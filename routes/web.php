@@ -35,3 +35,4 @@ Route::get('/About_view', [AboutController::class, 'index']);
 Route::view('/dashboard', 'dashboard');
 Route::view('/info_klinik', 'info_klinik');
 Route::view('/edit_profil', 'EditProfil');
+Route::view('/test', 'test');
