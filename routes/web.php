@@ -22,6 +22,9 @@ use App\Http\Controllers\AboutController;
 Route::get('/', function () {
     return view('welcome'); // atau halaman utama kamu
 });
+Route::get('/app', function () {
+return view('app');
+});
 
 Route::get('/login', [LoginController::class, 'index']);
 Route::get('/list-item', [ListItemController::class, 'index']);
