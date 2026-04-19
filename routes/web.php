@@ -31,7 +31,7 @@ Route::get('/list-item', [ListItemController::class, 'index']);
 Route::get('/About_view', [AboutController::class, 'index']);
 
 
-
+Route::view('/register', 'register');
 Route::view('/dashboard', 'dashboard');
 Route::view('/info_klinik', 'info_klinik');
 Route::view('/edit_profil', 'EditProfil');

@@ -1,0 +1,99 @@
+/* Background */
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url("../images/polibatam.jpg")no-repeat center/cover;;
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+}
+
+/* Kotak mengambang */
+.register-box {
+    width: 400px;
+    padding: 50px;
+
+    background: rgba(255, 255, 255, 0.2); /* lebih transparan */
+    backdrop-filter: blur(10px); /* 🔥 efek blur */
+    -webkit-backdrop-filter: blur(10px); /* untuk Safari */
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    border-radius: 12px;
+    box-shadow: 
+    0 10px 25px rgba(0, 0, 0, 0.2),
+    0 5px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+}
+
+.logo {
+    display: block;
+    margin: 0 auto 10px auto; /* tengah + jarak ke bawah */
+    width: 80px; /* atur ukuran */
+}
+
+/* Judul */
+.register-box h2 {
+    text-align: center;
+    color: #000;
+    text-shadow: X Y blur warna;
+}
+
+/* Input */
+.register-box input {
+    position: center;
+    width: 100%;
+    padding: 15px;
+    margin: 3px 0;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+}
+.password-box {
+    position: relative;
+}
+
+.password-box input {
+    width: 100%;
+    padding: 12px;
+    padding-right: 20px; /* kasih ruang buat icon */
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.button-group {
+    display: flex;
+    gap: 150px; /* jarak antar tombol */
+}
+
+/* Submit */
+.submit-box {
+    flex: 1;
+    padding: 10px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* Cancel */
+.cancel-box {
+    flex: 1;
+    padding: 10px;
+    background: #c42828;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}

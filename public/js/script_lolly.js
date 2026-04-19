@@ -1,0 +1,1 @@
+function a(){var b=document.getElementById("password");b.type=b.type==="password"?"text":"password";}
