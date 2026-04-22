@@ -17,6 +17,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ListItemController;
 use App\Http\Controllers\AboutController;
+use App\Http\Controllers\AppointmentController;
 
 
 Route::get('/', function () {
@@ -29,8 +30,9 @@ return view('app');
 Route::get('/login', [LoginController::class, 'index']);
 Route::get('/list-item', [ListItemController::class, 'index']);
 Route::get('/About_view', [AboutController::class, 'index']);
+Route::get('/appointment', [AppointmentController::class, 'index']);
 
-
+Route::post('/appointment', [AppointmentController::class, 'store']);
 Route::view('/register', 'register');
 Route::view('/dashboard', 'dashboard');
 Route::view('/info_klinik', 'info_klinik');
