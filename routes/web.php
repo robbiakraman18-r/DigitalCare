@@ -19,15 +19,29 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/app', function () {
-    return view('app');
+Route::get('/login', function () {
+    return view('login'); 
 });
 
-Route::get('/login', [LoginController::class, 'index'])->name('login');
-Route::get('/list-item', [ListItemController::class, 'index']);
+Route::get('/forgot-password', function () {
+    return view('forgot-password');
+});
+
+Route::get('/reset-password', function () {
+    return view('reset-password');
+});
 
 Route::get('/dashboard/{role}', [DashboardController::class, 'index']);
 
+Route::get('/buat-janji', function () {
+    return view('buat-janji');
+});
+
+Route::get('/janji-temu', function () {
+    return view('janji-temu');
+});
+
+Route::get('/list-item', [ListItemController::class, 'index']);
 Route::view('/register', 'register');
 Route::view('/info_klinik', 'info_klinik');
 Route::view('/edit_profil', 'EditProfil');

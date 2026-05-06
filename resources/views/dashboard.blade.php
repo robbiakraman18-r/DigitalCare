@@ -42,26 +42,52 @@
 
             <!-- MENU -->
             <nav class="mt-6 space-y-2 text-gray-700 font-medium">
-                <a href="/dashboard" class="flex items-center gap-3 px-4 py-2 hover:bg-blue-100 rounded-lg">
-                    <i class="fas fa-home"></i>
-                    <span class="hidden group-hover:inline">Beranda</span>
-                </a>
 
-                <a href="#" class="flex items-center gap-3 px-4 py-2 hover:bg-blue-100 rounded-lg">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span class="hidden group-hover:inline">Janji Temu</span>
-                </a>
+    <!-- BERANDA -->
+    <a href="/dashboard/pasien"
+    class="flex items-center gap-3 px-4 py-2 rounded-lg transition
+    {{ request()->is('dashboard/*') 
+        ? 'bg-blue-100 text-blue-600 font-semibold border-l-4 border-blue-500' 
+        : 'hover:bg-blue-100' }}">
+        
+        <i class="fas fa-home"></i>
+        <span class="hidden group-hover:inline">Beranda</span>
+    </a>
 
-                <a href="#" class="flex items-center gap-3 px-4 py-2 hover:bg-blue-100 rounded-lg">
-                    <i class="fas fa-file-medical"></i>
-                    <span class="hidden group-hover:inline">Riwayat Medis</span>
-                </a>
+    <!-- JANJI TEMU -->
+    <a href="/janji-temu"
+    class="flex items-center gap-3 px-4 py-2 rounded-lg transition
+    {{ request()->is('janji-temu') 
+        ? 'bg-blue-100 text-blue-600 font-semibold border-l-4 border-blue-500' 
+        : 'hover:bg-blue-100' }}">
+        
+        <i class="fas fa-calendar-alt"></i>
+        <span class="hidden group-hover:inline">Janji Temu</span>
+    </a>
 
-                <a href="/info_klinik" class="flex items-center gap-3 px-4 py-2 hover:bg-blue-100 rounded-lg">
-                    <i class="fas fa-info-circle"></i>
-                    <span class="hidden group-hover:inline">Info Klinik</span>
-                </a>
-            </nav>
+    <!-- RIWAYAT MEDIS -->
+    <a href="/riwayat"
+    class="flex items-center gap-3 px-4 py-2 rounded-lg transition
+    {{ request()->is('riwayat') 
+        ? 'bg-blue-100 text-blue-600 font-semibold border-l-4 border-blue-500' 
+        : 'hover:bg-blue-100' }}">
+        
+        <i class="fas fa-file-medical"></i>
+        <span class="hidden group-hover:inline">Riwayat Medis</span>
+    </a>
+
+    <!-- INFO KLINIK -->
+    <a href="/info_klinik"
+    class="flex items-center gap-3 px-4 py-2 rounded-lg transition
+    {{ request()->is('info_klinik') 
+        ? 'bg-blue-100 text-blue-600 font-semibold border-l-4 border-blue-500' 
+        : 'hover:bg-blue-100' }}">
+        
+        <i class="fas fa-info-circle"></i>
+        <span class="hidden group-hover:inline">Info Klinik</span>
+    </a>
+
+</nav>
         </div>
 
         <!-- LOGOUT -->
@@ -169,8 +195,30 @@
                 <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition flex items-center gap-4">
                     <i class="fas fa-calendar-alt text-4xl text-blue-500"></i>
                     <div>
-                        <p class="font-semibold text-gray-800">Janji Temu Aktif</p>
-                        <p class="text-3xl font-bold">0</p>
+                        <div class="flex flex-col">
+    
+    <!-- JUDUL -->
+    <p class="font-semibold text-gray-800">Janji Temu Aktif</p>
+
+    <!-- BUTTON -->
+    <a href="/buat-janji"
+        class="mt-2 inline-flex items-center gap-2 text-xs font-medium px-3 py-1.5 
+        bg-[#2C5E7E]/10 text-[#2C5E7E] rounded-full 
+        hover:bg-[#2C5E7E]/20 transition group w-fit">
+        
+        <!-- ICON -->
+        <svg xmlns="http://www.w3.org/2000/svg" 
+            class="w-4 h-4 transform group-hover:rotate-90 transition"
+            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 4v16m8-8H4"/>
+        </svg>
+
+        Buat Janji
+    </a>
+
+</div>
                     </div>
                 </div>
 
@@ -205,20 +253,7 @@
                             Janji Temu Mendatang
                         </h2>
                         
-                        <a href="/buat-janji"
-                        class="flex items-center gap-2 text-xs font-medium px-3 py-1.5 
-                        bg-[#2C5E7E]/10 text-[#2C5E7E] rounded-full 
-                        hover:bg-[#2C5E7E]/20 transition group">
                         
-                        <!-- ICON -->
-                        <svg xmlns="http://www.w3.org/2000/svg" 
-                        class="w-4 h-4 transform group-hover:rotate-90 transition"
-                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 4v16m8-8H4"/>
-                    </svg>
-                    Buat Janji
-                </a>
             </div>
             <!-- ISI -->
             <div class="py-10 text-center border-2 border-dashed border-gray-200 rounded-xl">

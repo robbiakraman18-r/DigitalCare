@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - DigitalCare</title>
+    <title>Reset Password - DigitalCare</title>
     @vite('resources/css/app.css')
 </head>
 
@@ -16,7 +16,7 @@
         <img src="/images/medical.jpg" class="w-full h-full object-cover">
 
         <div class="absolute inset-0 bg-teal-500/40 flex items-center justify-center">
-            <h1 class="text-white text-3xl font-bold">Welcome back!</h1>
+            <h1 class="text-white text-3xl font-bold">Reset Password</h1>
         </div>
     </div>
 
@@ -31,38 +31,25 @@
                 <p class="text-sm text-gray-500">Better Healthcare, Digitally</p>
             </div>
 
-            <h3 class="text-lg font-semibold text-center mb-1">Login</h3>
+            <h3 class="text-lg font-semibold text-center mb-1">Reset Password</h3>
             <p class="text-sm text-gray-500 text-center mb-6">
-                Masuk untuk mengakses akun anda
+                Masukkan email untuk menerima instruksi reset password
             </p>
 
-            <!-- FORM (DUMMY) -->
-            <form id="loginForm">
+            <!-- FORM -->
+            <form>
 
-                <!-- EMAIL -->
                 <div class="mb-4">
                     <input type="email" id="email"
                         placeholder="Email"
                         class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-teal-500 outline-none">
                 </div>
 
-                <!-- PASSWORD -->
-                <div class="mb-2">
-                    <input type="password" id="password"
-                        placeholder="Password"
-                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-teal-500 outline-none">
-                </div>
-
-                <div class="text-right mb-4">
-                    <a href="/forgot-password" class="text-sm text-blue-500">Lupa password?</a>
-                </div>
-
-                <!-- BUTTON LOGIN -->
                 <button type="button"
-                onclick="window.location.href='/dashboard/pasien'"
-                class="w-full bg-teal-600 text-white py-2 rounded-lg hover:bg-teal-700 transition duration-200 font-medium">
-                LOGIN
-            </button>
+                    onclick="kirim()"
+                    class="w-full bg-teal-600 text-white py-2 rounded-lg hover:bg-teal-700 transition">
+                    KIRIM INSTRUKSI
+                </button>
 
                 <!-- DIVIDER -->
                 <div class="flex items-center my-5">
@@ -71,11 +58,10 @@
                     <hr class="flex-1 border-gray-300">
                 </div>
 
-                <!-- REGISTER -->
                 <button type="button"
-                    onclick="window.location.href='/register'"
-                    class="w-full border border-teal-500 text-teal-600 py-2 rounded-lg hover:bg-teal-50 transition">
-                    Daftar Akun Baru
+                    onclick="window.location.href='/login'"
+                    class="w-full border border-gray-300 py-2 rounded-lg text-gray-600 hover:bg-gray-50">
+                    Kembali ke Login
                 </button>
 
             </form>
@@ -85,20 +71,17 @@
 
 </div>
 
-<!-- SCRIPT DUMMY LOGIN -->
 <script>
-function login() {
+function kirim() {
     let email = document.getElementById('email').value;
-    let password = document.getElementById('password').value;
 
-    if(email === "" || password === "") {
-        alert("Email dan password harus diisi!");
+    if(email === "") {
+        alert("Email harus diisi!");
         return;
     }
 
-    // simulasi login berhasil
-    alert("Login berhasil!");
-    window.location.href = "/dashboard";
+    alert("Instruksi dikirim (dummy)");
+    window.location.href = "/reset-password";
 }
 </script>
 
