@@ -3,73 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reset Password - DigitalCare</title>
+    <title>New Password - DigitalCare</title>
+
     @vite('resources/css/app.css')
+
 </head>
 
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+<body class="min-h-screen bg-gradient-to-br from-[#f0fffd] via-[#f8fffe] to-[#ecfffb] flex items-center justify-center p-6">
 
-<div class="w-full max-w-6xl bg-white rounded-xl shadow-md overflow-hidden flex">
+    <!-- CARD -->
+    <div class="w-full max-w-md bg-white rounded-3xl shadow-2xl p-8">
 
-    <!-- LEFT IMAGE -->
-    <div class="w-1/2 hidden md:block relative">
-        <img src="/images/medical.jpg" class="w-full h-full object-cover">
+        <!-- LOGO -->
+        <div class="text-center mb-7">
 
-        <div class="absolute inset-0 bg-teal-500/40 flex items-center justify-center">
-            <h1 class="text-white text-3xl font-bold">Reset Password</h1>
-        </div>
-    </div>
-
-    <!-- RIGHT FORM -->
-    <div class="w-full md:w-1/2 flex items-center justify-center p-10">
-        <div class="w-full max-w-md bg-white p-8 rounded-xl shadow">
-
-            <!-- LOGO -->
-            <div class="text-center mb-6">
-                <div class="text-teal-600 text-3xl mb-2">🩺</div>
-                <h2 class="text-xl font-semibold text-gray-800">DigitalCare</h2>
-                <p class="text-sm text-gray-500">Better Healthcare, Digitally</p>
+            <div class="w-14 h-14 mx-auto rounded-2xl bg-teal-500 flex items-center justify-center text-white text-2xl shadow-lg shadow-teal-200">
+                🩺
             </div>
 
-            <h3 class="text-lg font-semibold text-center mb-1">Reset Password</h3>
-            <p class="text-sm text-gray-500 text-center mb-6">
-                Masukkan password baru Anda
+            <h2 class="mt-4 text-2xl font-bold text-slate-800">
+                DigitalCare
+            </h2>
+
+            <p class="text-sm text-slate-500 mt-1">
+                Better Healthcare, Digitally
             </p>
 
-            <!-- FORM -->
-            <form>
+        </div>
 
-                <div class="mb-4">
-                    <input type="password"
-                        placeholder="Password"
-                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-teal-500 outline-none">
-                </div>
+        <!-- TITLE -->
+        <div class="mb-6 text-center">
 
-                <div class="mb-4">
-                    <input type="password"
-                        placeholder="Konfirmasi Password"
-                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-teal-500 outline-none">
-                </div>
+            <h3 class="text-2xl font-bold text-slate-800">
+                Create New Password
+            </h3>
 
-                <button type="button"
-                    onclick="reset()"
-                     class="w-full bg-teal-600 text-white py-2 rounded-lg hover:bg-teal-700 transition duration-200 font-medium">
-                    Confirm Password
-                </button>
-
-            </form>
+            <p class="text-sm text-slate-500 mt-2 leading-relaxed">
+                Masukkan password baru untuk akun Anda
+            </p>
 
         </div>
+
+        <!-- FORM -->
+        <form>
+
+            <!-- PASSWORD -->
+            <div class="mb-4">
+
+                <input
+                    type="password"
+                    placeholder="Password Baru"
+                    class="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-teal-500 outline-none transition"
+                >
+
+            </div>
+
+            <!-- CONFIRM PASSWORD -->
+            <div class="mb-6">
+
+                <input
+                    type="password"
+                    placeholder="Konfirmasi Password"
+                    class="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-teal-500 outline-none transition"
+                >
+
+            </div>
+
+            <!-- BUTTON -->
+            <button
+                type="button"
+                onclick="resetPassword()"
+                class="w-full py-3 rounded-2xl bg-teal-500 hover:bg-teal-600 text-white font-semibold shadow-lg shadow-teal-200 transition duration-300"
+            >
+                SIMPAN PASSWORD
+            </button>
+
+            <!-- DIVIDER -->
+            <div class="flex items-center gap-3 my-6">
+
+                <div class="h-px bg-slate-200 flex-1"></div>
+
+                <span class="text-sm text-slate-400">
+                    atau
+                </span>
+
+                <div class="h-px bg-slate-200 flex-1"></div>
+
+            </div>
+
+            <!-- BACK -->
+            <button
+                type="button"
+                onclick="window.location.href='/login'"
+                class="w-full py-3 rounded-2xl border border-slate-300 text-slate-600 font-medium hover:bg-slate-50 transition"
+            >
+                Kembali ke Login
+            </button>
+
+        </form>
+
     </div>
 
-</div>
+    <!-- SCRIPT -->
+    <script>
 
-<script>
-function reset() {
-    alert("Password berhasil direset (dummy)");
-    window.location.href = "/login";
-}
-</script>
+        function resetPassword() {
+
+            alert("Password berhasil direset!");
+
+            window.location.href = "/login";
+
+        }
+
+    </script>
 
 </body>
 </html>

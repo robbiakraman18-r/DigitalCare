@@ -1,284 +1,408 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    @vite(['resources/css/app.css','resources/js/app.js'])
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DigitalCare Dashboard</title>
+    <title>Dashboard Pasien - DigitalCare</title>
 
-    <!-- FONT MODERN -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    @vite(['resources/css/app.css','resources/js/app.js'])
 
-    <!-- AlpineJS -->
+    <!-- FONT -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- ICON -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- ALPINE -->
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
-<body class="bg-[#7BA8BD] min-h-screen font-[Inter] flex"
-      x-data="{ openProfile: false, confirmLogout: false }">
+<body
+class="bg-gradient-to-br from-[#f0fffd] via-[#f8fffe] to-[#ecfffb] min-h-screen font-[Inter] flex overflow-x-hidden"
+x-data="{ openProfile:false, logoutModal:false }">
+
+    <!-- BLUR -->
+    <div class="fixed top-0 left-0 w-72 h-72 bg-teal-200/40 blur-3xl rounded-full -z-10"></div>
+    <div class="fixed bottom-0 right-0 w-80 h-80 bg-cyan-200/40 blur-3xl rounded-full -z-10"></div>
 
     <!-- SIDEBAR -->
-    <div class="group fixed left-0 top-0 h-full w-16 hover:w-64 bg-white shadow-lg 
-                transition-all duration-300 overflow-hidden z-50 
-                flex flex-col justify-between">
+    <aside class="group fixed left-0 top-0 h-screen w-20 hover:w-72 bg-white/90 backdrop-blur-xl border-r border-white shadow-xl transition-all duration-300 z-50 flex flex-col justify-between overflow-hidden">
 
-        <!-- ATAS -->
         <div>
 
-            <!-- LOGO BARU -->
-            <div class="flex items-center gap-3 p-4 border-b">
-                <div class="w-10 h-10 bg-gradient-to-tr from-[#2C5E7E] to-[#5C94B3] 
-                    rounded-xl flex items-center justify-center text-white shadow-md">
-                    <i class="fas fa-heartbeat"></i>
+            <!-- LOGO -->
+            <div class="flex items-center gap-4 px-5 py-6 border-b border-slate-100">
+
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center shadow-lg shadow-teal-200">
+                    <i data-lucide="heart-pulse" class="w-6 h-6 text-white"></i>
                 </div>
 
-                <div class="hidden group-hover:block leading-tight">
-                    <p class="text-sm font-semibold text-[#2C5E7E]">DigitalCare</p>
-                    <p class="text-xs text-gray-400">Smart Clinic</p>
+                <div class="hidden group-hover:block">
+
+                    <h1 class="text-xl font-bold text-slate-800">
+                        Digital<span class="text-teal-500">Care</span>
+                    </h1>
+
+                    <p class="text-xs text-slate-400">
+                        Smart Healthcare
+                    </p>
+
                 </div>
+
             </div>
 
             <!-- MENU -->
-            <nav class="mt-6 space-y-2 text-gray-700 font-medium">
+            <nav class="mt-6 px-3 space-y-2">
 
-    <!-- BERANDA -->
-    <a href="/dashboard/pasien"
-    class="flex items-center gap-3 px-4 py-2 rounded-lg transition
-    {{ request()->is('dashboard/*') 
-        ? 'bg-blue-100 text-blue-600 font-semibold border-l-4 border-blue-500' 
-        : 'hover:bg-blue-100' }}">
-        
-        <i class="fas fa-home"></i>
-        <span class="hidden group-hover:inline">Beranda</span>
-    </a>
+                <a href="/dashboard/pasien"
+                class="flex items-center gap-4 px-4 py-3 rounded-2xl bg-teal-500 text-white shadow-lg shadow-teal-200">
 
-    <!-- JANJI TEMU -->
-    <a href="/janji-temu"
-    class="flex items-center gap-3 px-4 py-2 rounded-lg transition
-    {{ request()->is('janji-temu') 
-        ? 'bg-blue-100 text-blue-600 font-semibold border-l-4 border-blue-500' 
-        : 'hover:bg-blue-100' }}">
-        
-        <i class="fas fa-calendar-alt"></i>
-        <span class="hidden group-hover:inline">Janji Temu</span>
-    </a>
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
 
-    <!-- RIWAYAT MEDIS -->
-    <a href="/riwayat"
-    class="flex items-center gap-3 px-4 py-2 rounded-lg transition
-    {{ request()->is('riwayat') 
-        ? 'bg-blue-100 text-blue-600 font-semibold border-l-4 border-blue-500' 
-        : 'hover:bg-blue-100' }}">
-        
-        <i class="fas fa-file-medical"></i>
-        <span class="hidden group-hover:inline">Riwayat Medis</span>
-    </a>
+                    <span class="hidden group-hover:block font-medium">
+                        Dashboard
+                    </span>
 
-    <!-- INFO KLINIK -->
-    <a href="/info_klinik"
-    class="flex items-center gap-3 px-4 py-2 rounded-lg transition
-    {{ request()->is('info_klinik') 
-        ? 'bg-blue-100 text-blue-600 font-semibold border-l-4 border-blue-500' 
-        : 'hover:bg-blue-100' }}">
-        
-        <i class="fas fa-info-circle"></i>
-        <span class="hidden group-hover:inline">Info Klinik</span>
-    </a>
+                </a>
 
-</nav>
+                <a href="/janji-temu"
+                class="flex items-center gap-4 px-4 py-3 rounded-2xl hover:bg-teal-50 text-slate-600 transition">
+
+                    <i data-lucide="calendar-days" class="w-5 h-5"></i>
+
+                    <span class="hidden group-hover:block font-medium">
+                        Janji Temu
+                    </span>
+
+                </a>
+
+                <a href="/riwayat"
+                class="flex items-center gap-4 px-4 py-3 rounded-2xl hover:bg-teal-50 text-slate-600 transition">
+
+                    <i data-lucide="file-heart" class="w-5 h-5"></i>
+
+                    <span class="hidden group-hover:block font-medium">
+                        Rekam Medis
+                    </span>
+
+                </a>
+
+                <a href="/payment"
+                class="flex items-center gap-4 px-4 py-3 rounded-2xl hover:bg-teal-50 text-slate-600 transition">
+                <i data-lucide="wallet" class="w-5 h-5"></i>
+                <span class="hidden group-hover:block font-medium">
+                    Payment
+                </span>
+            </a>
+
+                    
+
+
+                <a href="/info-klinik"
+                class="flex items-center gap-4 px-4 py-3 rounded-2xl hover:bg-teal-50 text-slate-600 transition">
+
+                    <i data-lucide="building-2" class="w-5 h-5"></i>
+
+                    <span class="hidden group-hover:block font-medium">
+                        Info Klinik
+                    </span>
+
+                </a>
+
+            </nav>
+
         </div>
 
         <!-- LOGOUT -->
-        <div class="mb-4 px-2">
-            <button @click="confirmLogout = true"
-                class="w-full flex items-center gap-3 px-4 py-2 text-red-500 hover:bg-red-100 rounded-lg">
-                <i class="fas fa-sign-out-alt"></i>
-                <span class="hidden group-hover:inline">Logout</span>
-            </button>
-        </div>
-    </div>
+        <div class="p-4">
 
-    <!-- CONTENT -->
-    <div class="flex-1 ml-16 transition-all duration-300 w-full">
+            <button
+            @click="logoutModal = true"
+            class="w-full flex items-center gap-4 px-4 py-3 rounded-2xl text-red-500 hover:bg-red-50 transition">
 
-        <!-- PROFILE -->
-        <div class="flex justify-end items-center p-6 relative">
-            <button @click="openProfile = !openProfile"
-                class="flex items-center gap-2 bg-white px-3 py-2 rounded-full shadow">
+                <i data-lucide="log-out" class="w-5 h-5"></i>
 
-                <!-- AVATAR -->
-                <img src="https://i.pravatar.cc/40" 
-                     class="w-8 h-8 rounded-full object-cover border">
+                <span class="hidden group-hover:block font-medium">
+                    Logout
+                </span>
 
-                <span class="text-sm font-medium text-gray-700 hidden md:block">Rizki</span>
             </button>
 
-            <div 
-    x-show="openProfile"
-    x-transition
-    @click.away="openProfile = false"
-    class="absolute top-16 right-6 w-72 bg-white rounded-2xl shadow-xl p-5"
-    style="display: none;"
->
-
-    <!-- PROFILE -->
-    <div class="flex items-center gap-3 mb-4">
-        <img src="https://i.pravatar.cc/50"
-             class="w-12 h-12 rounded-full object-cover">
-
-        <div>
-            <p class="font-semibold text-gray-800">Rizki A</p>
-            <p class="text-sm text-gray-500">rizki@email.com</p>
-        </div>
-    </div>
-
-    <!-- DETAIL -->
-    <div class="text-sm text-gray-600 border-t pt-3 space-y-2">
-
-        <div class="flex justify-between">
-            <span class="text-gray-400">NIM</span>
-            <span class="font-medium text-gray-700">12345678</span>
         </div>
 
-        <!-- 🔥 TAMBAHAN -->
-        <div class="flex justify-between">
-            <span class="text-gray-400">Tanggal Lahir</span>
-            <span class="font-medium text-gray-700">12 Mei 2003</span>
-        </div>
+    </aside>
 
-        <div class="flex justify-between">
-            <span class="text-gray-400">Status</span>
-            <span class="font-medium text-blue-600">Pasien</span>
-        </div>
+    <!-- MAIN -->
+    <div class="flex-1 ml-20">
 
-    </div>
+        <!-- TOPBAR -->
+        <header class="flex justify-between items-center px-6 lg:px-10 py-6">
 
-    <!-- BUTTON MODERN -->
-    <div class="mt-4 pt-4 border-t">
+            <!-- LEFT -->
+            <div>
 
-        <a href="/edit_profil"
-   class="flex items-center justify-center gap-2 w-full 
-   text-sm font-medium px-4 py-2.5 
-   bg-[#2C5E7E] text-white rounded-xl 
-   hover:bg-[#244b66] transition shadow-sm hover:shadow-md group">
+                <h1 class="text-3xl font-bold text-slate-800">
+                    Halo, Rizki 👋
+                </h1>
 
-    <!-- ICON EDIT (PENCIL MODERN) -->
-    <svg xmlns="http://www.w3.org/2000/svg" 
-         class="w-4 h-4 transform group-hover:scale-110 transition"
-         fill="none" 
-         viewBox="0 0 24 24" 
-         stroke="currentColor" 
-         stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round" 
-              d="M15.232 5.232l3.536 3.536M9 11l6.768-6.768a2.5 2.5 0 113.536 3.536L12.536 14.536A4 4 0 0111 15H9v-2a4 4 0 011.232-2.768z"/>
-    </svg>
+                <p class="text-slate-500 mt-1">
+                    Selamat datang kembali di DigitalCare
+                </p>
 
-    Edit Profil
-</a>
+            </div>
 
-    </div>
+            <!-- RIGHT -->
+            <div class="flex items-center gap-4">
 
-</div>
-        </div>
+                <!-- NOTIFICATION -->
+                <button class="relative w-12 h-12 rounded-2xl bg-white shadow-sm border border-slate-100 flex items-center justify-center hover:bg-slate-50 transition">
 
-        <!-- MAIN -->
-        <main class="w-full px-6 pb-6">
+                    <i data-lucide="bell" class="w-5 h-5 text-slate-600"></i>
 
-            <h1 class="text-white text-3xl font-bold mb-1">Selamat Datang, Rizki A!</h1>
-            <p class="text-white opacity-90 mb-6">Yuk buat janji temu!</p>
+                    <span class="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-red-500 text-white text-[10px] flex items-center justify-center font-semibold">
+                        2
+                    </span>
 
-            <!-- CARD ATAS -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                </button>
 
-                <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition flex items-center gap-4">
-                    <i class="fas fa-calendar-alt text-4xl text-blue-500"></i>
-                    <div>
-                        <div class="flex flex-col">
-    
-    <!-- JUDUL -->
-    <p class="font-semibold text-gray-800">Janji Temu Aktif</p>
+                <!-- PROFILE -->
+                <div class="relative">
 
-    <!-- BUTTON -->
-    <a href="/buat-janji"
-        class="mt-2 inline-flex items-center gap-2 text-xs font-medium px-3 py-1.5 
-        bg-[#2C5E7E]/10 text-[#2C5E7E] rounded-full 
-        hover:bg-[#2C5E7E]/20 transition group w-fit">
-        
-        <!-- ICON -->
-        <svg xmlns="http://www.w3.org/2000/svg" 
-            class="w-4 h-4 transform group-hover:rotate-90 transition"
-            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M12 4v16m8-8H4"/>
-        </svg>
+                    <button
+                    @click="openProfile = !openProfile"
+                    class="flex items-center gap-3 bg-white px-3 py-2 rounded-2xl shadow-sm border border-slate-100 hover:bg-slate-50 transition">
 
-        Buat Janji
-    </a>
+                        <img
+                        src="https://i.pravatar.cc/100"
+                        class="w-10 h-10 rounded-xl object-cover">
 
-</div>
+                        <div class="hidden md:block text-left">
+
+                            <h3 class="text-sm font-semibold text-slate-800">
+                                Rizki A
+                            </h3>
+
+                            <p class="text-xs text-slate-400">
+                                Pasien
+                            </p>
+
+                        </div>
+
+                    </button>
+
+                    <!-- DROPDOWN -->
+                    <div
+                    x-show="openProfile"
+                    x-transition
+                    @click.away="openProfile = false"
+                    class="absolute right-0 mt-4 w-72 bg-white rounded-3xl shadow-2xl border border-slate-100 p-5"
+                    style="display:none;">
+
+                        <div class="flex items-center gap-4">
+
+                            <img
+                            src="https://i.pravatar.cc/100"
+                            class="w-14 h-14 rounded-2xl">
+
+                            <div>
+
+                                <h2 class="font-bold text-slate-800">
+                                    Rizki A
+                                </h2>
+
+                                <p class="text-sm text-slate-400">
+                                    rizki@email.com
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <div class="mt-5 space-y-3 text-sm border-t pt-4">
+
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">NIM</span>
+                                <span class="font-medium">12345678</span>
+                            </div>
+
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">Status</span>
+                                <span class="font-medium text-teal-500">
+                                    Pasien
+                                </span>
+                            </div>
+
+                        </div>
+
+                        <!-- BUTTON -->
+                        <div class="mt-5 space-y-3">
+
+                            <a href="/profil"
+                            class="flex items-center justify-center gap-2 py-3 rounded-2xl bg-teal-500 hover:bg-teal-600 text-white font-medium transition">
+
+                                <i data-lucide="user-cog" class="w-4 h-4"></i>
+
+                                Edit Profil
+
+                            </a>
+
+                            <button
+                            @click="logoutModal = true"
+                            class="w-full flex items-center justify-center gap-2 py-3 rounded-2xl border border-red-200 text-red-500 hover:bg-red-50 transition">
+
+                                <i data-lucide="log-out" class="w-4 h-4"></i>
+
+                                Logout
+
+                            </button>
+
+                        </div>
+
                     </div>
-                </div>
 
-                <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition flex items-center gap-4">
-                    <i class="fas fa-file-medical text-4xl text-green-500"></i>
-                    <div>
-                        <p class="font-semibold text-gray-800">Rekam Medis Baru</p>
-                        <p class="text-3xl font-bold">0</p>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition flex items-center gap-4">
-                    <i class="fas fa-bullhorn text-4xl text-orange-500"></i>
-                    <div>
-                        <p class="font-semibold text-gray-800">Pengumuman</p>
-                        <p class="text-3xl font-bold">0</p>
-                    </div>
                 </div>
 
             </div>
 
-            <!-- SECTION BAWAH -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
+        </header>
 
-                <!-- JANJI TEMU -->
-                <div class="lg:col-span-2 bg-white rounded-2xl p-6 shadow-sm">
-                    
-                    <!-- HEADER -->
-                    <div class="flex justify-between items-center mb-4">
-                        
-                        <h2 class="font-semibold text-gray-800">
-                            Janji Temu Mendatang
-                        </h2>
-                        
-                        
-            </div>
-            <!-- ISI -->
-            <div class="py-10 text-center border-2 border-dashed border-gray-200 rounded-xl">
-                <p class="text-gray-400 italic">Belum ada jadwal janji temu.</p>
-            </div>
-        </div>
-                <!-- KANAN -->
-                <div class="space-y-6">
+        <!-- CONTENT -->
+        <main class="px-6 lg:px-10 pb-10">
 
-                    <div class="bg-white rounded-2xl p-5 shadow-sm">
-                        <h2 class="font-semibold text-gray-800 mb-3 border-b pb-2">
-                            Rekam Medis Terbaru
-                        </h2>
-                        <p class="text-gray-400 text-sm italic">
-                            Belum ada riwayat medis.
+            <!-- HERO -->
+            <div class="relative overflow-hidden rounded-[32px] bg-gradient-to-r from-teal-500 to-cyan-500 p-8 lg:p-10 shadow-2xl shadow-teal-200">
+
+                <div class="absolute top-0 right-0 w-72 h-72 bg-white/10 rounded-full blur-3xl"></div>
+
+                <div class="relative z-10 grid lg:grid-cols-2 gap-10 items-center">
+
+                    <!-- LEFT -->
+                    <div>
+
+                        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-lg border border-white/20 text-white text-sm mb-6">
+
+                            <div class="w-2 h-2 rounded-full bg-white animate-pulse"></div>
+
+                            Sistem kesehatan aktif
+
+                        </div>
+
+                        <h1 class="text-4xl lg:text-5xl font-extrabold text-white leading-tight">
+                            Kelola kesehatan Anda dengan lebih mudah
+                        </h1>
+
+                        <p class="text-white/90 mt-5 leading-relaxed max-w-xl">
+                            Booking dokter, lihat rekam medis, resep obat,
+                            dan notifikasi klinik dalam satu dashboard modern.
                         </p>
+
+                        <div class="flex flex-wrap gap-4 mt-8">
+
+                            <a href="/buat-janji"
+                            class="px-6 py-3 rounded-2xl bg-white text-teal-600 font-semibold shadow-lg hover:scale-105 transition">
+
+                                Buat Janji
+
+                            </a>
+
+                            <a href="/riwayat"
+                            class="px-6 py-3 rounded-2xl border border-white/40 text-white font-semibold hover:bg-white/10 transition">
+
+                                Rekam Medis
+
+                            </a>
+
+                        </div>
+
                     </div>
 
-                    <div class="bg-white rounded-2xl p-5 shadow-sm">
-                        <h2 class="font-semibold text-gray-800 mb-3 border-b pb-2">
-                            Pengumuman
-                        </h2>
-                        <p class="text-gray-400 text-sm italic">
-                            Belum ada pengumuman terbaru.
-                        </p>
+                    <!-- RIGHT -->
+                    <div class="relative flex justify-center">
+
+                        <img
+                        src="https://cdn-icons-png.flaticon.com/512/3304/3304567.png"
+                        class="w-full max-w-[340px] drop-shadow-2xl relative z-10">
+
+                        <!-- FLOAT -->
+                        <div class="absolute top-5 left-0 bg-white p-4 rounded-3xl shadow-2xl animate-bounce">
+
+                            <div class="flex items-center gap-3">
+
+                                <div class="w-12 h-12 rounded-2xl bg-green-100 flex items-center justify-center">
+                                    <i data-lucide="calendar-check-2" class="text-green-500"></i>
+                                </div>
+
+                                <div>
+
+                                    <h3 class="font-bold text-slate-800">
+                                        Booking Berhasil
+                                    </h3>
+
+                                    <p class="text-sm text-slate-400">
+                                        Jadwal dikonfirmasi
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- STATS -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+
+                <!-- REKAM MEDIS -->
+                <div class="bg-white rounded-3xl p-6 shadow-lg border border-white">
+
+                    <div class="flex items-center justify-between">
+
+                        <div>
+
+                            <p class="text-slate-400 text-sm">
+                                Rekam Medis
+                            </p>
+
+                            <h2 class="text-4xl font-bold text-slate-800 mt-2">
+                                5
+                            </h2>
+
+                        </div>
+
+                        <div class="w-16 h-16 rounded-3xl bg-green-100 flex items-center justify-center">
+                            <i data-lucide="file-heart" class="text-green-500 w-8 h-8"></i>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- NOTIFIKASI -->
+                <div class="bg-white rounded-3xl p-6 shadow-lg border border-white">
+
+                    <div class="flex items-center justify-between">
+
+                        <div>
+
+                            <p class="text-slate-400 text-sm">
+                                Notifikasi
+                            </p>
+
+                            <h2 class="text-4xl font-bold text-slate-800 mt-2">
+                                3
+                            </h2>
+
+                        </div>
+
+                        <div class="w-16 h-16 rounded-3xl bg-yellow-100 flex items-center justify-center">
+                            <i data-lucide="bell-ring" class="text-yellow-500 w-8 h-8"></i>
+                        </div>
+
                     </div>
 
                 </div>
@@ -286,35 +410,58 @@
             </div>
 
         </main>
+
     </div>
 
-    <!-- POPUP LOGOUT -->
-    <div 
-        x-show="confirmLogout"
-        x-transition.opacity
-        class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
-        style="display: none;"
-    >
-        <div class="bg-white p-6 rounded-xl text-center w-80">
-            <h2 class="font-semibold mb-2">Konfirmasi Logout</h2>
-            <p class="mb-4 text-gray-600">Yakin mau logout?</p>
+    <!-- LOGOUT MODAL -->
+    <div
+    x-show="logoutModal"
+    x-transition
+    class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50"
+    style="display:none;">
 
-            <div class="flex gap-3">
-                <button @click="confirmLogout = false"
-                    class="flex-1 bg-gray-200 py-2 rounded-lg">
+        <div class="bg-white rounded-3xl p-8 w-full max-w-sm">
+
+            <div class="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mx-auto">
+
+                <i data-lucide="log-out" class="text-red-500"></i>
+
+            </div>
+
+            <h2 class="text-2xl font-bold text-center text-slate-800 mt-5">
+                Logout?
+            </h2>
+
+            <p class="text-center text-slate-500 mt-2">
+                Apakah Anda yakin ingin keluar?
+            </p>
+
+            <div class="grid grid-cols-2 gap-4 mt-8">
+
+                <button
+                @click="logoutModal = false"
+                class="py-3 rounded-2xl border border-slate-300 font-medium hover:bg-slate-50 transition">
+
                     Batal
+
                 </button>
 
-                <form method="POST" action="{{ route('logout') }}" class="flex-1">
-                    @csrf
-                    <button type="submit"
-                        class="w-full bg-red-500 text-white py-2 rounded-lg">
-                        Ya
-                    </button>
-                </form>
+                <a href="/login"
+                class="py-3 rounded-2xl bg-red-500 hover:bg-red-600 text-white text-center font-medium transition">
+
+                    Logout
+
+                </a>
+
             </div>
+
         </div>
+
     </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
 
 </body>
 </html>

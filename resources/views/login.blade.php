@@ -4,103 +4,148 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - DigitalCare</title>
+
     @vite('resources/css/app.css')
 </head>
 
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+<body class="min-h-screen bg-gradient-to-br from-[#f0fffd] via-[#f8fffe] to-[#ecfffb] flex items-center justify-center p-6">
 
-<div class="w-full max-w-6xl bg-white rounded-xl shadow-md overflow-hidden flex">
+<div class="w-full max-w-5xl bg-white rounded-3xl shadow-2xl overflow-hidden grid md:grid-cols-2">
 
     <!-- LEFT IMAGE -->
-    <div class="w-1/2 hidden md:block relative">
-        <img src="/images/medical.jpg" class="w-full h-full object-cover">
+    <div class="hidden md:block relative">
 
-        <div class="absolute inset-0 bg-teal-500/40 flex items-center justify-center">
-            <h1 class="text-white text-3xl font-bold">Welcome back!</h1>
+        <img
+            src="/images/medical.jpg"
+            class="w-full h-full object-cover"
+        >
+
+        <div class="absolute inset-0 bg-gradient-to-br from-teal-500/80 to-cyan-500/60 flex flex-col justify-center px-10">
+
+            <div class="backdrop-blur-md bg-white/10 border border-white/20 p-6 rounded-3xl">
+
+                <h1 class="text-4xl font-bold text-white leading-tight">
+                    Welcome Back
+                </h1>
+
+                <p class="text-white/90 mt-4 text-sm leading-relaxed">
+                    Akses layanan kesehatan digital dengan mudah,
+                    cepat, dan aman bersama DigitalCare.
+                </p>
+
+            </div>
+
         </div>
+
     </div>
 
     <!-- RIGHT FORM -->
-    <div class="w-full md:w-1/2 flex items-center justify-center p-10">
-        <div class="w-full max-w-md bg-white p-8 rounded-xl shadow">
+    <div class="flex items-center justify-center p-8 lg:p-10">
+
+        <div class="w-full max-w-sm">
 
             <!-- LOGO -->
-            <div class="text-center mb-6">
-                <div class="text-teal-600 text-3xl mb-2">🩺</div>
-                <h2 class="text-xl font-semibold text-gray-800">DigitalCare</h2>
-                <p class="text-sm text-gray-500">Better Healthcare, Digitally</p>
+            <div class="text-center mb-7">
+
+                <div class="w-14 h-14 mx-auto rounded-2xl bg-teal-500 flex items-center justify-center text-white text-2xl shadow-lg shadow-teal-200">
+                    🩺
+                </div>
+
+                <h2 class="mt-4 text-2xl font-bold text-slate-800">
+                    DigitalCare
+                </h2>
+
+                <p class="text-sm text-slate-500 mt-1">
+                    Better Healthcare, Digitally
+                </p>
+
             </div>
 
-            <h3 class="text-lg font-semibold text-center mb-1">Login</h3>
-            <p class="text-sm text-gray-500 text-center mb-6">
-                Masuk untuk mengakses akun anda
-            </p>
+            <!-- TITLE -->
+            <div class="mb-6">
 
-            <!-- FORM (DUMMY) -->
-            <form id="loginForm">
+                <h3 class="text-2xl font-bold text-slate-800">
+                    Login
+                </h3>
+
+                <p class="text-sm text-slate-500 mt-1">
+                    Masuk untuk melanjutkan akun anda
+                </p>
+
+            </div>
+
+            <!-- FORM -->
+            <form>
 
                 <!-- EMAIL -->
                 <div class="mb-4">
-                    <input type="email" id="email"
+
+                    <input
+                        type="email"
                         placeholder="Email"
-                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-teal-500 outline-none">
+                        class="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-teal-500 outline-none transition"
+                    >
+
                 </div>
 
                 <!-- PASSWORD -->
-                <div class="mb-2">
-                    <input type="password" id="password"
+                <div class="mb-3">
+
+                    <input
+                        type="password"
                         placeholder="Password"
-                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-teal-500 outline-none">
+                        class="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-teal-500 outline-none transition"
+                    >
+
                 </div>
 
-                <div class="text-right mb-4">
-                    <a href="/forgot-password" class="text-sm text-blue-500">Lupa password?</a>
+                <!-- FORGOT -->
+                <div class="text-right mb-6">
+
+                    <a href="/forgot-password" class="text-sm text-teal-600 hover:underline">
+                        Lupa password?
+                    </a>
+
                 </div>
 
-                <!-- BUTTON LOGIN -->
-                <button type="button"
-                onclick="window.location.href='/dashboard/pasien'"
-                class="w-full bg-teal-600 text-white py-2 rounded-lg hover:bg-teal-700 transition duration-200 font-medium">
-                LOGIN
-            </button>
+                <!-- BUTTON -->
+                <button
+                    type="button"
+                    onclick="window.location.href='/dashboard/pasien'"
+                    class="w-full py-3 rounded-2xl bg-teal-500 hover:bg-teal-600 text-white font-semibold shadow-lg shadow-teal-200 transition duration-300"
+                >
+                    LOGIN
+                </button>
 
                 <!-- DIVIDER -->
-                <div class="flex items-center my-5">
-                    <hr class="flex-1 border-gray-300">
-                    <span class="px-2 text-gray-400 text-sm">Atau</span>
-                    <hr class="flex-1 border-gray-300">
+                <div class="flex items-center gap-3 my-6">
+
+                    <div class="h-px bg-slate-200 flex-1"></div>
+
+                    <span class="text-sm text-slate-400">
+                        atau
+                    </span>
+
+                    <div class="h-px bg-slate-200 flex-1"></div>
+
                 </div>
 
                 <!-- REGISTER -->
-                <button type="button"
+                <button
+                    type="button"
                     onclick="window.location.href='/register'"
-                    class="w-full border border-teal-500 text-teal-600 py-2 rounded-lg hover:bg-teal-50 transition">
-                    Daftar Akun Baru
+                    class="w-full py-3 rounded-2xl border border-teal-500 text-teal-600 font-medium hover:bg-teal-50 transition"
+                >
+                    Buat Akun Baru
                 </button>
 
             </form>
 
         </div>
+
     </div>
 
 </div>
-
-<!-- SCRIPT DUMMY LOGIN -->
-<script>
-function login() {
-    let email = document.getElementById('email').value;
-    let password = document.getElementById('password').value;
-
-    if(email === "" || password === "") {
-        alert("Email dan password harus diisi!");
-        return;
-    }
-
-    // simulasi login berhasil
-    alert("Login berhasil!");
-    window.location.href = "/dashboard";
-}
-</script>
 
 </body>
 </html>

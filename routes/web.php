@@ -41,6 +41,9 @@ Route::get('/janji-temu', function () {
     return view('janji-temu');
 });
 
+Route::view('/rekam-medis', 'rekam-medis');
+
+
 Route::get('/list-item', [ListItemController::class, 'index']);
 Route::view('/register', 'register');
 Route::view('/info_klinik', 'info_klinik');
