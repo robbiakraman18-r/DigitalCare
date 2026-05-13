@@ -111,7 +111,7 @@
                 <!-- BUTTON -->
                 <button
                     type="button"
-                    onclick="window.location.href='/dashboard/pasien'"
+                    onclick="window.location.href='/dashboard'"
                     class="w-full py-3 rounded-2xl bg-teal-500 hover:bg-teal-600 text-white font-semibold shadow-lg shadow-teal-200 transition duration-300"
                 >
                     LOGIN
