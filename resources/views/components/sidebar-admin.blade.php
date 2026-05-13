@@ -7,9 +7,7 @@
         <div class="flex items-center gap-4 px-5 py-6 border-b border-slate-100 sticky top-0 bg-white/90 backdrop-blur-xl z-10">
 
             <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center shadow-lg shadow-cyan-200 shrink-0">
-
-                <i data-lucide="shield-check" class="w-6 h-6 text-white"></i>
-
+                🩺
             </div>
 
             <div class="opacity-0 group-hover:opacity-100 transition-all duration-500 whitespace-nowrap">

@@ -30,10 +30,8 @@
             <!-- LOGO -->
             <div class="flex items-center gap-3">
 
-                <div class="w-12 h-12 rounded-2xl bg-teal-500 flex items-center justify-center shadow-lg shadow-teal-200 hover:scale-110 transition duration-300">
-
-                    <i data-lucide="heart-pulse" class="w-6 h-6 text-white"></i>
-
+                <div class="w-14 h-14 mx-auto rounded-2xl bg-teal-500 flex items-center justify-center text-white text-2xl shadow-lg shadow-teal-200">
+                    🩺
                 </div>
 
                 <div>
