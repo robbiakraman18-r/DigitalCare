@@ -79,8 +79,8 @@
                 </span>
 
                 <div class="h-px bg-slate-200 flex-1"></div>
-
             </div>
+
 
             <!-- BACK LOGIN -->
             <button
