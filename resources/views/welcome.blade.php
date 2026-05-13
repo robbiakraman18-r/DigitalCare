@@ -65,7 +65,7 @@
 
                 <li>
                     <a href="#" class="hover:text-teal-500 transition">
-                        Layanan
+                        Kampus
                     </a>
                 </li>
 
@@ -80,6 +80,8 @@
                         Hubungi Kami
                     </a>
                 </li>
+
+                
 
             </ul>
 
@@ -96,9 +98,10 @@
                 <a
                     href="/register"
                     class="px-5 py-2 rounded-xl bg-teal-500 text-white text-sm font-medium shadow-lg shadow-teal-200 hover:bg-teal-600 hover:scale-105 transition duration-300"
-                >
+>
                     Daftar
                 </a>
+                
 
             </div>
 
@@ -284,7 +287,7 @@
                         <div>
 
                             <h4 class="text-sm font-semibold text-slate-800">
-                                1000+ Pasien
+                                100+ Pasien
                             </h4>
 
                             <p class="text-xs text-slate-500">

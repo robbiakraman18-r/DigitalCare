@@ -27,7 +27,7 @@
             Print / Save PDF
         </button>
 
-        <a href="/riwayat"
+        <a href="/detail-rekam-medis"
             class="px-5 py-3 bg-slate-200 rounded-2xl">
             Back
         </a>
