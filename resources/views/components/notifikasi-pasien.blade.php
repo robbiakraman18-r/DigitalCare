@@ -38,13 +38,14 @@
             </div>
         </a>
 
-        <a href="/rekam-medis" class="flex gap-3 p-4 hover:bg-slate-50">
-            <i data-lucide="file-heart" class="text-blue-500"></i>
+        <a href="/janji-temu" class="flex gap-3 p-4 hover:bg-slate-50">
+            <i data-lucide="calendar-check" class="text-green-500"></i>
             <div>
-                <p class="font-semibold text-sm">Rekam medis update</p>
-                <p class="text-xs text-slate-400">Data baru tersedia</p>
+                <p class="font-semibold text-sm">Janji temu dikonfirmasi</p>
+                <p class="text-xs text-slate-400">Klik untuk detail</p>
             </div>
         </a>
+        
 
     </div>
 
