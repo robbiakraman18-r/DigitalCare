@@ -104,3 +104,58 @@ Route::post('/logout', function (Request $request) {
     return redirect('/login');
 
 })->name('logout');
+
+
+
+/*
+|--------------------------------------------------------------------------
+| DOKTER
+|--------------------------------------------------------------------------
+*/
+
+Route::view('/dokter-dashboard', 'dokter.dashboard');
+
+Route::view('/jadwal-praktik', 'dokter.jadwal-praktik');
+
+Route::view('/appointment', 'dokter.appointment');
+
+Route::view('/medical-history', 'dokter.medical-history');
+
+Route::view('/dokter-pasien', 'dokter.pasien');
+
+Route::get('/dokter/detail-pasien', function () {
+    return view('dokter.detail-pasien');
+});
+
+Route::get('/dokter/rekam-medis', function () {
+    return view('dokter.rekam-medis');
+});
+
+Route::get('/info-klinik-dokter', function () {
+    return view('dokter.info-klinik-dokter');
+});
+
+Route::view('/profil-dokter', 'dokter.profil');
+
+
+
+
+
+
+Route::view('/dashboard-admin', 'admin.dashboard');
+
+Route::view('/admin-user-management', 'admin.user-management');
+
+Route::view('/admin-appointment', 'admin.appointment');
+
+Route::view('/admin-schedule-management', 'admin.schedule-management');
+
+Route::view('/admin-medical-records', 'admin.medical-records');
+
+Route::view('/admin-reports', 'admin.reports');
+
+Route::view('/admin-payments', 'admin.payments');
+
+Route::view('/admin-settings', 'admin.settings');
+
+Route::view('/profil-admin', 'admin.profile');

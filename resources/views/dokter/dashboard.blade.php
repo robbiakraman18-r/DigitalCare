@@ -1,246 +1,503 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    @vite(['resources/css/app.css','resources/js/app.js'])
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DigitalCare - Dashboard Dokter</title>
+@extends('layouts.dokter')
 
-    <!-- FONT -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+@section('title', 'Dashboard Dokter')
+@section('subtitle', 'Pantau aktivitas praktik hari ini')
 
-    <!-- ALPINE -->
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+@section('content')
 
-    <!-- ICON -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
+<div class="space-y-5">
 
-<body class="bg-[#7BA8BD] min-h-screen font-[Inter] flex"
-      x-data="{ openProfile: false, confirmLogout: false }">
+    <!-- HERO -->
+    <div class="relative overflow-hidden rounded-[30px] bg-gradient-to-r from-teal-500 to-cyan-500 p-6 text-white shadow-lg">
 
-<!-- SIDEBAR -->
-<div class="group fixed left-0 top-0 h-full w-16 hover:w-64 bg-white shadow-lg transition-all duration-300 overflow-hidden z-50 flex flex-col justify-between">
+        <div class="relative z-10">
 
-    <!-- TOP -->
-    <div>
+            <h1 class="text-2xl lg:text-3xl font-bold leading-tight">
+                Selamat Datang Dr. Rizki 👋
+            </h1>
 
-        <!-- LOGO -->
-        <div class="flex items-center gap-3 p-4 border-b">
-            <div class="w-10 h-10 bg-gradient-to-tr from-[#2C5E7E] to-[#5C94B3] rounded-xl flex items-center justify-center text-white">
-                <i class="fas fa-user-doctor"></i>
-            </div>
-            <div class="hidden group-hover:block">
-                <p class="text-sm font-semibold text-[#2C5E7E]">DigitalCare</p>
-                <p class="text-xs text-gray-400">Doctor Panel</p>
-            </div>
-        </div>
+            <p class="mt-2 text-teal-100 text-sm">
+                Anda memiliki 12 jadwal konsultasi hari ini.
+            </p>
 
-        <!-- MENU -->
-        <nav class="mt-6 space-y-2 text-gray-700 font-medium">
+            <div class="mt-5 flex gap-3">
 
-            <a href="/dashboard-dokter" class="flex items-center gap-3 px-4 py-2 hover:bg-blue-100 rounded-lg">
-                <i class="fas fa-home"></i>
-                <span class="hidden group-hover:inline">Dashboard</span>
-            </a>
+                <a href="/jadwal-praktik"
+                class="px-4 py-2 rounded-2xl bg-white text-teal-600 text-sm font-semibold hover:scale-105 transition">
 
-            <a href="/pasien" class="flex items-center gap-3 px-4 py-2 hover:bg-blue-100 rounded-lg">
-                <i class="fas fa-users"></i>
-                <span class="hidden group-hover:inline">Pasien</span>
-            </a>
+                    Lihat Jadwal
 
-            <a href="/jadwal-dokter" class="flex items-center gap-3 px-4 py-2 hover:bg-blue-100 rounded-lg">
-                <i class="fas fa-calendar"></i>
-                <span class="hidden group-hover:inline">Jadwal</span>
-            </a>
+                </a>
 
-            <a href="/rekam-medis" class="flex items-center gap-3 px-4 py-2 hover:bg-blue-100 rounded-lg">
-                <i class="fas fa-file-medical"></i>
-                <span class="hidden group-hover:inline">Rekam Medis</span>
-            </a>
+                <a href="/dokter-pasien"
+                class="px-4 py-2 rounded-2xl border border-white/30 hover:bg-white/10 text-sm transition">
 
-        </nav>
-    </div>
+                    Data Pasien
 
-    <!-- LOGOUT -->
-    <div class="mb-4 px-2">
-        <button @click="confirmLogout = true"
-            class="w-full flex items-center gap-3 px-4 py-2 text-red-500 hover:bg-red-100 rounded-lg">
-            <i class="fas fa-sign-out-alt"></i>
-            <span class="hidden group-hover:inline">Logout</span>
-        </button>
-    </div>
-</div>
-
-<!-- CONTENT -->
-<div class="flex-1 ml-16">
-
-    <!-- PROFILE -->
-    <div class="flex justify-end items-center p-6 relative">
-
-        <button @click="openProfile = !openProfile"
-            class="flex items-center gap-2 bg-white px-3 py-2 rounded-full shadow">
-
-            <!-- ICON DOKTER -->
-            <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-[#2C5E7E] to-[#5C94B3]
-                        flex items-center justify-center text-white">
-
-                <svg xmlns="http://www.w3.org/2000/svg"
-                     fill="none" viewBox="0 0 24 24"
-                     stroke-width="1.8" stroke="currentColor"
-                     class="w-4 h-4">
-
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                          d="M15.5 7.5a3.5 3.5 0 11-7 0 3.5 3.5 0 017 0z" />
-
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                          d="M4.5 20a8.5 8.5 0 0115 0" />
-
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                          d="M12 10v6m-3-3h6" />
-                </svg>
-
-            </div>
-
-            <span class="text-sm font-medium hidden md:block">Dr. Andi</span>
-        </button>
-
-        <!-- DROPDOWN -->
-        <div x-show="openProfile"
-             x-transition
-             @click.away="openProfile = false"
-             class="absolute top-16 right-6 w-72 bg-white rounded-2xl shadow-xl p-5"
-             style="display:none;">
-
-            <div class="flex items-center gap-3 mb-4">
-                <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-[#2C5E7E] to-[#5C94B3]
-                            flex items-center justify-center text-white">
-
-                    <i class="fas fa-user-doctor"></i>
-                </div>
-
-                <div>
-                    <p class="font-semibold">Dr. Andi Pratama</p>
-                    <p class="text-sm text-gray-500">dr.andi@digitalcare.id</p>
-                </div>
-            </div>
-
-            <!-- INFO PROFIL -->
-            <div class="border-t pt-3 text-sm space-y-2 text-gray-600">
-
-                <div class="flex justify-between">
-                    <span>Role</span>
-                    <span class="font-medium text-blue-600">Dokter</span>
-                </div>
-
-                <div class="flex justify-between">
-                    <span>No. STR</span>
-                    <span class="font-medium text-gray-800">312345678901</span>
-                </div>
-
-                <div class="flex justify-between">
-                    <span>No. SIP</span>
-                    <span class="font-medium text-gray-800">445/2024/DINKES</span>
-                </div>
-
-                <div class="flex justify-between">
-                    <span>No. HP</span>
-                    <span class="font-medium text-gray-800">+62 812-3456-7890</span>
-                </div>
+                </a>
 
             </div>
 
         </div>
+
+        <!-- BLUR -->
+        <div class="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-white/10"></div>
+
     </div>
 
-    <!-- MAIN -->
-    <main class="px-6 pb-6">
-
-        <h1 class="text-white text-3xl font-bold mb-1">Selamat Datang, Dr. Andi!</h1>
-        <p class="text-white opacity-90 mb-6">Kelola pasien dan jadwal hari ini</p>
+    <!-- STATISTIC -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
 
         <!-- CARD -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
 
-            <div class="bg-white rounded-2xl p-6 flex gap-4">
-                <i class="fas fa-user-injured text-4xl text-blue-500"></i>
+            <div class="flex items-center justify-between">
+
                 <div>
-                    <p class="font-semibold">Pasien Hari Ini</p>
-                    <p class="text-3xl font-bold">5</p>
-                </div>
-            </div>
 
-            <div class="bg-white rounded-2xl p-6 flex gap-4">
-                <i class="fas fa-calendar-check text-4xl text-green-500"></i>
-                <div>
-                    <p class="font-semibold">Jadwal Konsultasi</p>
-                    <p class="text-3xl font-bold">3</p>
-                </div>
-            </div>
+                    <p class="text-xs text-slate-400">
+                        Total Pasien
+                    </p>
 
-            <div class="bg-white rounded-2xl p-6 flex gap-4">
-                <i class="fas fa-prescription text-4xl text-orange-500"></i>
-                <div>
-                    <p class="font-semibold">Resep Dibuat</p>
-                    <p class="text-3xl font-bold">2</p>
-                </div>
-            </div>
+                    <h2 class="text-2xl font-bold mt-1 text-slate-800">
+                        120
+                    </h2>
 
-        </div>
-
-        <!-- BOTTOM -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
-
-            <!-- ANTRIAN -->
-            <div class="lg:col-span-2 bg-white rounded-2xl p-6">
-                <h2 class="font-semibold mb-4">Antrian Pasien</h2>
-
-                <div class="border-2 border-dashed p-10 text-center text-gray-400">
-                    Belum ada pasien dalam antrian
-                </div>
-            </div>
-
-            <!-- SIDE -->
-            <div class="space-y-6">
-
-                <div class="bg-white rounded-2xl p-5">
-                    <h2 class="font-semibold mb-2">Rekam Medis</h2>
-                    <p class="text-gray-400 text-sm">Belum ada data</p>
                 </div>
 
-                <div class="bg-white rounded-2xl p-5">
-                    <h2 class="font-semibold mb-2">Tindakan Hari Ini</h2>
-                    <p class="text-gray-400 text-sm">Belum ada tindakan</p>
+                <div class="w-11 h-11 rounded-xl bg-teal-100 flex items-center justify-center">
+
+                    <i data-lucide="users" class="w-5 h-5 text-teal-500"></i>
+
                 </div>
 
             </div>
 
         </div>
 
-    </main>
-</div>
+        <!-- CARD -->
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
 
-<!-- LOGOUT -->
-<div x-show="confirmLogout"
-     class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
-     style="display:none;">
+            <div class="flex items-center justify-between">
 
-    <div class="bg-white p-6 rounded-xl w-80 text-center">
+                <div>
 
-        <h2 class="font-semibold mb-2">Logout?</h2>
-        <p class="text-gray-600 mb-4">Yakin ingin keluar?</p>
+                    <p class="text-xs text-slate-400">
+                        Appointment
+                    </p>
 
-        <div class="flex gap-3">
-            <button @click="confirmLogout=false" class="flex-1 bg-gray-200 py-2 rounded-lg">Batal</button>
+                    <h2 class="text-2xl font-bold mt-1 text-slate-800">
+                        12
+                    </h2>
 
-            <form method="POST" action="{{ route('logout') }}" class="flex-1">
-                @csrf
-                <button class="w-full bg-red-500 text-white py-2 rounded-lg">Logout</button>
-            </form>
+                </div>
+
+                <div class="w-11 h-11 rounded-xl bg-cyan-100 flex items-center justify-center">
+
+                    <i data-lucide="calendar-days" class="w-5 h-5 text-cyan-500"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- CARD -->
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
+
+            <div class="flex items-center justify-between">
+
+                <div>
+
+                    <p class="text-xs text-slate-400">
+                        Rekam Medis
+                    </p>
+
+                    <h2 class="text-2xl font-bold mt-1 text-slate-800">
+                        89
+                    </h2>
+
+                </div>
+
+                <div class="w-11 h-11 rounded-xl bg-red-100 flex items-center justify-center">
+
+                    <i data-lucide="file-heart" class="w-5 h-5 text-red-500"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- CARD -->
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
+
+            <div class="flex items-center justify-between">
+
+                <div>
+
+                    <p class="text-xs text-slate-400">
+                        Jadwal Hari Ini
+                    </p>
+
+                    <h2 class="text-2xl font-bold mt-1 text-slate-800">
+                        6
+                    </h2>
+
+                </div>
+
+                <div class="w-11 h-11 rounded-xl bg-yellow-100 flex items-center justify-center">
+
+                    <i data-lucide="clock-3" class="w-5 h-5 text-yellow-500"></i>
+
+                </div>
+
+            </div>
+
         </div>
 
     </div>
+
+    <!-- CONTENT -->
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-4">
+
+        <!-- LEFT -->
+        <div class="xl:col-span-2 space-y-4">
+
+            <!-- JADWAL -->
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
+
+                <div class="flex justify-between items-center mb-4">
+
+                    <div>
+
+                        <h2 class="text-lg font-bold text-slate-800">
+                            Jadwal Praktik
+                        </h2>
+
+                        <p class="text-xs text-slate-400 mt-1">
+                            Jadwal konsultasi hari ini
+                        </p>
+
+                    </div>
+
+                    <a href="/jadwal-praktik"
+                    class="px-3 py-2 rounded-xl bg-teal-50 text-teal-500 text-sm font-medium hover:bg-teal-100 transition">
+
+                        Lihat Semua
+
+                    </a>
+
+                </div>
+
+                <div class="space-y-3">
+
+                    <!-- ITEM -->
+                    <div class="flex items-center justify-between p-3 rounded-2xl bg-slate-50">
+
+                        <div class="flex items-center gap-3">
+
+                            <div class="w-12 h-12 rounded-xl bg-teal-100 flex items-center justify-center font-bold text-sm text-teal-600">
+                                08:00
+                            </div>
+
+                            <div>
+
+                                <h3 class="font-semibold text-sm text-slate-800">
+                                    Ahmad Fauzi
+                                </h3>
+
+                                <p class="text-xs text-slate-400">
+                                    Demam & Batuk
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <span class="px-3 py-1 rounded-xl bg-green-100 text-green-600 text-xs font-semibold">
+                            Selesai
+                        </span>
+
+                    </div>
+
+                    <!-- ITEM -->
+                    <div class="flex items-center justify-between p-3 rounded-2xl bg-slate-50">
+
+                        <div class="flex items-center gap-3">
+
+                            <div class="w-12 h-12 rounded-xl bg-cyan-100 flex items-center justify-center font-bold text-sm text-cyan-600">
+                                09:00
+                            </div>
+
+                            <div>
+
+                                <h3 class="font-semibold text-sm text-slate-800">
+                                    Budi Santoso
+                                </h3>
+
+                                <p class="text-xs text-slate-400">
+                                    Sakit Kepala
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <span class="px-3 py-1 rounded-xl bg-yellow-100 text-yellow-600 text-xs font-semibold">
+                            Menunggu
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- APPOINTMENT -->
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
+
+                <div class="flex justify-between items-center mb-4">
+
+                    <div>
+
+                        <h2 class="text-lg font-bold text-slate-800">
+                            Appointment
+                        </h2>
+
+                        <p class="text-xs text-slate-400 mt-1">
+                            Appointment terbaru pasien
+                        </p>
+
+                    </div>
+
+                    <a href="/appointment"
+                    class="text-sm text-teal-500 font-medium">
+
+                        Lihat Semua
+
+                    </a>
+
+                </div>
+
+                <div class="overflow-x-auto">
+
+                    <table class="w-full">
+
+                        <thead>
+
+                            <tr class="border-b">
+
+                                <th class="text-left py-3 text-xs text-slate-400">
+                                    Nama
+                                </th>
+
+                                <th class="text-left py-3 text-xs text-slate-400">
+                                    Jam
+                                </th>
+
+                                <th class="text-left py-3 text-xs text-slate-400">
+                                    Status
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <tr class="border-b">
+
+                                <td class="py-3 text-sm font-medium">
+                                    Rizky
+                                </td>
+
+                                <td class="py-3 text-sm">
+                                    11:00 WIB
+                                </td>
+
+                                <td class="py-3">
+
+                                    <span class="px-3 py-1 rounded-xl bg-yellow-100 text-yellow-600 text-xs font-semibold">
+                                        Menunggu
+                                    </span>
+
+                                </td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td class="py-3 text-sm font-medium">
+                                    Andi
+                                </td>
+
+                                <td class="py-3 text-sm">
+                                    13:00 WIB
+                                </td>
+
+                                <td class="py-3">
+
+                                    <span class="px-3 py-1 rounded-xl bg-green-100 text-green-600 text-xs font-semibold">
+                                        Selesai
+                                    </span>
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT -->
+        <div class="space-y-4">
+
+            <!-- CHART -->
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
+
+                <div>
+
+                    <h2 class="text-lg font-bold text-slate-800">
+                        Statistik
+                    </h2>
+
+                    <p class="text-xs text-slate-400 mt-1">
+                        Status konsultasi
+                    </p>
+
+                </div>
+
+                <div class="mt-4 h-[220px]">
+
+                    <canvas id="dokterChart"></canvas>
+
+                </div>
+
+            </div>
+
+            <!-- INFO -->
+            <div class="bg-gradient-to-br from-teal-500 to-cyan-500 rounded-2xl p-5 text-white shadow-lg">
+
+                <h2 class="text-lg font-bold">
+                    Informasi Klinik
+                </h2>
+
+                <p class="text-sm text-teal-100 mt-2">
+                    Klinik buka hingga pukul 21:00 WIB.
+                </p>
+
+                <div class="mt-5 space-y-3">
+
+                    <div class="flex items-center gap-3">
+
+                        <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+
+                            <i data-lucide="phone" class="w-5 h-5"></i>
+
+                        </div>
+
+                        <div>
+
+                            <p class="text-xs text-teal-100">
+                                Kontak
+                            </p>
+
+                            <h3 class="font-semibold text-sm">
+                                +62 812-3456
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+                    <div class="flex items-center gap-3">
+
+                        <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+
+                            <i data-lucide="map-pin" class="w-5 h-5"></i>
+
+                        </div>
+
+                        <div>
+
+                            <p class="text-xs text-teal-100">
+                                Lokasi
+                            </p>
+
+                            <h3 class="font-semibold text-sm">
+                                Batam Center
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
 
-</body>
-</html>
+<!-- CHART -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+const ctx = document.getElementById('dokterChart');
+
+new Chart(ctx, {
+
+    type: 'doughnut',
+
+    data: {
+
+        labels: ['Selesai', 'Menunggu', 'Batal'],
+
+        datasets: [{
+
+            data: [12, 5, 2],
+
+            backgroundColor: [
+                '#14b8a6',
+                '#facc15',
+                '#f87171'
+            ],
+
+            borderWidth: 0
+
+        }]
+
+    },
+
+    options: {
+
+        cutout: '72%',
+
+        plugins: {
+
+            legend: {
+                position: 'bottom'
+            }
+
+        },
+
+        maintainAspectRatio: false
+
+    }
+
+});
+
+</script>
+
+@endsection

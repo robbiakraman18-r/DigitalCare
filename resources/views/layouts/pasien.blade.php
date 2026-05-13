@@ -23,7 +23,7 @@ x-data="{ openProfile:false, logoutModal:false }">
     <div class="fixed bottom-0 right-0 w-80 h-80 bg-cyan-200/40 blur-3xl rounded-full -z-10"></div>
 
     <!-- SIDEBAR -->
-    <x-sidebar />
+    <x-sidebar-pasien />
 
     
     
@@ -31,7 +31,7 @@ x-data="{ openProfile:false, logoutModal:false }">
     <div class="flex-1 ml-20">
         
         <!-- TOPBAR -->
-        <x-topbar />
+        <x-topbar-pasien />
         
         <!-- CONTENT -->
         <main class="px-6 lg:px-10 pb-10">
