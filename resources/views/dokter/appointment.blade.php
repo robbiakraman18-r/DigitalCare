@@ -1,8 +1,8 @@
 @extends('layouts.dokter')
 
-@section('title', 'Janji Temu')
+@section('title', 'Appointments')
 
-@section('subtitle', 'Janji temu pasien hari ini dan besok')
+@section('subtitle', 'Today’s and tomorrow’s patient appointments')
 
 @section('content')
 
@@ -17,11 +17,11 @@ class="space-y-6">
         <div class="bg-gradient-to-r from-teal-500 to-cyan-500 px-6 py-5 text-white">
 
             <h2 class="text-2xl font-bold">
-                Janji Temu
+                Appointments
             </h2>
 
             <p class="text-sm text-teal-100 mt-1">
-                Data appointment pasien.
+                Patient appointment data.
             </p>
 
         </div>
@@ -40,7 +40,7 @@ class="space-y-6">
 
                     <input
                     type="text"
-                    placeholder="Cari nama pasien..."
+                    placeholder="Search patient name..."
                     class="w-full pl-11 pr-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500">
 
                 </div>
@@ -49,11 +49,11 @@ class="space-y-6">
                 <div class="flex gap-3">
 
                     <button class="px-5 py-3 rounded-2xl bg-teal-500 text-white text-sm font-medium">
-                        Hari Ini
+                        Today
                     </button>
 
                     <button class="px-5 py-3 rounded-2xl bg-slate-100 text-slate-600 text-sm font-medium hover:bg-slate-200 transition">
-                        Besok
+                        Tomorrow
                     </button>
 
                 </div>
@@ -70,19 +70,19 @@ class="space-y-6">
                         <tr class="bg-slate-50 text-slate-500">
 
                             <th class="text-left py-4 px-4 rounded-l-2xl">
-                                Waktu
+                                Time
                             </th>
 
                             <th class="text-left py-4 px-4">
-                                Pasien
+                                Patient
                             </th>
 
                             <th class="text-left py-4 px-4">
-                                Keluhan
+                                Complaint
                             </th>
 
                             <th class="text-left py-4 px-4">
-                                Jenis
+                                Type
                             </th>
 
                             <th class="text-left py-4 px-4">
@@ -90,7 +90,7 @@ class="space-y-6">
                             </th>
 
                             <th class="text-left py-4 px-4 rounded-r-2xl">
-                                Aksi
+                                Action
                             </th>
 
                         </tr>
@@ -111,17 +111,17 @@ class="space-y-6">
                             </td>
 
                             <td class="py-4 px-4 text-slate-500">
-                                Demam
+                                Fever
                             </td>
 
                             <td class="py-4 px-4 text-slate-500">
-                                Konsultasi
+                                Consultation
                             </td>
 
                             <td class="py-4 px-4">
 
                                 <span class="px-3 py-1 rounded-xl bg-green-100 text-green-600 text-xs font-semibold">
-                                    Selesai
+                                    Completed
                                 </span>
 
                             </td>
@@ -132,7 +132,7 @@ class="space-y-6">
                                 @click="detailModal=true"
                                 class="px-4 py-2 rounded-xl border border-teal-500 text-teal-500 text-xs hover:bg-teal-50 transition">
 
-                                    Detail
+                                    Details
 
                                 </button>
 
@@ -152,17 +152,17 @@ class="space-y-6">
                             </td>
 
                             <td class="py-4 px-4 text-slate-500">
-                                Batuk
+                                Cough
                             </td>
 
                             <td class="py-4 px-4 text-slate-500">
-                                Konsultasi
+                                Consultation
                             </td>
 
                             <td class="py-4 px-4">
 
                                 <span class="px-3 py-1 rounded-xl bg-yellow-100 text-yellow-600 text-xs font-semibold">
-                                    Menunggu
+                                    Waiting
                                 </span>
 
                             </td>
@@ -173,7 +173,7 @@ class="space-y-6">
                                 @click="detailModal=true"
                                 class="px-4 py-2 rounded-xl border border-teal-500 text-teal-500 text-xs hover:bg-teal-50 transition">
 
-                                    Detail
+                                    Details
 
                                 </button>
 
@@ -191,7 +191,6 @@ class="space-y-6">
 
     </div>
 
-    <!-- MODAL DETAIL -->
     <!-- MODAL DETAIL -->
 <div
 x-show="detailModal"
@@ -217,11 +216,11 @@ style="display:none;">
         <div class="bg-gradient-to-r from-teal-500 to-cyan-500 p-6 rounded-t-[30px] text-white">
 
             <h2 class="text-2xl font-bold">
-                Detail Janji Temu
+                Appointment Details
             </h2>
 
             <p class="text-sm text-teal-100 mt-1">
-                Informasi lengkap appointment pasien
+                Complete patient appointment information
             </p>
 
         </div>
@@ -243,13 +242,13 @@ style="display:none;">
                     </h3>
 
                     <p class="text-sm text-slate-400">
-                        Pasien Konsultasi Umum
+                        General Consultation Patient
                     </p>
 
                     <div class="mt-2">
 
                         <span class="px-3 py-1 rounded-xl bg-green-100 text-green-600 text-xs font-semibold">
-                            Selesai
+                            Completed
                         </span>
 
                     </div>
@@ -264,11 +263,11 @@ style="display:none;">
                 <div class="rounded-2xl bg-slate-50 p-4">
 
                     <p class="text-xs text-slate-400">
-                        Tanggal
+                        Date
                     </p>
 
                     <h4 class="font-bold text-slate-800 mt-2">
-                        20 Mei 2026
+                        May 20, 2026
                     </h4>
 
                 </div>
@@ -276,11 +275,11 @@ style="display:none;">
                 <div class="rounded-2xl bg-slate-50 p-4">
 
                     <p class="text-xs text-slate-400">
-                        Jam Praktik
+                        Practice Time
                     </p>
 
                     <h4 class="font-bold text-slate-800 mt-2">
-                        08:00 WIB
+                        08:00 AM
                     </h4>
 
                 </div>
@@ -288,11 +287,11 @@ style="display:none;">
                 <div class="rounded-2xl bg-slate-50 p-4">
 
                     <p class="text-xs text-slate-400">
-                        Jenis Pemeriksaan
+                        Examination Type
                     </p>
 
                     <h4 class="font-bold text-slate-800 mt-2">
-                        Konsultasi
+                        Consultation
                     </h4>
 
                 </div>
@@ -300,11 +299,11 @@ style="display:none;">
                 <div class="rounded-2xl bg-slate-50 p-4">
 
                     <p class="text-xs text-slate-400">
-                        Keluhan
+                        Complaint
                     </p>
 
                     <h4 class="font-bold text-slate-800 mt-2">
-                        Demam Tinggi
+                        High Fever
                     </h4>
 
                 </div>
@@ -315,14 +314,14 @@ style="display:none;">
             <div class="rounded-2xl border border-slate-100 p-5">
 
                 <h3 class="font-bold text-slate-800 mb-3">
-                    Catatan Pasien
+                    Patient Notes
                 </h3>
 
                 <p class="text-sm leading-7 text-slate-500">
 
-                    Pasien mengalami demam sejak 2 hari terakhir disertai sakit kepala
-                    dan tubuh lemas. Sudah mengonsumsi obat penurun panas namun belum
-                    membaik.
+                    The patient has been experiencing a fever for the past 2 days,
+                    accompanied by headaches and body weakness. The patient has taken
+                    fever-reducing medication but has not improved yet.
 
                 </p>
 
@@ -334,7 +333,7 @@ style="display:none;">
                 <button
                 class="flex-1 py-3 rounded-2xl bg-teal-500 hover:bg-teal-600 text-white font-semibold transition">
 
-                    Mulai Konsultasi
+                    Start Consultation
 
                 </button>
 
@@ -342,7 +341,7 @@ style="display:none;">
                 @click="detailModal=false"
                 class="flex-1 py-3 rounded-2xl border border-slate-200 hover:bg-slate-50 font-semibold text-slate-700 transition">
 
-                    Tutup
+                    Close
 
                 </button>
 

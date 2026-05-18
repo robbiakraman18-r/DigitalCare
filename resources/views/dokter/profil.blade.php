@@ -8,11 +8,11 @@
     <div>
 
         <h1 class="text-3xl font-bold text-slate-800">
-            Profil Dokter
+            Doctor Profile
         </h1>
 
         <p class="text-slate-400 mt-1">
-            Informasi profil dokter DigitalCare.
+            Doctor profile information at DigitalCare.
         </p>
 
     </div>
@@ -36,17 +36,17 @@
                 </h2>
 
                 <p class="text-teal-100 mt-2 text-lg">
-                    Dokter Umum • DigitalCare Clinic
+                    General Practitioner • DigitalCare Clinic
                 </p>
 
                 <div class="flex flex-wrap gap-3 mt-5">
 
                     <span class="px-4 py-2 rounded-xl bg-white/20 text-sm font-semibold">
-                        Aktif
+                        Active
                     </span>
 
                     <span class="px-4 py-2 rounded-xl bg-white/20 text-sm font-semibold">
-                        5 Tahun Pengalaman
+                        5 Years of Experience
                     </span>
 
                 </div>
@@ -74,11 +74,11 @@
                 <div>
 
                     <h2 class="text-xl font-bold text-slate-800">
-                        Informasi Pribadi
+                        Personal Information
                     </h2>
 
                     <p class="text-sm text-slate-400">
-                        Data dokter yang terdaftar
+                        Registered doctor data
                     </p>
 
                 </div>
@@ -90,7 +90,7 @@
                 <div class="flex justify-between border-b pb-4">
 
                     <span class="text-slate-400">
-                        Nama Lengkap
+                        Full Name
                     </span>
 
                     <span class="font-semibold text-slate-700">
@@ -102,11 +102,11 @@
                 <div class="flex justify-between border-b pb-4">
 
                     <span class="text-slate-400">
-                        Jenis Kelamin
+                        Gender
                     </span>
 
                     <span class="font-semibold text-slate-700">
-                        Laki-laki
+                        Male
                     </span>
 
                 </div>
@@ -114,11 +114,11 @@
                 <div class="flex justify-between border-b pb-4">
 
                     <span class="text-slate-400">
-                        Tanggal Lahir
+                        Date of Birth
                     </span>
 
                     <span class="font-semibold text-slate-700">
-                        12 Mei 1995
+                        12 May 1995
                     </span>
 
                 </div>
@@ -138,7 +138,7 @@
                 <div class="flex justify-between">
 
                     <span class="text-slate-400">
-                        No Telepon
+                        Phone Number
                     </span>
 
                     <span class="font-semibold text-slate-700">
@@ -151,7 +151,7 @@
 
         </div>
 
-        <!-- PROFESIONAL -->
+        <!-- PROFESSIONAL -->
         <div class="bg-white rounded-[32px] border border-slate-100 shadow-sm p-7">
 
             <div class="flex items-center gap-3 mb-6">
@@ -165,11 +165,11 @@
                 <div>
 
                     <h2 class="text-xl font-bold text-slate-800">
-                        Informasi Profesional
+                        Professional Information
                     </h2>
 
                     <p class="text-sm text-slate-400">
-                        Data profesi dokter
+                        Doctor profession data
                     </p>
 
                 </div>
@@ -181,7 +181,7 @@
                 <div class="flex justify-between border-b pb-4">
 
                     <span class="text-slate-400">
-                        ID Dokter
+                        Doctor ID
                     </span>
 
                     <span class="font-semibold text-slate-700">
@@ -193,11 +193,11 @@
                 <div class="flex justify-between border-b pb-4">
 
                     <span class="text-slate-400">
-                        Spesialis
+                        Specialization
                     </span>
 
                     <span class="font-semibold text-slate-700">
-                        Dokter Umum
+                        General Practitioner
                     </span>
 
                 </div>
@@ -205,11 +205,11 @@
                 <div class="flex justify-between border-b pb-4">
 
                     <span class="text-slate-400">
-                        Jadwal Praktik
+                        Practice Schedule
                     </span>
 
                     <span class="font-semibold text-slate-700">
-                        Senin - Sabtu
+                        Monday - Saturday
                     </span>
 
                 </div>
@@ -217,7 +217,7 @@
                 <div class="flex justify-between border-b pb-4">
 
                     <span class="text-slate-400">
-                        Jam Praktik
+                        Practice Hours
                     </span>
 
                     <span class="font-semibold text-slate-700">
@@ -233,7 +233,7 @@
                     </span>
 
                     <span class="font-semibold text-green-600">
-                        Aktif
+                        Active
                     </span>
 
                 </div>
@@ -255,7 +255,7 @@
                 <div>
 
                     <p class="text-slate-400 text-sm">
-                        Total Pasien
+                        Total Patients
                     </p>
 
                     <h2 class="text-3xl font-bold text-slate-800 mt-2">
@@ -282,7 +282,7 @@
                 <div>
 
                     <p class="text-slate-400 text-sm">
-                        Appointment
+                        Appointments
                     </p>
 
                     <h2 class="text-3xl font-bold text-slate-800 mt-2">
@@ -309,7 +309,7 @@
                 <div>
 
                     <p class="text-slate-400 text-sm">
-                        Rekam Medis
+                        Medical Records
                     </p>
 
                     <h2 class="text-3xl font-bold text-slate-800 mt-2">

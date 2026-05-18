@@ -1,7 +1,7 @@
 @extends('layouts.dokter')
 
-@section('title', 'Dashboard Dokter')
-@section('subtitle', 'Pantau aktivitas praktik hari ini')
+@section('title', 'Doctor Dashboard')
+@section('subtitle', 'Today’s Practicum Activity Monitoring')
 
 @section('content')
 
@@ -13,11 +13,11 @@
         <div class="relative z-10">
 
             <h1 class="text-2xl lg:text-3xl font-bold leading-tight">
-                Selamat Datang Dr. Rizki 👋
+                Welcome, Dr. Rizki 👋
             </h1>
 
             <p class="mt-2 text-teal-100 text-sm">
-                Anda memiliki 12 jadwal konsultasi hari ini.
+                You have 12 consultation schedules for today.
             </p>
 
             <div class="mt-5 flex gap-3">
@@ -25,14 +25,14 @@
                 <a href="/jadwal-praktik"
                 class="px-4 py-2 rounded-2xl bg-white text-teal-600 text-sm font-semibold hover:scale-105 transition">
 
-                    Lihat Jadwal
+                    View Schedule
 
                 </a>
 
                 <a href="/dokter-pasien"
                 class="px-4 py-2 rounded-2xl border border-white/30 hover:bg-white/10 text-sm transition">
 
-                    Data Pasien
+                    Patient Data
 
                 </a>
 
@@ -56,7 +56,7 @@
                 <div>
 
                     <p class="text-xs text-slate-400">
-                        Total Pasien
+                        Total Patients
                     </p>
 
                     <h2 class="text-2xl font-bold mt-1 text-slate-800">
@@ -83,7 +83,7 @@
                 <div>
 
                     <p class="text-xs text-slate-400">
-                        Appointment
+                        Appointments
                     </p>
 
                     <h2 class="text-2xl font-bold mt-1 text-slate-800">
@@ -110,7 +110,7 @@
                 <div>
 
                     <p class="text-xs text-slate-400">
-                        Rekam Medis
+                        Medical Records
                     </p>
 
                     <h2 class="text-2xl font-bold mt-1 text-slate-800">
@@ -137,7 +137,7 @@
                 <div>
 
                     <p class="text-xs text-slate-400">
-                        Jadwal Hari Ini
+                        Today's Schedule
                     </p>
 
                     <h2 class="text-2xl font-bold mt-1 text-slate-800">
@@ -164,7 +164,7 @@
         <!-- LEFT -->
         <div class="xl:col-span-2 space-y-4">
 
-            <!-- JADWAL -->
+            <!-- SCHEDULE -->
             <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
 
                 <div class="flex justify-between items-center mb-4">
@@ -172,11 +172,11 @@
                     <div>
 
                         <h2 class="text-lg font-bold text-slate-800">
-                            Jadwal Praktik
+                            Practice Schedule
                         </h2>
 
                         <p class="text-xs text-slate-400 mt-1">
-                            Jadwal konsultasi hari ini
+                            Today's consultation schedule
                         </p>
 
                     </div>
@@ -184,7 +184,7 @@
                     <a href="/jadwal-praktik"
                     class="px-3 py-2 rounded-xl bg-teal-50 text-teal-500 text-sm font-medium hover:bg-teal-100 transition">
 
-                        Lihat Semua
+                        View All
 
                     </a>
 
@@ -208,7 +208,7 @@
                                 </h3>
 
                                 <p class="text-xs text-slate-400">
-                                    Demam & Batuk
+                                    Fever & Cough
                                 </p>
 
                             </div>
@@ -216,7 +216,7 @@
                         </div>
 
                         <span class="px-3 py-1 rounded-xl bg-green-100 text-green-600 text-xs font-semibold">
-                            Selesai
+                            Completed
                         </span>
 
                     </div>
@@ -237,7 +237,7 @@
                                 </h3>
 
                                 <p class="text-xs text-slate-400">
-                                    Sakit Kepala
+                                    Headache
                                 </p>
 
                             </div>
@@ -245,7 +245,7 @@
                         </div>
 
                         <span class="px-3 py-1 rounded-xl bg-yellow-100 text-yellow-600 text-xs font-semibold">
-                            Menunggu
+                            Waiting
                         </span>
 
                     </div>
@@ -262,11 +262,11 @@
                     <div>
 
                         <h2 class="text-lg font-bold text-slate-800">
-                            Appointment
+                            Appointments
                         </h2>
 
                         <p class="text-xs text-slate-400 mt-1">
-                            Appointment terbaru pasien
+                            Latest patient appointments
                         </p>
 
                     </div>
@@ -274,7 +274,7 @@
                     <a href="/appointment"
                     class="text-sm text-teal-500 font-medium">
 
-                        Lihat Semua
+                        View All
 
                     </a>
 
@@ -289,11 +289,11 @@
                             <tr class="border-b">
 
                                 <th class="text-left py-3 text-xs text-slate-400">
-                                    Nama
+                                    Name
                                 </th>
 
                                 <th class="text-left py-3 text-xs text-slate-400">
-                                    Jam
+                                    Time
                                 </th>
 
                                 <th class="text-left py-3 text-xs text-slate-400">
@@ -313,13 +313,13 @@
                                 </td>
 
                                 <td class="py-3 text-sm">
-                                    11:00 WIB
+                                    11:00 AM
                                 </td>
 
                                 <td class="py-3">
 
                                     <span class="px-3 py-1 rounded-xl bg-yellow-100 text-yellow-600 text-xs font-semibold">
-                                        Menunggu
+                                        Waiting
                                     </span>
 
                                 </td>
@@ -333,13 +333,13 @@
                                 </td>
 
                                 <td class="py-3 text-sm">
-                                    13:00 WIB
+                                    01:00 PM
                                 </td>
 
                                 <td class="py-3">
 
                                     <span class="px-3 py-1 rounded-xl bg-green-100 text-green-600 text-xs font-semibold">
-                                        Selesai
+                                        Completed
                                     </span>
 
                                 </td>
@@ -355,149 +355,5 @@
             </div>
 
         </div>
-
-        <!-- RIGHT -->
-        <div class="space-y-4">
-
-            <!-- CHART -->
-            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
-
-                <div>
-
-                    <h2 class="text-lg font-bold text-slate-800">
-                        Statistik
-                    </h2>
-
-                    <p class="text-xs text-slate-400 mt-1">
-                        Status konsultasi
-                    </p>
-
-                </div>
-
-                <div class="mt-4 h-[220px]">
-
-                    <canvas id="dokterChart"></canvas>
-
-                </div>
-
-            </div>
-
-            <!-- INFO -->
-            <div class="bg-gradient-to-br from-teal-500 to-cyan-500 rounded-2xl p-5 text-white shadow-lg">
-
-                <h2 class="text-lg font-bold">
-                    Informasi Klinik
-                </h2>
-
-                <p class="text-sm text-teal-100 mt-2">
-                    Klinik buka hingga pukul 21:00 WIB.
-                </p>
-
-                <div class="mt-5 space-y-3">
-
-                    <div class="flex items-center gap-3">
-
-                        <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
-
-                            <i data-lucide="phone" class="w-5 h-5"></i>
-
-                        </div>
-
-                        <div>
-
-                            <p class="text-xs text-teal-100">
-                                Kontak
-                            </p>
-
-                            <h3 class="font-semibold text-sm">
-                                +62 812-3456
-                            </h3>
-
-                        </div>
-
-                    </div>
-
-                    <div class="flex items-center gap-3">
-
-                        <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
-
-                            <i data-lucide="map-pin" class="w-5 h-5"></i>
-
-                        </div>
-
-                        <div>
-
-                            <p class="text-xs text-teal-100">
-                                Lokasi
-                            </p>
-
-                            <h3 class="font-semibold text-sm">
-                                Batam Center
-                            </h3>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-<!-- CHART -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<script>
-
-const ctx = document.getElementById('dokterChart');
-
-new Chart(ctx, {
-
-    type: 'doughnut',
-
-    data: {
-
-        labels: ['Selesai', 'Menunggu', 'Batal'],
-
-        datasets: [{
-
-            data: [12, 5, 2],
-
-            backgroundColor: [
-                '#14b8a6',
-                '#facc15',
-                '#f87171'
-            ],
-
-            borderWidth: 0
-
-        }]
-
-    },
-
-    options: {
-
-        cutout: '72%',
-
-        plugins: {
-
-            legend: {
-                position: 'bottom'
-            }
-
-        },
-
-        maintainAspectRatio: false
-
-    }
-
-});
-
-</script>
 
 @endsection

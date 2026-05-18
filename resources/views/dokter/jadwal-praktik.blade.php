@@ -10,11 +10,11 @@
         <div class="bg-gradient-to-r from-teal-500 to-cyan-500 px-6 py-5 text-white">
 
             <h2 class="text-2xl font-bold">
-                Jadwal Praktik
+                Practice Schedule
             </h2>
 
             <p class="text-sm text-teal-100 mt-1">
-                Jadwal praktik hari ini dan besok.
+                Practice schedule for today and tomorrow.
             </p>
 
         </div>
@@ -28,11 +28,11 @@
                 <div>
 
                     <h3 class="font-semibold text-slate-800">
-                        Minggu ini
+                        This Week
                     </h3>
 
                     <p class="text-sm text-slate-400 mt-1">
-                        20 - 21 Mei 2026
+                        20 - 21 May 2026
                     </p>
 
                 </div>
@@ -40,7 +40,7 @@
                 <button
                 class="px-4 py-2 rounded-2xl bg-teal-50 text-teal-600 text-sm font-medium hover:bg-teal-100 transition">
 
-                    Hari Berikutnya →
+                    Next Day →
 
                 </button>
 
@@ -56,19 +56,19 @@
                         <tr class="bg-slate-50 text-slate-500">
 
                             <th class="text-left py-4 px-4 rounded-l-2xl">
-                                Hari
+                                Day
                             </th>
 
                             <th class="text-left py-4 px-4">
-                                Tanggal
+                                Date
                             </th>
 
                             <th class="text-left py-4 px-4">
-                                Waktu Praktik
+                                Practice Hours
                             </th>
 
                             <th class="text-left py-4 px-4">
-                                Kuota
+                                Quota
                             </th>
 
                             <th class="text-left py-4 px-4 rounded-r-2xl">
@@ -84,11 +84,11 @@
                         <tr>
 
                             <td class="py-4 px-4 font-medium text-slate-700">
-                                Hari Ini
+                                Today
                             </td>
 
                             <td class="py-4 px-4 text-slate-500">
-                                20 Mei 2026
+                                20 May 2026
                             </td>
 
                             <td class="py-4 px-4 text-slate-500">
@@ -96,13 +96,13 @@
                             </td>
 
                             <td class="py-4 px-4 text-slate-500">
-                                20 Pasien
+                                20 Patients
                             </td>
 
                             <td class="py-4 px-4">
 
                                 <span class="px-3 py-1 rounded-xl bg-green-100 text-green-600 text-xs font-semibold">
-                                    Aktif
+                                    Active
                                 </span>
 
                             </td>
@@ -112,11 +112,11 @@
                         <tr>
 
                             <td class="py-4 px-4 font-medium text-slate-700">
-                                Besok
+                                Tomorrow
                             </td>
 
                             <td class="py-4 px-4 text-slate-500">
-                                21 Mei 2026
+                                21 May 2026
                             </td>
 
                             <td class="py-4 px-4 text-slate-500">
@@ -124,13 +124,13 @@
                             </td>
 
                             <td class="py-4 px-4 text-slate-500">
-                                15 Pasien
+                                15 Patients
                             </td>
 
                             <td class="py-4 px-4">
 
                                 <span class="px-3 py-1 rounded-xl bg-yellow-100 text-yellow-600 text-xs font-semibold">
-                                    Menunggu
+                                    Pending
                                 </span>
 
                             </td>
@@ -151,7 +151,7 @@
                 </div>
 
                 <p class="text-sm text-slate-600">
-                    Jadwal dapat berubah sesuai kebutuhan klinik.
+                    The schedule may change according to clinic needs.
                 </p>
 
             </div>

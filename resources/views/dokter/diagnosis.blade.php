@@ -71,7 +71,7 @@
                     </div>
 
                     <p class="text-slate-500 leading-relaxed">
-                        Sakit kepala, demam dan batuk sejak 2 hari yang lalu.
+                        Headache, fever, and cough for the past 2 days.
                     </p>
 
                 </div>
@@ -161,7 +161,7 @@
 
                     <textarea
                     rows="3"
-                    class="mt-2 w-full px-5 py-4 rounded-2xl border border-slate-200 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-teal-500">Sakit kepala, demam, dan batuk sejak 2 hari yang lalu.</textarea>
+                    class="mt-2 w-full px-5 py-4 rounded-2xl border border-slate-200 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-teal-500">Headache, fever, and cough for the past 2 days.</textarea>
 
                 </div>
 
@@ -173,7 +173,7 @@
 
                     <textarea
                     rows="3"
-                    class="mt-2 w-full px-5 py-4 rounded-2xl border border-slate-200 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-teal-500">Tidak ada riwayat penyakit kronis.</textarea>
+                    class="mt-2 w-full px-5 py-4 rounded-2xl border border-slate-200 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-teal-500">No history of chronic illness.</textarea>
 
                 </div>
 
@@ -185,7 +185,7 @@
 
                     <textarea
                     rows="3"
-                    class="mt-2 w-full px-5 py-4 rounded-2xl border border-slate-200 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-teal-500">Suhu tubuh 38.2 C, tekanan darah normal, tenggorokan kemerahan.</textarea>
+                    class="mt-2 w-full px-5 py-4 rounded-2xl border border-slate-200 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-teal-500">Body temperature 38.2°C, normal blood pressure, throat redness.</textarea>
 
                 </div>
 
@@ -197,7 +197,7 @@
 
                     <textarea
                     rows="3"
-                    class="mt-2 w-full px-5 py-4 rounded-2xl border border-slate-200 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-teal-500">Faringitis Akut (J02.9)</textarea>
+                    class="mt-2 w-full px-5 py-4 rounded-2xl border border-slate-200 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-teal-500">Acute Pharyngitis (J02.9)</textarea>
 
                 </div>
 
@@ -212,8 +212,8 @@
                 {
                     name:'Paracetamol 500mg',
                     dose:'1 Tablet',
-                    frequency:'3x sehari',
-                    duration:'5 Hari'
+                    frequency:'3 times a day',
+                    duration:'5 Days'
                 }
             ],
 
@@ -251,7 +251,7 @@
             </h2>
 
             <p class="text-sm text-slate-400">
-                Tambahkan obat untuk pasien
+                Add medication for the patient
             </p>
 
         </div>
@@ -287,6 +287,7 @@
     </div>
 
 </div>
+
             <!-- TABLE -->
             <div class="overflow-x-auto">
 
@@ -332,7 +333,7 @@
                                         <input
                                         type="text"
                                         x-model="medicine.name"
-                                        placeholder="Nama obat"
+                                        placeholder="Medicine name"
                                         class="flex-1 px-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-500">
 
                                         <!-- DELETE -->
@@ -368,7 +369,7 @@
                                     <input
                                     type="text"
                                     x-model="medicine.frequency"
-                                    placeholder="3x sehari"
+                                    placeholder="3 times a day"
                                     class="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-500">
 
                                 </td>
@@ -379,7 +380,7 @@
                                     <input
                                     type="text"
                                     x-model="medicine.duration"
-                                    placeholder="5 Hari"
+                                    placeholder="5 Days"
                                     class="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-500">
 
                                 </td>
@@ -404,13 +405,13 @@
 
                     <p class="text-sm text-green-700 leading-relaxed">
 
-                        Setelah diagnosis dan prescription disimpan,
-                        data otomatis akan masuk ke halaman:
+                        After the diagnosis and prescription are saved,
+                        the data will automatically appear on:
 
                         <span class="font-semibold">
-                            Rekam Medis Dokter,
-                            Data Pasien,
-                            dan Medical Records Admin.
+                            Doctor Medical Records,
+                            Patient Data,
+                            and Admin Medical Records.
                         </span>
 
                     </p>
@@ -438,7 +439,7 @@
             </h3>
 
             <p class="text-xs text-slate-400 mt-1">
-                Simpan ke rekam medis
+                Save to medical records
             </p>
 
         </button>
@@ -455,7 +456,7 @@
             </h3>
 
             <p class="text-xs text-slate-400 mt-1">
-                Cetak resep pasien
+                Print patient prescription
             </p>
 
         </button>
@@ -472,7 +473,7 @@
             </h3>
 
             <p class="text-xs text-slate-400 mt-1">
-                Kirim hasil diagnosis
+                Send diagnosis results
             </p>
 
         </button>

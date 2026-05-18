@@ -10,11 +10,11 @@
         <div>
 
             <h1 class="text-3xl font-bold text-slate-800">
-                Detail Pasien
+                Patient Details
             </h1>
 
             <p class="text-slate-400 mt-1">
-                Informasi lengkap pasien konsultasi.
+                Complete consultation patient information.
             </p>
 
         </div>
@@ -23,7 +23,7 @@
         href="/dokter-pasien"
         class="px-5 py-3 rounded-2xl bg-slate-100 hover:bg-slate-200 font-semibold transition">
 
-            Kembali
+            Back
 
         </a>
 
@@ -51,11 +51,11 @@
                 <div class="flex flex-wrap gap-3 mt-5">
 
                     <span class="px-4 py-2 rounded-xl bg-teal-100 text-teal-600 text-sm font-semibold">
-                        Pasien Aktif
+                        Active Patient
                     </span>
 
                     <span class="px-4 py-2 rounded-xl bg-cyan-100 text-cyan-600 text-sm font-semibold">
-                        Konsultasi Hari Ini
+                        Today's Consultation
                     </span>
 
                 </div>
@@ -73,33 +73,33 @@
         <div class="bg-white rounded-[32px] border border-slate-100 shadow-sm p-7">
 
             <h2 class="text-xl font-bold text-slate-800 mb-6">
-                Biodata Pasien
+                Patient Biodata
             </h2>
 
             <div class="space-y-5">
 
                 <div class="flex justify-between">
-                    <span class="text-slate-400">Nama Lengkap</span>
+                    <span class="text-slate-400">Full Name</span>
                     <span class="font-semibold text-slate-700">Ahmad Fauzi</span>
                 </div>
 
                 <div class="flex justify-between">
-                    <span class="text-slate-400">Umur</span>
-                    <span class="font-semibold text-slate-700">21 Tahun</span>
+                    <span class="text-slate-400">Age</span>
+                    <span class="font-semibold text-slate-700">21 Years Old</span>
                 </div>
 
                 <div class="flex justify-between">
-                    <span class="text-slate-400">Jenis Kelamin</span>
-                    <span class="font-semibold text-slate-700">Laki-laki</span>
+                    <span class="text-slate-400">Gender</span>
+                    <span class="font-semibold text-slate-700">Male</span>
                 </div>
 
                 <div class="flex justify-between">
-                    <span class="text-slate-400">No Telepon</span>
+                    <span class="text-slate-400">Phone Number</span>
                     <span class="font-semibold text-slate-700">0812-3456-7890</span>
                 </div>
 
                 <div class="flex justify-between">
-                    <span class="text-slate-400">Alamat</span>
+                    <span class="text-slate-400">Address</span>
                     <span class="font-semibold text-slate-700 text-right">
                         Batam Center
                     </span>
@@ -109,43 +109,43 @@
 
         </div>
 
-        <!-- KONSULTASI -->
+        <!-- CONSULTATION -->
         <div class="bg-white rounded-[32px] border border-slate-100 shadow-sm p-7">
 
             <h2 class="text-xl font-bold text-slate-800 mb-6">
-                Detail Konsultasi
+                Consultation Details
             </h2>
 
             <div class="space-y-5">
 
                 <div class="flex justify-between">
-                    <span class="text-slate-400">Tanggal</span>
-                    <span class="font-semibold text-slate-700">20 Mei 2026</span>
+                    <span class="text-slate-400">Date</span>
+                    <span class="font-semibold text-slate-700">May 20, 2026</span>
                 </div>
 
                 <div class="flex justify-between">
-                    <span class="text-slate-400">Jam</span>
-                    <span class="font-semibold text-slate-700">08:00 WIB</span>
+                    <span class="text-slate-400">Time</span>
+                    <span class="font-semibold text-slate-700">08:00 AM</span>
                 </div>
 
                 <div class="flex justify-between">
-                    <span class="text-slate-400">Keluhan</span>
-                    <span class="font-semibold text-slate-700">Demam & Batuk</span>
+                    <span class="text-slate-400">Complaint</span>
+                    <span class="font-semibold text-slate-700">Fever & Cough</span>
                 </div>
 
                 <div class="flex justify-between">
                     <span class="text-slate-400">Status</span>
-                    <span class="font-semibold text-green-600">Selesai</span>
+                    <span class="font-semibold text-green-600">Completed</span>
                 </div>
 
                 <div class="pt-4 border-t">
 
                     <p class="text-slate-400 text-sm mb-2">
-                        Catatan Dokter
+                        Doctor's Notes
                     </p>
 
                     <p class="text-slate-700 leading-relaxed">
-                        Pasien mengalami gejala flu ringan dan disarankan istirahat cukup serta konsumsi obat sesuai resep.
+                        The patient is experiencing mild flu symptoms and is advised to get enough rest and take medication according to the prescription.
                     </p>
 
                 </div>

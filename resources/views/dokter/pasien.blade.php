@@ -5,7 +5,7 @@
 <div
 x-data="{
     detailModal:false,
-    selectedDay:'Senin'
+    selectedDay:'Monday'
 }"
 class="space-y-6">
 
@@ -15,11 +15,11 @@ class="space-y-6">
         <div>
 
             <h1 class="text-3xl font-bold text-slate-800">
-                Data Pasien
+                Patient Data
             </h1>
 
             <p class="text-slate-400 mt-1">
-                Data pasien konsultasi minggu ini.
+                Consultation patient data for this week.
             </p>
 
         </div>
@@ -35,11 +35,11 @@ class="space-y-6">
             <div>
 
                 <h2 class="text-lg font-bold text-slate-800">
-                    Filter Hari Konsultasi
+                    Consultation Day Filter
                 </h2>
 
                 <p class="text-sm text-slate-400 mt-1">
-                    Pilih hari untuk melihat data pasien.
+                    Select a day to view patient data.
                 </p>
 
             </div>
@@ -55,23 +55,23 @@ class="space-y-6">
 
                     <input
                     type="text"
-                    placeholder="            Cari nama pasien..."
+                    placeholder="            Search patient name..."
                     class="w-full pl-12 pr-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:bg-white transition">
 
                 </div>
 
-                <!-- FILTER HARI -->
+                <!-- DAY FILTER -->
                 <select
                 x-model="selectedDay"
                 class="px-5 py-3 rounded-2xl border border-slate-200 bg-slate-50 text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-teal-500">
 
-                    <option>Senin</option>
-                    <option>Selasa</option>
-                    <option>Rabu</option>
-                    <option>Kamis</option>
-                    <option>Jumat</option>
-                    <option>Sabtu</option>
-                    <option>Minggu</option>
+                    <option>Monday</option>
+                    <option>Tuesday</option>
+                    <option>Wednesday</option>
+                    <option>Thursday</option>
+                    <option>Friday</option>
+                    <option>Saturday</option>
+                    <option>Sunday</option>
 
                 </select>
 
@@ -88,12 +88,12 @@ class="space-y-6">
         <div class="px-6 py-5 border-b border-slate-100">
 
             <h2 class="text-xl font-bold text-slate-800">
-                List Pasien
+                Patient List
             </h2>
 
             <p class="text-sm text-slate-400 mt-1">
 
-                Menampilkan data hari:
+                Displaying data for:
                 <span
                 class="font-semibold text-teal-500"
                 x-text="selectedDay"></span>
@@ -112,19 +112,19 @@ class="space-y-6">
                     <tr>
 
                         <th class="text-left px-6 py-4 text-sm text-slate-400 font-semibold">
-                            Pasien
+                            Patient
                         </th>
 
                         <th class="text-left px-6 py-4 text-sm text-slate-400 font-semibold">
-                            Umur
+                            Age
                         </th>
 
                         <th class="text-left px-6 py-4 text-sm text-slate-400 font-semibold">
-                            Keluhan
+                            Complaint
                         </th>
 
                         <th class="text-left px-6 py-4 text-sm text-slate-400 font-semibold">
-                            Jam
+                            Time
                         </th>
 
                         <th class="text-left px-6 py-4 text-sm text-slate-400 font-semibold">
@@ -169,21 +169,21 @@ class="space-y-6">
                         </td>
 
                         <td class="px-6 py-5 text-slate-600">
-                            21 Tahun
+                            21 Years Old
                         </td>
 
                         <td class="px-6 py-5 text-slate-600">
-                            Demam & Batuk
+                            Fever & Cough
                         </td>
 
                         <td class="px-6 py-5 text-slate-600">
-                            08:00 WIB
+                            08:00 AM
                         </td>
 
                         <td class="px-6 py-5">
 
                             <span class="px-4 py-2 rounded-xl bg-green-100 text-green-600 text-xs font-semibold">
-                                Selesai
+                                Completed
                             </span>
 
                         </td>
@@ -203,13 +203,12 @@ class="space-y-6">
 
         </a>
 
-
-                                <!-- REKAM MEDIS -->
+                                <!-- MEDICAL RECORD -->
                                 <a
                                 href="/dokter/rekam-medis"
                                 class="px-4 py-2 rounded-xl border border-slate-200 hover:bg-slate-100 text-sm font-semibold transition inline-flex items-center">
 
-                                    Rekam Medis
+                                    Medical Record
 
                                 </a>
 
@@ -247,21 +246,21 @@ class="space-y-6">
                         </td>
 
                         <td class="px-6 py-5 text-slate-600">
-                            32 Tahun
+                            32 Years Old
                         </td>
 
                         <td class="px-6 py-5 text-slate-600">
-                            Sakit Kepala
+                            Headache
                         </td>
 
                         <td class="px-6 py-5 text-slate-600">
-                            10:00 WIB
+                            10:00 AM
                         </td>
 
                         <td class="px-6 py-5">
 
                             <span class="px-4 py-2 rounded-xl bg-yellow-100 text-yellow-600 text-xs font-semibold">
-                                Menunggu
+                                Waiting
                             </span>
 
                         </td>
@@ -281,13 +280,12 @@ class="space-y-6">
 
         </a>
 
-
-                                <!-- REKAM MEDIS -->
+                                <!-- MEDICAL RECORD -->
                                 <a
                                 href="/dokter/rekam-medis"
                                 class="px-4 py-2 rounded-xl border border-slate-200 hover:bg-slate-100 text-sm font-semibold transition inline-flex items-center">
 
-                                    Rekam Medis
+                                    Medical Record
 
                                 </a>
 

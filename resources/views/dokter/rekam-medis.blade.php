@@ -10,11 +10,11 @@
         <div>
 
             <h1 class="text-3xl font-bold text-slate-800">
-                Rekam Medis
+                Medical Records
             </h1>
 
             <p class="text-slate-400 mt-1">
-                Riwayat pemeriksaan dan tindakan pasien.
+                Patient examination and treatment history.
             </p>
 
         </div>
@@ -23,7 +23,7 @@
         href="/dokter-pasien"
         class="px-5 py-3 rounded-2xl bg-slate-100 hover:bg-slate-200 font-semibold transition">
 
-            Kembali
+            Back
 
         </a>
 
@@ -45,7 +45,7 @@
                 </h2>
 
                 <p class="text-slate-400 mt-1">
-                    Riwayat Konsultasi Pasien
+                    Patient Consultation History
                 </p>
 
             </div>
@@ -63,17 +63,17 @@
                     <div>
 
                         <h3 class="font-bold text-slate-800">
-                            Pemeriksaan Umum
+                            General Examination
                         </h3>
 
                         <p class="text-sm text-slate-400 mt-1">
-                            20 Mei 2026 • 08:00 WIB
+                            20 May 2026 • 08:00 AM
                         </p>
 
                     </div>
 
                     <span class="px-4 py-2 rounded-xl bg-green-100 text-green-600 text-xs font-semibold">
-                        Selesai
+                        Completed
                     </span>
 
                 </div>
@@ -83,11 +83,11 @@
                     <div>
 
                         <p class="text-sm text-slate-400 mb-2">
-                            Keluhan
+                            Complaint
                         </p>
 
                         <p class="font-medium text-slate-700">
-                            Demam & Batuk
+                            Fever & Cough
                         </p>
 
                     </div>
@@ -95,11 +95,11 @@
                     <div>
 
                         <p class="text-sm text-slate-400 mb-2">
-                            Diagnosa
+                            Diagnosis
                         </p>
 
                         <p class="font-medium text-slate-700">
-                            Flu Ringan
+                            Mild Flu
                         </p>
 
                     </div>
@@ -109,11 +109,12 @@
                 <div class="mt-5">
 
                     <p class="text-sm text-slate-400 mb-2">
-                        Catatan Dokter
+                        Doctor's Notes
                     </p>
 
                     <p class="text-slate-700 leading-relaxed">
-                        Pasien disarankan istirahat cukup, minum air hangat, dan konsumsi obat rutin selama 3 hari.
+                        The patient is advised to get enough rest, drink warm water,
+                        and take medication regularly for 3 days.
                     </p>
 
                 </div>
@@ -128,11 +129,11 @@
                     <div>
 
                         <h3 class="font-bold text-slate-800">
-                            Konsultasi Lanjutan
+                            Follow-Up Consultation
                         </h3>
 
                         <p class="text-sm text-slate-400 mt-1">
-                            18 Mei 2026 • 10:00 WIB
+                            18 May 2026 • 10:00 AM
                         </p>
 
                     </div>
@@ -148,11 +149,11 @@
                     <div>
 
                         <p class="text-sm text-slate-400 mb-2">
-                            Keluhan
+                            Complaint
                         </p>
 
                         <p class="font-medium text-slate-700">
-                            Sakit Tenggorokan
+                            Sore Throat
                         </p>
 
                     </div>
@@ -160,11 +161,11 @@
                     <div>
 
                         <p class="text-sm text-slate-400 mb-2">
-                            Diagnosa
+                            Diagnosis
                         </p>
 
                         <p class="font-medium text-slate-700">
-                            Iritasi Tenggorokan
+                            Throat Irritation
                         </p>
 
                     </div>
@@ -174,11 +175,12 @@
                 <div class="mt-5">
 
                     <p class="text-sm text-slate-400 mb-2">
-                        Catatan Dokter
+                        Doctor's Notes
                     </p>
 
                     <p class="text-slate-700 leading-relaxed">
-                        Disarankan mengurangi minuman dingin dan memperbanyak istirahat.
+                        The patient is advised to reduce cold drinks intake
+                        and get more rest.
                     </p>
 
                 </div>
