@@ -119,6 +119,8 @@ Route::view('/jadwal-praktik', 'dokter.jadwal-praktik');
 
 Route::view('/appointment', 'dokter.appointment');
 
+Route::view('/diagnosis-prescription', 'dokter.diagnosis');
+
 Route::view('/medical-history', 'dokter.medical-history');
 
 Route::view('/dokter-pasien', 'dokter.pasien');
