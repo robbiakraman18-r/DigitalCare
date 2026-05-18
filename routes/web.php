@@ -1,26 +1,38 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-
-use App\Http\Controllers\LoginController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ListItemController;
-use App\Http\Controllers\AboutController;
-use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
+|
 */
 
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ListItemController;
+use App\Http\Controllers\AboutController;
+use App\Http\Controllers\AppointmentController;
+
+
 Route::get('/', function () {
-    return view('welcome');
+    return view('welcome'); // atau halaman utama kamu
+});
+Route::get('/app', function () {
+return view('app');
 });
 
+Route::get('/login', [LoginController::class, 'index']);
+Route::get('/list-item', [ListItemController::class, 'index']);
+Route::get('/About_view', [AboutController::class, 'index']);
+Route::get('/appointment', [AppointmentController::class, 'index']);
 
+<<<<<<< HEAD
 
 /*
 |--------------------------------------------------------------------------
@@ -161,3 +173,11 @@ Route::view('/admin-payments', 'admin.payments');
 Route::view('/admin-settings', 'admin.settings');
 
 Route::view('/profil-admin', 'admin.profile');
+=======
+Route::post('/appointment', [AppointmentController::class, 'store']);
+Route::view('/register', 'register');
+Route::view('/dashboard', 'dashboard');
+Route::view('/info_klinik', 'info_klinik');
+Route::view('/edit_profil', 'EditProfil');
+Route::view('/test', 'test');
+>>>>>>> f3f9ff30a5210c85b0bd453787f6d4b99cda4665
