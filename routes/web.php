@@ -137,3 +137,11 @@ Route::view('/admin-payments', 'admin.payments');
 Route::view('/admin-settings', 'admin.settings');
 
 Route::view('/profil-admin', 'admin.profile');
+
+use App\Http\Controllers\ListPatientController;
+
+Route::get('/listpatient', [ListPatientController::class, 'show']);
+
+use App\Http\Controllers\ListprescriptionController;
+
+Route::get('/listprescription', [ListprescriptionController::class, 'show']);
