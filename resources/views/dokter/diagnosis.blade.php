@@ -31,12 +31,12 @@
 
                         <div>
                             <span class="font-semibold">Medical Record :</span>
-                            RM.2026.00123
+                            DCM26.210123
                         </div>
 
                         <div>
                             <span class="font-semibold">Date :</span>
-                            26 May 2026
+                            21 May 2026
                         </div>
 
                         <div>
@@ -244,19 +244,7 @@ No history of chronic disease.
                                 </label>
 
                                 <input type="text"
-                                value="Acute Pharyngitis (J02.9)"
-                                class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4">
-
-                            </div>
-
-                            <div>
-
-                                <label class="text-sm font-semibold text-slate-700">
-                                    ICD-10 Code
-                                </label>
-
-                                <input type="text"
-                                value="J02.9"
+                                value="Acute Pharyngitis"
                                 class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4">
 
                             </div>
