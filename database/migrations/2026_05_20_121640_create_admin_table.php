@@ -17,8 +17,9 @@ return new class extends Migration
             $table->foreignId('user_id')
                 ->constrained('users');
                 
-            $table->string('nama');
-            $table->string('username')->unique();
+            $table->string('nama', 60);
+            $table->string('email')->unique();
+            $table->enum('role', ['admin', 'dokter', 'pasien']);
             $table->string('password');
             $table->timestamps();
         });

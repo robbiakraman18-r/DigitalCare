@@ -15,9 +15,8 @@ return new class extends Migration
             $table->id('id_dokter');
             // FOREIGN KEY KE USERS
             $table->foreignId('user_id')
-                  ->constrained('users');
-                  
-            $table->string('nama');
+                  ->constrained('users');     
+            $table->string('nama', 60);
             $table->string('no_sip')->unique();
             $table->string('foto_profil')->nullable();
             $table->enum('status_ketersediaan', [

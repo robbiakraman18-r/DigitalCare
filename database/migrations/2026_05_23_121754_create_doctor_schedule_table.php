@@ -16,7 +16,7 @@ return new class extends Migration
             // FOREIGN KEY
             $table->foreignId('id_dokter')
                   ->constrained('doctors', 'id_dokter')
-                  ->onDelete('cascade');
+                  ->onDelete('cascade');    
             $table->date('tanggal');
             $table->string('hari');
             $table->time('jam_mulai');
