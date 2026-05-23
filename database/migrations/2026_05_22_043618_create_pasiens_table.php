@@ -6,31 +6,29 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('pasiens', function (Blueprint $table) {
             $table->id('id_pasien');
-            // relasi ke users
+            
+            // Relasi asing ke tabel users
             $table->foreignId('user_id')
                 ->constrained('users')
                 ->onDelete('cascade');
 
-            $table->date('birth_date');
+            // Kolom Nomor Rekam Medis Baru
+            $table->string('no_rm', 15)->unique();
 
+            // Semua kolom biodata diatur ->nullable() agar register awal tidak crash
+            $table->date('birth_date')->nullable();
             $table->string('phone_number', 20)->nullable();
-
-            $table->enum('gender', ['Male', 'Female']);
-            $table->string('address');
+            $table->enum('gender', ['Male', 'Female'])->nullable();
+            $table->string('address')->nullable();
+            
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('pasiens');

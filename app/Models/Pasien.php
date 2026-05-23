@@ -9,56 +9,29 @@ class Pasien extends Model
 {
     use HasFactory;
 
-    /*
-    |--------------------------------------------------------------------------
-    | TABLE
-    |--------------------------------------------------------------------------
-    */
-
     protected $table = 'pasiens';
-
-    /*
-    |--------------------------------------------------------------------------
-    | PRIMARY KEY
-    |--------------------------------------------------------------------------
-    */
-
     protected $primaryKey = 'id_pasien';
 
-    /*
-    |--------------------------------------------------------------------------
-    | MASS ASSIGNMENT
-    |--------------------------------------------------------------------------
-    */
-
+    // Kolom bahasa Inggris wajib terdaftar agar sinkron dengan database migration
     protected $fillable = [
         'user_id',
-        'nama',
-        'tanggal_lahir',
-        'jenis_kelamin',
-        'alamat',
-        'no_hp'
+        'no_rm',
+        'birth_date',
+        'gender',
+        'address',
+        'phone_number'
     ];
 
-    /*
-    |--------------------------------------------------------------------------
-    | RELATION
-    |--------------------------------------------------------------------------
-    */
-
-    // patient belongs to user
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    // patient has many appointments
     public function appointments()
     {
-        return $this->hasOne(Appointment::class, 'id_pasien');
+        return $this->hasMany(Appointment::class, 'id_pasien');
     }
 
-    // patient has many diagnoses
     public function diagnoses()
     {
         return $this->hasMany(Diagnosis::class, 'id_pasien');
