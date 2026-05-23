@@ -11,17 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('patients', function (Blueprint $table) {
-            $table->id('patient_id');
-            // FOREIGN KEY KE USERS
+        Schema::create('pasiens', function (Blueprint $table) {
+            $table->id('id_pasien');
+            // relasi ke users
             $table->foreignId('user_id')
-                 ->constrained('users');
- 
-            $table->string('nama', 60);
+                ->constrained('users')
+                ->onDelete('cascade');
+
             $table->date('birth_date');
-            $table->enum('role', ['admin', 'dokter', 'pasien']);
-            $table->string('phone_number', 20);
+
+            $table->string('phone_number', 20)->nullable();
+
             $table->enum('gender', ['Male', 'Female']);
+            $table->string('address');
+            $table->timestamps();
         });
     }
 
@@ -30,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('patients');
+        Schema::dropIfExists('pasiens');
     }
 };

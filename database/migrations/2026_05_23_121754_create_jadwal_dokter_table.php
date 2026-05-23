@@ -11,18 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('doctor_schedules', function (Blueprint $table) {
+        Schema::create('jadwal_dokter', function (Blueprint $table) {
             $table->id('id_jadwal');
             // FOREIGN KEY
             $table->foreignId('id_dokter')
-                  ->constrained('doctors', 'id_dokter')
-                  ->onDelete('cascade');    
+                  ->constrained('dokters', 'id_dokter');   
             $table->date('tanggal');
             $table->string('hari');
             $table->time('jam_mulai');
             $table->time('jam_selesai');
             $table->string('ruang');
-            $table->integer('kuota_harian');
+            $table->integer('kuota_harian', 10);
             $table->enum('status_jadwal', [
                 'Available',
                 'Full',
@@ -37,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('doctor_schedule');
+        Schema::dropIfExists('jadwal_dokter');
     }
 };

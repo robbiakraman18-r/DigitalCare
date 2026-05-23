@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Pasien;
+use App\Models\Dokter;
 
 class Appointment extends Model
 {
@@ -47,15 +49,15 @@ class Appointment extends Model
     |--------------------------------------------------------------------------
     */
 
-    // appointment belongs to patient
-    public function patient()
+    // appointment belongs to pasien
+    public function pasien()
     {
-        return $this->belongsTo(Patient::class, 'id_pasien');
+        return $this->belongsTo(Pasien::class, 'id_pasien');
     }
 
-    // appointment belongs to doctor
-    public function doctor()
+    // appointment belongs to dokter
+    public function dokter()
     {
-        return $this->belongsTo(Doctor::class, 'id_dokter');
+        return $this->belongsTo(Dokter::class, 'id_dokter');
     }
 }

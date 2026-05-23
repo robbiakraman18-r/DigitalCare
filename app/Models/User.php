@@ -35,14 +35,14 @@ class User extends Authenticatable
     |--------------------------------------------------------------------------
     */
 
-    public function doctor()
+    public function dokter()
     {
-        return $this->hasOne(Doctor::class);
+        return $this->hasOne(Dokter::class);
     }
 
-    public function patient()
+    public function pasien()
     {
-        return $this->hasOne(Patient::class);
+        return $this->hasOne(Pasien::class);
     }
 
     public function admin()
@@ -56,18 +56,18 @@ class User extends Authenticatable
     |--------------------------------------------------------------------------
     */
 
-    public function isadmin()
+    public function isAdmin()
     {
         return $this->role == 'admin';
     }
 
-    public function isDoctor()
+    public function isDokter()
     {
-        return $this->role == 'doctor';
+        return $this->role == 'dokter';
     }
 
-    public function isPatient()
+    public function isPasien()
     {
-        return $this->role == 'patient';
+        return $this->role == 'pasien';
     }
 }

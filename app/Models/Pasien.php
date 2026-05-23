@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Doctor extends Model
+class Pasien extends Model
 {
     use HasFactory;
 
@@ -15,7 +15,7 @@ class Doctor extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'doctors';
+    protected $table = 'pasiens';
 
     /*
     |--------------------------------------------------------------------------
@@ -23,7 +23,7 @@ class Doctor extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $primaryKey = 'id_dokter';
+    protected $primaryKey = 'id_pasien';
 
     /*
     |--------------------------------------------------------------------------
@@ -34,9 +34,10 @@ class Doctor extends Model
     protected $fillable = [
         'user_id',
         'nama',
-        'no_sip',
-        'foto_profil',
-        'status_ketersediaan'
+        'tanggal_lahir',
+        'jenis_kelamin',
+        'alamat',
+        'no_hp'
     ];
 
     /*
@@ -45,15 +46,21 @@ class Doctor extends Model
     |--------------------------------------------------------------------------
     */
 
-    // dokter milik 1 user
+    // patient belongs to user
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    // dokter punya banyak jadwal
-    public function doctor_schedules()
+    // patient has many appointments
+    public function appointments()
     {
-        return $this->hasMany(DoctorSchedule::class, 'id_dokter');
+        return $this->hasOne(Appointment::class, 'id_pasien');
+    }
+
+    // patient has many diagnoses
+    public function diagnoses()
+    {
+        return $this->hasMany(Diagnosis::class, 'id_pasien');
     }
 }
