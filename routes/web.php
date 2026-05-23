@@ -5,12 +5,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\PasienController;
+use App\Http\Controllers\DokterController;
 use App\Http\Controllers\ListPatientController;
 use App\Http\Controllers\ListprescriptionController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AuthController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -53,7 +56,7 @@ Route::prefix('pasien')->middleware(['auth', 'role:pasien'])->group(function () 
       // AJAX: ambil jadwal dokter
     Route::get('/dokter/{id}/jadwal', [AppointmentController::class, 'getJadwal']);
     Route::post('/appointment', [AppointmentController::class, 'store']);
-    Route::view('/dashboard', 'pasien.dashboard');
+    Route::get('/dashboard', [PasienController::class, 'dashboard']);
     Route::view('/buat-janji', 'pasien.buat-janji');
     Route::view('/janji-temu', 'pasien.janji-temu');
     Route::view('/on-going', 'pasien.on-going');
@@ -86,7 +89,7 @@ Route::post('/logout', function (Request $request) {
 
 Route::prefix('dokter')->middleware(['auth', 'role:dokter'])->group(function () {
 
-    Route::view('/dashboard', 'dokter.dashboard');
+    Route::get('/dashboard', [DokterController::class, 'dashboard']);
     Route::view('/jadwal-praktik', 'dokter.jadwal-praktik');
     Route::view('/appointment', 'dokter.appointment');
     Route::view('/diagnosis-prescription', 'dokter.diagnosis');
@@ -105,8 +108,7 @@ Route::prefix('dokter')->middleware(['auth', 'role:dokter'])->group(function () 
 
 Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
 
-    Route::view('/dashboard', 'admin.dashboard');
-
+    Route::get('/dashboard', [AdminController::class, 'dashboard']);
     Route::view('/user-management', 'admin.user-management');
     Route::view('/appointment', 'admin.appointment');
     Route::view('/schedule-management', 'admin.schedule-management');
@@ -118,4 +120,8 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
 
     Route::get('/listpatient', [ListPatientController::class, 'show']);
     Route::get('/listprescription', [ListprescriptionController::class, 'show']);
+});
+
+    Route::get('/test-users', function () {
+        return App\Models\User::all();
 });

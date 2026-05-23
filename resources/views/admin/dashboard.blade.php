@@ -27,14 +27,14 @@
 
                 <div class="flex flex-wrap gap-3 mt-6">
 
-                    <a href="/admin-user-management"
+                    <a href="/admin/user-management"
                     class="px-5 py-3 rounded-2xl bg-white text-teal-600 font-semibold hover:scale-105 transition">
 
                         Data Dokter
 
                     </a>
 
-                    <a href="/admin-user-management"
+                    <a href="/admin/user-management"
                     class="px-5 py-3 rounded-2xl border border-white/30 hover:bg-white/10 transition">
 
                         Data Pasien
@@ -235,7 +235,7 @@
 
                     </div>
 
-                    <a href="/admin-appointment"
+                    <a href="/admin/appointment"
                     class="px-4 py-2 rounded-2xl bg-teal-50 text-teal-500 font-medium hover:bg-teal-100 transition">
 
                         Lihat Semua
