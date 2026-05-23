@@ -12,7 +12,6 @@ use App\Http\Controllers\ListPatientController;
 use App\Http\Controllers\ListprescriptionController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\AppointmentController;
-use App\Http\Controllers\AuthController;
 
 
 /*
@@ -34,16 +33,13 @@ Route::get('/app', function () {
 |--------------------------------------------------------------------------
 */
 
-Route::get('/login', [LoginController::class, 'index']);   
-Route::post('/login', [AuthController::class, 'login']);
+Route::get('/login', [LoginController::class, 'index'])->name('login'); 
+
+// BAGIAN INI DIUBAH: Mengarah ke LoginController, bukan AuthController
+Route::post('/login', [LoginController::class, 'login']);
+
 Route::get('/register', function () {
     return view('auth.register');
-});
-Route::get('/forgot-password', function () {
-    return view('auth.forgot-password');
-});
-Route::get('/reset-password', function () {
-    return view('auth.reset-password');
 });
 
 /*

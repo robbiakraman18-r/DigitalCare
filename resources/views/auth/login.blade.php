@@ -12,7 +12,6 @@
 
 <div class="w-full max-w-5xl bg-white rounded-3xl shadow-2xl overflow-hidden grid md:grid-cols-2">
 
-    <!-- LEFT IMAGE -->
     <div class="hidden md:block relative">
 
         <img
@@ -39,12 +38,10 @@
 
     </div>
 
-    <!-- RIGHT FORM -->
     <div class="flex items-center justify-center p-8 lg:p-10">
 
         <div class="w-full max-w-sm">
 
-            <!-- LOGO -->
             <div class="text-center mb-7">
 
                 <div class="w-14 h-14 mx-auto rounded-2xl bg-teal-500 flex items-center justify-center text-white text-2xl shadow-lg shadow-teal-200">
@@ -61,7 +58,6 @@
 
             </div>
 
-            <!-- TITLE -->
             <div class="mb-6">
 
                 <h3 class="text-2xl font-bold text-slate-800">
@@ -74,32 +70,40 @@
 
             </div>
 
-            <!-- FORM -->
-            <form>
+            <form action="/login" method="POST">
+                @csrf
 
-                <!-- EMAIL -->
+                @if ($errors->any())
+                    <div class="mb-4 p-3 rounded-2xl bg-red-50 text-red-600 text-sm">
+                        {{ $errors->first('email') }}
+                    </div>
+                @endif
+
                 <div class="mb-4">
 
                     <input
                         type="email"
+                        name="email"
+                        value="{{ old('email') }}"
                         placeholder="Email"
                         class="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-teal-500 outline-none transition"
+                        required
                     >
 
                 </div>
 
-                <!-- PASSWORD -->
                 <div class="mb-3">
 
                     <input
                         type="password"
+                        name="password"
                         placeholder="Password"
                         class="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-teal-500 outline-none transition"
+                        required
                     >
 
                 </div>
 
-                <!-- FORGOT -->
                 <div class="text-right mb-6">
 
                     <a href="/forgot-password" class="text-sm text-teal-600 hover:underline">
@@ -108,16 +112,13 @@
 
                 </div>
 
-                <!-- BUTTON -->
                 <button
-                    type="button"
-                    onclick="window.location.href='/dashboard'"
+                    type="submit"
                     class="w-full py-3 rounded-2xl bg-teal-500 hover:bg-teal-600 text-white font-semibold shadow-lg shadow-teal-200 transition duration-300"
                 >
                     LOGIN
                 </button>
 
-                <!-- DIVIDER -->
                 <div class="flex items-center gap-3 my-6">
 
                     <div class="h-px bg-slate-200 flex-1"></div>
@@ -130,7 +131,6 @@
 
                 </div>
 
-                <!-- REGISTER -->
                 <button
                     type="button"
                     onclick="window.location.href='/register'"
