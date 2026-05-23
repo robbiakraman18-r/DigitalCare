@@ -13,20 +13,27 @@ return new class extends Migration
     {
         Schema::create('jadwal_dokter', function (Blueprint $table) {
             $table->id('id_jadwal');
-            // FOREIGN KEY
-            $table->foreignId('id_dokter')
-                  ->constrained('dokters', 'id_dokter');   
+            $table->unsignedBigInteger('id_dokter');
+            $table->foreign('id_dokter')
+                ->references('id_dokter')
+                ->on('dokters');
+
             $table->date('tanggal');
             $table->string('hari');
             $table->time('jam_mulai');
             $table->time('jam_selesai');
             $table->string('ruang');
-            $table->integer('kuota_harian', 10);
+
+            // KUOTA
+            $table->integer('kuota_harian');   // batas maksimal
+            $table->integer('terisi')->default(0); // yang sudah booking
+
             $table->enum('status_jadwal', [
                 'Available',
                 'Full',
                 'Closed'
             ])->default('Available');
+
             $table->timestamps();
         });
     }

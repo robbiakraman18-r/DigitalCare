@@ -50,7 +50,9 @@ Route::get('/reset-password', function () {
 */
 
 Route::prefix('pasien')->middleware(['auth', 'role:pasien'])->group(function () {
-
+      // AJAX: ambil jadwal dokter
+    Route::get('/dokter/{id}/jadwal', [AppointmentController::class, 'getJadwal']);
+    Route::post('/appointment', [AppointmentController::class, 'store']);
     Route::view('/dashboard', 'pasien.dashboard');
     Route::view('/buat-janji', 'pasien.buat-janji');
     Route::view('/janji-temu', 'pasien.janji-temu');
