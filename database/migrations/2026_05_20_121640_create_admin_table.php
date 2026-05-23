@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('admin', function (Blueprint $table) {
             $table->id('id_admin');
+            // FOREIGN KEY KE USERS
+            $table->foreignId('user_id')
+                ->constrained('users');
+                
             $table->string('nama');
             $table->string('username')->unique();
             $table->string('password');

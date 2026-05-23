@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('patients', function (Blueprint $table) {
             $table->id('patient_id');
+            // FOREIGN KEY KE USERS
+            $table->foreignId('user_id')
+                 ->constrained('users');
+ 
             $table->string('name', 100);
             $table->date('birth_date');
             $table->string('email', 100);

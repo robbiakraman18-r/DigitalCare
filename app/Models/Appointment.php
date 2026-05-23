@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Patient extends Model
+class Appointment extends Model
 {
     use HasFactory;
 
@@ -15,7 +15,7 @@ class Patient extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'patients';
+    protected $table = 'appointments';
 
     /*
     |--------------------------------------------------------------------------
@@ -23,7 +23,7 @@ class Patient extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $primaryKey = 'id_pasien';
+    protected $primaryKey = 'id_appointment';
 
     /*
     |--------------------------------------------------------------------------
@@ -32,12 +32,12 @@ class Patient extends Model
     */
 
     protected $fillable = [
-        'user_id',
-        'nama',
-        'tanggal_lahir',
-        'jenis_kelamin',
-        'alamat',
-        'no_hp'
+        'id_pasien',
+        'id_dokter',
+        'tanggal_kunjungan',
+        'jam_kunjungan',
+        'keluhan',
+        'status_appointment'
     ];
 
     /*
@@ -46,21 +46,15 @@ class Patient extends Model
     |--------------------------------------------------------------------------
     */
 
-    // patient belongs to user
-    public function user()
+    // appointment belongs to patient
+    public function patient()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Patient::class, 'id_pasien');
     }
 
-    // patient has many appointments
-    public function appointments()
+    // appointment belongs to doctor
+    public function doctor()
     {
-        return $this->hasOne(Appointment::class, 'id_pasien');
-    }
-
-    // patient has many diagnoses
-    public function diagnoses()
-    {
-        return $this->hasMany(Diagnosis::class, 'id_pasien');
+        return $this->belongsTo(Doctor::class, 'id_dokter');
     }
 }
