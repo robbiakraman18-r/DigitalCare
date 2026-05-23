@@ -37,6 +37,7 @@ class Appointment extends Model
         'tanggal_kunjungan',
         'jam_kunjungan',
         'keluhan',
+        'nomor_antrian',
         'status_appointment'
     ];
 
