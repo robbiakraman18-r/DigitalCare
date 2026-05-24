@@ -138,3 +138,25 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
 Route::get('/test-users', function () {
     return App\Models\User::all();
 });
+Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard']);
+
+    Route::view('/user-management', 'admin.user-management');
+    Route::view('/appointment', 'admin.appointment');
+    Route::view('/schedule-management', 'admin.schedule-management');
+    Route::view('/medical-records', 'admin.medical-records');
+    Route::view('/reports', 'admin.reports');
+    Route::view('/payments', 'admin.payments');
+    Route::view('/settings', 'admin.settings');
+    Route::view('/profile', 'admin.profile');
+
+    // DOCTOR SCHEDULE
+    Route::get('/doctor-schedule', [AdminController::class, 'schedule']);
+    Route::post('/doctor-schedule', [AdminController::class, 'storeSchedule']);
+
+    // COMPLAINT
+    Route::get('/complaint', [AdminController::class, 'complaint']);
+
+    Route::get('/listpatient', [ListPatientController::class, 'show']);
+    Route::get('/listprescription', [ListprescriptionController::class, 'show']);
+});

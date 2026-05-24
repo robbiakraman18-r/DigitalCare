@@ -551,3 +551,7 @@
 </div>
 
 @endsection
+<h1>Admin Dashboard</h1>
+
+<a href="/admin/doctor-schedule">Doctor Schedule</a><br>
+<a href="/admin/complaint">Complaint</a>

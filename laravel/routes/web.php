@@ -1,15 +1,17 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
-Route::get('/', function () {
-    return view('welcome');
-});
 use App\Http\Controllers\AdminController;
 
-Route::get('/admin/dashboard', [AdminController::class, 'dashboard']);
+Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
 
-Route::get('/admin/doctor-schedule', [AdminController::class, 'schedule']);
-Route::post('/admin/doctor-schedule', [AdminController::class, 'storeSchedule']);
+    Route::get('/dashboard', [AdminController::class, 'dashboard']);
 
-Route::get('/admin/complaint', [AdminController::class, 'complaint']);
+    Route::get('/doctor-schedule', [AdminController::class, 'schedule']);
+    Route::post('/doctor-schedule', [AdminController::class, 'storeSchedule']);
+
+    Route::get('/complaint', [AdminController::class, 'complaint']);
+});
+Route::get('/doctor-schedule', function () {
+    return view('doctor-schedule');
+});
