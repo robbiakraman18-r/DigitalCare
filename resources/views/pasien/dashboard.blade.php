@@ -1,10 +1,14 @@
 @extends('layouts.pasien')
 
-@section('content')
-@section('title', 'Halo, Rizki 👋')
+@section('title')
+    Halo, {{ Auth::user()->name }} 👋
+@endsection
+
 @section('subtitle', 'Selamat datang kembali di DigitalCare')
 
-<div class="space-y-8">
+@section('content')
+<div class="space-y-8" x-data="pasienDashboard">
+    {{-- Banner Selamat Datang --}}
     <div class="relative overflow-hidden rounded-[32px] bg-gradient-to-r from-teal-500 to-cyan-500 p-8 lg:p-10 shadow-xl shadow-teal-100">
         <div class="absolute top-0 right-0 w-72 h-72 bg-white/10 rounded-full blur-3xl"></div>
         <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -14,10 +18,10 @@
                     Layanan Kesehatan Smart Campus Aktif
                 </div>
                 <h1 class="text-3xl lg:text-4xl font-extrabold text-white leading-tight">
-                    Welcome Back, Rizki!
+                    Welcome Back, {{ Auth::user()->name }}!
                 </h1>
                 <p class="text-white/90 mt-2 text-sm leading-relaxed max-w-xl">
-                    No. Rekam Medis (NIM/MRN): <span class="font-bold underline">123456</span> | Selalu pantau kondisi fisik Anda di sela-sela kesibukan akademik.
+                    No. Rekam Medis (NIM/MRN): <span class="font-bold underline">{{ Auth::user()->nim ?? '-' }}</span> | Selalu pantau kondisi fisik Anda di sela-sela kesibukan akademik.
                 </p>
             </div>
             <div class="flex gap-3 shrink-0">
@@ -34,19 +38,26 @@
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 
+                {{-- Janji Temu Terdekat --}}
                 <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 flex flex-col justify-between">
                     <div>
                         <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Janji Temu Terdekat</h3>
-                        <div class="p-4 rounded-2xl bg-teal-50/50 border border-teal-100 flex items-start gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-teal-500 flex items-center justify-center text-white text-xl shrink-0">
-                                👨‍⚕️
+                        @if(isset($janjiTerdekat) && $janjiTerdekat)
+                            <div class="p-4 rounded-2xl bg-teal-50/50 border border-teal-100 flex items-start gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-teal-500 flex items-center justify-center text-white text-xl shrink-0">
+                                    👨‍⚕️
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-slate-800 text-sm">Dr. {{ $janjiTerdekat->dokter->nama ?? 'Dokter' }}</h4>
+                                    <p class="text-xs text-teal-600 font-medium">{{ $janjiTerdekat->dokter->spesialisasi ?? 'Dokter Umum Kampus' }}</p>
+                                    <p class="text-xs text-slate-500 mt-2 font-semibold">{{ \Carbon\Carbon::parse($janjiTerdekat->tanggal)->translatedFormat('l, d F') }} | {{ $janjiTerdekat->jam }} WIB</p>
+                                </div>
                             </div>
-                            <div>
-                                <h4 class="font-bold text-slate-800 text-sm">Dr. Andi</h4>
-                                <p class="text-xs text-teal-600 font-medium">Dokter Umum Kampus</p>
-                                <p class="text-xs text-slate-500 mt-2 font-semibold">Senin, 25 Mei | 09:30 WIB</p>
+                        @else
+                            <div class="text-center py-6 text-slate-400 text-sm">
+                                Belum ada janji temu terjadwal.
                             </div>
-                        </div>
+                        @endif
                     </div>
                     <div class="flex gap-2 mt-4 pt-4 border-t border-slate-100">
                         <button class="flex-1 py-2 rounded-xl bg-teal-50 text-teal-600 text-xs font-semibold hover:bg-teal-100 transition">
@@ -58,27 +69,28 @@
                     </div>
                 </div>
 
+                {{-- Tanda Vital Terakhir --}}
                 <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
                     <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Tanda Vital Terakhir</h3>
                     <div class="grid grid-cols-2 gap-3">
                         <div class="p-3 bg-slate-50 rounded-2xl text-center">
                             <span class="text-[10px] uppercase font-bold text-slate-400 block">Tekanan Darah</span>
-                            <span class="text-lg font-bold text-slate-800 block mt-1">120/80</span>
+                            <span class="text-lg font-bold text-slate-800 block mt-1">{{ $rekamMedis->tekanan_darah ?? '120/80' }}</span>
                             <span class="text-[10px] text-slate-400">mmHg</span>
                         </div>
                         <div class="p-3 bg-slate-50 rounded-2xl text-center">
                             <span class="text-[10px] uppercase font-bold text-slate-400 block">Detak Jantung</span>
-                            <span class="text-lg font-bold text-slate-800 block mt-1">76</span>
+                            <span class="text-lg font-bold text-slate-800 block mt-1">{{ $rekamMedis->detak_jantung ?? '76' }}</span>
                             <span class="text-[10px] text-slate-400">bpm</span>
                         </div>
                         <div class="p-3 bg-slate-50 rounded-2xl text-center">
                             <span class="text-[10px] uppercase font-bold text-slate-400 block">Berat Badan</span>
-                            <span class="text-lg font-bold text-slate-800 block mt-1">58.2</span>
+                            <span class="text-lg font-bold text-slate-800 block mt-1">{{ $rekamMedis->berat_badan ?? '58.2' }}</span>
                             <span class="text-[10px] text-slate-400">kg</span>
                         </div>
                         <div class="p-3 bg-slate-50 rounded-2xl text-center">
                             <span class="text-[10px] uppercase font-bold text-slate-400 block">Suhu Tubuh</span>
-                            <span class="text-lg font-bold text-slate-800 block mt-1">36.8</span>
+                            <span class="text-lg font-bold text-slate-800 block mt-1">{{ $rekamMedis->suhu_tubuh ?? '36.8' }}</span>
                             <span class="text-[10px] text-slate-400">°C</span>
                         </div>
                     </div>
@@ -86,6 +98,7 @@
 
             </div>
 
+            {{-- Konsumsi Obat Aktif --}}
             <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider">Konsumsi Obat Aktif</h3>
@@ -93,31 +106,35 @@
                 </div>
                 
                 <div class="divide-y divide-slate-100">
-                    <div class="flex items-center justify-between py-3 first:pt-0 last:pb-0">
-                        <div class="flex items-center gap-3">
-                            <div class="w-9 h-9 rounded-xl bg-cyan-50 flex items-center justify-center text-cyan-600 text-sm font-bold">💊</div>
-                            <div>
-                                <h4 class="font-bold text-slate-800 text-sm">Amoxicillin 500mg</h4>
-                                <p class="text-xs text-slate-400">3x Sehari (Setelah makan) — Habiskan</p>
+                    @forelse($resepObat ?? [] as $obat)
+                        <div class="flex items-center justify-between py-3 first:pt-0 last:pb-0">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-xl bg-cyan-50 flex items-center justify-center text-cyan-600 text-sm font-bold">💊</div>
+                                <div>
+                                    <h4 class="font-bold text-slate-800 text-sm">{{ $obat->nama_obat }}</h4>
+                                    <p class="text-xs text-slate-400">{{ $obat->dosis }} — {{ $obat->keterangan }}</p>
+                                </div>
                             </div>
+                            <span class="text-xs font-semibold text-slate-600">{{ $obat->waktu_konsumsi }}</span>
                         </div>
-                        <span class="text-xs font-semibold text-slate-600">Jam 08:00 | 14:00 | 20:00</span>
-                    </div>
-                    <div class="flex items-center justify-between py-3 last:pb-0">
-                        <div class="flex items-center gap-3">
-                            <div class="w-9 h-9 rounded-xl bg-cyan-50 flex items-center justify-center text-cyan-600 text-sm font-bold">💊</div>
-                            <div>
-                                <h4 class="font-bold text-slate-800 text-sm">Paracetamol 500mg</h4>
-                                <p class="text-xs text-slate-400">Bila demam atau pusing saja</p>
+                    @empty
+                        <div class="flex items-center justify-between py-3 first:pt-0">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-xl bg-cyan-50 flex items-center justify-center text-cyan-600 text-sm font-bold">💊</div>
+                                <div>
+                                    <h4 class="font-bold text-slate-800 text-sm">Amoxicillin 500mg</h4>
+                                    <p class="text-xs text-slate-400">3x Sehari (Setelah makan) — Habiskan</p>
+                                </div>
                             </div>
+                            <span class="text-xs font-semibold text-slate-600">Jam 08:00 | 14:00 | 20:00</span>
                         </div>
-                        <span class="text-xs font-semibold text-slate-600">Sesuai Kebutuhan</span>
-                    </div>
+                    @endforelse
                 </div>
             </div>
 
         </div>
 
+        {{-- Sidebar Kanan --}}
         <div class="space-y-6">
             
             <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
@@ -159,30 +176,41 @@
                         <i data-lucide="activity" class="w-6 h-6"></i>
                     </div>
                     <div>
-                        <h4 class="text-xl font-bold text-slate-800">5 Kali</h4>
+                        <h4 class="text-xl font-bold text-slate-800">{{ $totalKunjungan ?? 5 }} Kali</h4>
                         <p class="text-xs text-slate-400">Total Kunjungan Klinik</p>
                     </div>
                 </div>
                 <a href="/rekam-medis" class="text-xs text-teal-600 font-semibold hover:underline">Lihat Semua</a>
             </div>
 
+            <button @click="openLogout()" class="w-full py-3 rounded-2xl bg-slate-100 hover:bg-red-50 hover:text-red-600 text-slate-600 font-medium transition flex items-center justify-center gap-2">
+                <i data-lucide="log-out" class="w-4 h-4"></i> Keluar Aplikasi
+            </button>
         </div>
 
     </div>
 </div>
 
+{{-- Modal Logout Terpisah Secara Alur DOM --}}
 <div x-show="logoutModal" x-transition class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50" style="display:none;">
-    <div class="bg-white rounded-3xl p-8 w-full max-w-sm">
+    <div class="bg-white rounded-3xl p-8 w-full max-w-sm" @click.away="closeLogout()">
         <div class="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mx-auto">
-            <i data-lucide="log-out" class="text-red-500"></i>
+            <i data-lucide="log-out" class="text-red-500 w-8 h-8"></i>
         </div>
         <h2 class="text-2xl font-bold text-center text-slate-800 mt-5">Logout?</h2>
         <p class="text-center text-slate-500 mt-2">Apakah Anda yakin ingin keluar?</p>
         <div class="grid grid-cols-2 gap-4 mt-8">
-            <button @click="logoutModal = false" class="py-3 rounded-2xl border border-slate-300 font-medium hover:bg-slate-50 transition">Batal</button>
-            <a href="/login" class="py-3 rounded-2xl bg-red-500 hover:bg-red-600 text-white text-center font-medium transition">Logout</a>
+            <button @click="closeLogout()" class="py-3 rounded-2xl border border-slate-300 font-medium hover:bg-slate-50 transition">Batal</button>
+            <form action="{{ route('logout') }}" method="POST" class="inline">
+                @csrf
+                <button type="submit" class="w-full py-3 rounded-2xl bg-red-500 hover:bg-red-600 text-white text-center font-medium transition">Logout</button>
+            </form>
         </div>
     </div>
 </div>
+
+@push('scripts')
+    <script src="{{ asset('js/pasien-dashboard.js') }}"></script>
+@endpush
 
 @endsection
