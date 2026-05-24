@@ -2,58 +2,32 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Schedule;
+use App\Models\RekamMedis;
 
 class Dokter extends Model
 {
-    use HasFactory;
-
-    /*
-    |--------------------------------------------------------------------------
-    | TABLE
-    |--------------------------------------------------------------------------
-    */
-
-    protected $table = 'dokters';
-
-    /*
-    |--------------------------------------------------------------------------
-    | PRIMARY KEY
-    |--------------------------------------------------------------------------
-    */
+    protected $table = 'dokter';
 
     protected $primaryKey = 'id_dokter';
 
-    /*
-    |--------------------------------------------------------------------------
-    | MASS ASSIGNMENT
-    |--------------------------------------------------------------------------
-    */
-
     protected $fillable = [
-        'user_id',
         'nama',
         'no_sip',
-        'foto_profil',
-        'status_ketersediaan'
+        'email',
+        'jenis_kelamin',
+        'password',
+        'foto_profil'
     ];
 
-    /*
-    |--------------------------------------------------------------------------
-    | RELATION
-    |--------------------------------------------------------------------------
-    */
-
-    // dokter milik 1 user
-    public function user()
+    public function schedule()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasMany(Schedule::class, 'id_dokter');
     }
 
-    // dokter punya banyak jadwal
-    public function jadwal_dokter()
+    public function rekamMedis()
     {
-        return $this->hasMany(JadwalDokter::class, 'id_dokter');
+        return $this->hasMany(RekamMedis::class, 'id_dokter');
     }
 }

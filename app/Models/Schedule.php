@@ -4,12 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+
 class Schedule extends Model
 {
-    protected $fillable = [
-        'doctor_name',
-        'day',
-        'start_time',
-        'end_time'
-    ];
+    
 }
