@@ -32,7 +32,7 @@
             <div class="flex-1">
 
                 <h2 class="text-4xl font-bold">
-                    Dr. Rizki Ramadhan
+                    {{ $dokter->user->name ?? '-' }}
                 </h2>
 
                 <p class="text-teal-100 mt-2 text-lg">
@@ -42,7 +42,7 @@
                 <div class="flex flex-wrap gap-3 mt-5">
 
                     <span class="px-4 py-2 rounded-xl bg-white/20 text-sm font-semibold">
-                        Active
+                        {{ $dokter->status_ketersediaan }}
                     </span>
 
                     <span class="px-4 py-2 rounded-xl bg-white/20 text-sm font-semibold">
@@ -94,7 +94,7 @@
                     </span>
 
                     <span class="font-semibold text-slate-700">
-                        Dr. Rizki Ramadhan
+                        {{ $dokter->user->name ?? '-' }}
                     </span>
 
                 </div>
@@ -102,11 +102,11 @@
                 <div class="flex justify-between border-b pb-4">
 
                     <span class="text-slate-400">
-                        Gender
+                        {{ $dokter->gender }}
                     </span>
 
                     <span class="font-semibold text-slate-700">
-                        Male
+                        {{ $dokter->user->gender ?? '-' }}
                     </span>
 
                 </div>
@@ -118,7 +118,7 @@
                     </span>
 
                     <span class="font-semibold text-slate-700">
-                        12 May 1995
+                        {{ $dokter->user->date_of_birth ?? '-' }}
                     </span>
 
                 </div>
@@ -130,7 +130,7 @@
                     </span>
 
                     <span class="font-semibold text-slate-700">
-                        dokter@digitalcare.com
+                        {{ $dokter->user->email ?? '-' }}
                     </span>
 
                 </div>
@@ -259,7 +259,7 @@
                     </p>
 
                     <h2 class="text-3xl font-bold text-slate-800 mt-2">
-                        120
+                        {{ $totalPasien }}
                     </h2>
 
                 </div>

@@ -102,16 +102,26 @@ Route::post('/logout', function (Request $request) {
 */
 
 Route::prefix('dokter')->middleware(['auth', 'role:dokter'])->group(function () {
+
     Route::get('/dashboard', [DokterController::class, 'dashboard']);
-    Route::view('/jadwal-praktik', 'dokter.jadwal-praktik');
-    Route::view('/appointment', 'dokter.appointment');
-    Route::view('/diagnosis-prescription', 'dokter.diagnosis');
-    Route::view('/medical-history', 'dokter.medical-history');
-    Route::view('/pasien', 'dokter.pasien');
-    Route::view('/detail-pasien', 'dokter.detail-pasien');
-    Route::view('/rekam-medis', 'dokter.rekam-medis');
+
+    Route::get('/profile', [DokterController::class, 'profile']);
+
+    Route::get('/pasien', [DokterController::class, 'pasien']);
+
+    Route::get('/appointment', [DokterController::class, 'appointment']);
+
+    Route::get('/jadwal-praktik', [DokterController::class, 'jadwal']);
+
+    Route::get('/rekam-medis', [DokterController::class, 'rekamMedis']);
+
+    Route::get('/diagnosis-prescription', [DokterController::class, 'diagnosis']);
+
+    Route::get('/detail-pasien/{id}', [DokterController::class, 'detailPasien']);
+
     Route::view('/info-klinik', 'dokter.info-klinik-dokter');
-    Route::view('/profile', 'dokter.profil');
+
+    Route::get('/medical-history', [DokterController::class, 'medicalHistory']);
 });
 
 /*
