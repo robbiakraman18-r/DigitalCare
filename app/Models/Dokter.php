@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
-use App\Models\Schedule;
+use App\Models\JadwalDokter;
 use App\Models\RekamMedis;
 use App\Models\Appointment;
 
@@ -34,13 +34,13 @@ class Dokter extends Model
 
     /*
     |----------------------------------
-    | RELASI KE SCHEDULE
+    | RELASI KE JADWAL DOKTER
     |----------------------------------
     */
-    public function schedules()
-    {
-        return $this->hasMany(Schedule::class, 'id_dokter', 'id_dokter');
-    }
+    public function jadwal()
+{
+    return $this->hasMany(JadwalDokter::class, 'id_dokter', 'id_dokter');
+}
 
     /*
     |----------------------------------
@@ -61,4 +61,5 @@ class Dokter extends Model
     {
         return $this->hasMany(RekamMedis::class, 'id_dokter', 'id_dokter');
     }
+    
 }

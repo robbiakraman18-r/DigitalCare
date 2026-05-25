@@ -3,21 +3,22 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\RekamMedis;
 
 class DetailResep extends Model
 {
-    protected $table = 'detail_reseps';
+    protected $table = 'detail_resep';
+    protected $primaryKey = 'id_detail';
 
     protected $fillable = [
         'id_rekam_medis',
         'nama_obat',
         'dosis',
+        'jumlah',
         'aturan_pakai'
     ];
 
     public function rekamMedis()
     {
-        return $this->belongsTo(RekamMedis::class, 'id_rekam_medis');
+        return $this->belongsTo(RekamMedis::class, 'id_rekam_medis', 'id_rekam_medis');
     }
 }

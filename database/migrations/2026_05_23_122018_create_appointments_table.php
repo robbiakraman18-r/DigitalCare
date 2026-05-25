@@ -12,9 +12,33 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('appointments', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+    $table->id('id_janji');
+
+    // RELASI KE JADWAL
+    $table->foreignId('id_jadwal')
+    ->constrained('jadwal_dokter', 'id_jadwal')
+    ->onDelete('cascade');
+
+    // RELASI KE PASIEN
+    $table->foreignId('id_pasien')
+        ->constrained('pasiens', 'id_pasien')
+        ->onDelete('cascade');
+
+    $table->date('tanggal_janji');
+
+    $table->integer('nomor_antrian');
+
+    $table->enum('status_janji', [
+        'pending',
+        'approved',
+        'completed',
+        'cancelled'
+    ])->default('pending');
+
+    $table->text('keluhan_utama');
+
+    $table->timestamps();
+});
     }
 
     /**

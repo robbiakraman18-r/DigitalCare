@@ -12,30 +12,33 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('jadwal_dokter', function (Blueprint $table) {
-            $table->id('id_jadwal');
-            $table->unsignedBigInteger('id_dokter');
-            $table->foreign('id_dokter')
-                ->references('id_dokter')
-                ->on('dokters');
+    $table->id('id_jadwal');
 
-            $table->date('tanggal');
-            $table->string('hari');
-            $table->time('jam_mulai');
-            $table->time('jam_selesai');
-            $table->string('ruang');
+    // RELASI DOKTER
+    $table->foreignId('id_dokter')
+        ->constrained('dokters', 'id_dokter')
+        ->onDelete('cascade');
 
-            // KUOTA
-            $table->integer('kuota_harian');   // batas maksimal
-            $table->integer('terisi')->default(0); // yang sudah booking
+    $table->date('tanggal');
+    $table->string('hari');
 
-            $table->enum('status_jadwal', [
-                'Available',
-                'Full',
-                'Closed'
-            ])->default('Available');
+    $table->time('jam_mulai');
+    $table->time('jam_selesai');
 
-            $table->timestamps();
-        });
+    $table->string('ruang');
+
+    // KUOTA
+    $table->integer('kuota_harian');
+    $table->integer('terisi')->default(0);
+
+    $table->enum('status_jadwal', [
+        'Available',
+        'Full',
+        'Closed'
+    ])->default('Available');
+
+    $table->timestamps();
+});
     }
 
     /**

@@ -9,23 +9,30 @@ use App\Models\DetailResep;
 class RekamMedis extends Model
 {
     protected $table = 'rekam_medis';
+    protected $primaryKey = 'id_rekam_medis';
 
     protected $fillable = [
-        'id_pasien',
+        'id_janji',
         'id_dokter',
-        'diagnosis',
-        'tindakan'
+        'diagnosa',
+        'keluhan',
+        'catatan_dokter',
+        'waktu_pemeriksaan'
     ];
 
-    // ke dokter
     public function dokter()
     {
         return $this->belongsTo(Dokter::class, 'id_dokter', 'id_dokter');
     }
 
-    // ke detail resep
+    public function appointment()
+    {
+        return $this->belongsTo(Appointment::class, 'id_janji', 'id');
+    }
+
     public function detailResep()
     {
         return $this->hasMany(DetailResep::class, 'id_rekam_medis');
     }
+    
 }

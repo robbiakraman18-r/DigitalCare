@@ -3,24 +3,24 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Dokter;
 
-class Schedule extends Model
+class JadwalDokter extends Model
 {
-    protected $table = 'schedules';
+    protected $table = 'jadwal_dokter';
     protected $primaryKey = 'id_jadwal';
 
     protected $fillable = [
         'id_dokter',
-        'hari',
         'tanggal',
+        'hari',
         'jam_mulai',
         'jam_selesai',
-        'ruang_kuota_harian',
+        'ruang',
+        'kuota_harian',
+        'terisi',
         'status_jadwal'
     ];
 
-    // INI YANG KAMU TANYA
     public function dokter()
     {
         return $this->belongsTo(Dokter::class, 'id_dokter', 'id_dokter');

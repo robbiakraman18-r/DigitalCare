@@ -6,58 +6,37 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Pasien;
 use App\Models\Dokter;
+use App\Models\JadwalDokter;
 
 class Appointment extends Model
 {
     use HasFactory;
 
-    /*
-    |--------------------------------------------------------------------------
-    | TABLE
-    |--------------------------------------------------------------------------
-    */
-
     protected $table = 'appointments';
-
-    /*
-    |--------------------------------------------------------------------------
-    | PRIMARY KEY
-    |--------------------------------------------------------------------------
-    */
-
-    protected $primaryKey = 'id_appointment';
-
-    /*
-    |--------------------------------------------------------------------------
-    | MASS ASSIGNMENT
-    |--------------------------------------------------------------------------
-    */
+    protected $primaryKey = 'id_janji';
 
     protected $fillable = [
+        'id_jadwal',
         'id_pasien',
         'id_dokter',
-        'tanggal_kunjungan',
-        'jam_kunjungan',
-        'keluhan',
+        'tanggal_janji',
         'nomor_antrian',
-        'status_appointment'
+        'status_janji',
+        'keluhan_utama'
     ];
 
-    /*
-    |--------------------------------------------------------------------------
-    | RELATION
-    |--------------------------------------------------------------------------
-    */
-
-    // appointment belongs to pasien
     public function pasien()
     {
-        return $this->belongsTo(Pasien::class, 'id_pasien');
+        return $this->belongsTo(Pasien::class, 'id_pasien', 'id_pasien');
     }
 
-    // appointment belongs to dokter
     public function dokter()
     {
-        return $this->belongsTo(Dokter::class, 'id_dokter');
+        return $this->belongsTo(Dokter::class, 'id_dokter', 'id_dokter');
+    }
+
+    public function jadwal()
+    {
+        return $this->belongsTo(JadwalDokter::class, 'id_jadwal', 'id_jadwal');
     }
 }
