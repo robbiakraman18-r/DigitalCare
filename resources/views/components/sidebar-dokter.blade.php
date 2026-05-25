@@ -27,9 +27,9 @@
         <nav class="mt-6 px-3 space-y-2">
 
             <!-- DASHBOARD -->
-            <a href="/dokter-dashboard"
+            <a href="{{ route('dokter.dashboard') }}"
             class="flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300 hover:scale-[1.02]
-            {{ request()->is('dokter-dashboard')
+            {{ request()->is('dokter/dashboard')
             ? 'bg-teal-500 text-white shadow-lg shadow-teal-200'
             : 'text-slate-600 hover:bg-teal-50' }}">
 
@@ -42,9 +42,9 @@
             </a>
 
             <!-- JADWAL -->
-            <a href="/jadwal-praktik"
+            <a href="{{ route('dokter.jadwal') }}"
             class="flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300
-            {{ request()->is('jadwal-praktik')
+            {{ request()->is('dokter/jadwal-praktik')
             ? 'bg-teal-500 text-white shadow-lg shadow-teal-200'
             : 'text-slate-600 hover:bg-teal-50' }}">
 
@@ -57,9 +57,9 @@
             </a>
 
             <!-- APPOINTMENT -->
-            <a href="/appointment"
+            <a href="{{ route('dokter.appointment') }}"
             class="flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300
-            {{ request()->is('appointment')
+            {{ request()->is('dokter/appointment')
             ? 'bg-teal-500 text-white shadow-lg shadow-teal-200'
             : 'text-slate-600 hover:bg-teal-50' }}">
 
@@ -72,13 +72,13 @@
             </a>
 
             <!-- DIAGNOSIS & PRESCRIPTION -->
-<a href="/diagnosis-prescription"
+<a href="{{ route('dokter.diagnosis') }}"
 class="relative flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300
-{{ request()->is('diagnosis-prescription')
+{{ request()->is('dokter/diagnosis-prescription')
 ? 'bg-teal-500 text-white shadow-lg shadow-teal-200'
 : 'text-slate-600 hover:bg-teal-50' }}">
 
-    @if(request()->is('diagnosis-prescription'))
+    @if(request()->is('dokter/diagnosis-prescription'))
 
     <div class="absolute right-0 top-1/2 -translate-y-1/2 w-1.5 h-10 rounded-l-full bg-white"></div>
 
@@ -95,9 +95,9 @@ class="relative flex items-center gap-4 px-4 py-3 rounded-2xl transition-all dur
 
 
             <!-- PASIEN -->
-            <a href="/dokter-pasien"
+            <a href="{{ route('dokter.pasien') }}"
             class="flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300
-            {{ request()->is('dokter-pasien') || request()->is('dokter/detail-pasien')
+            {{ request()->is('dokter/pasien') || request()->is('dokter/detail-pasien')
             ? 'bg-teal-500 text-white shadow-lg shadow-teal-200'
             : 'text-slate-600 hover:bg-teal-50' }}">
 
@@ -111,9 +111,9 @@ class="relative flex items-center gap-4 px-4 py-3 rounded-2xl transition-all dur
 
 
             <!-- INFO -->
-            <a href="/info-klinik-dokter"
+            <a href="{{ route('dokter.info') }}"
             class="flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300
-            {{ request()->is('info-klinik-dokter')
+            {{ request()->is('dokter/info-klinik')
             ? 'bg-teal-500 text-white shadow-lg shadow-teal-200'
             : 'text-slate-600 hover:bg-teal-50' }}">
 

@@ -22,7 +22,8 @@
             <h2 class="font-bold">Notifications</h2>
         </div>
 
-        <a href="/dokter/jadwal" class="flex gap-3 p-4 hover:bg-slate-50">
+        <a href="{{ route('dokter.jadwal') }}" 
+        class="flex gap-3 p-4 hover:bg-slate-50">
 
             <i data-lucide="calendar-clock" class="text-cyan-500"></i>
 
@@ -33,7 +34,7 @@
 
         </a>
 
-        <a href="/dokter/pasien" class="flex gap-3 p-4 hover:bg-slate-50">
+        <a href="{{ route('dokter.pasien') }}" class="flex gap-3 p-4 hover:bg-slate-50">
 
             <i data-lucide="users" class="text-blue-500"></i>
 

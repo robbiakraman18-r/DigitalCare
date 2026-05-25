@@ -22,14 +22,14 @@
 
             <div class="mt-5 flex gap-3">
 
-                <a href="/jadwal-praktik"
+                <a href="{{ route('dokter.jadwal') }}"
                 class="px-4 py-2 rounded-2xl bg-white text-teal-600 text-sm font-semibold hover:scale-105 transition">
 
                     View Schedule
 
                 </a>
 
-                <a href="/dokter-pasien"
+                <a href="{{ route('dokter.pasien') }}"
                 class="px-4 py-2 rounded-2xl border border-white/30 hover:bg-white/10 text-sm transition">
 
                     Patient Data
@@ -181,7 +181,7 @@
 
                     </div>
 
-                    <a href="/jadwal-praktik"
+                    <a href="{{ route('dokter.jadwal') }}"
                     class="px-3 py-2 rounded-xl bg-teal-50 text-teal-500 text-sm font-medium hover:bg-teal-100 transition">
 
                         View All
@@ -271,7 +271,7 @@
 
                     </div>
 
-                    <a href="/appointment"
+                    <a href="{{ route('dokter.appointment') }}"
                     class="text-sm text-teal-500 font-medium">
 
                         View All

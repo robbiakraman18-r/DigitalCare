@@ -103,27 +103,36 @@ Route::post('/logout', function (Request $request) {
 
 Route::prefix('dokter')->middleware(['auth', 'role:dokter'])->group(function () {
 
-    Route::get('/dashboard', [DokterController::class, 'dashboard']);
+    Route::get('/dashboard', [DokterController::class, 'dashboard'])
+        ->name('dokter.dashboard');
 
-    Route::get('/profile', [DokterController::class, 'profile']);
+    Route::get('/profile', [DokterController::class, 'profile'])
+    ->name('dokter.profile');
 
-    Route::get('/pasien', [DokterController::class, 'pasien']);
+    Route::get('/pasien', [DokterController::class, 'pasien'])
+        ->name('dokter.pasien');
 
-    Route::get('/appointment', [DokterController::class, 'appointment']);
+    Route::get('/appointment', [DokterController::class, 'appointment'])
+        ->name('dokter.appointment');
 
-    Route::get('/jadwal-praktik', [DokterController::class, 'jadwal']);
+    Route::get('/jadwal-praktik', [DokterController::class, 'jadwal'])
+        ->name('dokter.jadwal');
 
-    Route::get('/rekam-medis', [DokterController::class, 'rekamMedis']);
+    Route::get('/rekam-medis', [DokterController::class, 'rekamMedis'])
+        ->name('dokter.rekammedis');
 
-    Route::get('/diagnosis-prescription', [DokterController::class, 'diagnosis']);
+    Route::get('/diagnosis-prescription', [DokterController::class, 'diagnosis'])
+        ->name('dokter.diagnosis');
 
-    Route::get('/detail-pasien/{id}', [DokterController::class, 'detailPasien']);
+    Route::get('/detail-pasien/{id}', [DokterController::class, 'detailPasien'])
+        ->name('dokter.detailpasien');
 
-    Route::view('/info-klinik', 'dokter.info-klinik-dokter');
+    Route::view('/info-klinik', 'dokter.info-klinik-dokter')
+        ->name('dokter.info');
 
-    Route::get('/medical-history', [DokterController::class, 'medicalHistory']);
+    Route::get('/medical-history', [DokterController::class, 'medicalHistory'])
+        ->name('dokter.medicalhistory');
 });
-
 /*
 |--------------------------------------------------------------------------
 | ADMIN

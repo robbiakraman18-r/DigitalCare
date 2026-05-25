@@ -49,7 +49,7 @@
                 </div>
 
                 <!-- ITEM -->
-                <a href="/jadwal-praktik"
+                <a href="{{ route('dokter.jadwal') }}"
                 class="flex gap-3 p-4 hover:bg-slate-50">
 
                     <i data-lucide="calendar-check" class="text-teal-500"></i>
@@ -69,7 +69,7 @@
                 </a>
 
                 <!-- ITEM -->
-                <a href="/dokter-pasien"
+                <a href="{{ route('dokter.pasien') }}"
                 class="flex gap-3 p-4 hover:bg-slate-50">
 
                     <i data-lucide="users" class="text-cyan-500"></i>
@@ -189,7 +189,7 @@
                 <!-- BUTTON -->
                 <div class="mt-5">
 
-                    <a href="/profil-dokter"
+                    <a href="{{ route('dokter.profile') }}"
                     class="flex items-center justify-center gap-2 py-3 rounded-2xl bg-teal-500 hover:bg-teal-600 text-white font-medium transition-all duration-300">
 
                         <i data-lucide="user" class="w-4 h-4"></i>
