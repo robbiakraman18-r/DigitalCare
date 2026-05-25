@@ -15,8 +15,7 @@ return new class extends Migration
             $table->id('id_admin');
 
             $table->foreignId('user_id')
-                ->constrained('users')
-                ->onDelete('cascade');
+                ->constrained('users');
 
             $table->timestamps();
         });
