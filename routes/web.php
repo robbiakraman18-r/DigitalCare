@@ -157,8 +157,8 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
 Route::get('/test-users', function () {
     return App\Models\User::all();
 });
+
 Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/dashboard', [AdminController::class, 'dashboard']);
 
     Route::view('/user-management', 'admin.user-management');
     Route::view('/appointment', 'admin.appointment');
