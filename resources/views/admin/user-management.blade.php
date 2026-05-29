@@ -29,12 +29,12 @@
             </button>
 
             <button
-            class="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold transition">
+onclick="document.getElementById('addDoctorModal').classList.remove('hidden')"
+class="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold transition">
 
-                + Add User
+    + Add Doctor
 
-            </button>
-
+</button>
         </div>
 
     </div>
@@ -327,5 +327,157 @@
     </div>
 
 </div>
+<!-- ADD DOCTOR MODAL -->
+<div
+id="addDoctorModal"
+class="fixed inset-0 bg-black/40 hidden z-50 flex items-center justify-center">
+    <div class="bg-white w-full max-w-2xl rounded-[30px] p-8 shadow-xl">
 
+        <div class="flex items-center justify-between mb-6">
+
+            <h2 class="text-2xl font-bold text-slate-800">
+                Add Doctor
+            </h2>
+
+            <button
+            onclick="document.getElementById('addDoctorModal').classList.add('hidden')"
+            class="text-slate-500 text-2xl">
+
+                ×
+
+            </button>
+
+        </div>
+
+        <form action="/admin/doctor" method="POST">
+
+            @csrf
+
+            <div class="grid grid-cols-2 gap-5">
+
+                <!-- NAME -->
+                <div class="col-span-2">
+                    <label class="font-medium text-slate-700">
+                        Doctor Name
+                    </label>
+
+                    <input
+                    type="text"
+                    name="name"
+                    required
+                    class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200"
+                    placeholder="Enter doctor name">
+                </div>
+
+                <!-- EMAIL -->
+                <div>
+                    <label class="font-medium text-slate-700">
+                        Email
+                    </label>
+
+                    <input
+                    type="email"
+                    name="email"
+                    required
+                    class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200"
+                    placeholder="doctor@gmail.com">
+                </div>
+
+                <!-- PASSWORD -->
+                <div>
+                    <label class="font-medium text-slate-700">
+                        Password
+                    </label>
+
+                    <input
+                    type="password"
+                    name="password"
+                    required
+                    class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200"
+                    placeholder="********">
+                </div>
+
+                <!-- NO SIP -->
+                <div>
+                    <label class="font-medium text-slate-700">
+                        No SIP
+                    </label>
+
+                    <input
+                    type="text"
+                    name="no_sip"
+                    required
+                    class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
+                </div>
+
+                <!-- GENDER -->
+                <div>
+                    <label class="font-medium text-slate-700">
+                        Gender
+                    </label>
+
+                    <select
+                    name="gender"
+                    class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
+
+                        <option value="Male">
+                            Male
+                        </option>
+
+                        <option value="Female">
+                            Female
+                        </option>
+
+                    </select>
+                </div>
+
+                <!-- STATUS -->
+                <div class="col-span-2">
+                    <label class="font-medium text-slate-700">
+                        Availability Status
+                    </label>
+
+                    <select
+                    name="status_ketersediaan"
+                    class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
+
+                        <option value="Available">
+                            Available
+                        </option>
+
+                        <option value="Unavailable">
+                            Unavailable
+                        </option>
+
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="flex justify-end gap-3 mt-8">
+
+                <button
+                type="button"
+                onclick="document.getElementById('addDoctorModal').classList.add('hidden')"
+                class="px-5 py-3 rounded-2xl border border-slate-200">
+
+                    Cancel
+
+                </button>
+
+                <button
+                type="submit"
+                class="px-5 py-3 rounded-2xl bg-blue-600 text-white">
+
+                    Save Doctor
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
 @endsection

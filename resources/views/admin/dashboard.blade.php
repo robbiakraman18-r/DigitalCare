@@ -6,7 +6,49 @@
 @endphp
 
 @section('content')
+<div class="grid md:grid-cols-4 gap-4">
 
+    <a href="/admin/user-management"
+    class="bg-white rounded-3xl p-5 shadow-sm border border-slate-100 hover:shadow-md transition">
+
+        <h3 class="font-bold text-slate-800">
+            Kelola Dokter
+        </h3>
+
+        <p class="text-sm text-slate-400 mt-2">
+            Tambah, edit, hapus dokter
+        </p>
+
+    </a>
+
+    <a href="/admin/listpatient"
+    class="bg-white rounded-3xl p-5 shadow-sm border border-slate-100">
+
+        <h3 class="font-bold text-slate-800">
+            Data Pasien
+        </h3>
+
+    </a>
+
+    <a href="/admin/doctor-schedule"
+    class="bg-white rounded-3xl p-5 shadow-sm border border-slate-100">
+
+        <h3 class="font-bold text-slate-800">
+            Jadwal Dokter
+        </h3>
+
+    </a>
+
+    <a href="/admin/complaint"
+    class="bg-white rounded-3xl p-5 shadow-sm border border-slate-100">
+
+        <h3 class="font-bold text-slate-800">
+            Complaint
+        </h3>
+
+    </a>
+
+</div>
 <div class="space-y-6">
 
     <!-- HERO -->
@@ -98,7 +140,7 @@
                     </p>
 
                     <h2 class="text-3xl font-bold text-slate-800 mt-2">
-                        18
+                        {{ $totalDokter }}
                     </h2>
 
                     <p class="text-sm text-green-500 mt-2">
@@ -129,7 +171,7 @@
                     </p>
 
                     <h2 class="text-3xl font-bold text-slate-800 mt-2">
-                        320
+                        {{ $totalPasien }}
                     </h2>
 
                     <p class="text-sm text-teal-500 mt-2">
@@ -160,7 +202,7 @@
                     </p>
 
                     <h2 class="text-3xl font-bold text-slate-800 mt-2">
-                        24
+                        {{ $totalAppointment }}
                     </h2>
 
                     <p class="text-sm text-yellow-500 mt-2">
@@ -191,7 +233,7 @@
                     </p>
 
                     <h2 class="text-3xl font-bold text-slate-800 mt-2">
-                        12JT
+                        {{ $dokterAktif }}
                     </h2>
 
                     <p class="text-sm text-cyan-500 mt-2">
@@ -274,55 +316,77 @@
 
                         <tbody>
 
-                            <tr class="border-b border-slate-100">
+@forelse($appointmentsToday as $appointment)
 
-                                <td class="py-4 font-semibold text-slate-700">
-                                    Ahmad Fauzi
-                                </td>
+<tr class="border-b border-slate-100">
 
-                                <td class="py-4 text-slate-500">
-                                    Dr. Rizki
-                                </td>
+    <td class="py-4 font-semibold text-slate-700">
+        {{ $appointment->pasien->user->nama ?? '-' }}
+    </td>
 
-                                <td class="py-4 text-slate-500">
-                                    09:00 WIB
-                                </td>
+    <td class="py-4 text-slate-500">
+        {{ $appointment->dokter->user->nama ?? '-' }}
+    </td>
 
-                                <td class="py-4">
+    <td class="py-4 text-slate-500">
+        {{ $appointment->created_at->format('H:i') }}
+    </td>
 
-                                    <span class="px-4 py-2 rounded-xl bg-green-100 text-green-600 text-xs font-semibold">
-                                        Selesai
-                                    </span>
+    <td class="py-4">
+        <span class="px-4 py-2 rounded-xl bg-yellow-100 text-yellow-600 text-xs font-semibold">
+            Appointment
+        </span>
+    </td>
 
-                                </td>
+</tr>
 
-                            </tr>
+@empty
 
-                            <tr>
+<tr>
+    <td colspan="4" class="text-center py-6 text-slate-400">
+        Belum ada appointment
+    </td>
+</tr>
 
-                                <td class="py-4 font-semibold text-slate-700">
-                                    Budi Santoso
-                                </td>
+@endforelse
 
-                                <td class="py-4 text-slate-500">
-                                    Dr. Andi
-                                </td>
+</tbody><tbody>
 
-                                <td class="py-4 text-slate-500">
-                                    11:00 WIB
-                                </td>
+@forelse($appointmentsToday as $appointment)
 
-                                <td class="py-4">
+<tr class="border-b border-slate-100">
 
-                                    <span class="px-4 py-2 rounded-xl bg-yellow-100 text-yellow-600 text-xs font-semibold">
-                                        Menunggu
-                                    </span>
+    <td class="py-4 font-semibold text-slate-700">
+        {{ $appointment->pasien->user->nama ?? '-' }}
+    </td>
 
-                                </td>
+    <td class="py-4 text-slate-500">
+        {{ $appointment->dokter->user->nama ?? '-' }}
+    </td>
 
-                            </tr>
+    <td class="py-4 text-slate-500">
+        {{ $appointment->created_at->format('H:i') }}
+    </td>
 
-                        </tbody>
+    <td class="py-4">
+        <span class="px-4 py-2 rounded-xl bg-yellow-100 text-yellow-600 text-xs font-semibold">
+            Appointment
+        </span>
+    </td>
+
+</tr>
+
+@empty
+
+<tr>
+    <td colspan="4" class="text-center py-6 text-slate-400">
+        Belum ada appointment
+    </td>
+</tr>
+
+@endforelse
+
+</tbody>
 
                     </table>
 
@@ -551,7 +615,3 @@
 </div>
 
 @endsection
-<h1>Admin Dashboard</h1>
-
-<a href="/admin/doctor-schedule">Doctor Schedule</a><br>
-<a href="/admin/complaint">Complaint</a>
