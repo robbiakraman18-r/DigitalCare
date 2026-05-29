@@ -14,6 +14,9 @@ use App\Http\Controllers\DokterController;
 use App\Http\Controllers\ListPatientController;
 use App\Http\Controllers\ListprescriptionController;
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\JadwalController;
+
+
 
 /*
 |--------------------------------------------------------------------------

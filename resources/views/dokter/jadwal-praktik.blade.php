@@ -23,28 +23,27 @@
         <div class="p-6">
 
             <!-- FILTER -->
-            <div class="flex items-center justify-between mb-6">
+            <!-- DATE PICKER -->
+<div class="mb-6">
 
-                <div>
+    <form method="GET">
 
-                    <h3 class="font-semibold text-slate-800">
-                        This Week
-                    </h3>
+        <label class="block text-sm font-medium text-slate-600 mb-2">
+            Select Schedule Date
+        </label>
 
-                    <p class="text-sm text-slate-400 mt-1">
-                        20 - 21 May 2026
-                    </p>
+        <input
+            type="date"
+            name="tanggal"
+            min="{{ now()->format('Y-m-d') }}"
+            value="{{ request('tanggal', now()->format('Y-m-d')) }}"
+            onchange="this.form.submit()"
+            class="px-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-400"
+        >
 
-                </div>
+    </form>
 
-                <button
-                class="px-4 py-2 rounded-2xl bg-teal-50 text-teal-600 text-sm font-medium hover:bg-teal-100 transition">
-
-                    Next Day →
-
-                </button>
-
-            </div>
+</div>
 
             <!-- TABLE -->
             <div class="overflow-x-auto">
@@ -81,63 +80,62 @@
 
                     <tbody class="divide-y">
 
-                        <tr>
+    @foreach($jadwal as $item)
 
-                            <td class="py-4 px-4 font-medium text-slate-700">
-                                Today
-                            </td>
+    <tr>
 
-                            <td class="py-4 px-4 text-slate-500">
-                                20 May 2026
-                            </td>
+        <!-- HARI -->
+        <td class="py-4 px-4 font-medium text-slate-700">
+            {{ $item->hari }}
+        </td>
 
-                            <td class="py-4 px-4 text-slate-500">
-                                08.00 - 16.00
-                            </td>
+        <!-- TANGGAL -->
+        <td class="py-4 px-4 text-slate-500">
+            {{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}
+        </td>
 
-                            <td class="py-4 px-4 text-slate-500">
-                                20 Patients
-                            </td>
+        <!-- JAM -->
+        <td class="py-4 px-4 text-slate-500">
+            {{ \Carbon\Carbon::parse($item->jam_mulai)->format('H.i') }}
+            -
+            {{ \Carbon\Carbon::parse($item->jam_selesai)->format('H.i') }}
+        </td>
 
-                            <td class="py-4 px-4">
+        <!-- KUOTA -->
+        <td class="py-4 px-4 text-slate-500">
+            {{ $item->terisi }}/{{ $item->kuota_harian }} Patients
+        </td>
 
-                                <span class="px-3 py-1 rounded-xl bg-green-100 text-green-600 text-xs font-semibold">
-                                    Active
-                                </span>
+        <!-- STATUS -->
+        <td class="py-4 px-4">
 
-                            </td>
+            @if($item->status_jadwal == 'Available')
 
-                        </tr>
+                <span class="px-3 py-1 rounded-xl bg-green-100 text-green-600 text-xs font-semibold">
+                    Available
+                </span>
 
-                        <tr>
+            @elseif($item->status_jadwal == 'Full')
 
-                            <td class="py-4 px-4 font-medium text-slate-700">
-                                Tomorrow
-                            </td>
+                <span class="px-3 py-1 rounded-xl bg-red-100 text-red-600 text-xs font-semibold">
+                    Full
+                </span>
 
-                            <td class="py-4 px-4 text-slate-500">
-                                21 May 2026
-                            </td>
+            @else
 
-                            <td class="py-4 px-4 text-slate-500">
-                                08.00 - 16.00
-                            </td>
+                <span class="px-3 py-1 rounded-xl bg-yellow-100 text-yellow-600 text-xs font-semibold">
+                    Closed
+                </span>
 
-                            <td class="py-4 px-4 text-slate-500">
-                                15 Patients
-                            </td>
+            @endif
 
-                            <td class="py-4 px-4">
+        </td>
 
-                                <span class="px-3 py-1 rounded-xl bg-yellow-100 text-yellow-600 text-xs font-semibold">
-                                    Pending
-                                </span>
+    </tr>
 
-                            </td>
+    @endforeach
 
-                        </tr>
-
-                    </tbody>
+</tbody>
 
                 </table>
 
