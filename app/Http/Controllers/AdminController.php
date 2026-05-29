@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Schedule;
 use App\Models\Complaint;
 use App\Models\User;
 use App\Models\Dokter;
@@ -13,7 +12,9 @@ use App\Models\Appointment;
 
 class AdminController extends Controller
 {
-    // STORE DOKTER (SUDAH FIX LOGIN + DOKTER)
+    // =========================================
+    // STORE DOKTER
+    // =========================================
     public function storeDokter(Request $request)
     {
         $request->validate([
@@ -23,15 +24,16 @@ class AdminController extends Controller
             'password' => 'required|min:6',
         ]);
 
-        // 1. BUAT USER LOGIN
+        // BUAT USER LOGIN
         $user = User::create([
-            'name' => $request->nama,
+            'nama' => $request->nama,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'dokter',
+            'status' => 'active',
         ]);
 
-        // 2. BUAT DATA DOKTER
+        // BUAT DATA DOKTER
         Dokter::create([
             'user_id' => $user->id,
             'nama' => $request->nama,
@@ -39,10 +41,13 @@ class AdminController extends Controller
             'status_ketersediaan' => 'Available',
         ]);
 
-        return redirect()->back()->with('success', 'Dokter & akun login berhasil dibuat');
+        return redirect()->back()
+            ->with('success', 'Dokter & akun login berhasil dibuat');
     }
 
+    // =========================================
     // ADMIN DASHBOARD
+    // =========================================
     public function dashboard()
     {
         $totalDokter = Dokter::count();
@@ -62,36 +67,94 @@ class AdminController extends Controller
         ));
     }
 
-    // DOCTOR SCHEDULE
-    public function schedule()
-    {
-        $schedules = Schedule::latest()->get();
-        return view('admin.doctor_schedule', compact('schedules'));
+    // =========================================
+    // USER MANAGEMENT + SEARCH
+    // =========================================
+
+public function userManagement(Request $request)
+{
+    $query = User::query();
+
+    // SEARCH
+    if ($request->search) {
+        $query->where(function ($q) use ($request) {
+            $q->where('nama', 'like', '%' . $request->search . '%')
+              ->orWhere('email', 'like', '%' . $request->search . '%')
+              ->orWhere('role', 'like', '%' . $request->search . '%');
+        });
     }
 
-    public function storeSchedule(Request $request)
-    {
-        $request->validate([
-            'doctor_name' => 'required|string|max:255',
-            'day' => 'required|string|max:50',
-            'start_time' => 'required',
-            'end_time' => 'required',
-        ]);
-
-        Schedule::create([
-            'doctor_name' => $request->doctor_name,
-            'day' => $request->day,
-            'start_time' => $request->start_time,
-            'end_time' => $request->end_time,
-        ]);
-
-        return redirect()->back()->with('success', 'Schedule added successfully');
+    // FILTER ROLE
+    if ($request->role) {
+        $query->where('role', $request->role);
     }
 
+    // FILTER STATUS (INI YANG KAMU ERROR TADI)
+    if ($request->status) {
+        $query->where('status', $request->status);
+    }
+
+    $users = $query->latest()->get();
+
+    return view('admin.user-management', compact('users'));
+}
+
+
+    // =========================================
+    // UPDATE USER
+    // =========================================
+    public function updateUser(Request $request, $id)
+{
+    $user = User::findOrFail($id);
+
+    $request->validate([
+        'nama' => 'required',
+        'email' => 'required|email',
+        'status' => 'required',
+    ]);
+
+    $user->update([
+        'nama' => $request->nama,
+        'email' => $request->email,
+        'status' => $request->status,
+    ]);
+
+    return redirect()->back()
+        ->with('success', 'User updated');
+}
+
+    // =========================================
+    // DELETE USER
+    // =========================================
+    public function deleteUser($id)
+    {
+        $user = User::findOrFail($id);
+
+        $user->delete();
+
+        return redirect()->back()
+            ->with('success', 'User deleted successfully');
+    }
+
+    // =========================================
     // COMPLAINT
+    // =========================================
     public function complaint()
     {
         $complaints = Complaint::latest()->get();
+
         return view('admin.complaint', compact('complaints'));
     }
+
+
+    public function toggleStatus($id)
+{
+    $user = User::findOrFail($id);
+
+    $user->status = $user->status === 'active' ? 'inactive' : 'active';
+    $user->save();
+
+    return back()->with('success', 'Status updated');
+}
+
 }

@@ -21,6 +21,8 @@ class User extends Authenticatable implements MustVerifyEmail // Menambahkan imp
         'email',
         'password',
         'role',
+        'department',
+        'status'
     ];
 
     /**

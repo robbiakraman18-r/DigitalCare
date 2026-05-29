@@ -111,7 +111,9 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
 
     Route::get('/dashboard', [AdminController::class, 'dashboard']);
 
-    Route::view('/user-management', 'admin.user-management');
+    Route::get('/user-management', [AdminController::class, 'userManagement']);
+
+
     Route::view('/appointment', 'admin.appointment');
     Route::view('/schedule-management', 'admin.schedule-management');
     Route::view('/medical-records', 'admin.medical-records');
@@ -121,7 +123,20 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::view('/profile', 'admin.profile');
 
     // CRUD DOCTOR
-    Route::post('/doctor', [AdminController::class, 'storeDokter']);
+    Route::post('/doctor', [AdminController::class, 'storeDokter'])
+    ->name('admin.doctor.store');
+
+    // BUAT EDIT USER
+    Route::put('/user/{id}', [AdminController::class, 'updateUser'])
+    ->name('admin.user.update');
+
+    // BUAT DELETE USER 
+    Route::delete('/user/{id}', [AdminController::class, 'deleteUser'])
+    ->name('admin.user.delete');
+
+    // TOGGLE STATUS USER
+    Route::put('/user/{id}/toggle-status', [AdminController::class, 'toggleStatus'])
+    ->name('admin.user.toggleStatus');
 
     // DOCTOR SCHEDULE
     Route::get('/doctor-schedule', [AdminController::class, 'schedule']);

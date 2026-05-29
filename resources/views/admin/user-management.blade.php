@@ -22,19 +22,13 @@
         <div class="flex items-center gap-3">
 
             <button
-            class="px-5 py-3 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold transition">
+            onclick="document.getElementById('addDoctorModal').classList.remove('hidden')"
+            class="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold transition">
 
-                Roles & Permissions
+                + Add Doctor
 
             </button>
 
-            <button
-onclick="document.getElementById('addDoctorModal').classList.remove('hidden')"
-class="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold transition">
-
-    + Add Doctor
-
-</button>
         </div>
 
     </div>
@@ -53,11 +47,11 @@ class="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semib
                     </p>
 
                     <h2 class="text-3xl font-bold text-slate-800 mt-2">
-                        56
+                        {{ $users->count() }}
                     </h2>
 
                     <p class="text-green-500 text-sm mt-2">
-                        +12 this month
+                        System Users
                     </p>
 
                 </div>
@@ -83,11 +77,11 @@ class="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semib
                     </p>
 
                     <h2 class="text-3xl font-bold text-slate-800 mt-2">
-                        18
+                        {{ $users->where('role', 'dokter')->count() }}
                     </h2>
 
                     <p class="text-green-500 text-sm mt-2">
-                        +4 this month
+                        Active Doctors
                     </p>
 
                 </div>
@@ -109,15 +103,15 @@ class="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semib
                 <div>
 
                     <p class="text-slate-400 text-sm">
-                        Staff
+                        Patients
                     </p>
 
                     <h2 class="text-3xl font-bold text-slate-800 mt-2">
-                        26
+                        {{ $users->where('role', 'pasien')->count() }}
                     </h2>
 
                     <p class="text-green-500 text-sm mt-2">
-                        +6 this month
+                        Registered Patients
                     </p>
 
                 </div>
@@ -143,11 +137,11 @@ class="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semib
                     </p>
 
                     <h2 class="text-3xl font-bold text-slate-800 mt-2">
-                        48
+                        {{ $users->count() }}
                     </h2>
 
                     <p class="text-green-500 text-sm mt-2">
-                        +10% from last month
+                        Current Active Accounts
                     </p>
 
                 </div>
@@ -170,33 +164,78 @@ class="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semib
         <!-- FILTER -->
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 p-5 border-b border-slate-100">
 
-            <div class="relative w-full lg:w-96">
+            <form
+            method="GET"
+            action="{{ url()->current() }}"
+            class="flex flex-col lg:flex-row gap-4 w-full">
 
-                <i data-lucide="search"
-                class="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
+                <!-- SEARCH -->
+                <div class="relative w-full lg:w-96">
 
-                <input
-                type="text"
-                placeholder="Search users..."
-                class="w-full pl-12 pr-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <i data-lucide="search"
+                    class="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
 
-            </div>
+                    <input
+                    type="text"
+                    name="search"
+                    value="{{ request('search') }}"
+                    placeholder="Search user, role, email..."
+                    class="w-full pl-12 pr-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
 
-            <div class="flex items-center gap-3">
+                </div>
 
-                <select class="px-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 text-slate-700">
+                <!-- FILTER ROLE -->
+                <select
+                name="role"
+                class="px-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 text-slate-700">
 
-                    <option>All Roles</option>
+                    <option value="">
+                        All Roles
+                    </option>
+
+                    <option value="admin"
+                    {{ request('role') == 'admin' ? 'selected' : '' }}>
+                        Admin
+                    </option>
+
+                    <option value="dokter"
+                    {{ request('role') == 'dokter' ? 'selected' : '' }}>
+                        Doctor
+                    </option>
+
+                    <option value="pasien"
+                    {{ request('role') == 'pasien' ? 'selected' : '' }}>
+                        Patient
+                    </option>
 
                 </select>
 
-                <select class="px-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 text-slate-700">
+                <!-- FILTER STATUS -->
+                <select name="status"
+    class="px-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 text-slate-700">
 
-                    <option>All Status</option>
+    <option value="">All Status</option>
 
-                </select>
+    <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>
+        Active
+    </option>
 
-            </div>
+    <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>
+        Inactive
+    </option>
+
+</select>
+
+                <!-- BUTTON -->
+                <button
+                type="submit"
+                class="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold transition">
+
+                    Filter
+
+                </button>
+
+            </form>
 
         </div>
 
@@ -230,7 +269,7 @@ class="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semib
                         </th>
 
                         <th class="px-6 py-4 text-left text-sm text-slate-400">
-                            Last Login
+                            Created
                         </th>
 
                         <th class="px-6 py-4 text-center text-sm text-slate-400">
@@ -243,23 +282,26 @@ class="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semib
 
                 <tbody>
 
+                    @foreach($users as $user)
+
                     <tr class="border-b border-slate-100 hover:bg-slate-50 transition">
 
                         <td class="px-6 py-5">
 
                             <div class="flex items-center gap-4">
 
-                                <img src="https://i.pravatar.cc/100?img=12"
+                                <img
+                                src="https://i.pravatar.cc/100?img={{ $user->id }}"
                                 class="w-11 h-11 rounded-2xl object-cover">
 
                                 <div>
 
                                     <h3 class="font-semibold text-slate-800">
-                                        Dr. Emily Carter
+                                        {{ $user->nama }}
                                     </h3>
 
                                     <p class="text-sm text-slate-400">
-                                        EMP-001
+                                        USER-{{ $user->id }}
                                     </p>
 
                                 </div>
@@ -270,53 +312,138 @@ class="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semib
 
                         <td class="px-6 py-5">
 
+                            @if($user->role == 'admin')
+
+                            <span class="px-3 py-1 rounded-xl bg-red-100 text-red-600 text-xs font-semibold">
+                                Admin
+                            </span>
+
+                            @elseif($user->role == 'dokter')
+
                             <span class="px-3 py-1 rounded-xl bg-blue-100 text-blue-600 text-xs font-semibold">
                                 Doctor
                             </span>
 
+                            @else
+
+                            <span class="px-3 py-1 rounded-xl bg-green-100 text-green-600 text-xs font-semibold">
+                                Patient
+                            </span>
+
+                            @endif
+
                         </td>
 
                         <td class="px-6 py-5 text-slate-600">
-                            Cardiology
+
+                            @if($user->role == 'dokter')
+
+                                Medical
+
+                            @elseif($user->role == 'admin')
+
+                                Administration
+
+                            @else
+
+                                Patient
+
+                            @endif
+
                         </td>
 
                         <td class="px-6 py-5 text-slate-600">
-                            emily@carewell.com
+                            {{ $user->email }}
                         </td>
 
                         <td class="px-6 py-5">
 
-                            <span class="px-3 py-1 rounded-xl bg-green-100 text-green-600 text-xs font-semibold">
-                                Active
-                            </span>
+    @if($user->status == 'active')
+        <span class="px-3 py-1 rounded-xl bg-green-100 text-green-600 text-xs font-semibold">
+            Active
+        </span>
+    @else
+        <span class="px-3 py-1 rounded-xl bg-red-100 text-red-600 text-xs font-semibold">
+            Inactive
+        </span>
+    @endif
+
+</td>
+
 
                         </td>
 
                         <td class="px-6 py-5 text-slate-600">
-                            May 14, 2025
+                            {{ $user->created_at->format('d M Y') }}
                         </td>
 
                         <td class="px-6 py-5">
 
                             <div class="flex items-center justify-center gap-3">
 
-                                <button class="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center hover:bg-slate-100">
+                                <!-- VIEW -->
+                                <button
+                                onclick="document.getElementById('viewUserModal{{ $user->id }}').classList.remove('hidden')"
+                                class="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center hover:bg-slate-100 transition">
 
                                     <i data-lucide="eye" class="w-4 h-4"></i>
 
                                 </button>
 
-                                <button class="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center hover:bg-slate-100">
+                                <!-- EDIT -->
+                                <button
+                                onclick="document.getElementById('editUserModal{{ $user->id }}').classList.remove('hidden')"
+                                class="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center hover:bg-slate-100 transition">
 
                                     <i data-lucide="square-pen" class="w-4 h-4"></i>
 
                                 </button>
+
+                                <!-- TOGGLE STATUS -->
+<form action="{{ route('admin.user.toggleStatus', $user->id) }}" method="POST">
+    @csrf
+    @method('PUT')
+
+    <button type="submit"
+        class="w-9 h-9 rounded-xl border flex items-center justify-center
+        {{ $user->status == 'active' ? 'border-red-200 hover:bg-red-50' : 'border-green-200 hover:bg-green-50' }}">
+
+        @if($user->status == 'active')
+            <i data-lucide="user-x" class="w-4 h-4 text-red-500"></i>
+        @else
+            <i data-lucide="user-check" class="w-4 h-4 text-green-500"></i>
+        @endif
+
+    </button>
+</form>
+
+                                <!-- DELETE -->
+                                <form
+                                action="{{ route('admin.user.delete', $user->id) }}"
+                                method="POST"
+                                class="m-0 p-0 flex">
+
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button
+                                    type="submit"
+                                    onclick="return confirm('Delete this user?')"
+                                    class="w-9 h-9 rounded-xl border border-red-200 flex items-center justify-center hover:bg-red-50 transition">
+
+                                        <i data-lucide="trash-2" class="w-4 h-4 text-red-500"></i>
+
+                                    </button>
+
+                                </form>
 
                             </div>
 
                         </td>
 
                     </tr>
+
+                    @endforeach
 
                 </tbody>
 
@@ -327,10 +454,12 @@ class="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semib
     </div>
 
 </div>
+
 <!-- ADD DOCTOR MODAL -->
 <div
 id="addDoctorModal"
 class="fixed inset-0 bg-black/40 hidden z-50 flex items-center justify-center">
+
     <div class="bg-white w-full max-w-2xl rounded-[30px] p-8 shadow-xl">
 
         <div class="flex items-center justify-between mb-6">
@@ -349,28 +478,28 @@ class="fixed inset-0 bg-black/40 hidden z-50 flex items-center justify-center">
 
         </div>
 
-        <form action="/admin/doctor" method="POST">
+        <form action="{{ route('admin.doctor.store') }}" method="POST">
 
             @csrf
 
             <div class="grid grid-cols-2 gap-5">
 
-                <!-- NAME -->
                 <div class="col-span-2">
+
                     <label class="font-medium text-slate-700">
                         Doctor Name
                     </label>
 
                     <input
                     type="text"
-                    name="name"
+                    name="nama"
                     required
-                    class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200"
-                    placeholder="Enter doctor name">
+                    class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
+
                 </div>
 
-                <!-- EMAIL -->
                 <div>
+
                     <label class="font-medium text-slate-700">
                         Email
                     </label>
@@ -379,12 +508,12 @@ class="fixed inset-0 bg-black/40 hidden z-50 flex items-center justify-center">
                     type="email"
                     name="email"
                     required
-                    class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200"
-                    placeholder="doctor@gmail.com">
+                    class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
+
                 </div>
 
-                <!-- PASSWORD -->
                 <div>
+
                     <label class="font-medium text-slate-700">
                         Password
                     </label>
@@ -393,12 +522,12 @@ class="fixed inset-0 bg-black/40 hidden z-50 flex items-center justify-center">
                     type="password"
                     name="password"
                     required
-                    class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200"
-                    placeholder="********">
+                    class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
+
                 </div>
 
-                <!-- NO SIP -->
                 <div>
+
                     <label class="font-medium text-slate-700">
                         No SIP
                     </label>
@@ -406,50 +535,8 @@ class="fixed inset-0 bg-black/40 hidden z-50 flex items-center justify-center">
                     <input
                     type="text"
                     name="no_sip"
-                    required
-                    class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
-                </div>
-
-                <!-- GENDER -->
-                <div>
-                    <label class="font-medium text-slate-700">
-                        Gender
-                    </label>
-
-                    <select
-                    name="gender"
                     class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
 
-                        <option value="Male">
-                            Male
-                        </option>
-
-                        <option value="Female">
-                            Female
-                        </option>
-
-                    </select>
-                </div>
-
-                <!-- STATUS -->
-                <div class="col-span-2">
-                    <label class="font-medium text-slate-700">
-                        Availability Status
-                    </label>
-
-                    <select
-                    name="status_ketersediaan"
-                    class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
-
-                        <option value="Available">
-                            Available
-                        </option>
-
-                        <option value="Unavailable">
-                            Unavailable
-                        </option>
-
-                    </select>
                 </div>
 
             </div>
@@ -480,4 +567,181 @@ class="fixed inset-0 bg-black/40 hidden z-50 flex items-center justify-center">
     </div>
 
 </div>
+
+{{-- VIEW + EDIT MODAL --}}
+@foreach($users as $user)
+
+<!-- VIEW MODAL -->
+<div
+id="viewUserModal{{ $user->id }}"
+class="fixed inset-0 bg-black/40 hidden z-50 flex items-center justify-center">
+
+    <div class="bg-white w-full max-w-lg rounded-[30px] p-8 shadow-xl">
+
+        <div class="flex items-center justify-between mb-6">
+
+            <h2 class="text-2xl font-bold text-slate-800">
+                User Detail
+            </h2>
+
+            <button
+            onclick="document.getElementById('viewUserModal{{ $user->id }}').classList.add('hidden')"
+            class="text-slate-500 text-2xl">
+
+                ×
+
+            </button>
+
+        </div>
+
+        <div class="space-y-4">
+
+            <div>
+                <p class="text-sm text-slate-400">Name</p>
+                <h3 class="font-semibold text-slate-800">{{ $user->nama }}</h3>
+            </div>
+
+            <div>
+                <p class="text-sm text-slate-400">Email</p>
+                <h3 class="font-semibold text-slate-800">{{ $user->email }}</h3>
+            </div>
+
+            <div>
+                <p class="text-sm text-slate-400">Role</p>
+                <h3 class="font-semibold text-slate-800">{{ $user->role }}</h3>
+            </div>
+
+            <div>
+                <p class="text-sm text-slate-400">Created</p>
+                <h3 class="font-semibold text-slate-800">
+                    {{ $user->created_at->format('d M Y H:i') }}
+                </h3>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- EDIT MODAL -->
+<div
+id="editUserModal{{ $user->id }}"
+class="fixed inset-0 bg-black/40 hidden z-50 flex items-center justify-center">
+
+    <div class="bg-white w-full max-w-xl rounded-[30px] p-8 shadow-xl">
+
+        <div class="flex items-center justify-between mb-6">
+
+            <h2 class="text-2xl font-bold text-slate-800">
+                Edit User
+            </h2>
+
+            <button
+            onclick="document.getElementById('editUserModal{{ $user->id }}').classList.add('hidden')"
+            class="text-slate-500 text-2xl">
+
+                ×
+
+            </button>
+
+        </div>
+
+        <form
+        action="{{ route('admin.user.update', $user->id) }}"
+        method="POST">
+
+            @csrf
+            @method('PUT')
+
+            <div class="space-y-5">
+
+                <div>
+
+                    <label class="font-medium text-slate-700">
+                        Name
+                    </label>
+
+                    <input
+                    type="text"
+                    name="nama"
+                    value="{{ $user->nama }}"
+                    class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
+
+                </div>
+
+                <div>
+
+                    <label class="font-medium text-slate-700">
+                        Email
+                    </label>
+
+                    <input
+                    type="email"
+                    name="email"
+                    value="{{ $user->email }}"
+                    class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
+
+                </div>
+
+                <div>
+
+                    <label class="font-medium text-slate-700">
+                        Role
+                    </label>
+
+                    <select
+                    name="role"
+                    class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
+
+                        <option value="admin"
+                        {{ $user->role == 'admin' ? 'selected' : '' }}>
+                            Admin
+                        </option>
+
+                        <option value="dokter"
+                        {{ $user->role == 'dokter' ? 'selected' : '' }}>
+                            Doctor
+                        </option>
+
+                        <option value="pasien"
+                        {{ $user->role == 'pasien' ? 'selected' : '' }}>
+                            Patient
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <div class="flex justify-end gap-3 mt-8">
+
+                <button
+                type="button"
+                onclick="document.getElementById('editUserModal{{ $user->id }}').classList.add('hidden')"
+                class="px-5 py-3 rounded-2xl border border-slate-200">
+
+                    Cancel
+
+                </button>
+
+                <button
+                type="submit"
+                class="px-5 py-3 rounded-2xl bg-blue-600 text-white">
+
+                    Update User
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+@endforeach
+
 @endsection
