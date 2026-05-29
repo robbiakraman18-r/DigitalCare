@@ -103,7 +103,7 @@ public function userManagement(Request $request)
     // =========================================
     // UPDATE USER
     // =========================================
-    public function updateUser(Request $request, $id)
+    public function updateUser(Request $request, int $id)
 {
     $user = User::findOrFail($id);
 
@@ -126,7 +126,7 @@ public function userManagement(Request $request)
     // =========================================
     // DELETE USER
     // =========================================
-    public function deleteUser($id)
+    public function deleteUser( int $id)
     {
         $user = User::findOrFail($id);
 
@@ -147,7 +147,7 @@ public function userManagement(Request $request)
     }
 
 
-    public function toggleStatus($id)
+    public function toggleStatus(int $id)
 {
     $user = User::findOrFail($id);
 
