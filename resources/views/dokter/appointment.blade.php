@@ -7,7 +7,7 @@
 @section('content')
 
 <div
-x-data="{ detailModal:false }"
+x-data="{ detailModal:false, selected:null }"
 class="space-y-6">
 
     <!-- CARD -->
@@ -99,89 +99,74 @@ class="space-y-6">
 
                     <tbody class="divide-y">
 
-                        <!-- ITEM -->
-                        <tr>
+@foreach($appointments as $item)
 
-                            <td class="py-4 px-4">
-                                08.00
-                            </td>
+<tr>
 
-                            <td class="py-4 px-4 font-medium">
-                                Andi Setiawan
-                            </td>
+    <!-- TIME -->
+    <td class="py-4 px-4">
+        {{ \Carbon\Carbon::parse($item->jadwal->jam_mulai)->format('H:i') }}
+    </td>
 
-                            <td class="py-4 px-4 text-slate-500">
-                                Fever
-                            </td>
+    <!-- PATIENT -->
+    <td class="py-4 px-4 font-medium">
+        {{ $item->pasien->user->name ?? $item->pasien->nama }}
+    </td>
 
-                            <td class="py-4 px-4 text-slate-500">
-                                Consultation
-                            </td>
+    <!-- COMPLAINT -->
+    <td class="py-4 px-4 text-slate-500">
+        {{ $item->keluhan_utama }}
+    </td>
 
-                            <td class="py-4 px-4">
+    <!-- TYPE -->
+    <td class="py-4 px-4 text-slate-500">
+        Consultation
+    </td>
 
-                                <span class="px-3 py-1 rounded-xl bg-green-100 text-green-600 text-xs font-semibold">
-                                    Completed
-                                </span>
+    <!-- STATUS -->
+    <td class="py-4 px-4">
 
-                            </td>
+        @if($item->status_janji == 'completed')
+            <span class="px-3 py-1 rounded-xl bg-green-100 text-green-600 text-xs font-semibold">
+                Completed
+            </span>
 
-                            <td class="py-4 px-4">
+        @elseif($item->status_janji == 'approved')
+            <span class="px-3 py-1 rounded-xl bg-blue-100 text-blue-600 text-xs font-semibold">
+                In Progress
+            </span>
 
-                                <button
-                                @click="detailModal=true"
-                                class="px-4 py-2 rounded-xl border border-teal-500 text-teal-500 text-xs hover:bg-teal-50 transition">
+        @elseif($item->status_janji == 'pending')
+            <span class="px-3 py-1 rounded-xl bg-yellow-100 text-yellow-600 text-xs font-semibold">
+                Waiting
+            </span>
 
-                                    Details
+        @else
+            <span class="px-3 py-1 rounded-xl bg-red-100 text-red-600 text-xs font-semibold">
+                Cancelled
+            </span>
+        @endif
 
-                                </button>
+    </td>
 
-                            </td>
+    <!-- ACTION -->
+    <td class="py-4 px-4">
 
-                        </tr>
+        <button
+        @click="detailModal=true; selected={{ Js::from($item) }}"
+        class="px-4 py-2 rounded-xl border border-teal-500 text-teal-500 text-xs hover:bg-teal-50 transition">
 
-                        <!-- ITEM -->
-                        <tr>
+            Details
 
-                            <td class="py-4 px-4">
-                                09.00
-                            </td>
+        </button>
 
-                            <td class="py-4 px-4 font-medium">
-                                Aris Arya
-                            </td>
+    </td>
 
-                            <td class="py-4 px-4 text-slate-500">
-                                Cough
-                            </td>
+</tr>
 
-                            <td class="py-4 px-4 text-slate-500">
-                                Consultation
-                            </td>
+@endforeach
 
-                            <td class="py-4 px-4">
-
-                                <span class="px-3 py-1 rounded-xl bg-yellow-100 text-yellow-600 text-xs font-semibold">
-                                    Waiting
-                                </span>
-
-                            </td>
-
-                            <td class="py-4 px-4">
-
-                                <button
-                                @click="detailModal=true"
-                                class="px-4 py-2 rounded-xl border border-teal-500 text-teal-500 text-xs hover:bg-teal-50 transition">
-
-                                    Details
-
-                                </button>
-
-                            </td>
-
-                        </tr>
-
-                    </tbody>
+</tbody>
 
                 </table>
 
@@ -238,7 +223,7 @@ style="display:none;">
                 <div>
 
                     <h3 class="text-xl font-bold text-slate-800">
-                        Andi Setiawan
+                        <span x-text="selected?.pasien?.user?.name ?? selected?.pasien?.nama"></span>
                     </h3>
 
                     <p class="text-sm text-slate-400">
@@ -248,7 +233,7 @@ style="display:none;">
                     <div class="mt-2">
 
                         <span class="px-3 py-1 rounded-xl bg-green-100 text-green-600 text-xs font-semibold">
-                            Completed
+                            <span x-text="selected?.status_janji"></span>
                         </span>
 
                     </div>
@@ -267,7 +252,7 @@ style="display:none;">
                     </p>
 
                     <h4 class="font-bold text-slate-800 mt-2">
-                        May 20, 2026
+                        <span x-text="selected?.jadwal?.tanggal"></span>
                     </h4>
 
                 </div>
@@ -279,7 +264,7 @@ style="display:none;">
                     </p>
 
                     <h4 class="font-bold text-slate-800 mt-2">
-                        08:00 AM
+                        <span x-text="selected?.jadwal?.jam_mulai"></span>
                     </h4>
 
                 </div>
@@ -291,7 +276,7 @@ style="display:none;">
                     </p>
 
                     <h4 class="font-bold text-slate-800 mt-2">
-                        Consultation
+                        <span x-text="selected?.jadwal?.ruang ?? 'Consultation'"></span>
                     </h4>
 
                 </div>
@@ -303,7 +288,7 @@ style="display:none;">
                     </p>
 
                     <h4 class="font-bold text-slate-800 mt-2">
-                        High Fever
+                        <span x-text="selected?.keluhan_utama"></span>
                     </h4>
 
                 </div>

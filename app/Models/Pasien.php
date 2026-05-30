@@ -32,8 +32,5 @@ class Pasien extends Model
         return $this->hasMany(Appointment::class, 'id_pasien');
     }
 
-    public function diagnoses()
-    {
-        return $this->hasMany(Diagnosis::class, 'id_pasien');
-    }
+
 }

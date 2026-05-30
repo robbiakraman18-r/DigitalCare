@@ -6,26 +6,26 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+    
     public function up(): void
     {
         Schema::create('appointments', function (Blueprint $table) {
     $table->id('id_janji');
 
-    // RELASI KE JADWAL
     $table->foreignId('id_jadwal')
-    ->constrained('jadwal_dokter', 'id_jadwal')
-    ->onDelete('cascade');
+        ->constrained('jadwal_dokter', 'id_jadwal')
+        ->onDelete('cascade');
 
-    // RELASI KE PASIEN
     $table->foreignId('id_pasien')
         ->constrained('pasiens', 'id_pasien')
         ->onDelete('cascade');
 
-    $table->date('tanggal_janji');
+    // 🔥 TAMBAHAN INI
+    $table->foreignId('id_dokter')
+        ->constrained('dokters', 'id_dokter')
+        ->onDelete('cascade');
 
+    $table->date('tanggal_janji');
     $table->integer('nomor_antrian');
 
     $table->enum('status_janji', [
@@ -38,7 +38,8 @@ return new class extends Migration
     $table->text('keluhan_utama');
 
     $table->timestamps();
-});
+}
+);
     }
 
     /**

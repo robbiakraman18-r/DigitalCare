@@ -27,6 +27,14 @@ class UserSeeder extends Seeder
             'role' => 'dokter'
         ]);
 
+        // 🔥 INI YANG KURANG SELAMA INI
+    \App\Models\Dokter::create([
+        'user_id' => $dokter->id,
+        'no_sip' => 'SIP-001',
+        'status_ketersediaan' => 'Available',
+        'gender' => 'Male'
+    ]);
+
         $pasien = User::create([
             'nama' => 'Budi',
             'email' => 'pasien@gmail.com',

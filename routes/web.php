@@ -93,9 +93,17 @@ Route::prefix('dokter')->middleware(['auth', 'role:dokter'])->group(function () 
 
     Route::get('/dashboard', [DokterController::class, 'dashboard'])->name('dokter.dashboard');
     Route::get('/profile', [DokterController::class, 'profile'])->name('dokter.profile');
-    Route::get('/pasien', [DokterController::class, 'pasien'])->name('dokter.pasien');
-    Route::get('/appointment', [DokterController::class, 'appointment'])->name('dokter.appointment');
     Route::get('/jadwal-praktik', [DokterController::class, 'jadwal'])->name('dokter.jadwal');
+    Route::get('/appointment', [DokterController::class, 'appointment'])->name('dokter.appointment');
+    Route::post('/appointment/panggil/{id}', [DokterController::class, 'panggilPasien'])->name('dokter.panggil');
+    
+    Route::post('/appointment/selesai/{id}', [DokterController::class, 'selesaiPasien'])->name('dokter.selesai');
+    Route::post('/appointment/cancel/{id}', [DokterController::class, 'cancelPasien'])->name('dokter.cancel');
+    Route::post('/appointment/next', [DokterController::class, 'nextPasien'])->name('dokter.next');
+
+
+
+    Route::get('/pasien', [DokterController::class, 'pasien'])->name('dokter.pasien');
     Route::get('/rekam-medis', [DokterController::class, 'rekamMedis'])->name('dokter.rekammedis');
     Route::get('/diagnosis-prescription', [DokterController::class, 'diagnosis'])->name('dokter.diagnosis');
     Route::get('/detail-pasien/{id}', [DokterController::class, 'detailPasien'])->name('dokter.detailpasien');
