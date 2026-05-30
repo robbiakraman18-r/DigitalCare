@@ -153,7 +153,13 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/doctor-schedule', [AdminController::class, 'schedule']);
     Route::post('/doctor-schedule', [AdminController::class, 'storeSchedule']);
 
+    // UPDATE JADWAL PRAKTIK DOKTER
+
+    Route::put('/doctor-schedule/{id}', [AdminController::class, 'updateJadwalDokter'])
+->name('admin.doctor.schedule.update');
+
     // COMPLAINT
+
     Route::get('/complaint', [AdminController::class, 'complaint']);
 
     // LIST DATA

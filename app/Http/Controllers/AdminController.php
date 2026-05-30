@@ -30,7 +30,7 @@ class AdminController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'dokter',
-            'status' => 'active',
+    
         ]);
 
         // BUAT DATA DOKTER
@@ -99,30 +99,39 @@ public function userManagement(Request $request)
     return view('admin.user-management', compact('users'));
 }
 
-
-    // =========================================
-    // UPDATE USER
-    // =========================================
-    public function updateUser(Request $request, int $id)
+// =========================================
+// UPDATE USER
+// =========================================
+public function updateUser(Request $request, int $id)
 {
     $user = User::findOrFail($id);
 
     $request->validate([
         'nama' => 'required',
         'email' => 'required|email',
-        'status' => 'required',
+        'role' => 'required',
+        'status' => 'nullable',
+        'hari_praktik' => 'nullable',
+        'jam_mulai' => 'nullable',
+        'jam_selesai' => 'nullable',
     ]);
+
+    // kalau status kosong → otomatis active
+    $status = $request->status ?? $user->status ?? 'active';
 
     $user->update([
         'nama' => $request->nama,
         'email' => $request->email,
-        'status' => $request->status,
+        'role' => $request->role,
+        'status' => $status,
+        'hari_praktik' => $request->hari_praktik,
+        'jam_mulai' => $request->jam_mulai,
+        'jam_selesai' => $request->jam_selesai,
     ]);
 
     return redirect()->back()
-        ->with('success', 'User updated');
+        ->with('success', 'User updated successfully');
 }
-
     // =========================================
     // DELETE USER
     // =========================================
@@ -156,5 +165,26 @@ public function userManagement(Request $request)
 
     return back()->with('success', 'Status updated');
 }
+// =========================================
+// UPDATE JADWAL PRAKTIK DOKTER
+// =========================================
+public function updateJadwalDokter(Request $request, int $id)
+{
+    $request->validate([
+        'hari_praktik' => 'required',
+        'jam_mulai' => 'required',
+        'jam_selesai' => 'required',
+    ]);
 
+    $dokter = User::findOrFail($id);
+
+    $dokter->update([
+        'hari_praktik' => $request->hari_praktik,
+        'jam_mulai' => $request->jam_mulai,
+        'jam_selesai' => $request->jam_selesai,
+    ]);
+
+    return redirect()->back()
+        ->with('success', 'Jadwal praktik dokter berhasil diperbarui');
+}
 }

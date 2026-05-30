@@ -22,7 +22,10 @@ class User extends Authenticatable implements MustVerifyEmail // Menambahkan imp
         'password',
         'role',
         'department',
-        'status'
+        'status',
+        'hari_praktik',
+        'jam_mulai',
+        'jam_selesai'
     ];
 
     /**
