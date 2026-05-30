@@ -110,20 +110,20 @@ public function updateUser(Request $request, int $id)
         'nama' => 'required',
         'email' => 'required|email',
         'role' => 'required',
-        'status' => 'nullable',
         'hari_praktik' => 'nullable',
         'jam_mulai' => 'nullable',
         'jam_selesai' => 'nullable',
     ]);
 
-    // kalau status kosong → otomatis active
-    $status = $request->status ?? $user->status ?? 'active';
-
     $user->update([
         'nama' => $request->nama,
         'email' => $request->email,
         'role' => $request->role,
-        'status' => $status,
+
+        // kalau kosong otomatis active
+        'status' => $request->status ?? $user->status ?? 'active',
+
+        // jadwal dokter
         'hari_praktik' => $request->hari_praktik,
         'jam_mulai' => $request->jam_mulai,
         'jam_selesai' => $request->jam_selesai,
@@ -176,7 +176,7 @@ public function updateJadwalDokter(Request $request, int $id)
         'jam_selesai' => 'required',
     ]);
 
-    $dokter = User::findOrFail($id);
+    $dokter = Dokter::where('user_id', $id)->firstOrFail();
 
     $dokter->update([
         'hari_praktik' => $request->hari_praktik,

@@ -133,8 +133,8 @@
                 <div>
 
                     <p class="text-slate-400 text-sm">
-                        Active Users
-                    </p>
+    Registered Users
+</p>
 
                     <h2 class="text-3xl font-bold text-slate-800 mt-2">
                         {{ $users->count() }}
@@ -210,21 +210,7 @@
 
                 </select>
 
-                <!-- FILTER STATUS -->
-                <select name="status"
-    class="px-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 text-slate-700">
-
-    <option value="">All Status</option>
-
-    <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>
-        Active
-    </option>
-
-    <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>
-        Inactive
-    </option>
-
-</select>
+        
 
                 <!-- BUTTON -->
                 <button
@@ -264,9 +250,9 @@
                             Email
                         </th>
 
-                        <th class="px-6 py-4 text-left text-sm text-slate-400">
-                            Status
-                        </th>
+                       <th class="px-6 py-4 text-left text-sm text-slate-400">
+    Account
+</th>
 
                         <th class="px-6 py-4 text-left text-sm text-slate-400">
                             Created
@@ -358,20 +344,14 @@
 
                         <td class="px-6 py-5">
 
-    @if($user->status == 'active')
-        <span class="px-3 py-1 rounded-xl bg-green-100 text-green-600 text-xs font-semibold">
-            Active
-        </span>
-    @else
-        <span class="px-3 py-1 rounded-xl bg-red-100 text-red-600 text-xs font-semibold">
-            Inactive
-        </span>
-    @endif
+    <span class="px-3 py-1 rounded-xl bg-green-100 text-green-600 text-xs font-semibold">
+        Registered
+    </span>
 
 </td>
 
 
-                        </td>
+
 
                         <td class="px-6 py-5 text-slate-600">
                             {{ $user->created_at->format('d M Y') }}
@@ -399,24 +379,7 @@
 
                                 </button>
 
-                                <!-- TOGGLE STATUS -->
-<form action="{{ route('admin.user.toggleStatus', $user->id) }}" method="POST">
-    @csrf
-    @method('PUT')
-
-    <button type="submit"
-        class="w-9 h-9 rounded-xl border flex items-center justify-center
-        {{ $user->status == 'active' ? 'border-red-200 hover:bg-red-50' : 'border-green-200 hover:bg-green-50' }}">
-
-        @if($user->status == 'active')
-            <i data-lucide="user-x" class="w-4 h-4 text-red-500"></i>
-        @else
-            <i data-lucide="user-check" class="w-4 h-4 text-green-500"></i>
-        @endif
-
-    </button>
-</form>
-
+            
                                 <!-- DELETE -->
                                 <form
                                 action="{{ route('admin.user.delete', $user->id) }}"
