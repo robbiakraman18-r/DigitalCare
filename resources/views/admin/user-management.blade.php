@@ -157,7 +157,11 @@
         </div>
 
     </div>
-
+@if(session('success'))
+    <div class="mb-4 p-3 rounded-xl bg-green-500 text-white">
+        {{ session('success') }}
+    </div>
+@endif
     <!-- TABLE -->
     <div class="bg-white rounded-[30px] border border-slate-100 shadow-sm overflow-hidden">
 
@@ -504,26 +508,27 @@ class="fixed inset-0 bg-black/40 hidden z-50 flex items-center justify-center">
 
             </div>
 
-            <div class="flex justify-end gap-3 mt-8">
+           <div class="flex justify-end gap-3 mt-8">
 
-                <button
-                type="button"
-                onclick="document.getElementById('addDoctorModal').classList.add('hidden')"
-                class="px-5 py-3 rounded-2xl border border-slate-200">
+    <button
+    type="button"
+    onclick="document.getElementById('addDoctorModal').classList.add('hidden')"
+    class="px-5 py-3 rounded-2xl border border-slate-200">
 
-                    Cancel
+        Cancel
 
-                </button>
+    </button>
 
-                <button
-                type="submit"
-                class="px-5 py-3 rounded-2xl bg-blue-600 text-white">
+    <button
+    type="submit"
+    class="px-5 py-3 rounded-2xl bg-blue-600 text-white">
 
-                    Save Doctor
+        Save Doctor
 
-                </button>
+    </button>
 
-            </div>
+</div>
+
 
         </form>
 
@@ -781,5 +786,15 @@ class="fixed inset-0 bg-black/40 hidden z-50 flex items-center justify-center">
 </div>
 
 @endforeach
-
+<script>
+document.querySelectorAll('form').forEach(form => {
+    form.addEventListener('submit', function () {
+        const btn = this.querySelector('button[type="submit"]');
+        if (btn) {
+            btn.disabled = true;
+            btn.innerText = "Processing...";
+        }
+    });
+});
+</script>
 @endsection

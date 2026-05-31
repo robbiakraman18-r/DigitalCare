@@ -42,7 +42,7 @@ class AdminController extends Controller
         ]);
 
         return redirect()->back()
-            ->with('success', 'Dokter & akun login berhasil dibuat');
+    ->with('success', 'Doctor berhasil ditambahkan');
     }
 
     // =========================================
@@ -110,24 +110,28 @@ public function updateUser(Request $request, int $id)
         'nama' => 'required',
         'email' => 'required|email',
         'role' => 'required',
-        'hari_praktik' => 'nullable',
-        'jam_mulai' => 'nullable',
-        'jam_selesai' => 'nullable',
     ]);
 
+    // update user
     $user->update([
         'nama' => $request->nama,
         'email' => $request->email,
         'role' => $request->role,
-
-        // kalau kosong otomatis active
-        'status' => $request->status ?? $user->status ?? 'active',
-
-        // jadwal dokter
-        'hari_praktik' => $request->hari_praktik,
-        'jam_mulai' => $request->jam_mulai,
-        'jam_selesai' => $request->jam_selesai,
     ]);
+
+    // kalau dokter update jadwal ke tabel dokters
+    if ($user->role == 'dokter') {
+
+        $dokter = Dokter::where('user_id', $user->id)->first();
+
+        if ($dokter) {
+            $dokter->update([
+                'hari_praktik' => $request->hari_praktik,
+                'jam_mulai' => $request->jam_mulai,
+                'jam_selesai' => $request->jam_selesai,
+            ]);
+        }
+    }
 
     return redirect()->back()
         ->with('success', 'User updated successfully');
@@ -135,15 +139,22 @@ public function updateUser(Request $request, int $id)
     // =========================================
     // DELETE USER
     // =========================================
-    public function deleteUser( int $id)
-    {
-        $user = User::findOrFail($id);
+    public function deleteUser(int $id)
+{
+    $user = User::findOrFail($id);
 
-        $user->delete();
+    // kalau dokter hapus data dokter dulu
+    Dokter::where('user_id', $user->id)->delete();
 
-        return redirect()->back()
-            ->with('success', 'User deleted successfully');
-    }
+    // kalau pasien ada tabel pasien
+    Pasien::where('user_id', $user->id)->delete();
+
+    // baru hapus user
+    $user->delete();
+
+    return redirect()->back()
+        ->with('success', 'User berhasil dihapus');
+}
 
     // =========================================
     // COMPLAINT

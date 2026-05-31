@@ -174,5 +174,3 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
 */
 
 Route::get('/test-users', fn () => App\Models\User::all());
-Route::put('/admin/user/{id}/update', [AdminController::class, 'updateUser'])
-    ->name('admin.user.update');
