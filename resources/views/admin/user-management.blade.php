@@ -626,8 +626,13 @@ class="fixed inset-0 bg-black/40 hidden z-50 flex items-center justify-center">
 {{-- JADWAL PRAKTIK KHUSUS DOKTER --}}
 @if($user->role == 'dokter')
 
-<div>
+@php
+$dokter = \App\Models\Dokter::where('user_id', $user->id)->first();
+@endphp
 
+@if($user->role == 'dokter')
+
+<div>
     <label class="font-medium text-slate-700">
         Hari Praktik
     </label>
@@ -638,38 +643,35 @@ class="fixed inset-0 bg-black/40 hidden z-50 flex items-center justify-center">
 
         <option value="">Pilih Hari</option>
 
-        <option value="Senin" {{ $user->hari_praktik == 'Senin' ? 'selected' : '' }}>
+        <option value="Senin" {{ optional($dokter)->hari_praktik == 'Senin' ? 'selected' : '' }}>
             Senin
         </option>
 
-        <option value="Selasa" {{ $user->hari_praktik == 'Selasa' ? 'selected' : '' }}>
+        <option value="Selasa" {{ optional($dokter)->hari_praktik == 'Selasa' ? 'selected' : '' }}>
             Selasa
         </option>
 
-        <option value="Rabu" {{ $user->hari_praktik == 'Rabu' ? 'selected' : '' }}>
+        <option value="Rabu" {{ optional($dokter)->hari_praktik == 'Rabu' ? 'selected' : '' }}>
             Rabu
         </option>
 
-        <option value="Kamis" {{ $user->hari_praktik == 'Kamis' ? 'selected' : '' }}>
+        <option value="Kamis" {{ optional($dokter)->hari_praktik == 'Kamis' ? 'selected' : '' }}>
             Kamis
         </option>
 
-        <option value="Jumat" {{ $user->hari_praktik == 'Jumat' ? 'selected' : '' }}>
+        <option value="Jumat" {{ optional($dokter)->hari_praktik == 'Jumat' ? 'selected' : '' }}>
             Jumat
         </option>
 
-        <option value="Sabtu" {{ $user->hari_praktik == 'Sabtu' ? 'selected' : '' }}>
+        <option value="Sabtu" {{ optional($dokter)->hari_praktik == 'Sabtu' ? 'selected' : '' }}>
             Sabtu
         </option>
-
     </select>
-
 </div>
 
 <div class="grid grid-cols-2 gap-4">
 
     <div>
-
         <label class="font-medium text-slate-700">
             Jam Mulai
         </label>
@@ -677,13 +679,11 @@ class="fixed inset-0 bg-black/40 hidden z-50 flex items-center justify-center">
         <input
         type="time"
         name="jam_mulai"
-        value="{{ $user->jam_mulai }}"
+        value="{{ optional($dokter)->jam_mulai }}"
         class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
-
     </div>
 
     <div>
-
         <label class="font-medium text-slate-700">
             Jam Selesai
         </label>
@@ -691,13 +691,13 @@ class="fixed inset-0 bg-black/40 hidden z-50 flex items-center justify-center">
         <input
         type="time"
         name="jam_selesai"
-        value="{{ $user->jam_selesai }}"
+        value="{{ optional($dokter)->jam_selesai }}"
         class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
-
     </div>
 
 </div>
 
+@endif
 @endif
                 <div>
 
