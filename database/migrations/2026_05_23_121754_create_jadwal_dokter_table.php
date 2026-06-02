@@ -30,6 +30,8 @@ return new class extends Migration
     // KUOTA
     $table->integer('kuota_harian');
     $table->integer('terisi')->default(0);
+    
+    $table->integer('current_antrian')->default(0);
 
     $table->enum('status_jadwal', [
         'Available',
@@ -48,4 +50,5 @@ return new class extends Migration
     {
         Schema::dropIfExists('jadwal_dokter');
     }
+    
 };
