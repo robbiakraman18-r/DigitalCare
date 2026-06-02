@@ -198,4 +198,49 @@ public function updateJadwalDokter(Request $request, int $id)
     return redirect()->back()
         ->with('success', 'Jadwal praktik dokter berhasil diperbarui');
 }
+// =========================================
+// APPOINTMENT / ANTREAN PASIEN
+// =========================================
+public function appointment()
+{
+    $appointments = Appointment::with([
+        'pasien',
+        'dokter',
+        'jadwal'
+    ])->latest()->get();
+
+    return view('admin.appointment', compact('appointments'));
+}
+
+// =========================================
+// UPDATE STATUS ANTREAN
+// =========================================
+public function updateAppointmentStatus(Request $request, $id)
+{
+    $appointment = Appointment::findOrFail($id);
+
+    $appointment->update([
+        'status_janji' => $request->status_janji
+    ]);
+
+    return back()->with(
+        'success',
+        'Status antrean berhasil diupdate'
+    );
+}
+
+// =========================================
+// DELETE APPOINTMENT
+// =========================================
+public function deleteAppointment($id)
+{
+    $appointment = Appointment::findOrFail($id);
+
+    $appointment->delete();
+
+    return back()->with(
+        'success',
+        'Antrean pasien berhasil dihapus'
+    );
+}
 }

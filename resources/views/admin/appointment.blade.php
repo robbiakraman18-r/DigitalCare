@@ -122,83 +122,118 @@
 
                 <tbody>
 
-                    <tr class="border-b border-slate-100 hover:bg-slate-50 transition">
+@forelse($appointments as $appointment)
 
-                        <td class="px-6 py-5 font-medium text-slate-700">
-                            APT-000124
-                        </td>
+<tr class="border-b border-slate-100 hover:bg-slate-50 transition">
 
-                        <td class="px-6 py-5 text-slate-600">
-                            May 14, 2025 <br>
-                            08:00 PM
-                        </td>
+    <td class="px-6 py-5 font-medium text-slate-700">
+        #{{ $appointment->nomor_antrian }}
+    </td>
 
-                        <td class="px-6 py-5">
+    <td class="px-6 py-5 text-slate-600">
+        {{ $appointment->tanggal_janji }}
+    </td>
 
-                            <div class="flex items-center gap-3">
+    <td class="px-6 py-5">
+        <div>
 
-                                <img src="https://i.pravatar.cc/100?img=15"
-                                class="w-10 h-10 rounded-xl object-cover">
+            <h3 class="font-semibold text-slate-800">
+                {{ $appointment->pasien->nama ?? '-' }}
+            </h3>
 
-                                <div>
+            <p class="text-sm text-slate-400">
+                ID: {{ $appointment->id_pasien }}
+            </p>
 
-                                    <h3 class="font-semibold text-slate-800">
-                                        John Smith
-                                    </h3>
+        </div>
+    </td>
 
-                                    <p class="text-sm text-slate-400">
-                                        PT-00235
-                                    </p>
+    <td class="px-6 py-5 text-slate-600">
+        {{ $appointment->dokter->nama ?? '-' }}
+    </td>
 
-                                </div>
+    <td class="px-6 py-5 text-slate-600">
+        Klinik
+    </td>
 
-                            </div>
+    <td class="px-6 py-5 text-slate-600">
+        {{ $appointment->keluhan_utama }}
+    </td>
 
-                        </td>
+    <td class="px-6 py-5">
 
-                        <td class="px-6 py-5 text-slate-600">
-                            Dr. Emily Carter
-                        </td>
+        <form action="{{ route('admin.appointment.status', $appointment->id_janji) }}"
+        method="POST">
 
-                        <td class="px-6 py-5 text-slate-600">
-                            Cardiology
-                        </td>
+            @csrf
+            @method('PUT')
 
-                        <td class="px-6 py-5 text-slate-600">
-                            Consultation
-                        </td>
+            <select
+                name="status_janji"
+                onchange="this.form.submit()"
+                class="px-3 py-2 rounded-xl border border-slate-200">
 
-                        <td class="px-6 py-5">
+                <option value="Menunggu"
+                {{ $appointment->status_janji == 'Menunggu' ? 'selected' : '' }}>
+                    Menunggu
+                </option>
 
-                            <span class="px-3 py-1 rounded-xl bg-green-100 text-green-600 text-xs font-semibold">
-                                Confirmed
-                            </span>
+                <option value="Dipanggil"
+                {{ $appointment->status_janji == 'Dipanggil' ? 'selected' : '' }}>
+                    Dipanggil
+                </option>
 
-                        </td>
+                <option value="Selesai"
+                {{ $appointment->status_janji == 'Selesai' ? 'selected' : '' }}>
+                    Selesai
+                </option>
 
-                        <td class="px-6 py-5">
+                <option value="Batal"
+                {{ $appointment->status_janji == 'Batal' ? 'selected' : '' }}>
+                    Batal
+                </option>
 
-                            <div class="flex items-center justify-center gap-3">
+            </select>
 
-                                <button class="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center hover:bg-slate-100">
+        </form>
 
-                                    <i data-lucide="eye" class="w-4 h-4"></i>
+    </td>
 
-                                </button>
+    <td class="px-6 py-5">
 
-                                <button class="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center hover:bg-slate-100">
+        <form action="{{ route('admin.appointment.delete', $appointment->id_janji) }}"
+        method="POST">
 
-                                    <i data-lucide="square-pen" class="w-4 h-4"></i>
+            @csrf
+            @method('DELETE')
 
-                                </button>
+            <button
+            onclick="return confirm('Hapus antrean ini?')"
+            class="w-9 h-9 rounded-xl border border-red-200 flex items-center justify-center hover:bg-red-100">
 
-                            </div>
+                <i data-lucide="trash-2"
+                class="w-4 h-4 text-red-500"></i>
 
-                        </td>
+            </button>
 
-                    </tr>
+        </form>
 
-                </tbody>
+    </td>
+
+</tr>
+
+@empty
+
+<tr>
+    <td colspan="8"
+    class="text-center py-10 text-slate-400">
+        Belum ada appointment pasien
+    </td>
+</tr>
+
+@endforelse
+
+</tbody>
 
             </table>
 
