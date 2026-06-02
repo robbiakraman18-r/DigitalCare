@@ -125,18 +125,17 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/user-management', [AdminController::class, 'userManagement']);
 
 
-   Route::get('/appointment',
-[AdminController::class, 'appointment'])
-->name('admin.appointment');
+    Route::get('/appointment',
+   [AdminController::class, 'appointment'])
+   ->name('admin.appointment');
 
-Route::put('/appointment/status/{id}',
-[AdminController::class, 'updateAppointmentStatus'])
-->name('admin.appointment.status');
+   Route::put('/appointment/status/{id}',
+   [AdminController::class, 'updateAppointmentStatus'])
+   ->name('admin.appointment.status');
 
-Route::delete('/appointment/delete/{id}',
-[AdminController::class, 'deleteAppointment'])
-->name('admin.appointment.delete');
-
+    Route::delete('/appointment/delete/{id}',
+   [AdminController::class, 'deleteAppointment'])
+   ->name('admin.appointment.delete');
     Route::view('/schedule-management', 'admin.schedule-management');
     Route::view('/medical-records', 'admin.medical-records');
     Route::view('/reports', 'admin.reports');
