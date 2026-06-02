@@ -128,7 +128,8 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/appointment',
    [AdminController::class, 'appointment'])
    ->name('admin.appointment');
-
+    Route::post('/appointment/store', [AdminController::class, 'storeAppointment'])
+    ->name('admin.appointment.store');
    Route::put('/appointment/status/{id}',
    [AdminController::class, 'updateAppointmentStatus'])
    ->name('admin.appointment.status');

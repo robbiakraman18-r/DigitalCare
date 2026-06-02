@@ -24,16 +24,13 @@ class AdminController extends Controller
             'password' => 'required|min:6',
         ]);
 
-        // BUAT USER LOGIN
         $user = User::create([
             'nama' => $request->nama,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'dokter',
-    
         ]);
 
-        // BUAT DATA DOKTER
         Dokter::create([
             'user_id' => $user->id,
             'nama' => $request->nama,
@@ -42,205 +39,200 @@ class AdminController extends Controller
         ]);
 
         return redirect()->back()
-    ->with('success', 'Doctor berhasil ditambahkan');
+            ->with('success', 'Doctor berhasil ditambahkan');
     }
 
     // =========================================
-    // ADMIN DASHBOARD
+    // DASHBOARD
     // =========================================
     public function dashboard()
     {
-        $totalDokter = Dokter::count();
-        $totalPasien = Pasien::count();
-        $totalAppointment = Appointment::count();
-
-        $dokterAktif = Dokter::where('status_ketersediaan', 'Available')->count();
-
-        $appointmentsToday = Appointment::latest()->take(5)->get();
-
-        return view('admin.dashboard', compact(
-            'totalDokter',
-            'totalPasien',
-            'totalAppointment',
-            'dokterAktif',
-            'appointmentsToday'
-        ));
+        return view('admin.dashboard', [
+            'totalDokter' => Dokter::count(),
+            'totalPasien' => Pasien::count(),
+            'totalAppointment' => Appointment::count(),
+            'dokterAktif' => Dokter::where('status_ketersediaan', 'Available')->count(),
+            'appointmentsToday' => Appointment::latest()->take(5)->get(),
+        ]);
     }
 
     // =========================================
-    // USER MANAGEMENT + SEARCH
+    // USER MANAGEMENT
     // =========================================
+    public function userManagement(Request $request)
+    {
+        $query = User::query();
 
-public function userManagement(Request $request)
-{
-    $query = User::query();
-
-    // SEARCH
-    if ($request->search) {
-        $query->where(function ($q) use ($request) {
-            $q->where('nama', 'like', '%' . $request->search . '%')
-              ->orWhere('email', 'like', '%' . $request->search . '%')
-              ->orWhere('role', 'like', '%' . $request->search . '%');
-        });
-    }
-
-    // FILTER ROLE
-    if ($request->role) {
-        $query->where('role', $request->role);
-    }
-
-    // FILTER STATUS (INI YANG KAMU ERROR TADI)
-    if ($request->status) {
-        $query->where('status', $request->status);
-    }
-
-    $users = $query->latest()->get();
-
-    return view('admin.user-management', compact('users'));
-}
-
-// =========================================
-// UPDATE USER
-// =========================================
-public function updateUser(Request $request, int $id)
-{
-    $user = User::findOrFail($id);
-
-    $request->validate([
-        'nama' => 'required',
-        'email' => 'required|email',
-        'role' => 'required',
-    ]);
-
-    // update user
-    $user->update([
-        'nama' => $request->nama,
-        'email' => $request->email,
-        'role' => $request->role,
-    ]);
-
-    // kalau dokter update jadwal ke tabel dokters
-    if ($user->role == 'dokter') {
-
-        $dokter = Dokter::where('user_id', $user->id)->first();
-
-        if ($dokter) {
-            $dokter->update([
-                'hari_praktik' => $request->hari_praktik,
-                'jam_mulai' => $request->jam_mulai,
-                'jam_selesai' => $request->jam_selesai,
-            ]);
+        if ($request->search) {
+            $query->where(function ($q) use ($request) {
+                $q->where('nama', 'like', "%{$request->search}%")
+                  ->orWhere('email', 'like', "%{$request->search}%")
+                  ->orWhere('role', 'like', "%{$request->search}%");
+            });
         }
+
+        if ($request->role) {
+            $query->where('role', $request->role);
+        }
+
+        if ($request->status) {
+            $query->where('status', $request->status);
+        }
+
+        return view('admin.user-management', [
+            'users' => $query->latest()->get()
+        ]);
     }
 
-    return redirect()->back()
-        ->with('success', 'User updated successfully');
-}
+    // =========================================
+    // UPDATE USER
+    // =========================================
+    public function updateUser(Request $request, int $id)
+    {
+        $user = User::findOrFail($id);
+
+        $request->validate([
+            'nama' => 'required',
+            'email' => 'required|email',
+            'role' => 'required',
+        ]);
+
+        $user->update($request->only('nama', 'email', 'role'));
+
+        if ($user->role == 'dokter') {
+            $dokter = Dokter::where('user_id', $user->id)->first();
+
+            if ($dokter) {
+                $dokter->update([
+                    'hari_praktik' => $request->hari_praktik,
+                    'jam_mulai' => $request->jam_mulai,
+                    'jam_selesai' => $request->jam_selesai,
+                ]);
+            }
+        }
+
+        return back()->with('success', 'User updated successfully');
+    }
+
     // =========================================
     // DELETE USER
     // =========================================
     public function deleteUser(int $id)
-{
-    $user = User::findOrFail($id);
+    {
+        $user = User::findOrFail($id);
 
-    // kalau dokter hapus data dokter dulu
-    Dokter::where('user_id', $user->id)->delete();
+        Dokter::where('user_id', $user->id)->delete();
+        Pasien::where('user_id', $user->id)->delete();
 
-    // kalau pasien ada tabel pasien
-    Pasien::where('user_id', $user->id)->delete();
+        $user->delete();
 
-    // baru hapus user
-    $user->delete();
-
-    return redirect()->back()
-        ->with('success', 'User berhasil dihapus');
-}
+        return back()->with('success', 'User berhasil dihapus');
+    }
 
     // =========================================
     // COMPLAINT
     // =========================================
     public function complaint()
     {
-        $complaints = Complaint::latest()->get();
-
-        return view('admin.complaint', compact('complaints'));
+        return view('admin.complaint', [
+            'complaints' => Complaint::latest()->get()
+        ]);
     }
 
-
+    // =========================================
+    // TOGGLE STATUS USER
+    // =========================================
     public function toggleStatus(int $id)
-{
-    $user = User::findOrFail($id);
+    {
+        $user = User::findOrFail($id);
 
-    $user->status = $user->status === 'active' ? 'inactive' : 'active';
-    $user->save();
+        $user->status = $user->status === 'active' ? 'inactive' : 'active';
+        $user->save();
 
-    return back()->with('success', 'Status updated');
-}
-// =========================================
-// UPDATE JADWAL PRAKTIK DOKTER
-// =========================================
-public function updateJadwalDokter(Request $request, int $id)
-{
-    $request->validate([
-        'hari_praktik' => 'required',
-        'jam_mulai' => 'required',
-        'jam_selesai' => 'required',
-    ]);
+        return back()->with('success', 'Status updated');
+    }
 
-    $dokter = Dokter::where('user_id', $id)->firstOrFail();
+    // =========================================
+    // UPDATE JADWAL DOKTER
+    // =========================================
+    public function updateJadwalDokter(Request $request, int $id)
+    {
+        $dokter = Dokter::where('user_id', $id)->firstOrFail();
 
-    $dokter->update([
-        'hari_praktik' => $request->hari_praktik,
-        'jam_mulai' => $request->jam_mulai,
-        'jam_selesai' => $request->jam_selesai,
-    ]);
+        $dokter->update($request->only(
+            'hari_praktik',
+            'jam_mulai',
+            'jam_selesai'
+        ));
 
-    return redirect()->back()
-        ->with('success', 'Jadwal praktik dokter berhasil diperbarui');
-}
-// =========================================
-// APPOINTMENT / ANTREAN PASIEN
-// =========================================
-public function appointment()
-{
-    $appointments = Appointment::with([
-        'pasien',
-        'dokter',
-        'jadwal'
-    ])->latest()->get();
+        return back()->with('success', 'Jadwal praktik dokter berhasil diperbarui');
+    }
 
-    return view('admin.appointment', compact('appointments'));
-}
+    // =========================================
+    // APPOINTMENT LIST
+    // =========================================
+    public function appointment()
+    {
+        return view('admin.appointment', [
+            'appointments' => Appointment::with(['pasien', 'dokter'])
+                ->latest()
+                ->get()
+        ]);
+    }
 
-// =========================================
-// UPDATE STATUS ANTREAN
-// =========================================
-public function updateAppointmentStatus(Request $request, $id)
-{
-    $appointment = Appointment::findOrFail($id);
+    // =========================================
+    // STORE APPOINTMENT (INI YANG KAMU BUTUH)
+    // =========================================
+    public function storeAppointment(Request $request)
+    {
+        $request->validate([
+            'nama_pasien' => 'required',
+            'nama_dokter' => 'required',
+            'tanggal_janji' => 'required',
+            'keluhan_utama' => 'required',
+        ]);
 
-    $appointment->update([
-        'status_janji' => $request->status_janji
-    ]);
+        Appointment::create([
+            'id_pasien' => 1,
+            'id_dokter' => 1,
+            'tanggal_janji' => $request->tanggal_janji,
+            'nomor_antrian' => rand(1, 999),
+            'status_janji' => 'pending',
+            'keluhan_utama' => $request->keluhan_utama,
+        ]);
 
-    return back()->with(
-        'success',
-        'Status antrean berhasil diupdate'
-    );
-}
+        return back()->with(
+            'success',
+            'Appointment successfully created!'
+        );
+    }
 
-// =========================================
-// DELETE APPOINTMENT
-// =========================================
-public function deleteAppointment($id)
-{
-    $appointment = Appointment::findOrFail($id);
+    // =========================================
+    // UPDATE STATUS APPOINTMENT
+    // =========================================
+    public function updateAppointmentStatus(Request $request, $id)
+    {
+        $appointment = Appointment::findOrFail($id);
 
-    $appointment->delete();
+        $appointment->update([
+            'status_janji' => $request->status_janji
+        ]);
 
-    return back()->with(
-        'success',
-        'Antrean pasien berhasil dihapus'
-    );
-}
+        return back()->with('success', 'Status antrean berhasil diupdate');
+    }
+
+    // =========================================
+    // DELETE APPOINTMENT (SUDAH FIX)
+    // =========================================
+    public function deleteAppointment($id)
+    {
+        $appointment = Appointment::findOrFail($id);
+
+        $appointment->delete();
+
+        return back()->with(
+            'success',
+            'Appointment successfully deleted!'
+        );
+    }
 }
