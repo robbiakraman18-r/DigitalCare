@@ -101,6 +101,8 @@ Route::prefix('dokter')->middleware(['auth', 'role:dokter'])->group(function () 
     Route::post('/appointment/cancel/{id}', [DokterController::class, 'cancelPasien'])->name('dokter.cancel');
     Route::post('/appointment/next', [DokterController::class, 'nextPasien'])->name('dokter.next');
 
+    Route::post('/dokter/profile/photo', [DokterController::class, 'uploadPhoto'])
+    ->name('dokter.profile.photo');
 
 
     Route::get('/pasien', [DokterController::class, 'pasien'])->name('dokter.pasien');

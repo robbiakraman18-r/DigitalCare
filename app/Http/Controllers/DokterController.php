@@ -12,26 +12,96 @@ use Carbon\Carbon;
 
 class DokterController extends Controller
 {
-    public function dashboard()
-    {
-        return view('dokter.dashboard');
+
+public function dashboard()
+{
+
+    $dokter = auth()->user()->dokter;
+
+    $todayAppointments = $dokter->appointments()
+        ->whereDate('tanggal_janji', today())
+        ->orderBy('nomor_antrian')
+        ->get();
+
+    $totalPasien = $dokter->appointments()
+        ->distinct('id_pasien')
+        ->count('id_pasien');
+
+    $totalAppointment = $dokter->appointments()->count();
+
+    $todaySchedule = $todayAppointments->count();
+
+    $totalRekamMedis = \App\Models\RekamMedis::where('id_dokter', $dokter->id_dokter)->count();
+
+    return view('dokter.dashboard', compact(
+        'dokter',
+        'todayAppointments',
+        'totalPasien',
+        'totalAppointment',
+        'todaySchedule',
+        'totalRekamMedis'
+    ));
+
+}
+
+public function uploadPhoto(Request $request)
+{
+    $request->validate([
+        'foto_profil' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+    ]);
+
+    $dokter = auth()->user()->dokter;
+
+    if ($request->hasFile('foto_profil')) {
+
+        // hapus foto lama (optional)
+        if ($dokter->foto_profil && file_exists(storage_path('app/public/' . $dokter->foto_profil))) {
+            unlink(storage_path('app/public/' . $dokter->foto_profil));
+        }
+
+        // simpan foto baru
+        $file = $request->file('foto_profil');
+        $path = $file->store('dokter', 'public');
+
+        $dokter->foto_profil = $path;
+        $dokter->save();
     }
 
+    return back()->with('success', 'Foto profil berhasil diupdate');
+}
     /*
     |----------------------------------
     | JADWAL PRAKTIK
     |----------------------------------
     */
     public function jadwal()
-    {
-        $tanggal = request('tanggal', now()->format('Y-m-d'));
+{
+    $dokter = Dokter::where('user_id', auth()->id())
+        ->firstOrFail();
 
-        $jadwal = JadwalDokter::whereDate('tanggal', $tanggal)
-            ->orderBy('tanggal', 'asc')
-            ->get();
+    $tanggal = request('tanggal');
 
-        return view('dokter.jadwal-praktik', compact('jadwal'));
+    $jadwal = JadwalDokter::where(
+        'id_dokter',
+        $dokter->id_dokter
+    );
+
+    if ($tanggal) {
+        $jadwal->whereDate('tanggal', $tanggal);
+    } else {
+        $jadwal->whereDate(
+            'tanggal',
+            '>=',
+            now()->toDateString()
+        );
     }
+
+    $jadwal = $jadwal
+        ->orderBy('tanggal')
+        ->get();
+
+    return view('dokter.jadwal-praktik', compact('jadwal'));
+}
 
     /*
     |----------------------------------
@@ -55,7 +125,7 @@ class DokterController extends Controller
 }
 
     //PANGGIL PASIEN
-    public function panggilPasien($id)
+    public function panggilPasien(int $id)
     {
         $appointment = Appointment::findOrFail($id);
         
@@ -67,7 +137,7 @@ class DokterController extends Controller
     }
 
     //SELESAI PERIKSA PASIEN
-    public function selesaiPasien($id)
+    public function selesaiPasien(int $id)
     {
         $appointment = Appointment::findOrFail($id);
         
@@ -79,7 +149,7 @@ class DokterController extends Controller
     }
 
     //BATAL PASIEN
-    public function cancelPasien($id)
+    public function cancelPasien(int $id)
     {
         $appointment = Appointment::findOrFail($id);
         
@@ -164,13 +234,13 @@ class DokterController extends Controller
     | DETAIL PASIEN
     |----------------------------------
     */
-    public function detailPasien($id)
-    {
-        $pasien = Pasien::findOrFail($id);
 
-        return view('dokter.detail-pasien', compact('pasien'));
-    }
+public function detailPasien($id)
+{
+    $pasien = Pasien::where('id_pasien', $id)->firstOrFail();
 
+    return view('dokter.detail-pasien', compact('pasien'));
+}
     /*
     |----------------------------------
     | PROFILE DOKTER

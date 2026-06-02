@@ -25,16 +25,31 @@ class Appointment extends Model
         'keluhan_utama'
     ];
 
+    /*
+    |----------------------------------
+    | RELASI PASIEN
+    |----------------------------------
+    */
     public function pasien()
     {
         return $this->belongsTo(Pasien::class, 'id_pasien', 'id_pasien');
     }
 
+    /*
+    |----------------------------------
+    | RELASI DOKTER
+    |----------------------------------
+    */
     public function dokter()
     {
         return $this->belongsTo(Dokter::class, 'id_dokter', 'id_dokter');
     }
 
+    /*
+    |----------------------------------
+    | RELASI JADWAL
+    |----------------------------------
+    */
     public function jadwal()
     {
         return $this->belongsTo(JadwalDokter::class, 'id_jadwal', 'id_jadwal');

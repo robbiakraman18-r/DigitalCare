@@ -1,3 +1,11 @@
+@php
+    $dokter = auth()->user()->dokter;
+
+    $foto = $dokter->foto_profil
+        ? asset('storage/' . $dokter->foto_profil)
+        : 'https://ui-avatars.com/api/?name=' . urlencode($dokter->nama_dokter);
+@endphp
+
 <header class="flex justify-between items-center px-6 lg:px-10 py-6">
 
     <!-- LEFT -->
@@ -19,7 +27,6 @@
         <!-- NOTIFICATION -->
         <div class="relative" x-data="{ openNotif:false }">
 
-            <!-- BELL -->
             <button
             @click="openNotif = !openNotif"
             class="relative w-12 h-12 rounded-2xl bg-white border shadow-sm flex items-center justify-center hover:scale-105 transition">
@@ -32,7 +39,6 @@
 
             </button>
 
-            <!-- DROPDOWN -->
             <div
             x-show="openNotif"
             @click.away="openNotif=false"
@@ -41,51 +47,23 @@
             style="display:none;">
 
                 <div class="p-4 border-b">
-
-                    <h2 class="font-bold">
-                        Notifications
-                    </h2>
-
+                    <h2 class="font-bold">Notifications</h2>
                 </div>
 
-                <!-- ITEM -->
-                <a href="{{ route('dokter.jadwal') }}"
-                class="flex gap-3 p-4 hover:bg-slate-50">
-
+                <a href="{{ route('dokter.jadwal') }}" class="flex gap-3 p-4 hover:bg-slate-50">
                     <i data-lucide="calendar-check" class="text-teal-500"></i>
-
                     <div>
-
-                        <p class="font-semibold text-sm">
-                            Jadwal konsultasi baru
-                        </p>
-
-                        <p class="text-xs text-slate-400">
-                            Hari ini pukul 10:00
-                        </p>
-
+                        <p class="font-semibold text-sm">Jadwal konsultasi baru</p>
+                        <p class="text-xs text-slate-400">Hari ini pukul 10:00</p>
                     </div>
-
                 </a>
 
-                <!-- ITEM -->
-                <a href="{{ route('dokter.pasien') }}"
-                class="flex gap-3 p-4 hover:bg-slate-50">
-
+                <a href="{{ route('dokter.pasien') }}" class="flex gap-3 p-4 hover:bg-slate-50">
                     <i data-lucide="users" class="text-cyan-500"></i>
-
                     <div>
-
-                        <p class="font-semibold text-sm">
-                            Pasien baru masuk
-                        </p>
-
-                        <p class="text-xs text-slate-400">
-                            Ruang konsultasi 2
-                        </p>
-
+                        <p class="font-semibold text-sm">Pasien baru masuk</p>
+                        <p class="text-xs text-slate-400">Ruang konsultasi 2</p>
                     </div>
-
                 </a>
 
             </div>
@@ -93,24 +71,24 @@
         </div>
 
         <!-- PROFILE -->
-        <div class="relative">
+        <div class="relative" x-data="{ openProfile:false }">
 
             <button
             @click="openProfile = !openProfile"
             class="flex items-center gap-3 bg-white px-3 py-2 rounded-2xl shadow-sm border border-slate-100 hover:bg-slate-50 transition-all duration-300">
 
                 <img
-                src="https://i.pravatar.cc/100?img=12"
+                src="{{ $foto }}"
                 class="w-10 h-10 rounded-xl object-cover">
 
                 <div class="hidden md:block text-left">
 
                     <h3 class="text-sm font-semibold text-slate-800">
-                        Dr. Andi
+                        {{ $dokter->nama_dokter }}
                     </h3>
 
                     <p class="text-xs text-slate-400">
-                        Dokter
+                        {{ auth()->user()->email }}
                     </p>
 
                 </div>
@@ -128,17 +106,17 @@
                 <div class="flex items-center gap-4">
 
                     <img
-                    src="https://i.pravatar.cc/100?img=12"
-                    class="w-14 h-14 rounded-2xl">
+                    src="{{ $foto }}"
+                    class="w-14 h-14 rounded-2xl object-cover">
 
                     <div>
 
                         <h2 class="font-bold text-slate-800">
-                            Dr. Andi
+                            {{ $dokter->nama_dokter }}
                         </h2>
 
                         <p class="text-sm text-slate-400">
-                            doctor@digitalcare.com
+                            {{ auth()->user()->email }}
                         </p>
 
                     </div>
@@ -149,39 +127,17 @@
                 <div class="mt-5 space-y-3 text-sm border-t pt-4">
 
                     <div class="flex justify-between">
-
-                        <span class="text-slate-400">
-                            ID Dokter
-                        </span>
-
+                        <span class="text-slate-400">ID Dokter</span>
                         <span class="font-medium">
-                            D-001
+                            DOC-{{ str_pad($dokter->id_dokter,3,'0',STR_PAD_LEFT) }}
                         </span>
-
                     </div>
 
                     <div class="flex justify-between">
-
-                        <span class="text-slate-400">
-                            Spesialis
-                        </span>
-
-                        <span class="font-medium">
-                            Umum
-                        </span>
-
-                    </div>
-
-                    <div class="flex justify-between">
-
-                        <span class="text-slate-400">
-                            Status
-                        </span>
-
+                        <span class="text-slate-400">Status</span>
                         <span class="font-medium text-teal-500">
-                            Aktif
+                            {{ ucfirst($dokter->status_ketersediaan) }}
                         </span>
-
                     </div>
 
                 </div>
@@ -193,7 +149,6 @@
                     class="flex items-center justify-center gap-2 py-3 rounded-2xl bg-teal-500 hover:bg-teal-600 text-white font-medium transition-all duration-300">
 
                         <i data-lucide="user" class="w-4 h-4"></i>
-
                         Lihat Profil
 
                     </a>
