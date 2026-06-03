@@ -73,14 +73,13 @@
 
                 </div>
 
-                <!-- BUTTON -->
                 <div class="mt-5">
                     <a
-                        href="/edit-profile"
+                        href="{{ route('profile.show') }}" 
                         class="flex items-center justify-center gap-2 py-3 rounded-2xl bg-teal-500 hover:bg-teal-600 text-white font-medium transition-all duration-300"
                     >
-                        <i data-lucide="user-cog" class="w-4 h-4"></i>
-                        Edit Profil
+                        <i data-lucide="user" class="w-4 h-4"></i>
+                        Lihat Profil
                     </a>
                 </div>
 

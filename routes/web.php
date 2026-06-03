@@ -5,16 +5,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
-use App\Http\Controllers\LoginController;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\PasienController;
-use App\Http\Controllers\RegisterController;
-use App\Http\Controllers\VerificationController;
-use App\Http\Controllers\DokterController;
-use App\Http\Controllers\ListPatientController;
-use App\Http\Controllers\ListprescriptionController;
-use App\Http\Controllers\AppointmentController;
-use App\Http\Controllers\JadwalController;
+// Controller Imports
+use App\Http\Controllers\{
+    LoginController, AdminController, PasienController, RegisterController, 
+    VerificationController, DokterController, ListPatientController, 
+    ListprescriptionController, AppointmentController, JadwalController, ProfileController
+};
 
 
 
@@ -66,13 +62,15 @@ Route::post('/logout', function (Request $request) {
 */
 
 Route::prefix('pasien')->middleware(['auth', 'role:pasien'])->group(function () {
-
-    Route::get('/dashboard', [PasienController::class, 'dashboard']);
-
+    Route::get('/dashboard', [PasienController::class, 'dashboard'])->name('pasien.dashboard');
+    
+    // Appointment
+    Route::get('/buat-janji', [PasienController::class, 'createAppointment'])->name('pasien.buat-janji');
+    Route::post('/buat-janji/store', [PasienController::class, 'storeAppointment'])->name('pasien.buat-janji.store');
     Route::get('/dokter/{id}/jadwal', [AppointmentController::class, 'getJadwal']);
     Route::post('/appointment', [AppointmentController::class, 'store']);
 
-    Route::view('/buat-janji', 'pasien.buat-janji');
+    // Static Views
     Route::view('/janji-temu', 'pasien.janji-temu');
     Route::view('/on-going', 'pasien.on-going');
     Route::view('/rekam-medis', 'pasien.rekam-medis');
@@ -80,7 +78,11 @@ Route::prefix('pasien')->middleware(['auth', 'role:pasien'])->group(function () 
     Route::view('/download-rekam-medis', 'pasien.download-rekam-medis');
     Route::view('/payment', 'pasien.payment');
     Route::view('/info-klinik', 'pasien.info-clinic');
-    Route::view('/edit-profile', 'pasien.edit-profil');
+
+    // Profile Routes - Gunakan class yang sudah di-import di atas
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/edit-profil', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/edit-profil', [ProfileController::class, 'update'])->name('profile.update');
 });
 
 /*

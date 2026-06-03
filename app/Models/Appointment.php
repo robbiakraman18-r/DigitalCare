@@ -30,6 +30,18 @@ class Appointment extends Model
     | RELASI PASIEN
     |----------------------------------
     */
+
+    public function appointment()
+{
+    // Rekam medis terhubung ke Appointment menggunakan foreign key 'id_janji'
+    return $this->belongsTo(Appointment::class, 'id_janji', 'id_janji');
+}
+
+public function rekamMedis()
+{
+    return $this->hasOne(RekamMedis::class, 'id_janji', 'id_janji');
+}
+
     public function pasien()
     {
         return $this->belongsTo(Pasien::class, 'id_pasien', 'id_pasien');

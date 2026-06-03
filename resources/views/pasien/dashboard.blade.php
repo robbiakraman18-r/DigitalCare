@@ -25,7 +25,7 @@
                 </p>
             </div>
             <div class="flex gap-3 shrink-0">
-                <a href="/buat-janji" class="px-5 py-3 rounded-2xl bg-white text-teal-600 font-semibold shadow-md hover:bg-teal-50 transition text-sm">
+                <a href="/pasien/buat-janji" class="px-5 py-3 rounded-2xl bg-white text-teal-600 font-semibold shadow-md hover:bg-teal-50 transition text-sm">
                     Buat Janji Temu
                 </a>
             </div>

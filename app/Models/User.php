@@ -2,69 +2,32 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail; // Ditambahkan untuk kontrak verifikasi email
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class User extends Authenticatable implements MustVerifyEmail // Menambahkan implements MustVerifyEmail
+/**
+ * @property-read \App\Models\Pasien|null $pasien
+ * @property-read \App\Models\Dokter|null $dokter
+ */
+class User extends Authenticatable implements MustVerifyEmail 
 {
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
-        'nama', 
-        'email',
-        'password',
-        'role',
-        'department',
-        'status',
-        'hari_praktik',
-        'jam_mulai',
-        'jam_selesai'
+        'nama', 'email', 'password', 'role', 'department', 'status', 'hari_praktik', 'jam_mulai', 'jam_selesai'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    // ... (simpan properti $hidden dan $casts kamu)
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-    ];
-
-    /*
-    |--------------------------------------------------------------------------
-    | RELATIONS (Hubungan Antar Tabel)
-    |--------------------------------------------------------------------------
-    */
-
-    /**
-     * Hubungan User ke Pasien (Satu akun user memiliki satu profil pasien)
-     */
-    public function pasien()
-    {
-        return $this->hasOne(Pasien::class, 'user_id');
-    }
-
-    public function dokter()
+public function pasien()
 {
-    return $this->hasOne(Dokter::class, 'user_id');
+    // Mengasumsikan tabel 'pasiens' memiliki kolom 'user_id'
+    return $this->hasOne(Pasien::class, 'user_id'); 
 }
 
+    public function dokter() {
+        return $this->hasOne(Dokter::class, 'user_id');
+    }
 }

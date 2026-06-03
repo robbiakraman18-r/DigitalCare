@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('jadwal_dokter', function (Blueprint $table) {
+        Schema::create('jadwal_dokters', function (Blueprint $table) {
     $table->id('id_jadwal');
 
     // RELASI DOKTER
@@ -48,7 +48,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('jadwal_dokter');
+        Schema::dropIfExists('jadwal_dokters');
     }
     
 };

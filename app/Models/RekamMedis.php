@@ -27,7 +27,7 @@ class RekamMedis extends Model
 
     public function appointment()
     {
-        return $this->belongsTo(Appointment::class, 'id_janji', 'id');
+        return $this->belongsTo(Appointment::class, 'id_janji', 'id_janji');
     }
 
     public function detailResep()

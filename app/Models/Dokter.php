@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\JadwalDokter;
@@ -11,6 +12,8 @@ use App\Models\Pasien;
 
 class Dokter extends Model
 {
+    use HasFactory;
+
     protected $table = 'dokters';
     protected $primaryKey = 'id_dokter';
 
@@ -23,29 +26,31 @@ class Dokter extends Model
     ];
 
     /*
-    |----------------------------------
+    |--------------------------------------------------------------------------
     | RELASI KE USER
-    |----------------------------------
+    |--------------------------------------------------------------------------
+    | Menghubungkan id_dokter -> user_id -> users.id (Tempat menyimpan kolom 'name')
     */
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     /*
-    |----------------------------------
-    | RELASI JADWAL
-    |----------------------------------
+    |--------------------------------------------------------------------------
+    | RELASI KE JADWAL DOKTER
+    |--------------------------------------------------------------------------
+    | Dipanggil di AppointmentController::create() via eager loading bertingkat
     */
-    public function jadwal()
+    public function jadwalDokter()
     {
         return $this->hasMany(JadwalDokter::class, 'id_dokter', 'id_dokter');
     }
 
     /*
-    |----------------------------------
+    |--------------------------------------------------------------------------
     | RELASI APPOINTMENT
-    |----------------------------------
+    |--------------------------------------------------------------------------
     */
     public function appointments()
     {
@@ -53,9 +58,9 @@ class Dokter extends Model
     }
 
     /*
-    |----------------------------------
+    |--------------------------------------------------------------------------
     | RELASI REKAM MEDIS
-    |----------------------------------
+    |--------------------------------------------------------------------------
     */
     public function rekamMedis()
     {
@@ -63,9 +68,9 @@ class Dokter extends Model
     }
 
     /*
-    |----------------------------------
+    |--------------------------------------------------------------------------
     | RELASI PASIEN UNIK (MANY TO MANY VIA APPOINTMENT)
-    |----------------------------------
+    |--------------------------------------------------------------------------
     */
     public function pasien()
     {
@@ -78,9 +83,9 @@ class Dokter extends Model
     }
 
     /*
-    |----------------------------------
+    |--------------------------------------------------------------------------
     | BUSINESS LOGIC (DASHBOARD READY)
-    |----------------------------------
+    |--------------------------------------------------------------------------
     */
 
     // Total pasien unik (pernah appointment)
