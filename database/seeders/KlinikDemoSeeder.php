@@ -16,6 +16,19 @@ class KlinikDemoSeeder extends Seeder
 {
     public function run(): void
     {
+        // ==================================================
+        // 1. ADMIN
+        // ==================================================
+        $admin = User::updateOrCreate(
+            ['email' => 'admin@clinic.com'],
+            [
+                'nama' => 'Admin Klinik',
+                'password' => bcrypt('admin123'),
+                'role' => 'admin'
+            ]
+        );
+
+        
         // =========================
         // USER DOKTER
         // =========================
