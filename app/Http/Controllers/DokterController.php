@@ -16,12 +16,17 @@ class DokterController extends Controller
 public function dashboard()
 {
 
-    $dokter = auth()->user()->dokter;
+   $dokter = Dokter::where('user_id', auth()->id())->first();
+
+if (!$dokter) {
+    abort(403, 'Dokter belum terhubung dengan user ini');
+}
 
     $todayAppointments = $dokter->appointments()
-        ->whereDate('tanggal_janji', today())
-        ->orderBy('nomor_antrian')
-        ->get();
+    ->whereDate('tanggal_janji', today())
+    ->with('pasien')
+    ->orderBy('nomor_antrian')
+    ->get();
 
     $totalPasien = $dokter->appointments()
         ->distinct('id_pasien')
@@ -29,7 +34,9 @@ public function dashboard()
 
     $totalAppointment = $dokter->appointments()->count();
 
-    $todaySchedule = $todayAppointments->count();
+   $todaySchedule = $dokter->appointments()
+    ->whereDate('tanggal_janji', today())
+    ->count();
 
     $totalRekamMedis = \App\Models\RekamMedis::where('id_dokter', $dokter->id_dokter)->count();
 
@@ -50,7 +57,11 @@ public function uploadPhoto(Request $request)
         'foto_profil' => 'required|image|mimes:jpg,jpeg,png|max:2048',
     ]);
 
-    $dokter = auth()->user()->dokter;
+    $dokter = auth()->user()->dokter ?? null;
+
+if (!$dokter) {
+    abort(403, 'Data dokter tidak ditemukan');
+}
 
     if ($request->hasFile('foto_profil')) {
 
@@ -76,29 +87,20 @@ public function uploadPhoto(Request $request)
     */
     public function jadwal()
 {
-    $dokter = Dokter::where('user_id', auth()->id())
-        ->firstOrFail();
+     $dokter = Dokter::where('user_id', auth()->id())->first();
+    if (!$dokter) {
+        abort(403, 'Data dokter tidak ditemukan');
+    }
 
     $tanggal = request('tanggal');
 
-    $jadwal = JadwalDokter::where(
-        'id_dokter',
-        $dokter->id_dokter
-    );
+    $query = JadwalDokter::where('id_dokter', $dokter->id_dokter);
 
     if ($tanggal) {
-        $jadwal->whereDate('tanggal', $tanggal);
-    } else {
-        $jadwal->whereDate(
-            'tanggal',
-            '>=',
-            now()->toDateString()
-        );
+        $query->whereDate('tanggal', $tanggal);
     }
 
-    $jadwal = $jadwal
-        ->orderBy('tanggal')
-        ->get();
+    $jadwal = $query->orderBy('tanggal')->get();
 
     return view('dokter.jadwal-praktik', compact('jadwal'));
 }
@@ -108,45 +110,68 @@ public function uploadPhoto(Request $request)
     | APPOINTMENT / ANTRIAN HARI INI
     |----------------------------------
     */
-   public function appointment()
+  public function appointment(Request $request)
 {
     $dokter = Dokter::where('user_id', auth()->id())->firstOrFail();
 
-    $appointments = Appointment::with([
-        'pasien.user',
-        'jadwal'
-    ])
-    ->whereHas('jadwal', function ($q) use ($dokter) {
-        $q->where('id_dokter', $dokter->id_dokter);
-    })
-    ->orderBy('nomor_antrian')
-    ->get();
+    $query = Appointment::with(['pasien.user', 'jadwal'])
+        ->where('id_dokter', $dokter->id_dokter);
+
+    // SEARCH (fix)
+    if ($request->search) {
+        $query->whereHas('pasien.user', function ($q) use ($request) {
+            $q->where('name', 'like', '%' . $request->search . '%');
+        });
+    }
+
+    // FILTER STATUS (optional)
+    if ($request->status) {
+        $query->where('status_janji', $request->status);
+    }
+
+    $appointments = $query->orderBy('nomor_antrian')->get();
+
     return view('dokter.appointment', compact('appointments'));
 }
 
     //PANGGIL PASIEN
-    public function panggilPasien(int $id)
-    {
-        $appointment = Appointment::findOrFail($id);
-        
-        $appointment->update([
-            'status_janji' => 'approved'
-            ]);
-            
-        return back()->with('success', 'Pasien dipanggil');
-    }
+    public function panggilPasien($id)
+{
+    $appointment = Appointment::findOrFail($id);
+
+    $appointment->update([
+        'status_janji' => 'called'
+    ]);
+
+    return back()->with('success', 'Pasien dipanggil');
+}
+
+
+public function startConsultation($id)
+{
+    $appointment = Appointment::findOrFail($id);
+
+    $appointment->update([
+        'status_janji' => 'in_consultation'
+    ]);
+
+    return redirect()
+        ->route('dokter.diagnosis', $appointment->id)
+        ->with('success', 'Mulai pemeriksaan pasien');
+}
+
 
     //SELESAI PERIKSA PASIEN
-    public function selesaiPasien(int $id)
-    {
-        $appointment = Appointment::findOrFail($id);
-        
-        $appointment->update([
-            'status_janji' => 'completed'
-            ]);
-            
-        return back()->with('success', 'Pasien selesai diperiksa');
-    }
+    public function selesaiPasien($id)
+{
+    $appointment = Appointment::findOrFail($id);
+
+    $appointment->update([
+        'status_janji' => 'completed'
+    ]);
+
+    return back()->with('success', 'Pemeriksaan selesai');
+}
 
     //BATAL PASIEN
     public function cancelPasien(int $id)
@@ -162,31 +187,27 @@ public function uploadPhoto(Request $request)
 
     // PANGGIL PASIEN SELANJUTNYA
     public function nextPasien()
-    {
-        $dokter = auth()->user()->dokter;
-        
-        $next = Appointment::with(['pasien', 'jadwal'])
+{
+    $dokter = auth()->user()->dokter;
+
+    $next = Appointment::with(['pasien', 'jadwal'])
         ->where('id_dokter', $dokter->id_dokter)
         ->where('status_janji', 'pending')
-        ->whereHas('jadwal', function ($q) {
-            $q->whereDate('tanggal', Carbon::today());
-            })
-            ->orderBy('nomor_antrian', 'asc')
-            ->first();
-            
-            if (!$next) {
-                return back()->with('error', 'Tidak ada antrian');
-        }
+        ->whereDate('tanggal_janji', today())
+        ->orderBy('nomor_antrian')
+        ->first();
+
+    if (!$next) {
+        return back()->with('error', 'Tidak ada antrian');
+    }
 
     $next->update([
-        'status_janji' => 'approved'
+        'status_janji' => 'called'
     ]);
-
-
-
 
     return back()->with('success', 'Pasien dipanggil');
 }
+
 
 
     /*

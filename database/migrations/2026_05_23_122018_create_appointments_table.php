@@ -13,7 +13,7 @@ return new class extends Migration
     $table->id('id_janji');
 
     $table->foreignId('id_jadwal')
-        ->constrained('jadwal_dokter', 'id_jadwal')
+        ->constrained('jadwal_dokters', 'id_jadwal')
         ->onDelete('cascade');
 
     $table->foreignId('id_pasien')
@@ -29,11 +29,12 @@ return new class extends Migration
     $table->integer('nomor_antrian');
 
     $table->enum('status_janji', [
-        'pending',
-        'approved',
-        'completed',
-        'cancelled'
-    ])->default('pending');
+    'pending',
+    'called',
+    'in_consultation',
+    'completed',
+    'cancelled'
+])->default('pending');
 
     $table->text('keluhan_utama');
 

@@ -29,148 +29,106 @@ class="space-y-6">
         <!-- CONTENT -->
         <div class="p-6">
 
-            <!-- TOP -->
-            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
+            <div class="flex flex-col lg:flex-row justify-between gap-4 mb-6">
 
-                <!-- SEARCH -->
-                <div class="relative w-full lg:w-96">
+    {{-- SEARCH --}}
+    <form method="GET" class="w-full lg:w-1/3">
+        <input
+            type="text"
+            name="search"
+            value="{{ request('search') }}"
+            placeholder="Search patient..."
+            class="w-full px-4 py-3 rounded-2xl border focus:ring-2 focus:ring-teal-500"
+        >
+    </form>
 
-                    <i data-lucide="search"
-                    class="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+    {{-- ACTION BUTTON --}}
+    <div class="flex gap-3">
 
-                    <input
-                    type="text"
-                    placeholder="Search patient name..."
-                    class="w-full pl-11 pr-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500">
+        <a href="?filter=today"
+           class="px-4 py-2 rounded-xl bg-teal-500 text-white text-sm">
+            Today
+        </a>
 
-                </div>
+        <a href="?filter=tomorrow"
+           class="px-4 py-2 rounded-xl bg-slate-100 text-slate-600 text-sm">
+            Tomorrow
+        </a>
 
-                <!-- FILTER -->
-                <div class="flex gap-3">
+        <form method="POST" action="{{ route('dokter.next') }}">
+            @csrf
+            <button class="px-4 py-2 rounded-xl bg-blue-600 text-white text-sm">
+                ▶ Next Patient
+            </button>
+        </form>
 
-                    <button class="px-5 py-3 rounded-2xl bg-teal-500 text-white text-sm font-medium">
-                        Today
-                    </button>
+    </div>
 
-                    <button class="px-5 py-3 rounded-2xl bg-slate-100 text-slate-600 text-sm font-medium hover:bg-slate-200 transition">
-                        Tomorrow
-                    </button>
+</div>
 
-                </div>
-
-            </div>
-
-            <!-- TABLE -->
-            <div class="overflow-x-auto">
-
-                <table class="w-full text-sm">
-
-                    <thead>
-
-                        <tr class="bg-slate-50 text-slate-500">
-
-                            <th class="text-left py-4 px-4 rounded-l-2xl">
-                                Time
-                            </th>
-
-                            <th class="text-left py-4 px-4">
-                                Patient
-                            </th>
-
-                            <th class="text-left py-4 px-4">
-                                Complaint
-                            </th>
-
-                            <th class="text-left py-4 px-4">
-                                Type
-                            </th>
-
-                            <th class="text-left py-4 px-4">
-                                Status
-                            </th>
-
-                            <th class="text-left py-4 px-4 rounded-r-2xl">
-                                Action
-                            </th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody class="divide-y">
+            <div class="space-y-3">
 
 @foreach($appointments as $item)
 
-<tr>
+<div class="flex items-center justify-between p-4 border rounded-2xl hover:bg-slate-50 transition">
 
-    <!-- TIME -->
-    <td class="py-4 px-4">
-        {{ \Carbon\Carbon::parse($item->jadwal->jam_mulai)->format('H:i') }}
-    </td>
+    <!-- LEFT -->
+    <div class="flex items-center gap-4 cursor-pointer"
+         @click="detailModal=true; selected={{ Js::from($item) }}">
 
-    <!-- PATIENT -->
-    <td class="py-4 px-4 font-medium">
-        {{ $item->pasien->user->name ?? $item->pasien->nama }}
-    </td>
+        <div class="text-2xl font-black text-teal-600">
+            #{{ $item->nomor_antrian }}
+        </div>
 
-    <!-- COMPLAINT -->
-    <td class="py-4 px-4 text-slate-500">
-        {{ $item->keluhan_utama }}
-    </td>
+        <div>
+            <div class="font-semibold text-slate-800">
+                {{ $item->pasien->user->name ?? $item->pasien->nama }}
+            </div>
 
-    <!-- TYPE -->
-    <td class="py-4 px-4 text-slate-500">
-        Consultation
-    </td>
+            <div class="text-sm text-slate-500">
+                {{ $item->keluhan_utama }}
+            </div>
+        </div>
 
-    <!-- STATUS -->
-    <td class="py-4 px-4">
+    </div>
 
-        @if($item->status_janji == 'completed')
-            <span class="px-3 py-1 rounded-xl bg-green-100 text-green-600 text-xs font-semibold">
-                Completed
-            </span>
+    <!-- RIGHT -->
+    <div class="flex items-center gap-3">
 
-        @elseif($item->status_janji == 'approved')
-            <span class="px-3 py-1 rounded-xl bg-blue-100 text-blue-600 text-xs font-semibold">
-                In Progress
-            </span>
-
-        @elseif($item->status_janji == 'pending')
-            <span class="px-3 py-1 rounded-xl bg-yellow-100 text-yellow-600 text-xs font-semibold">
+        @if($item->status_janji == 'pending')
+            <span class="px-3 py-1 rounded-xl bg-yellow-100 text-yellow-600 text-xs">
                 Waiting
             </span>
 
+        @elseif($item->status_janji == 'called')
+            <span class="px-3 py-1 rounded-xl bg-blue-100 text-blue-600 text-xs">
+                Called
+            </span>
+
+        @elseif($item->status_janji == 'in_consultation')
+            <span class="px-3 py-1 rounded-xl bg-purple-100 text-purple-600 text-xs">
+                In Consultation
+            </span>
+
+        @elseif($item->status_janji == 'completed')
+            <span class="px-3 py-1 rounded-xl bg-green-100 text-green-600 text-xs">
+                Done
+            </span>
+
         @else
-            <span class="px-3 py-1 rounded-xl bg-red-100 text-red-600 text-xs font-semibold">
+            <span class="px-3 py-1 rounded-xl bg-red-100 text-red-600 text-xs">
                 Cancelled
             </span>
         @endif
 
-    </td>
+    </div>
 
-    <!-- ACTION -->
-    <td class="py-4 px-4">
-
-        <button
-        @click="detailModal=true; selected={{ Js::from($item) }}"
-        class="px-4 py-2 rounded-xl border border-teal-500 text-teal-500 text-xs hover:bg-teal-50 transition">
-
-            Details
-
-        </button>
-
-    </td>
-
-</tr>
+</div>
 
 @endforeach
 
-</tbody>
+</div>
 
-                </table>
-
-            </div>
 
         </div>
 
@@ -303,24 +261,18 @@ style="display:none;">
                 </h3>
 
                 <p class="text-sm leading-7 text-slate-500">
-
-                    The patient has been experiencing a fever for the past 2 days,
-                    accompanied by headaches and body weakness. The patient has taken
-                    fever-reducing medication but has not improved yet.
-
-                </p>
+    <span x-text="selected?.keluhan_utama"></span>
+</p>
 
             </div>
 
             <!-- ACTION -->
             <div class="flex gap-3">
 
-                <button
-                class="flex-1 py-3 rounded-2xl bg-teal-500 hover:bg-teal-600 text-white font-semibold transition">
-
-                    Start Consultation
-
-                </button>
+                <a :href="`/dokter/rekam-medis/${selected.id}`"
+   class="flex-1 py-3 rounded-2xl bg-teal-500 text-white font-semibold text-center">
+    Start Consultation
+</a>
 
                 <button
                 @click="detailModal=false"

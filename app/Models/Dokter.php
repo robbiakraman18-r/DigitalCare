@@ -104,16 +104,16 @@ class Dokter extends Model
 
     // Appointment hari ini
     public function appointmentHariIni()
-    {
-        return $this->appointments()
-            ->whereDate('created_at', today());
-    }
+{
+    return $this->appointments()
+        ->whereDate('tanggal_janji', today());
+}
 
     // Total jadwal hari ini
     public function totalHariIni()
-    {
-        return $this->appointmentHariIni()->count();
-    }
+{
+    return $this->appointmentHariIni()->count();
+}
 
     // Latest appointment (dashboard card)
     public function latestAppointments($limit = 5)

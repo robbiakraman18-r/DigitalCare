@@ -11,15 +11,13 @@ use Illuminate\Support\Facades\Log;
 
 class AppointmentController extends Controller
 {
-    /**
-     * Menampilkan halaman form buat janji temu.
-     */
+    // =========================
+    // FORM BUAT JANJI
+    // =========================
     public function create()
     {
-        // Ambil data user login beserta data pasien
         $user = auth()->user()->load('pasien');
 
-        // Mengambil data Dokter dengan relasi user dan jadwal yang valid
         $dokters = Dokter::with([
             'user',
             'jadwalDokter' => function ($query) {
@@ -37,9 +35,9 @@ class AppointmentController extends Controller
         return view('pasien.buat-janji', compact('dokters', 'user'));
     }
 
-    /**
-     * Menyimpan data janji temu baru ke database.
-     */
+    // =========================
+    // SIMPAN APPOINTMENT
+    // =========================
     public function store(Request $request)
     {
         $request->validate([
@@ -49,21 +47,19 @@ class AppointmentController extends Controller
         ]);
 
         try {
-            return DB::transaction(function () use ($request) {
+            DB::transaction(function () use ($request) {
 
-$jadwal = JadwalDokter::lockForUpdate()
-    ->findOrFail($request->id_jadwal);
-    
-                if ($jadwal->tanggal !== $request->tanggal_janji) {
-                    return redirect()->back()
-                        ->withInput()
-                        ->with('error', 'Tanggal yang Anda pilih tidak sesuai dengan jadwal praktik dokter.');
+                $jadwal = JadwalDokter::lockForUpdate()
+                    ->findOrFail($request->id_jadwal);
+
+                if ($jadwal->tanggal != $request->tanggal_janji) {
+                    throw new \Exception('Tanggal tidak sesuai jadwal dokter.');
                 }
 
                 $pasien = auth()->user()->pasien;
 
                 if (!$pasien) {
-                    throw new \Exception('Profil data pasien Anda tidak ditemukan.');
+                    throw new \Exception('Data pasien tidak ditemukan.');
                 }
 
                 $exists = Appointment::where('id_jadwal', $jadwal->id_jadwal)
@@ -71,19 +67,16 @@ $jadwal = JadwalDokter::lockForUpdate()
                     ->exists();
 
                 if ($exists) {
-                    return redirect()->back()
-                        ->withInput()
-                        ->with('error', 'Anda sudah melakukan booking pada jadwal dokter ini.');
+                    throw new \Exception('Anda sudah booking jadwal ini.');
                 }
 
-                if ($jadwal->terisi >= $jadwal->kuota_harian || $jadwal->status_jadwal === 'Full') {
-                    return redirect()->back()
-                        ->withInput()
-                        ->with('error', 'Kuota dokter pada hari tersebut sudah penuh.');
+                if ($jadwal->terisi >= $jadwal->kuota_harian) {
+                    throw new \Exception('Kuota penuh.');
                 }
 
                 $jadwal->increment('current_antrian');
                 $nomorAntrian = $jadwal->current_antrian;
+
                 $jadwal->terisi += 1;
 
                 if ($jadwal->terisi >= $jadwal->kuota_harian) {
@@ -101,17 +94,32 @@ $jadwal = JadwalDokter::lockForUpdate()
                     'status_janji'  => 'pending',
                     'keluhan_utama' => $request->keluhan_utama,
                 ]);
-
-                return redirect()->route('pasien.dashboard')
-                    ->with('success', 'Janji temu berhasil dibuat! Nomor antrian Anda: #' . $nomorAntrian);
             });
 
-        } catch (\Exception $e) {
-            Log::error('Gagal membuat appointment: ' . $e->getMessage());
+            return redirect()->route('pasien.dashboard')
+                ->with('success', 'Janji berhasil dibuat!');
 
-            return redirect()->back()
-                ->withInput()
-                ->with('error', 'Terjadi kesalahan sistem: ' . $e->getMessage());
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+
+            return back()->with('error', $e->getMessage());
         }
+    }
+
+    // =========================
+    // INI YANG KAMU KURANG (UI APPOINTMENT)
+    // =========================
+    public function index()
+    {
+        $user = auth()->user()->load('pasien');
+
+        $pasien = $user->pasien;
+
+        $appointments = Appointment::with(['dokter', 'jadwalDokter'])
+            ->where('id_pasien', $pasien->id_pasien)
+            ->latest()
+            ->get();
+
+        return view('pasien.appointment', compact('appointments', 'user'));
     }
 }
