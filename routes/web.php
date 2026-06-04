@@ -111,7 +111,10 @@ Route::post('/appointment/start/{id}', [DokterController::class, 'startConsultat
 
     Route::get('/pasien', [DokterController::class, 'pasien'])->name('dokter.pasien');
     Route::get('/rekam-medis', [DokterController::class, 'rekamMedis'])->name('dokter.rekammedis');
-    Route::get('/diagnosis-prescription', [DokterController::class, 'diagnosis'])->name('dokter.diagnosis');
+    Route::get(
+        '/diagnosis-prescription/{id}',
+        [DokterController::class, 'diagnosis']
+        )->name('dokter.diagnosis');
     Route::get('/detail-pasien/{id}', [DokterController::class, 'detailPasien'])->name('dokter.detailpasien');
     Route::get('/medical-history', [DokterController::class, 'medicalHistory'])->name('dokter.medicalhistory');
 

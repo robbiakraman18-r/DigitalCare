@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Pasien;
 use App\Models\Dokter;
 use App\Models\JadwalDokter;
+use App\Models\RekamMedis;
 
 class Appointment extends Model
 {
@@ -30,12 +31,6 @@ class Appointment extends Model
     | RELASI PASIEN
     |----------------------------------
     */
-
-    public function appointment()
-{
-    // Rekam medis terhubung ke Appointment menggunakan foreign key 'id_janji'
-    return $this->belongsTo(Appointment::class, 'id_janji', 'id_janji');
-}
 
 public function rekamMedis()
 {

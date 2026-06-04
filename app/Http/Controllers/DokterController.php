@@ -15,14 +15,23 @@ class DokterController extends Controller
 
 public function dashboard()
 {
-    $dokter = Dokter::where('user_id', auth()->id())->first();
-    $jadwalHariIni = JadwalDokter::where('id_dokter', $dokter->id_dokter)
-    ->whereDate('tanggal', today())
+    $dokter = Dokter::where('user_id', auth()->id())
+    ->firstOrFail();
+
+$jadwalHariIni = JadwalDokter::where(
+    'id_dokter',
+    $dokter->id_dokter
+)
+->whereDate('tanggal', today())
+->get();
+
+
+$latestAppointments = Appointment::with('pasien')
+    ->where('id_dokter', $dokter->id_dokter)
+    ->latest()
+    ->take(5)
     ->get();
 
-    if (!$dokter) {
-        abort(403, 'Dokter belum terhubung dengan user ini');
-    }
 
     // 🔥 FIX UTAMA DI SINI
     $todayAppointments = $dokter->appointments()
@@ -37,6 +46,14 @@ public function dashboard()
 
     $totalAppointment = $dokter->appointments()->count();
 
+    $totalPending = $dokter->appointments()
+    ->where('status_janji', 'pending')
+    ->count();
+
+    $totalCompleted = $dokter->appointments()
+    ->where('status_janji', 'completed')
+    ->count();
+
     $todaySchedule = $dokter->appointments()
         ->whereDate('tanggal_janji', \Carbon\Carbon::today('Asia/Jakarta'))
         ->count();
@@ -50,7 +67,10 @@ public function dashboard()
     'totalPasien',
     'totalAppointment',
     'todaySchedule',
-    'totalRekamMedis'
+    'totalRekamMedis',
+    'totalPending',
+    'totalCompleted',
+    'latestAppointments'
 ));
 }
 
@@ -191,7 +211,8 @@ public function startConsultation($id)
     // PANGGIL PASIEN SELANJUTNYA
     public function nextPasien()
 {
-    $dokter = auth()->user()->dokter;
+    $dokter = Dokter::where('user_id', auth()->id())
+    ->firstOrFail();
 
     $next = Appointment::with(['pasien', 'jadwal'])
         ->where('id_dokter', $dokter->id_dokter)
@@ -228,10 +249,19 @@ public function startConsultation($id)
     | DIAGNOSIS
     |----------------------------------
     */
-    public function diagnosis()
-    {
-        return view('dokter.diagnosis');
-    }
+    public function diagnosis($id)
+{
+    $appointment = Appointment::with([
+        'pasien.user',
+        'dokter',
+        'jadwal'
+    ])->findOrFail($id);
+
+    return view(
+        'dokter.diagnosis',
+        compact('appointment')
+    );
+}
 
     /*
     |----------------------------------

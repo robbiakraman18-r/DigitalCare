@@ -4,31 +4,6 @@
 @section('subtitle', 'Today’s Practicum Activity Monitoring')
 
 @section('content')
-
-@php
-    $dokter = auth()->user()->dokter;
-
-    use App\Models\Appointment;
-    use App\Models\RekamMedis;
-
-    $totalPasien = Appointment::where('id_dokter', $dokter->id_dokter)
-        ->distinct('id_pasien')
-        ->count('id_pasien');
-
-    $totalAppointment = Appointment::where('id_dokter', $dokter->id_dokter)->count();
-
-    $totalRekamMedis = RekamMedis::where('id_dokter', $dokter->id_dokter)->count();
-
-    $todaySchedule = Appointment::where('id_dokter', $dokter->id_dokter)
-        ->whereDate('created_at', today())
-        ->count();
-
-    $appointments = Appointment::where('id_dokter', $dokter->id_dokter)
-        ->latest()
-        ->take(2)
-        ->get();
-@endphp
-
 <div class="space-y-5">
 
     <!-- HERO -->
@@ -37,7 +12,7 @@
         <div class="relative z-10">
 
             <h1 class="text-2xl lg:text-3xl font-bold leading-tight">
-                Welcome, Dr. {{ $dokter->nama_dokter }} 👋
+                Welcome, Dr. {{ $dokter->user->name }}👋
             </h1>
 
             <p class="mt-2 text-teal-100 text-sm">
@@ -114,6 +89,48 @@
             </div>
 
         </div>
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
+
+    <div class="flex items-center justify-between">
+
+        <div>
+
+            <p class="text-xs text-slate-400">Pending</p>
+
+            <h2 class="text-2xl font-bold mt-1 text-slate-800">
+                {{ $totalPending }}
+            </h2>
+
+        </div>
+
+        <div class="w-11 h-11 rounded-xl bg-orange-100 flex items-center justify-center">
+            <i data-lucide="hourglass" class="w-5 h-5 text-orange-500"></i>
+        </div>
+
+    </div>
+
+</div>
+<div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
+
+    <div class="flex items-center justify-between">
+
+        <div>
+
+            <p class="text-xs text-slate-400">Completed</p>
+
+            <h2 class="text-2xl font-bold mt-1 text-slate-800">
+                {{ $totalCompleted }}
+            </h2>
+
+        </div>
+
+        <div class="w-11 h-11 rounded-xl bg-green-100 flex items-center justify-center">
+            <i data-lucide="check-circle" class="w-5 h-5 text-green-500"></i>
+        </div>
+
+    </div>
+
+</div>
 
         <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
 
@@ -292,12 +309,12 @@
 
                         <tbody>
 
-                            @foreach($appointments as $item)
+                            @foreach($latestAppointments as $item)
 
                             <tr class="border-b">
 
                                 <td class="py-3 text-sm font-medium">
-                                    Pasien #{{ $item->id_pasien }}
+                                    {{ $item->pasien->user->name ?? 'Pasien' }}
                                 </td>
 
                                 <td class="py-3 text-sm">
