@@ -15,18 +15,21 @@ class DokterController extends Controller
 
 public function dashboard()
 {
-
-   $dokter = Dokter::where('user_id', auth()->id())->first();
-
-if (!$dokter) {
-    abort(403, 'Dokter belum terhubung dengan user ini');
-}
-
-    $todayAppointments = $dokter->appointments()
-    ->whereDate('tanggal_janji', today())
-    ->with('pasien')
-    ->orderBy('nomor_antrian')
+    $dokter = Dokter::where('user_id', auth()->id())->first();
+    $jadwalHariIni = JadwalDokter::where('id_dokter', $dokter->id_dokter)
+    ->whereDate('tanggal', today())
     ->get();
+
+    if (!$dokter) {
+        abort(403, 'Dokter belum terhubung dengan user ini');
+    }
+
+    // 🔥 FIX UTAMA DI SINI
+    $todayAppointments = $dokter->appointments()
+        ->whereDate('tanggal_janji', \Carbon\Carbon::today('Asia/Jakarta'))
+        ->with('pasien')
+        ->orderBy('nomor_antrian')
+        ->get();
 
     $totalPasien = $dokter->appointments()
         ->distinct('id_pasien')
@@ -34,21 +37,21 @@ if (!$dokter) {
 
     $totalAppointment = $dokter->appointments()->count();
 
-   $todaySchedule = $dokter->appointments()
-    ->whereDate('tanggal_janji', today())
-    ->count();
+    $todaySchedule = $dokter->appointments()
+        ->whereDate('tanggal_janji', \Carbon\Carbon::today('Asia/Jakarta'))
+        ->count();
 
     $totalRekamMedis = \App\Models\RekamMedis::where('id_dokter', $dokter->id_dokter)->count();
 
     return view('dokter.dashboard', compact(
-        'dokter',
-        'todayAppointments',
-        'totalPasien',
-        'totalAppointment',
-        'todaySchedule',
-        'totalRekamMedis'
-    ));
-
+    'dokter',
+    'todayAppointments',
+    'jadwalHariIni',
+    'totalPasien',
+    'totalAppointment',
+    'todaySchedule',
+    'totalRekamMedis'
+));
 }
 
 public function uploadPhoto(Request $request)

@@ -3,19 +3,23 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\JadwalDokter;
 
 class DashboardController extends Controller
 {
-    public function index($role)
+
+public function index($role)
 {
-    if ($role == 'admin') {
-        return view('admin.dashboard');
-    }
+    $jadwal = JadwalDokter::all(); // atau query kamu
 
     if ($role == 'dokter') {
-        return view('dokter.dashboard');
+        return view('dokter.dashboard', compact('jadwal'));
     }
 
-    return view('dashboard'); // pasien
+    if ($role == 'admin') {
+        return view('admin.dashboard', compact('jadwal'));
+    }
+
+    return view('dashboard', compact('jadwal'));
 }
 }

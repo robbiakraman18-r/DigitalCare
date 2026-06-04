@@ -195,48 +195,54 @@
 
                 <div class="space-y-3">
 
-    @forelse($todayAppointments as $item)
+   @forelse($jadwalHariIni as $item)
 
-        <div class="flex items-center justify-between p-3 rounded-2xl bg-slate-50">
+<div class="flex items-center justify-between p-3 rounded-2xl bg-slate-50">
 
-            <div class="flex items-center gap-3">
+    <div class="flex items-center gap-3">
 
-                <div class="w-12 h-12 rounded-xl bg-teal-100 flex items-center justify-center font-bold text-sm text-teal-600">
-                    {{ \Carbon\Carbon::parse($item->tanggal_janji)->format('H:i') }}
-                </div>
+        <div class="w-12 h-12 rounded-xl bg-teal-100 flex items-center justify-center font-bold text-sm text-teal-600">
+            {{ \Carbon\Carbon::parse($item->jam_mulai)->format('H:i') }}
+        </div>
 
-                <div>
-                    <h3 class="font-semibold text-sm text-slate-800">
-                        {{ $item->pasien->nama_pasien ?? 'Pasien' }}
-                    </h3>
+        <div>
 
-                    <p class="text-xs text-slate-400">
-                        {{ $item->keluhan_utama ?? 'General Checkup' }}
-                    </p>
-                </div>
+            <h3 class="font-semibold text-sm text-slate-800">
+                {{ $item->hari }}
+            </h3>
 
-            </div>
-
-            <span class="px-3 py-1 rounded-xl 
-                @if($item->status_janji == 'completed') bg-green-100 text-green-600
-                @elseif($item->status_janji == 'pending') bg-yellow-100 text-yellow-600
-                @else bg-red-100 text-red-600
-                @endif
-                text-xs font-semibold">
-
-                {{ ucfirst($item->status_janji) }}
-
-            </span>
+            <p class="text-xs text-slate-400">
+                {{ \Carbon\Carbon::parse($item->jam_mulai)->format('H:i') }}
+                -
+                {{ \Carbon\Carbon::parse($item->jam_selesai)->format('H:i') }}
+            </p>
 
         </div>
 
-    @empty
+    </div>
 
-        <p class="text-sm text-slate-400">
-            Tidak ada jadwal hari ini
-        </p>
+    <span class="px-3 py-1 rounded-xl text-xs font-semibold
+        @if($item->status_jadwal == 'Available')
+            bg-green-100 text-green-600
+        @elseif($item->status_jadwal == 'Full')
+            bg-red-100 text-red-600
+        @else
+            bg-yellow-100 text-yellow-600
+        @endif">
 
-    @endforelse
+        {{ $item->status_jadwal }}
+
+    </span>
+
+</div>
+
+@empty
+
+<p class="text-sm text-slate-400">
+    Tidak ada jadwal hari ini
+</p>
+
+@endforelse
 
 </div>
 
