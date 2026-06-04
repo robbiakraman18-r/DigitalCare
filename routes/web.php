@@ -115,6 +115,20 @@ Route::post('/appointment/start/{id}', [DokterController::class, 'startConsultat
         '/diagnosis-prescription/{id}',
         [DokterController::class, 'diagnosis']
         )->name('dokter.diagnosis');
+    
+    Route::post(
+        '/diagnosis-prescription/{id}',
+        [DokterController::class, 'simpanDiagnosis']
+        )->name('dokter.diagnosis.store');
+
+    Route::post(
+        '/dokter/diagnosis/{id}',
+        [DokterController::class, 'storeDiagnosis']
+        )->name('dokter.diagnosis.store');
+    
+    Route::get('/dokter/appointment', [DokterController::class, 'appointment'])
+    ->name('dokter.appointment');
+    
     Route::get('/detail-pasien/{id}', [DokterController::class, 'detailPasien'])->name('dokter.detailpasien');
     Route::get('/medical-history', [DokterController::class, 'medicalHistory'])->name('dokter.medicalhistory');
 

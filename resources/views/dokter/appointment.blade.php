@@ -6,286 +6,233 @@
 
 @section('content')
 
-<div
-x-data="{ detailModal:false, selected:null }"
-class="space-y-6">
+<div x-data="{ detailModal:false, selected:null }" class="space-y-6">
 
     <!-- CARD -->
     <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
 
         <!-- HEADER -->
         <div class="bg-gradient-to-r from-teal-500 to-cyan-500 px-6 py-5 text-white">
-
-            <h2 class="text-2xl font-bold">
-                Appointments
-            </h2>
-
-            <p class="text-sm text-teal-100 mt-1">
-                Patient appointment data.
-            </p>
-
+            <h2 class="text-2xl font-bold">Appointments</h2>
+            <p class="text-sm text-teal-100 mt-1">Patient appointment data.</p>
         </div>
 
         <!-- CONTENT -->
         <div class="p-6">
 
+            <!-- SEARCH + ACTION -->
             <div class="flex flex-col lg:flex-row justify-between gap-4 mb-6">
 
-    {{-- SEARCH --}}
-    <form method="GET" class="w-full lg:w-1/3">
-        <input
-            type="text"
-            name="search"
-            value="{{ request('search') }}"
-            placeholder="Search patient..."
-            class="w-full px-4 py-3 rounded-2xl border focus:ring-2 focus:ring-teal-500"
-        >
-    </form>
+                <form method="GET" class="w-full lg:w-1/3">
+                    <input
+                        type="text"
+                        name="search"
+                        value="{{ request('search') }}"
+                        placeholder="Search patient..."
+                        class="w-full px-4 py-3 rounded-2xl border focus:ring-2 focus:ring-teal-500 outline-none"
+                    >
+                </form>
 
-    {{-- ACTION BUTTON --}}
-    <div class="flex gap-3">
+                <div class="flex flex-wrap gap-3">
 
-        <a href="?filter=today"
-           class="px-4 py-2 rounded-xl bg-teal-500 text-white text-sm">
-            Today
-        </a>
+                    <a href="?filter=today"
+                       class="px-4 py-2 rounded-xl bg-teal-500 text-white text-sm hover:bg-teal-600 transition">
+                        Today
+                    </a>
 
-        <a href="?filter=tomorrow"
-           class="px-4 py-2 rounded-xl bg-slate-100 text-slate-600 text-sm">
-            Tomorrow
-        </a>
+                    <a href="?filter=tomorrow"
+                       class="px-4 py-2 rounded-xl bg-slate-100 text-slate-600 text-sm hover:bg-slate-200 transition">
+                        Tomorrow
+                    </a>
 
-        <form method="POST" action="{{ route('dokter.next') }}">
-            @csrf
-            <button class="px-4 py-2 rounded-xl bg-blue-600 text-white text-sm">
-                ▶ Next Patient
-            </button>
-        </form>
+                    <form method="POST" action="{{ route('dokter.next') }}">
+                        @csrf
+                        <button class="px-4 py-2 rounded-xl bg-blue-600 text-white text-sm hover:bg-blue-700 transition">
+                            ▶ Next Patient
+                        </button>
+                    </form>
 
-    </div>
-
-</div>
-
-            <div class="space-y-3">
-
-@foreach($appointments as $item)
-
-<div class="flex items-center justify-between p-4 border rounded-2xl hover:bg-slate-50 transition">
-
-    <!-- LEFT -->
-    <div class="flex items-center gap-4 cursor-pointer"
-         @click="detailModal=true; selected={{ Js::from($item) }}">
-
-        <div class="text-2xl font-black text-teal-600">
-            #{{ $item->nomor_antrian }}
-        </div>
-
-        <div>
-            <div class="font-semibold text-slate-800">
-                {{ $item->pasien->user->name ?? $item->pasien->nama }}
+                </div>
             </div>
 
-            <div class="text-sm text-slate-500">
-                {{ $item->keluhan_utama }}
-            </div>
-        </div>
+            <!-- LIST -->
+            <div class="space-y-4">
 
-    </div>
+                @foreach($appointments as $item)
 
-    <!-- RIGHT -->
-    <div class="flex items-center gap-3">
+                <div class="group bg-white border rounded-2xl p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:shadow-md transition">
 
-        @if($item->status_janji == 'pending')
-            <span class="px-3 py-1 rounded-xl bg-yellow-100 text-yellow-600 text-xs">
-                Waiting
-            </span>
+                    <!-- LEFT -->
+                    <div class="flex items-center gap-4 cursor-pointer"
+                        @click="if('{{ $item->status_janji }}' !== 'completed') { detailModal=true; selected={{ Js::from($item) }} }">
 
-        @elseif($item->status_janji == 'called')
-            <span class="px-3 py-1 rounded-xl bg-blue-100 text-blue-600 text-xs">
-                Called
-            </span>
+                        <!-- NUMBER -->
+                        <div class="relative group">
 
-        @elseif($item->status_janji == 'in_consultation')
-            <span class="px-3 py-1 rounded-xl bg-purple-100 text-purple-600 text-xs">
-                In Consultation
-            </span>
+                            <div class="w-12 h-12 flex items-center justify-center rounded-2xl bg-teal-50 text-teal-600 font-bold text-lg cursor-pointer">
+                                #{{ $item->nomor_antrian }}
+                            </div>
 
-        @elseif($item->status_janji == 'completed')
-            <span class="px-3 py-1 rounded-xl bg-green-100 text-green-600 text-xs">
-                Done
-            </span>
+                            @if($item->status_janji != 'completed')
+                            <div class="absolute left-14 top-1/2 -translate-y-1/2 w-64 bg-white border shadow-lg rounded-xl p-3 opacity-0 group-hover:opacity-100 transition z-50">
 
-        @else
-            <span class="px-3 py-1 rounded-xl bg-red-100 text-red-600 text-xs">
-                Cancelled
-            </span>
-        @endif
+                                <p class="text-xs text-slate-400">Patient Info</p>
 
-    </div>
+                                <p class="font-semibold text-slate-800">
+                                    {{ $item->pasien->user->name ?? $item->pasien->nama }}
+                                </p>
 
-</div>
+                                <p class="text-sm text-slate-500 mt-1">
+                                    {{ $item->keluhan_utama }}
+                                </p>
 
-@endforeach
+                                <p class="text-xs text-slate-400 mt-2">
+                                    Status: {{ ucfirst($item->status_janji) }}
+                                </p>
 
-</div>
+                            </div>
+                            @endif
 
+                        </div>
 
-        </div>
+                        <!-- INFO -->
+                        <div>
+                            <div class="font-semibold text-slate-800">
+                                {{ $item->pasien->user->name ?? $item->pasien->nama }}
+                            </div>
+                            <div class="text-sm text-slate-500">
+                                {{ $item->keluhan_utama }}
+                            </div>
+                        </div>
 
-    </div>
+                    </div>
 
-    <!-- MODAL DETAIL -->
-<div
-x-show="detailModal"
-x-transition
-class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4"
-style="display:none;">
+                    <!-- RIGHT -->
+                    <div class="flex flex-col md:flex-row md:items-center gap-3 md:gap-4">
 
-    <!-- CARD -->
-    <div
-    @click.away="detailModal=false"
-    class="relative w-full max-w-2xl bg-white rounded-[30px] shadow-2xl overflow-hidden">
+                        <!-- STATUS -->
+                        <div>
+                            @if($item->status_janji == 'pending')
+                                <span class="px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-semibold">Waiting</span>
 
-        <!-- CLOSE -->
-        <button
-        @click="detailModal=false"
-        class="absolute top-5 right-5 w-10 h-10 rounded-xl bg-white shadow-md hover:bg-slate-100 flex items-center justify-center transition z-20">
+                            @elseif($item->status_janji == 'called')
+                                <span class="px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-semibold">Called</span>
 
-            <i data-lucide="x" class="w-5 h-5 text-slate-600"></i>
+                            @elseif($item->status_janji == 'in_consultation')
+                                <span class="px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-xs font-semibold">In Consultation</span>
 
-        </button>
+                            @elseif($item->status_janji == 'completed')
+                                <span class="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">Done</span>
+                            @endif
+                        </div>
 
-        <!-- HEADER -->
-        <div class="bg-gradient-to-r from-teal-500 to-cyan-500 p-6 rounded-t-[30px] text-white">
+                        <!-- ACTION -->
+                        <div class="flex gap-2">
 
-            <h2 class="text-2xl font-bold">
-                Appointment Details
-            </h2>
+                            @if($item->status_janji == 'pending')
 
-            <p class="text-sm text-teal-100 mt-1">
-                Complete patient appointment information
-            </p>
+                                <form action="{{ route('dokter.panggil', $item->id_janji) }}" method="POST">
+                                    @csrf
+                                    <button class="px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-xl text-xs">
+                                        Panggil
+                                    </button>
+                                </form>
 
-        </div>
+                            @elseif($item->status_janji == 'called')
 
-        <!-- BODY -->
-        <div class="p-6 space-y-5">
+                                <form action="{{ route('dokter.start', $item->id_janji) }}" method="POST">
+                                    @csrf
+                                    <button class="px-3 py-2 bg-teal-500 hover:bg-teal-600 text-white rounded-xl text-xs">
+                                        Periksa
+                                    </button>
+                                </form>
 
-            <!-- PROFILE -->
-            <div class="flex items-center gap-4">
+                            @elseif($item->status_janji == 'in_consultation')
 
-                <img
-                src="https://i.pravatar.cc/120?img=15"
-                class="w-16 h-16 rounded-2xl object-cover border-4 border-teal-100">
+                                <form action="{{ route('dokter.selesai', $item->id_janji) }}" method="POST">
+                                    @csrf
+                                    <button class="px-3 py-2 bg-green-500 hover:bg-green-600 text-white rounded-xl text-xs">
+                                        Selesai
+                                    </button>
+                                </form>
 
-                <div>
+                            @endif
 
-                    <h3 class="text-xl font-bold text-slate-800">
-                        <span x-text="selected?.pasien?.user?.name ?? selected?.pasien?.nama"></span>
-                    </h3>
-
-                    <p class="text-sm text-slate-400">
-                        General Consultation Patient
-                    </p>
-
-                    <div class="mt-2">
-
-                        <span class="px-3 py-1 rounded-xl bg-green-100 text-green-600 text-xs font-semibold">
-                            <span x-text="selected?.status_janji"></span>
-                        </span>
-
+                        </div>
                     </div>
 
                 </div>
 
-            </div>
-
-            <!-- INFO -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
-                <div class="rounded-2xl bg-slate-50 p-4">
-
-                    <p class="text-xs text-slate-400">
-                        Date
-                    </p>
-
-                    <h4 class="font-bold text-slate-800 mt-2">
-                        <span x-text="selected?.jadwal?.tanggal"></span>
-                    </h4>
-
-                </div>
-
-                <div class="rounded-2xl bg-slate-50 p-4">
-
-                    <p class="text-xs text-slate-400">
-                        Practice Time
-                    </p>
-
-                    <h4 class="font-bold text-slate-800 mt-2">
-                        <span x-text="selected?.jadwal?.jam_mulai"></span>
-                    </h4>
-
-                </div>
-
-                <div class="rounded-2xl bg-slate-50 p-4">
-
-                    <p class="text-xs text-slate-400">
-                        Examination Type
-                    </p>
-
-                    <h4 class="font-bold text-slate-800 mt-2">
-                        <span x-text="selected?.jadwal?.ruang ?? 'Consultation'"></span>
-                    </h4>
-
-                </div>
-
-                <div class="rounded-2xl bg-slate-50 p-4">
-
-                    <p class="text-xs text-slate-400">
-                        Complaint
-                    </p>
-
-                    <h4 class="font-bold text-slate-800 mt-2">
-                        <span x-text="selected?.keluhan_utama"></span>
-                    </h4>
-
-                </div>
+                @endforeach
 
             </div>
 
-            <!-- NOTE -->
-            <div class="rounded-2xl border border-slate-100 p-5">
+        </div>
+    </div>
 
-                <h3 class="font-bold text-slate-800 mb-3">
-                    Patient Notes
+    <!-- MODAL DETAIL -->
+    <div
+        x-show="detailModal"
+        x-transition
+        class="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4"
+        style="display:none;"
+    >
+        <div @click.away="detailModal=false"
+             class="w-full max-w-2xl bg-white rounded-3xl shadow-xl overflow-hidden">
+
+            <!-- HEADER -->
+            <div class="bg-gradient-to-r from-teal-500 to-cyan-500 p-6 text-white">
+                <h2 class="text-xl font-bold">Patient Detail</h2>
+            </div>
+
+            <!-- BODY -->
+            <div class="p-6 space-y-4">
+
+                <!-- NAME -->
+                <h3 class="text-lg font-bold text-slate-800">
+                    <span x-text="selected?.pasien?.user?.name ?? selected?.pasien?.nama"></span>
                 </h3>
 
-                <p class="text-sm leading-7 text-slate-500">
-    <span x-text="selected?.keluhan_utama"></span>
-</p>
+                <!-- GRID -->
+                <div class="grid grid-cols-2 gap-4 text-sm">
 
-            </div>
+                    <div class="p-3 bg-slate-50 rounded-xl">
+                        <p class="text-slate-400">No RM</p>
+                        <p class="font-semibold" x-text="selected?.pasien?.no_rm"></p>
+                    </div>
 
-            <!-- ACTION -->
-            <div class="flex gap-3">
+                    <div class="p-3 bg-slate-50 rounded-xl">
+                        <p class="text-slate-400">Gender</p>
+                        <p class="font-semibold" x-text="selected?.pasien?.gender"></p>
+                    </div>
 
-                <a :href="`/dokter/rekam-medis/${selected.id}`"
-   class="flex-1 py-3 rounded-2xl bg-teal-500 text-white font-semibold text-center">
-    Start Consultation
-</a>
+                    <div class="p-3 bg-slate-50 rounded-xl">
+                        <p class="text-slate-400">Birth Date</p>
+                        <p class="font-semibold" x-text="selected?.pasien?.birth_date"></p>
+                    </div>
 
-                <button
-                @click="detailModal=false"
-                class="flex-1 py-3 rounded-2xl border border-slate-200 hover:bg-slate-50 font-semibold text-slate-700 transition">
+                    <div class="p-3 bg-slate-50 rounded-xl">
+                        <p class="text-slate-400">Phone</p>
+                        <p class="font-semibold" x-text="selected?.pasien?.phone_number"></p>
+                    </div>
 
+                </div>
+
+                <!-- COMPLAINT -->
+                <div class="p-4 bg-slate-50 rounded-xl">
+                    <p class="text-slate-400 text-sm">Complaint</p>
+                    <p class="font-medium text-slate-700" x-text="selected?.keluhan_utama"></p>
+                </div>
+
+                <!-- CLOSE -->
+                <button @click="detailModal=false"
+                        class="w-full mt-2 py-3 bg-slate-900 text-white rounded-xl">
                     Close
-
                 </button>
 
             </div>
 
         </div>
-
     </div>
 
 </div>

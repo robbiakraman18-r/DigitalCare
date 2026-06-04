@@ -34,5 +34,8 @@ class RekamMedis extends Model
     {
         return $this->hasMany(DetailResep::class, 'id_rekam_medis');
     }
-    
+    public function resepObat()
+{
+    return $this->hasMany(\App\Models\DetailResep::class, 'id_rekam_medis', 'id_rekam_medis');
+}
 }
