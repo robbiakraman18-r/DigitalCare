@@ -12,11 +12,36 @@
                 Appointments
             </h1>
 
-            @if(session('success'))
-                <div class="mt-4 px-4 py-3 rounded-2xl bg-green-100 border border-green-300 text-green-700">
-                    {{ session('success') }}
-                </div>
-            @endif
+           @if(session('success'))
+    <div id="success-alert"
+        class="mt-4 flex items-center gap-3 bg-green-50 border-l-4 border-green-500 text-green-700 p-4 rounded-2xl shadow-sm">
+
+        <svg xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 text-green-600"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor">
+
+            <path stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"/>
+        </svg>
+
+        <span>{{ session('success') }}</span>
+    </div>
+
+    <script>
+        setTimeout(() => {
+            const alert = document.getElementById('success-alert');
+            if(alert){
+                alert.style.transition = "0.5s";
+                alert.style.opacity = "0";
+                setTimeout(() => alert.remove(), 500);
+            }
+        }, 3000);
+    </script>
+@endif
 
             <p class="text-slate-400 mt-1">
                 View and manage patient appointments.

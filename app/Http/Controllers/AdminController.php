@@ -183,29 +183,29 @@ class AdminController extends Controller
     // =========================================
     // STORE APPOINTMENT (INI YANG KAMU BUTUH)
     // =========================================
-    public function storeAppointment(Request $request)
-    {
-        $request->validate([
-            'nama_pasien' => 'required',
-            'nama_dokter' => 'required',
-            'tanggal_janji' => 'required',
-            'keluhan_utama' => 'required',
-        ]);
+   public function storeAppointment(Request $request)
+{
+    $request->validate([
+        'nama_pasien' => 'required',
+        'nama_dokter' => 'required',
+        'tanggal_janji' => 'required',
+        'keluhan_utama' => 'required',
+    ]);
 
-        Appointment::create([
-            'id_pasien' => 1,
-            'id_dokter' => 1,
-            'tanggal_janji' => $request->tanggal_janji,
-            'nomor_antrian' => rand(1, 999),
-            'status_janji' => 'pending',
-            'keluhan_utama' => $request->keluhan_utama,
-        ]);
+    Appointment::create([
+        'id_pasien' => 1,
+        'id_dokter' => 1,
+        'tanggal_janji' => $request->tanggal_janji,
+        'nomor_antrian' => rand(1, 999),
+        'status_janji' => 'pending',
+        'keluhan_utama' => $request->keluhan_utama,
+    ]);
 
-        return back()->with(
-            'success',
-            'Appointment successfully created!'
-        );
-    }
+    return back()->with(
+        'success',
+        'Appointment successfully created!'
+    );
+}
 
     // =========================================
     // UPDATE STATUS APPOINTMENT

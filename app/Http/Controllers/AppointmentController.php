@@ -51,8 +51,9 @@ class AppointmentController extends Controller
         try {
             return DB::transaction(function () use ($request) {
 
-                $jadwal = JadwalDokter::lockForUpdate()->find($request->id_jadwal);
-
+$jadwal = JadwalDokter::lockForUpdate()
+    ->findOrFail($request->id_jadwal);
+    
                 if ($jadwal->tanggal !== $request->tanggal_janji) {
                     return redirect()->back()
                         ->withInput()

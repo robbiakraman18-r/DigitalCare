@@ -23,7 +23,7 @@
         </div>
 
         <!-- MENU -->
-        <nav class="mt-6 px-3 space-y-2 pb-10">
+        <nav class="mt-6 px-3 space-y-2 pb-20">
 
             <!-- DASHBOARD -->
             <a href="/admin/dashboard"
@@ -41,7 +41,6 @@
                 <span class="font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300">
                     Dashboard
                 </span>
-
             </a>
 
             <!-- USER MANAGEMENT -->
@@ -60,7 +59,6 @@
                 <span class="font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300">
                     User Management
                 </span>
-
             </a>
 
             <!-- SCHEDULE MANAGEMENT -->
@@ -79,7 +77,6 @@
                 <span class="font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300">
                     Schedule Management
                 </span>
-
             </a>
 
             <!-- APPOINTMENT -->
@@ -98,7 +95,6 @@
                 <span class="font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300">
                     Appointment
                 </span>
-
             </a>
 
             <!-- MEDICAL RECORDS -->
@@ -117,7 +113,6 @@
                 <span class="font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300">
                     Medical Records
                 </span>
-
             </a>
 
             <!-- REPORTS -->
@@ -136,7 +131,6 @@
                 <span class="font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300">
                     Reports
                 </span>
-
             </a>
 
             <!-- PAYMENTS -->
@@ -146,16 +140,11 @@
             ? 'bg-teal-500 text-white shadow-lg shadow-cyan-200'
             : 'text-slate-600 hover:bg-teal-50' }}">
 
-                @if(request()->is('admin/payments'))
-                <div class="absolute right-0 top-1/2 -translate-y-1/2 w-1.5 h-10 rounded-l-full bg-white"></div>
-                @endif
-
                 <i data-lucide="wallet" class="w-5 h-5 shrink-0"></i>
 
                 <span class="font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300">
                     Payments
                 </span>
-
             </a>
 
             <!-- SETTINGS -->
@@ -165,20 +154,30 @@
             ? 'bg-teal-500 text-white shadow-lg shadow-cyan-200'
             : 'text-slate-600 hover:bg-teal-50' }}">
 
-                @if(request()->is('admin/settings'))
-                <div class="absolute right-0 top-1/2 -translate-y-1/2 w-1.5 h-10 rounded-l-full bg-white"></div>
-                @endif
-
                 <i data-lucide="settings-2" class="w-5 h-5 shrink-0"></i>
 
                 <span class="font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300">
                     Settings
                 </span>
-
             </a>
 
         </nav>
 
+    </div>
+
+    <!-- LOGOUT -->
+    <div class="p-3 border-t border-slate-100">
+        <button
+            @click="logoutModal=true"
+            class="w-full flex items-center gap-4 px-4 py-3 rounded-2xl text-red-500 hover:bg-red-50 transition-all duration-300">
+
+            <i data-lucide="log-out" class="w-5 h-5 shrink-0"></i>
+
+            <span class="font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300">
+                Logout
+            </span>
+
+        </button>
     </div>
 
 </aside>
