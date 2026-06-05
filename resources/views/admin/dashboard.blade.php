@@ -6,49 +6,6 @@
 @endphp
 
 @section('content')
-<div class="grid md:grid-cols-4 gap-4">
-
-    <a href="/admin/user-management"
-    class="bg-white rounded-3xl p-5 shadow-sm border border-slate-100 hover:shadow-md transition">
-
-        <h3 class="font-bold text-slate-800">
-            Kelola Dokter
-        </h3>
-
-        <p class="text-sm text-slate-400 mt-2">
-            Tambah, edit, hapus dokter
-        </p>
-
-    </a>
-
-    <a href="/admin/listpatient"
-    class="bg-white rounded-3xl p-5 shadow-sm border border-slate-100">
-
-        <h3 class="font-bold text-slate-800">
-            Data Pasien
-        </h3>
-
-    </a>
-
-    <a href="/admin/doctor-schedule"
-    class="bg-white rounded-3xl p-5 shadow-sm border border-slate-100">
-
-        <h3 class="font-bold text-slate-800">
-            Jadwal Dokter
-        </h3>
-
-    </a>
-
-    <a href="/admin/complaint"
-    class="bg-white rounded-3xl p-5 shadow-sm border border-slate-100">
-
-        <h3 class="font-bold text-slate-800">
-            Complaint
-        </h3>
-
-    </a>
-
-</div>
 <div class="space-y-6">
 
     <!-- HERO -->
