@@ -1,7 +1,7 @@
 @extends('layouts.pasien')
 
 @section('title')
-    Halo, {{ Auth::user()->name }} 👋
+    Halo, {{ Auth::user()->nama }} 👋
 @endsection
 
 @section('subtitle', 'Selamat datang kembali di DigitalCare')
@@ -21,7 +21,7 @@
                     Welcome Back, {{ Auth::user()->name }}!
                 </h1>
                 <p class="text-white/90 mt-2 text-sm leading-relaxed max-w-xl">
-                    No. Rekam Medis (NIM/MRN): <span class="font-bold underline">{{ Auth::user()->nim ?? '-' }}</span> | Selalu pantau kondisi fisik Anda di sela-sela kesibukan akademik.
+                    Selalu pantau kondisi fisik Anda di sela-sela kesibukan akademik.
                 </p>
             </div>
             <div class="flex gap-3 shrink-0">
