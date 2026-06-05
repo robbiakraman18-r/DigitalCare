@@ -57,7 +57,7 @@ public function rekamMedis()
     | RELASI JADWAL
     |----------------------------------
     */
-    public function jadwalDokter()
+    public function jadwal()
     {
         return $this->belongsTo(JadwalDokter::class, 'id_jadwal', 'id_jadwal');
     }

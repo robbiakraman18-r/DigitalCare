@@ -85,7 +85,7 @@ class DokterController extends Controller
     {
         $dokter = Dokter::where('user_id', auth()->id())->firstOrFail();
 
-        $query = Appointment::with(['pasien.user', 'jadwalDokter'])
+        $query = Appointment::with(['pasien.user', 'jadwal'])
             ->where('id_dokter', $dokter->id_dokter);
 
         if ($request->search) {
