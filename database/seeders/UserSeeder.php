@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Dokter;
 use App\Models\Pasien;
+use App\Models\Admin;
 use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
@@ -21,6 +22,12 @@ class UserSeeder extends Seeder
                 'nama' => 'Admin Klinik',
                 'password' => Hash::make('00000000'),
                 'role' => 'admin'
+            ]
+        );
+        Admin::updateOrCreate(
+            ['user_id' => $admin->id],
+            [
+                'position' => 'Administrator'
             ]
         );
 
@@ -67,10 +74,10 @@ class UserSeeder extends Seeder
             ['user_id' => $pasienUser->id],
             [
                 'no_rm' => 'RM-0001',
-                'tanggal_lahir' => '2000-01-01',
-                'jenis_kelamin' => 'Female',
-                'alamat' => 'Batam',
-                'no_hp' => '08123456789'
+                'birth_date' => '2000-01-01',
+                'gender' => 'Female',
+                'address' => 'Batam',
+                'phone_number' => '08123456789'
             ]
         );
     }

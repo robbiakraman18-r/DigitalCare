@@ -8,6 +8,7 @@ use App\Models\Appointment;
 use App\Models\Dokter;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class AppointmentController extends Controller
 {
@@ -16,20 +17,61 @@ class AppointmentController extends Controller
     // =========================
     public function create()
     {
-        $user = auth()->user()->load('pasien');
+        /** @var \App\Models\User|null $user */
+        $user = auth()->user();
+
+        if (!$user) {
+            abort(403);
+        }
+
+        $user->load('pasien');
+
+        $pasien = $user->pasien;
+
+         if (!$pasien) {
+             return redirect()->route('profile.edit')
+                 ->with('error', 'Silakan lengkapi profil Anda terlebih dahulu.');
+         }
 
         $dokters = Dokter::with([
             'user',
             'jadwalDokter' => function ($query) {
+
+                $today = Carbon::today()->toDateString();
+                $nowTime = Carbon::now()->format('H:i:s');
+
                 $query->where('status_jadwal', 'Available')
-                      ->where('tanggal', '>=', now()->toDateString())
-                      ->orderBy('tanggal', 'asc');
+                    ->where(function ($q) use ($today, $nowTime) {
+
+                        $q->where('tanggal', '>', $today)
+
+                            ->orWhere(function ($sub) use ($today, $nowTime) {
+                                $sub->where('tanggal', $today)
+                                    ->where('jam_mulai', '>', $nowTime);
+                            });
+
+                    })
+                    ->orderBy('tanggal')
+                    ->orderBy('jam_mulai');
             }
         ])
-        ->whereHas('jadwalDokter', function ($query) {
-            $query->where('status_jadwal', 'Available')
-                  ->where('tanggal', '>=', now()->toDateString());
-        })
+                ->whereHas('jadwalDokter', function ($query) {
+
+                    $today = Carbon::today()->toDateString();
+                    $nowTime = Carbon::now()->format('H:i:s');
+
+                    $query->where('status_jadwal', 'Available')
+                        ->where(function ($q) use ($today, $nowTime) {
+
+                            $q->where('tanggal', '>', $today)
+
+                                ->orWhere(function ($sub) use ($today, $nowTime) {
+                                    $sub->where('tanggal', $today)
+                                        ->where('jam_mulai', '>', $nowTime);
+                                });
+
+                });
+})
         ->get();
 
         return view('pasien.buat-janji', compact('dokters', 'user'));
@@ -106,20 +148,20 @@ class AppointmentController extends Controller
         }
     }
 
-    // =========================
-    // INI YANG KAMU KURANG (UI APPOINTMENT)
-    // =========================
     public function index()
     {
-        $user = auth()->user()->load('pasien');
+        /** @var \App\Models\User $user */
+        $user = auth()->user();
+
+        $user->load('pasien');
 
         $pasien = $user->pasien;
 
-        $appointments = Appointment::with(['dokter', 'jadwalDokter'])
+        $appointments = Appointment::with(['dokter', 'jadwal_dokter'])
             ->where('id_pasien', $pasien->id_pasien)
             ->latest()
             ->get();
 
-        return view('pasien.appointment', compact('appointments', 'user'));
+        return view('pasien.buat-janji', compact('appointments', 'user'));
     }
 }

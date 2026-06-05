@@ -16,14 +16,18 @@ class PasienController extends Controller
      */
     public function dashboard()
     {
-        $pasienId = Auth::id();
+        $user = Auth::user();
+        $pasienId = $user->pasien->id_pasien;
 
         // 1. Ambil 1 janji terdekat, sertakan relasi dokter agar bisa dipanggil di view (e.g. $janjiTerdekat->dokter->nama_dokter)
-        $janjiTerdekat = Appointment::with('dokter')
-            ->where('id_pasien', $pasienId)
-            ->where('tanggal_janji', '>=', now()->toDateString())
-            ->orderBy('tanggal_janji', 'asc')
-            ->first();
+        $janjiTerdekat = Appointment::with([
+            'dokter.user',
+            'jadwalDokter'
+        ])
+        ->where('id_pasien', $pasienId)
+        ->whereDate('tanggal_janji', '>=', now())
+        ->orderBy('tanggal_janji')
+        ->first();
 
         // 2. Ambil data Rekam Medis terakhir termasuk resep obat dan appointment terkait
         $rekamMedis = RekamMedis::with(['resepObat', 'appointment.dokter']) 
@@ -72,7 +76,8 @@ class PasienController extends Controller
             'keluhan_utama' => 'required|string|min:5',
         ]);
 
-        $pasienId = Auth::id();
+        $user = Auth::user();
+        $pasienId = $user->pasien->id_pasien;
 
         // 2. Fitur Keamanan Ekstra: Cek apakah pasien sudah punya janji bertstatus 'pending'
         $adaJanjiPending = Appointment::where('id_pasien', $pasienId)

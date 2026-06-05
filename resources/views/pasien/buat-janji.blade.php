@@ -1,6 +1,7 @@
 @extends('layouts.pasien')
 
 @section('content')
+
 <div class="w-full max-w-[1400px] mx-auto p-4 sm:p-6 lg:p-8 transition-all duration-300">
 
     @if(session('error'))
@@ -45,7 +46,7 @@
                     <div class="sm:col-span-3">
                         <label class="text-xs sm:text-sm font-semibold text-slate-700 block mb-1.5">Name</label>
                         <input type="text" 
-                               value="{{ Auth::user()->name }}" 
+                               value="{{ Auth::user()->nama }}" 
                                class="w-full px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl bg-slate-50 text-slate-400 cursor-not-allowed focus:outline-none text-sm" 
                                readonly>
                     </div>
@@ -61,7 +62,7 @@
                     <div class="sm:col-span-3">
                         <label class="text-xs sm:text-sm font-semibold text-slate-700 block mb-1.5">Date of Birth</label>
                         <input type="text" 
-                               value="{{ Auth::user()->tanggal_lahir ?? '-' }}" 
+                               value="{{ Auth::user()->pasien->birth_date ?? '-' }}"
                                class="w-full px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl bg-slate-50 text-slate-400 cursor-not-allowed focus:outline-none text-sm" 
                                readonly>
                     </div>
@@ -69,9 +70,39 @@
                     <div class="sm:col-span-1">
                         <label class="text-xs sm:text-sm font-semibold text-slate-700 block mb-1.5">Gender</label>
                         <input type="text" 
-                               value="{{ Auth::user()->jenis_kelamin ?? '-' }}" 
+                               value="{{ Auth::user()->pasien->gender ?? '-' }}" 
                                class="w-full px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl bg-slate-50 text-slate-400 cursor-not-allowed focus:outline-none text-sm" 
                                readonly>
+                    </div>
+
+                    <div class="sm:col-span-2">
+                        <label class="text-xs sm:text-sm font-semibold text-slate-700 block mb-1.5">
+                            NIK
+                        </label>
+                        <input type="text"
+                            value="{{ Auth::user()->pasien->nik ?? '-' }}"
+                            class="w-full px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl bg-slate-50 text-slate-400 cursor-not-allowed focus:outline-none text-sm"
+                            readonly>
+                    </div>
+
+                    <div class="sm:col-span-2">
+                        <label class="text-xs sm:text-sm font-semibold text-slate-700 block mb-1.5">
+                            Phone Number
+                        </label>
+                        <input type="text"
+                            value="{{ Auth::user()->pasien->phone_number ?? '-' }}"
+                            class="w-full px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl bg-slate-50 text-slate-400 cursor-not-allowed focus:outline-none text-sm"
+                            readonly>
+                    </div>
+
+                    <div class="sm:col-span-4">
+                        <label class="text-xs sm:text-sm font-semibold text-slate-700 block mb-1.5">
+                            Address
+                        </label>
+                        <textarea
+                            rows="3"
+                            class="w-full px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl bg-slate-50 text-slate-400 cursor-not-allowed focus:outline-none text-sm resize-none"
+                            readonly>{{ Auth::user()->pasien->address ?? '-' }}</textarea>
                     </div>
 
                     <div class="sm:col-span-4">

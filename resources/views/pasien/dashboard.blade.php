@@ -48,9 +48,13 @@
                                     👨‍⚕️
                                 </div>
                                 <div>
-                                    <h4 class="font-bold text-slate-800 text-sm">Dr. {{ $janjiTerdekat->dokter->nama ?? 'Dokter' }}</h4>
-                                    <p class="text-xs text-teal-600 font-medium">{{ $janjiTerdekat->dokter->spesialisasi ?? 'Dokter Umum Kampus' }}</p>
-                                    <p class="text-xs text-slate-500 mt-2 font-semibold">{{ \Carbon\Carbon::parse($janjiTerdekat->tanggal)->translatedFormat('l, d F') }} | {{ $janjiTerdekat->jam }} WIB</p>
+                                    <h4 class="font-bold text-slate-800 text-sm">
+                                        Dr. {{ $janjiTerdekat->dokter->user->nama ?? 'Dokter' }}
+                                    </h4>
+
+                                    <p class="text-xs text-teal-600 font-medium">
+                                        {{ $janjiTerdekat->dokter->spesialisasi ?? 'Dokter Umum' }}
+                                    </p>
                                 </div>
                             </div>
                         @else

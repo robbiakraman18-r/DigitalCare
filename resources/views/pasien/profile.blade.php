@@ -29,7 +29,10 @@
                     <span class="font-medium text-slate-800">
                         {{ $user->nama }}
                     </span>
-
+                    <span class="text-slate-500">NIK</span>
+                    <span class="font-medium text-slate-800">
+                        {{ $user->pasien->nik ?? '-' }}
+                    </span>
                     <span class="text-slate-500">Gender</span>
                     <span class="font-medium text-slate-800">
                         {{ $user->pasien->gender ?? '-' }}

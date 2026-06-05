@@ -63,10 +63,10 @@ Route::post('/logout', function (Request $request) {
 
 Route::prefix('pasien')->middleware(['auth', 'role:pasien'])->group(function () {
     Route::get('/dashboard', [PasienController::class, 'dashboard'])->name('pasien.dashboard');
-    
+
     // Appointment
-    Route::get('/buat-janji', [PasienController::class, 'createAppointment'])->name('pasien.buat-janji');
-    Route::post('/buat-janji/store', [PasienController::class, 'storeAppointment'])->name('pasien.buat-janji.store');
+    Route::get('/buat-janji', [AppointmentController::class, 'create'])->name('pasien.buat-janji');
+    Route::post('/buat-janji/store', [AppointmentController::class, 'store'])->name('pasien.buat-janji.store');
     Route::get('/dokter/{id}/jadwal', [AppointmentController::class, 'getJadwal']);
     Route::post('/appointment', [AppointmentController::class, 'store']);
 
@@ -82,7 +82,7 @@ Route::prefix('pasien')->middleware(['auth', 'role:pasien'])->group(function () 
     // Profile Routes - Gunakan class yang sudah di-import di atas
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/edit-profil', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::post('/edit-profil', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/edit-profil', [ProfileController::class, 'update'])->name('profile.update');
 });
 
 /*

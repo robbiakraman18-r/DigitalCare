@@ -6,8 +6,10 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    
     public function up(): void
     {
+        
         Schema::create('pasiens', function (Blueprint $table) {
             $table->id('id_pasien');
             
@@ -21,6 +23,7 @@ return new class extends Migration
 
             // Semua kolom biodata diatur ->nullable() agar register awal tidak crash
             $table->date('birth_date')->nullable();
+            $table->string('nik', 20)->nullable();
             $table->string('phone_number', 20)->nullable();
             $table->enum('gender', ['Male', 'Female'])->nullable();
             $table->string('address')->nullable();
