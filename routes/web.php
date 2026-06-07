@@ -109,6 +109,9 @@ Route::prefix('dokter')->middleware(['auth', 'role:dokter'])->group(function () 
 Route::post('/appointment/start/{id}', [DokterController::class, 'startConsultation'])
     ->name('dokter.start');
 
+    Route::get('/dokter/pemeriksaan', [DokterController::class, 'pemeriksaan'])
+    ->name('dokter.pemeriksaan');
+
     Route::get('/pasien', [DokterController::class, 'pasien'])->name('dokter.pasien');
     Route::get('/rekam-medis', [DokterController::class, 'rekamMedis'])->name('dokter.rekammedis');
     Route::get(
