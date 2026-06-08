@@ -86,7 +86,8 @@ class DokterController extends Controller
         $dokter = Dokter::where('user_id', auth()->id())->firstOrFail();
 
         $query = Appointment::with(['pasien.user', 'jadwal'])
-            ->where('id_dokter', $dokter->id_dokter);
+            ->where('id_dokter', $dokter->id_dokter)
+            ->whereDate('tanggal_janji', '>=', today());
 
         if ($request->search) {
             $query->whereHas('pasien.user', function ($q) use ($request) {
@@ -106,10 +107,22 @@ class DokterController extends Controller
             $query->whereDate('tanggal_janji', now()->addDay());
         }
 
-        $appointments = $query->orderBy('nomor_antrian')->get();
-
-        return view('dokter.appointment', compact('appointments'));
-    }
+        $appointments = $query
+        ->orderByRaw("
+        CASE
+            WHEN status_janji = 'pending' THEN 1
+            WHEN status_janji = 'called' THEN 2
+            WHEN status_janji = 'in_consultation' THEN 3
+            WHEN status_janji = 'completed' THEN 4
+            WHEN status_janji = 'cancelled' THEN 5
+            ELSE 6
+            END
+        ")
+            ->orderBy('tanggal_janji')
+            ->orderBy('nomor_antrian')
+            ->get();
+            return view('dokter.appointment', compact('appointments'));
+        }
 
     public function panggilPasien($id)
     {
@@ -350,4 +363,26 @@ class DokterController extends Controller
 
         return back()->with('success', 'Foto profil berhasil diupdate');
     }
+
+    
+    public function pemeriksaan($id_janji = null)
+    {
+        $appointment = null;
+
+        // kalau ada ID dari URL
+        if ($id_janji) {
+            $appointment = Appointment::with(['pasien', 'jadwal.dokter'])
+                ->find($id_janji);
+        }
+
+        // kalau tidak ada ID → ambil yang sedang konsultasi (opsional)
+        if (!$appointment) {
+            $appointment = Appointment::with(['pasien', 'jadwal.dokter'])
+                ->where('status_janji', 'in_consultation')
+                ->latest()
+                ->first();
+        }
+
+            return view('dokter.pemeriksaan', compact('appointment'));
+    }   
 }

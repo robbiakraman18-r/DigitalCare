@@ -1,6 +1,6 @@
 @extends('layouts.dokter')
 
-@section('title', 'Doctor Diagnosis Form')
+@section('title', 'Pemeriksaan')
 
 @section('content')
 
@@ -12,7 +12,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <h1 class="text-4xl font-black tracking-wide">FORM DIAGNOSA DOKTER</h1>
-                    <p class="mt-2 text-cyan-100 text-lg">Doctor Diagnosis Form</p>
+                    <p class="mt-2 text-cyan-100 text-lg">Pemeriksaan</p>
                 </div>
                 <div class="bg-white/20 px-6 py-4 rounded-3xl text-sm space-y-2">
                     <div><span class="font-semibold">Medical Record :</span> {{ $appointment->no_rekam_medis ?? 'DCM26-' . $appointment->id_janji }}</div>

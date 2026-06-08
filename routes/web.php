@@ -93,51 +93,69 @@ Route::prefix('pasien')->middleware(['auth', 'role:pasien'])->group(function () 
 
 Route::prefix('dokter')->middleware(['auth', 'role:dokter'])->group(function () {
 
-    Route::get('/dashboard', [DokterController::class, 'dashboard'])->name('dokter.dashboard');
-    Route::get('/profile', [DokterController::class, 'profile'])->name('dokter.profile');
-    Route::get('/jadwal-praktik', [DokterController::class, 'jadwal'])->name('dokter.jadwal');
-    Route::get('/appointment', [DokterController::class, 'appointment'])->name('dokter.appointment');
-    Route::post('/appointment/panggil/{id}', [DokterController::class, 'panggilPasien'])->name('dokter.panggil');
-    
-    Route::post('/appointment/selesai/{id}', [DokterController::class, 'selesaiPasien'])->name('dokter.selesai');
-    Route::post('/appointment/cancel/{id}', [DokterController::class, 'cancelPasien'])->name('dokter.cancel');
-    Route::post('/appointment/next', [DokterController::class, 'nextPasien'])->name('dokter.next');
+    Route::get('/dashboard', [DokterController::class, 'dashboard'])
+        ->name('dokter.dashboard');
 
-    Route::post('/dokter/profile/photo', [DokterController::class, 'uploadPhoto'])
-    ->name('dokter.profile.photo');
+    Route::get('/profile', [DokterController::class, 'profile'])
+        ->name('dokter.profile');
 
-Route::post('/appointment/start/{id}', [DokterController::class, 'startConsultation'])
-    ->name('dokter.start');
+    Route::post('/profile/photo', [DokterController::class, 'uploadPhoto'])
+        ->name('dokter.profile.photo');
 
-    Route::get('/dokter/pemeriksaan', [DokterController::class, 'pemeriksaan'])
-    ->name('dokter.pemeriksaan');
+    Route::get('/jadwal-praktik', [DokterController::class, 'jadwal'])
+        ->name('dokter.jadwal');
 
-    Route::get('/pasien', [DokterController::class, 'pasien'])->name('dokter.pasien');
-    Route::get('/rekam-medis', [DokterController::class, 'rekamMedis'])->name('dokter.rekammedis');
-    Route::get(
-        '/diagnosis-prescription/{id}',
-        [DokterController::class, 'diagnosis']
-        )->name('dokter.diagnosis');
-    
-    Route::post(
-        '/diagnosis-prescription/{id}',
-        [DokterController::class, 'simpanDiagnosis']
-        )->name('dokter.diagnosis.store');
+    Route::get('/appointment', [DokterController::class, 'appointment'])
+        ->name('dokter.appointment');
 
-    Route::post(
-        '/dokter/diagnosis/{id}',
-        [DokterController::class, 'storeDiagnosis']
-        )->name('dokter.diagnosis.store');
-    
-    Route::get('/dokter/appointment', [DokterController::class, 'appointment'])
-    ->name('dokter.appointment');
-    
-    Route::get('/detail-pasien/{id}', [DokterController::class, 'detailPasien'])->name('dokter.detailpasien');
-    Route::get('/medical-history', [DokterController::class, 'medicalHistory'])->name('dokter.medicalhistory');
+    Route::post('/appointment/panggil/{id}', [DokterController::class, 'panggilPasien'])
+        ->name('dokter.panggil');
 
-    Route::view('/info-klinik', 'dokter.info-klinik-dokter')->name('dokter.info');
+    Route::post('/appointment/start/{id}', [DokterController::class, 'startConsultation'])
+        ->name('dokter.start');
+
+    Route::post('/appointment/selesai/{id}', [DokterController::class, 'selesaiPasien'])
+        ->name('dokter.selesai');
+
+    Route::post('/appointment/cancel/{id}', [DokterController::class, 'cancelPasien'])
+        ->name('dokter.cancel');
+
+    Route::post('/appointment/next', [DokterController::class, 'nextPasien'])
+        ->name('dokter.next');
+
+    // MENU PEMERIKSAAN
+    Route::get('/pemeriksaan', [DokterController::class, 'pemeriksaan'])
+        ->name('dokter.pemeriksaan');
+
+    // HALAMAN PEMERIKSAAN PASIEN (FILE diagnosis.blade.php)
+    Route::get('/diagnosis-prescription/{id}', [DokterController::class, 'diagnosis'])
+        ->name('dokter.diagnosis');
+
+    Route::post('/diagnosis-prescription/{id}', [DokterController::class, 'simpanDiagnosis'])
+        ->name('dokter.diagnosis.store');
+
+    Route::get('/pasien', [DokterController::class, 'pasien'])
+        ->name('dokter.pasien');
+
+    Route::get('/detail-pasien/{id}', [DokterController::class, 'detailPasien'])
+        ->name('dokter.detailpasien');
+
+    Route::get('/rekam-medis', [DokterController::class, 'rekamMedis'])
+        ->name('dokter.rekammedis');
+
+    Route::get('/medical-history', [DokterController::class, 'medicalHistory'])
+        ->name('dokter.medicalhistory');
+
+    Route::view('/info-klinik', 'dokter.info-klinik-dokter')
+        ->name('dokter.info');
+
+
+
+
+        
+    Route::get('/pemeriksaan/{id_janji?}', [DokterController::class, 'pemeriksaan'])
+        ->name('dokter.pemeriksaan');
 });
-
 /*
 |--------------------------------------------------------------------------
 | ADMIN
