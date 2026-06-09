@@ -124,7 +124,7 @@ Route::prefix('dokter')->middleware(['auth', 'role:dokter'])->group(function () 
         ->name('dokter.next');
 
     // MENU PEMERIKSAAN
-    Route::get('/pemeriksaan', [DokterController::class, 'pemeriksaan'])
+    Route::get('/pemeriksaan/{id_janji?}', [DokterController::class, 'pemeriksaan'])
         ->name('dokter.pemeriksaan');
 
     // HALAMAN PEMERIKSAAN PASIEN (FILE diagnosis.blade.php)
@@ -149,12 +149,6 @@ Route::prefix('dokter')->middleware(['auth', 'role:dokter'])->group(function () 
     Route::view('/info-klinik', 'dokter.info-klinik-dokter')
         ->name('dokter.info');
 
-
-
-
-        
-    Route::get('/pemeriksaan/{id_janji?}', [DokterController::class, 'pemeriksaan'])
-        ->name('dokter.pemeriksaan');
 });
 /*
 |--------------------------------------------------------------------------

@@ -21,39 +21,51 @@
         <div class="p-6">
 
             <!-- SEARCH + ACTION -->
-            <div class="flex flex-col lg:flex-row justify-between gap-4 mb-6">
+<div class="flex flex-col lg:flex-row justify-between gap-4 mb-6">
 
-                <form method="GET" class="w-full lg:w-1/3">
-                    <input
-                        type="text"
-                        name="search"
-                        value="{{ request('search') }}"
-                        placeholder="Search patient..."
-                        class="w-full px-4 py-3 rounded-2xl border focus:ring-2 focus:ring-teal-500 outline-none"
-                    >
-                </form>
+    <!-- SEARCH -->
+    <form method="GET" class="w-full lg:w-1/3">
+        <input
+            type="text"
+            name="search"
+            value="{{ request('search') }}"
+            placeholder="Search patient..."
+            class="w-full px-4 py-3 rounded-2xl border focus:ring-2 focus:ring-teal-500 outline-none"
+        >
+    </form>
 
-                <div class="flex flex-wrap gap-3">
+    <!-- ACTION -->
+    <div class="flex flex-col gap-3">
 
-                    <a href="?filter=today"
-                       class="px-4 py-2 rounded-xl bg-teal-500 text-white text-sm hover:bg-teal-600 transition">
-                        Today
-                    </a>
+        <!-- DATE PICKER -->
+        <form method="GET">
 
-                    <a href="?filter=tomorrow"
-                       class="px-4 py-2 rounded-xl bg-slate-100 text-slate-600 text-sm hover:bg-slate-200 transition">
-                        Tomorrow
-                    </a>
+            <label class="block text-xs text-slate-500 mb-1">
+                Select Date
+            </label>
 
-                    <form method="POST" action="{{ route('dokter.next') }}">
-                        @csrf
-                        <button class="px-4 py-2 rounded-xl bg-blue-600 text-white text-sm hover:bg-blue-700 transition">
-                            ▶ Next Patient
-                        </button>
-                    </form>
+            <input
+                type="date"
+                name="tanggal"
+                value="{{ request('tanggal', now()->format('Y-m-d')) }}"
+                min="{{ now()->format('Y-m-d') }}"
+                onchange="this.form.submit()"
+                class="px-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-400 text-sm"
+            >
 
-                </div>
-            </div>
+        </form>
+
+        <!-- NEXT BUTTON -->
+        <form method="POST" action="{{ route('dokter.next') }}">
+            @csrf
+            <button class="px-4 py-2 rounded-xl bg-blue-600 text-white text-sm hover:bg-blue-700 transition">
+                ▶ Next Patient
+            </button>
+        </form>
+
+    </div>
+
+</div>
 
             <!-- LIST -->
             <div class="space-y-4">
@@ -96,14 +108,47 @@
                         </div>
 
                         <!-- INFO -->
-                        <div>
-                            <div class="font-semibold text-slate-800">
-                                {{ $item->pasien->user->name ?? $item->pasien->nama }}
-                            </div>
-                            <div class="text-sm text-slate-500">
-                                {{ $item->keluhan_utama }}
-                            </div>
-                        </div>
+<div class="space-y-2">
+
+    <!-- NAME -->
+    <div class="font-semibold text-slate-800 text-base">
+        {{ $item->pasien->user->name ?? $item->pasien->nama }}
+    </div>
+
+    <!-- COMPLAINT -->
+    <div class="text-sm text-slate-500">
+        {{ $item->keluhan_utama }}
+    </div>
+
+    <!-- META INFO -->
+    <div class="flex flex-wrap gap-2 text-xs mt-2">
+        <!-- JAM -->
+        <span class="px-2 py-1 rounded-lg bg-slate-100 text-slate-600">
+
+            @if(isset($item->jadwal->jam_mulai))
+                {{ \Carbon\Carbon::parse($item->jadwal->jam_mulai)->format('H:i') }}
+            @elseif(isset($item->jam_janji))
+                {{ \Carbon\Carbon::parse($item->jam_janji)->format('H:i') }}
+            @else
+                -
+            @endif
+
+        </span>
+
+        <!-- STATUS QUICK -->
+        <span class="px-2 py-1 rounded-lg
+            @if($item->status_janji == 'pending') bg-yellow-50 text-yellow-700
+            @elseif($item->status_janji == 'called') bg-blue-50 text-blue-700
+            @elseif($item->status_janji == 'in_consultation') bg-purple-50 text-purple-700
+            @else bg-green-50 text-green-700
+            @endif
+        ">
+            {{ ucfirst(str_replace('_',' ', $item->status_janji)) }}
+        </span>
+
+    </div>
+
+</div>
 
                     </div>
 
@@ -149,14 +194,12 @@
 
                             @elseif($item->status_janji == 'in_consultation')
 
-                                <form action="{{ route('dokter.selesai', $item->id_janji) }}" method="POST">
-                                    @csrf
-                                    <button class="px-3 py-2 bg-green-500 hover:bg-green-600 text-white rounded-xl text-xs">
-                                        Selesai
-                                    </button>
-                                </form>
+    <a href="{{ route('dokter.diagnosis', $item->id_janji) }}"
+        class="px-3 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-xl text-xs inline-block">
+        Lanjutkan Pemeriksaan
+    </a>
 
-                            @endif
+@endif
 
                         </div>
                     </div>

@@ -1,10 +1,9 @@
 @extends('layouts.dokter')
 
-@section('title', 'Pemeriksaan')
 
 @section('content')
 
-<div class="min-h-screen bg-slate-100 p-6">
+<div class="min-h-screen bg-transparent p-6">
     <div class="max-w-7xl mx-auto bg-white rounded-[35px] border border-sky-100 shadow-xl overflow-hidden">
 
         <!-- HEADER -->

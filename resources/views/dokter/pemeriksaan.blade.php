@@ -1,79 +1,114 @@
 @extends('layouts.dokter')
 
 @section('title', 'Pemeriksaan')
-@section('subtitle', 'Pilih pasien dari appointment untuk memulai pemeriksaan')
+@section('subtitle', 'Pemeriksaan pasien yang sedang berlangsung')
 
 @section('content')
 
 <div class="space-y-6">
 
-    <!-- MAIN CARD -->
-    <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
+@if($appointment)
 
-        <!-- HEADER -->
-        <div class="relative bg-gradient-to-r from-teal-500 via-cyan-500 to-sky-500 px-6 py-6 text-white">
+<div class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
 
-            <!-- decorative blur -->
-            <div class="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top_right,white,transparent)]"></div>
-
-            <div class="relative">
-                <h2 class="text-2xl font-bold tracking-tight">Pemeriksaan Pasien</h2>
-                <p class="text-sm text-white/80 mt-1">
-                    Pilih pasien dari appointment untuk memulai proses pemeriksaan medis
-                </p>
-            </div>
-
-        </div>
-
-        <!-- CONTENT -->
-        <div class="p-8">
-
-            <!-- EMPTY STATE -->
-            <div class="flex flex-col items-center justify-center text-center py-16">
-
-                <!-- ICON CARD -->
-                <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-teal-50 to-cyan-50
-                            flex items-center justify-center shadow-sm border border-slate-100 mb-5">
-
-                    <svg class="w-9 h-9 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M19.428 15.341A8 8 0 118 4.928M12 12v.01" />
-                    </svg>
-                </div>
-
-                <!-- TITLE -->
-                <h3 class="text-xl font-semibold text-slate-800">
-                    Belum ada pasien dipilih
-                </h3>
-
-                <p class="text-sm text-slate-500 mt-2 max-w-md leading-relaxed">
-                    Silakan pilih pasien dari daftar appointment hari ini untuk memulai pemeriksaan.
-                    Sistem akan otomatis menampilkan data medis pasien setelah dipilih.
-                </p>
-
-                <!-- ACTIONS -->
-                <div class="mt-6 flex flex-wrap gap-3 justify-center">
-
-                    <a href="{{ route('dokter.appointment') }}"
-                       class="px-5 py-2.5 rounded-xl bg-teal-500 text-white text-sm font-medium
-                              shadow-sm hover:shadow-md hover:bg-teal-600 active:scale-[0.98]
-                              transition-all duration-200">
-                        Appointment Hari Ini
-                    </a>
-
-                    <a href="{{ route('dokter.appointment') }}"
-                       class="px-5 py-2.5 rounded-xl bg-slate-100 text-slate-700 text-sm font-medium
-                              hover:bg-slate-200 active:scale-[0.98]
-                              transition-all duration-200">
-                        Semua Appointment
-                    </a>
-
-                </div>
-
-            </div>
-
-        </div>
+    <div class="bg-gradient-to-r from-teal-500 via-cyan-500 to-sky-500 p-6 text-white">
+        <h2 class="text-2xl font-bold">Pasien Sedang Diperiksa</h2>
+        <p class="text-sm text-white/80 mt-1">
+            Lanjutkan proses diagnosis pasien.
+        </p>
     </div>
+
+    <div class="p-8">
+
+        <div class="grid md:grid-cols-2 gap-6">
+
+            <div>
+                <p class="text-xs text-slate-500 uppercase">Nama Pasien</p>
+                <p class="font-semibold text-lg">
+                    {{ $appointment->pasien->user->name }}
+                </p>
+            </div>
+
+            <div>
+                <p class="text-xs text-slate-500 uppercase">Nomor Antrian</p>
+                <p class="font-semibold text-lg">
+                    #{{ $appointment->nomor_antrian }}
+                </p>
+            </div>
+
+            <div>
+                <p class="text-xs text-slate-500 uppercase">Tanggal Janji</p>
+                <p class="font-semibold">
+                    {{ $appointment->tanggal_janji }}
+                </p>
+            </div>
+
+            <div>
+                <p class="text-xs text-slate-500 uppercase">Status</p>
+
+                <span class="px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-sm">
+                    Sedang Diperiksa
+                </span>
+            </div>
+
+        </div>
+
+        <div class="mt-8">
+
+            <a href="{{ route('dokter.diagnosis',$appointment->id_janji) }}"
+                class="inline-flex items-center px-6 py-3 rounded-xl bg-teal-500 text-white font-medium hover:bg-teal-600 transition">
+
+                Lanjutkan Diagnosis →
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+@else
+
+<div class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
+
+    <div class="bg-gradient-to-r from-teal-500 via-cyan-500 to-sky-500 p-6 text-white">
+        <h2 class="text-2xl font-bold">Pemeriksaan Pasien</h2>
+        <p class="text-sm text-white/80 mt-1">
+            Belum ada pasien yang dipilih.
+        </p>
+    </div>
+
+    <div class="py-20 text-center px-8">
+
+        <div class="mx-auto w-20 h-20 rounded-full bg-teal-50 flex items-center justify-center">
+
+            <svg class="w-10 h-10 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 12h6m-3-3v6m8-3A9 9 0 1112 3a9 9 0 019 9z"/>
+            </svg>
+
+        </div>
+
+        <h3 class="mt-6 text-2xl font-bold text-slate-700">
+            Belum Ada Pasien Dipilih
+        </h3>
+
+        <p class="mt-3 text-slate-500 max-w-lg mx-auto">
+            Pilih pasien dari halaman Appointment untuk memulai pemeriksaan dan diagnosis medis.
+        </p>
+
+        <a href="{{ route('dokter.appointment') }}"
+            class="inline-block mt-8 px-6 py-3 rounded-xl bg-teal-500 text-white font-medium hover:bg-teal-600 transition">
+
+            Buka Appointment
+
+        </a>
+
+    </div>
+
+</div>
+
+@endif
 
 </div>
 

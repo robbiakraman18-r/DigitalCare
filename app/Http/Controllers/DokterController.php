@@ -135,19 +135,16 @@ class DokterController extends Controller
     public function startConsultation($id)
     {
         $appointment = Appointment::findOrFail($id);
-        $appointment->update(['status_janji' => 'in_consultation']);
+        
+        $appointment->update([
+            'status_janji' => 'in_consultation'
+        ]);
+        
+        session([
+            'active_patient' => $appointment->id_janji
+        ]);
 
-        return redirect()
-            ->route('dokter.diagnosis', $appointment->id_janji)
-            ->with('success', 'Mulai pemeriksaan pasien');
-    }
-
-    public function selesaiPasien($id)
-    {
-        $appointment = Appointment::findOrFail($id);
-        $appointment->update(['status_janji' => 'completed']);
-
-        return back()->with('success', 'Pemeriksaan selesai');
+        return redirect()->route('dokter.diagnosis', $appointment->id_janji);
     }
 
     public function cancelPasien(int $id)
@@ -235,50 +232,21 @@ class DokterController extends Controller
         }
 
         // ✅ Update status appointment ke completed
-        $appointment->update(['status_janji' => 'completed']);
+        // Update status appointment
+        $appointment->update([
+            'status_janji' => 'completed'
+        ]);
 
+        session()->forget('active_patient');
+
+        // Hapus session pasien aktif
+        session()->forget('active_patient');
+        
         return redirect()
-            ->route('dokter.rekammedis')
-            ->with('success', 'Diagnosis berhasil disimpan');
+        ->route('dokter.appointment')
+        ->with('success', 'Diagnosis berhasil disimpan');
     }
-
-    public function storeDiagnosis(Request $request, $id)
-{
-    // 1. ambil appointment
-    $appointment = Appointment::findOrFail($id);
-
-    // 2. buat rekam medis
-    $rekam = RekamMedis::create([
-        'id_janji' => $appointment->id_janji,
-        'id_dokter' => $appointment->id_dokter,
-        'diagnosa' => $request->diagnosa,
-        'keluhan' => $request->keluhan,
-        'catatan_dokter' => $request->catatan_dokter,
-        'waktu_pemeriksaan' => Carbon::now()
-    ]);
-
-    // 3. simpan resep (loop array)
-    if ($request->nama_obat) {
-        foreach ($request->nama_obat as $key => $obat) {
-            DetailResep::create([
-                'id_rekam_medis' => $rekam->id_rekam_medis,
-                'nama_obat' => $obat,
-                'dosis' => $request->dosis[$key] ?? null,
-                'jumlah' => $request->jumlah[$key] ?? 1,
-                'aturan_pakai' => $request->aturan_pakai[$key] ?? null,
-            ]);
-        }
-    }
-
-    // 4. update status appointment
-    $appointment->update([
-        'status_janji' => 'completed'
-    ]);
-
-    return redirect()->route('dokter.appointment')
-    ->with('success', 'Diagnosis berhasil disimpan');
-}
-
+        
     /*
     |----------------------------------
     | REKAM MEDIS
@@ -366,23 +334,29 @@ class DokterController extends Controller
 
     
     public function pemeriksaan($id_janji = null)
-    {
-        $appointment = null;
+{
+    if (!$id_janji) {
+        $id_janji = session('active_patient');
+    }
 
-        // kalau ada ID dari URL
-        if ($id_janji) {
-            $appointment = Appointment::with(['pasien', 'jadwal.dokter'])
-                ->find($id_janji);
-        }
+    $appointment = null;
 
-        // kalau tidak ada ID → ambil yang sedang konsultasi (opsional)
+    if ($id_janji) {
+
+        $appointment = Appointment::with([
+            'pasien.user',
+            'dokter.user',
+            'jadwal'
+        ])
+        ->where('id_janji', $id_janji)
+        ->where('status_janji', 'in_consultation')
+        ->first();
+
         if (!$appointment) {
-            $appointment = Appointment::with(['pasien', 'jadwal.dokter'])
-                ->where('status_janji', 'in_consultation')
-                ->latest()
-                ->first();
+            session()->forget('active_patient');
         }
+    }
 
-            return view('dokter.pemeriksaan', compact('appointment'));
-    }   
+    return view('dokter.pemeriksaan', compact('appointment'));
+}
 }
