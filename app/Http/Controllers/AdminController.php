@@ -138,7 +138,28 @@ class AdminController extends Controller
             'complaints' => Complaint::latest()->get()
         ]);
     }
+// =========================================
+// UPDATE COMPLAINT
+// =========================================
+public function updateComplaint(Request $request, $id)
+{
+    $request->validate([
+        'status' => 'required',
+        'response' => 'nullable|string'
+    ]);
 
+    $complaint = Complaint::findOrFail($id);
+
+    $complaint->update([
+        'status' => $request->status,
+        'response' => $request->response
+    ]);
+
+    return back()->with(
+        'success',
+        'Complaint berhasil ditindaklanjuti'
+    );
+}
     // =========================================
     // TOGGLE STATUS USER
     // =========================================

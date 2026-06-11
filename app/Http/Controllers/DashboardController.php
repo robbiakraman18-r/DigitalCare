@@ -21,5 +21,6 @@ public function index($role)
     }
 
     return view('dashboard', compact('jadwal'));
+    
 }
 }
