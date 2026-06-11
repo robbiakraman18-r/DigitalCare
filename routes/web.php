@@ -211,8 +211,10 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
 
     Route::get('/complaint', [AdminController::class, 'complaint']);
     Route::get('/complaint', [AdminController::class, 'complaint']);
-    Route::post('/complaint/{id}', [AdminController::class, 'updateComplaint']);
-
+    Route::get('/complaint', [AdminController::class, 'complaint'])->name('admin.complaint');
+    Route::post('/complaint/{id}/update', [AdminController::class, 'updateComplaint'])
+    ->name('admin.complaint.update');
+    
     // LIST DATA
     Route::get('/listpatient', [ListPatientController::class, 'show']);
     Route::get('/listprescription', [ListprescriptionController::class, 'show']);

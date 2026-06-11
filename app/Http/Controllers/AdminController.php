@@ -138,28 +138,25 @@ class AdminController extends Controller
             'complaints' => Complaint::latest()->get()
         ]);
     }
-// =========================================
-// UPDATE COMPLAINT
-// =========================================
-public function updateComplaint(Request $request, $id)
-{
-    $request->validate([
-        'status' => 'required',
-        'response' => 'nullable|string'
-    ]);
 
-    $complaint = Complaint::findOrFail($id);
+    // =========================================
+    // UPDATE COMPLAINT (NO RESPONSE)
+    // =========================================
+    public function updateComplaint(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required'
+        ]);
 
-    $complaint->update([
-        'status' => $request->status,
-        'response' => $request->response
-    ]);
+        $complaint = Complaint::findOrFail($id);
 
-    return back()->with(
-        'success',
-        'Complaint berhasil ditindaklanjuti'
-    );
-}
+        $complaint->update([
+            'status' => $request->status
+        ]);
+
+        return back()->with('success', 'Complaint berhasil diupdate');
+    }
+
     // =========================================
     // TOGGLE STATUS USER
     // =========================================
@@ -202,31 +199,28 @@ public function updateComplaint(Request $request, $id)
     }
 
     // =========================================
-    // STORE APPOINTMENT (INI YANG KAMU BUTUH)
+    // STORE APPOINTMENT
     // =========================================
-   public function storeAppointment(Request $request)
-{
-    $request->validate([
-        'nama_pasien' => 'required',
-        'nama_dokter' => 'required',
-        'tanggal_janji' => 'required',
-        'keluhan_utama' => 'required',
-    ]);
+    public function storeAppointment(Request $request)
+    {
+        $request->validate([
+            'nama_pasien' => 'required',
+            'nama_dokter' => 'required',
+            'tanggal_janji' => 'required',
+            'keluhan_utama' => 'required',
+        ]);
 
-    Appointment::create([
-        'id_pasien' => 1,
-        'id_dokter' => 1,
-        'tanggal_janji' => $request->tanggal_janji,
-        'nomor_antrian' => rand(1, 999),
-        'status_janji' => 'pending',
-        'keluhan_utama' => $request->keluhan_utama,
-    ]);
+        Appointment::create([
+            'id_pasien' => 1,
+            'id_dokter' => 1,
+            'tanggal_janji' => $request->tanggal_janji,
+            'nomor_antrian' => rand(1, 999),
+            'status_janji' => 'pending',
+            'keluhan_utama' => $request->keluhan_utama,
+        ]);
 
-    return back()->with(
-        'success',
-        'Appointment successfully created!'
-    );
-}
+        return back()->with('success', 'Appointment successfully created!');
+    }
 
     // =========================================
     // UPDATE STATUS APPOINTMENT
@@ -243,7 +237,7 @@ public function updateComplaint(Request $request, $id)
     }
 
     // =========================================
-    // DELETE APPOINTMENT (SUDAH FIX)
+    // DELETE APPOINTMENT
     // =========================================
     public function deleteAppointment($id)
     {
@@ -251,9 +245,6 @@ public function updateComplaint(Request $request, $id)
 
         $appointment->delete();
 
-        return back()->with(
-            'success',
-            'Appointment successfully deleted!'
-        );
+        return back()->with('success', 'Appointment successfully deleted!');
     }
 }
