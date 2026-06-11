@@ -35,7 +35,7 @@ class AppointmentController extends Controller
 
         $dokters = Dokter::with([
             'user',
-            'jadwal' => function ($query) { // Diubah dari 'JadwalDokter' ke 'jadwal'
+            'jadwalDokter' => function ($query) { // Diubah dari 'JadwalDokter' ke 'jadwal'
 
                 $today = Carbon::today()->toDateString();
                 $nowTime = Carbon::now()->format('H:i:s');
@@ -54,7 +54,7 @@ class AppointmentController extends Controller
                     ->orderBy('jam_mulai');
             }
         ])
-        ->whereHas('jadwal', function ($query) { // Diubah dari 'JadwalDokter' ke 'jadwal'
+        ->whereHas('jadwalDokter', function ($query) { // Diubah dari 'JadwalDokter' ke 'jadwal'
 
             $today = Carbon::today()->toDateString();
             $nowTime = Carbon::now()->format('H:i:s');
