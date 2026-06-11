@@ -113,8 +113,8 @@
 
                     <td class="px-6 py-5">
 
-                        <span class="px-3 py-1 rounded-full bg-blue-100 text-blue-500 text-xs font-semibold">
-                            On Going
+                        <span class="px-3 py-1 rounded-full bg-green-100 text-green-500 text-xs font-semibold">
+                            Done
                         </span>
 
                     </td>

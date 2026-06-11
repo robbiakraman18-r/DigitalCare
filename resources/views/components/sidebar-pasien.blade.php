@@ -44,9 +44,9 @@
                 </span>
             </a>
 
-            <a href="/pasien/rekam-medis"
+            <a href="/pasien/listrekam-medis"
             class="flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300
-            {{ request()->is('pasien/rekam-medis') || request()->is('pasien/detail-rekam-medis') || request()->is('pasien/download-rekam-medis')
+            {{ request()->is('pasien/listrekam-medis') || request()->is('pasien/detail-rekam-medis') || request()->is('pasien/download-rekam-medis')
             ? 'bg-teal-500 text-white shadow-lg shadow-teal-200'
             : 'text-slate-600 hover:bg-teal-50' }}">
 

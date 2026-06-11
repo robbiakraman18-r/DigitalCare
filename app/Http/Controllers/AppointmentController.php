@@ -29,13 +29,13 @@ class AppointmentController extends Controller
         $pasien = $user->pasien;
 
          if (!$pasien) {
-             return redirect()->route('profile.edit')
-                 ->with('error', 'Silakan lengkapi profil Anda terlebih dahulu.');
+              return redirect()->route('profile.edit')
+                  ->with('error', 'Silakan lengkapi profil Anda terlebih dahulu.');
          }
 
         $dokters = Dokter::with([
             'user',
-            'jadwalDokter' => function ($query) {
+            'jadwal' => function ($query) { // Diubah dari 'JadwalDokter' ke 'jadwal'
 
                 $today = Carbon::today()->toDateString();
                 $nowTime = Carbon::now()->format('H:i:s');
@@ -44,7 +44,6 @@ class AppointmentController extends Controller
                     ->where(function ($q) use ($today, $nowTime) {
 
                         $q->where('tanggal', '>', $today)
-
                             ->orWhere(function ($sub) use ($today, $nowTime) {
                                 $sub->where('tanggal', $today)
                                     ->where('jam_mulai', '>', $nowTime);
@@ -55,23 +54,22 @@ class AppointmentController extends Controller
                     ->orderBy('jam_mulai');
             }
         ])
-                ->whereHas('jadwalDokter', function ($query) {
+        ->whereHas('jadwal', function ($query) { // Diubah dari 'JadwalDokter' ke 'jadwal'
 
-                    $today = Carbon::today()->toDateString();
-                    $nowTime = Carbon::now()->format('H:i:s');
+            $today = Carbon::today()->toDateString();
+            $nowTime = Carbon::now()->format('H:i:s');
 
-                    $query->where('status_jadwal', 'Available')
-                        ->where(function ($q) use ($today, $nowTime) {
+            $query->where('status_jadwal', 'Available')
+                ->where(function ($q) use ($today, $nowTime) {
 
-                            $q->where('tanggal', '>', $today)
-
-                                ->orWhere(function ($sub) use ($today, $nowTime) {
-                                    $sub->where('tanggal', $today)
-                                        ->where('jam_mulai', '>', $nowTime);
-                                });
+                    $q->where('tanggal', '>', $today)
+                        ->orWhere(function ($sub) use ($today, $nowTime) {
+                            $sub->where('tanggal', $today)
+                                ->where('jam_mulai', '>', $nowTime);
+                        });
 
                 });
-})
+        })
         ->get();
 
         return view('pasien.buat-janji', compact('dokters', 'user'));
@@ -83,13 +81,15 @@ class AppointmentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'id_jadwal'     => 'required|exists:jadwal_dokters,id_jadwal',
+            'id_jadwal'     => 'required|exists:jadwal_dokters,id_jadwal', // Diubah dari 'JadwalDokter' ke nama tabel 'jadwal_dokters'
             'tanggal_janji' => 'required|date|after_or_equal:today',
             'keluhan_utama' => 'required|string|min:5',
         ]);
 
+        $appointment = null;
+
         try {
-            DB::transaction(function () use ($request) {
+            DB::transaction(function () use ($request, &$appointment) {
 
                 $jadwal = JadwalDokter::lockForUpdate()
                     ->findOrFail($request->id_jadwal);
@@ -127,7 +127,7 @@ class AppointmentController extends Controller
 
                 $jadwal->save();
 
-                Appointment::create([
+                $appointment = Appointment::create([
                     'id_jadwal'     => $jadwal->id_jadwal,
                     'id_pasien'     => $pasien->id_pasien,
                     'id_dokter'     => $jadwal->id_dokter,
@@ -138,7 +138,7 @@ class AppointmentController extends Controller
                 ]);
             });
 
-            return redirect()->route('pasien.dashboard')
+            return redirect()->route('nomor.antrian', $appointment->id_janji)
                 ->with('success', 'Janji berhasil dibuat!');
 
         } catch (\Exception $e) {
@@ -146,6 +146,17 @@ class AppointmentController extends Controller
 
             return back()->with('error', $e->getMessage());
         }
+    }
+
+    // =========================
+    // TAMPILKAN NOMOR ANTRIAN
+    // =========================
+    public function showQueue($id)
+    {
+        // Diubah dari 'JadwalDokter' ke 'jadwal' agar sesuai dengan model Appointment.php
+        $appointment = Appointment::with(['dokter.user', 'jadwal'])->findOrFail($id);
+
+        return view('/pasien/nomor-antrian', compact('appointment'));
     }
 
     public function index()
@@ -157,7 +168,8 @@ class AppointmentController extends Controller
 
         $pasien = $user->pasien;
 
-        $appointments = Appointment::with(['dokter', 'jadwal_dokter'])
+        // Diubah dari 'JadwalDokter' ke 'jadwal'
+        $appointments = Appointment::with(['dokter', 'jadwal'])
             ->where('id_pasien', $pasien->id_pasien)
             ->latest()
             ->get();

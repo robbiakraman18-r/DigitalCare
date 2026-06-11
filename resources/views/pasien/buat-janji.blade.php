@@ -200,9 +200,11 @@
 
         <div class="mt-6">
             <button type="submit" 
-                    class="w-full bg-emerald-500 hover:bg-emerald-600 active:scale-[0.99] text-white font-bold py-3.5 sm:py-4 rounded-xl shadow-lg shadow-emerald-100 flex items-center justify-center gap-2 transition-all duration-200 text-sm sm:text-base">
-                <i data-lucide="calendar" class="w-5 h-5"></i>
-                Book Appointment
+                    class="w-full bg-emerald-500 hover:bg-emerald-600 active:scale-[0.99] text-white font-bold py-3.5 sm:py-4 rounded-xl shadow-lg shadow-emerald-100 flex items-center justify-center gap-3 transition-all duration-200 text-sm sm:text-base">
+                <div class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                    <i data-lucide="calendar" class="w-5 h-5 text-white"></i>
+                </div>
+                <span>Book Appointment</span>
             </button>
         </div>
 

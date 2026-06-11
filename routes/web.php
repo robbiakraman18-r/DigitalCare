@@ -70,10 +70,15 @@ Route::prefix('pasien')->middleware(['auth', 'role:pasien'])->group(function () 
     Route::get('/dokter/{id}/jadwal', [AppointmentController::class, 'getJadwal']);
     Route::post('/appointment', [AppointmentController::class, 'store']);
 
+    // Rute untuk memproses form booking
+    Route::post('/book-appointment', [AppointmentController::class, 'store'])->name('appointment.store');
+    // Rute untuk menampilkan halaman nomor antrean
+    Route::get('/nomor-antrian/{id}', [AppointmentController::class, 'showQueue'])->name('nomor.antrian');
+
     // Static Views
     Route::view('/janji-temu', 'pasien.janji-temu');
     Route::view('/on-going', 'pasien.on-going');
-    Route::view('/rekam-medis', 'pasien.rekam-medis');
+    Route::view('/listrekam-medis', 'pasien.listrekam-medis');
     Route::view('/detail-rekam-medis', 'pasien.detail-rekam-medis');
     Route::view('/download-rekam-medis', 'pasien.download-rekam-medis');
     Route::view('/payment', 'pasien.payment');
