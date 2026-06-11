@@ -85,7 +85,8 @@ class AppointmentController extends Controller
             'tanggal_janji' => 'required|date|after_or_equal:today',
             'keluhan_utama' => 'required|string|min:5',
         ]);
-
+            
+        /** @var \App\Models\Appointment|null $appointment */
         $appointment = null;
 
         try {
@@ -138,6 +139,9 @@ class AppointmentController extends Controller
                 ]);
             });
 
+            if (!$appointment) {
+                return back()->with('error', 'Gagal membuat appointment.');
+}
             return redirect()->route('nomor.antrian', $appointment->id_janji)
                 ->with('success', 'Janji berhasil dibuat!');
 
