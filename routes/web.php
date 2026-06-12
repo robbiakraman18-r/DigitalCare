@@ -70,9 +70,9 @@ Route::prefix('pasien')->middleware(['auth', 'role:pasien'])->group(function () 
     Route::get('/dokter/{id}/jadwal', [AppointmentController::class, 'getJadwal']);
     Route::post('/appointment', [AppointmentController::class, 'store']);
 
-    // Rute untuk memproses form booking
+    // Rute memproses form booking
     Route::post('/book-appointment', [AppointmentController::class, 'store'])->name('appointment.store');
-    // Rute untuk menampilkan halaman nomor antrean
+    // Rute menampilkan halaman nomor antrean
     Route::get('/nomor-antrian/{id}', [AppointmentController::class, 'showQueue'])->name('nomor.antrian');
 
     // Static Views
@@ -84,7 +84,7 @@ Route::prefix('pasien')->middleware(['auth', 'role:pasien'])->group(function () 
     Route::view('/payment', 'pasien.payment');
     Route::view('/info-klinik', 'pasien.info-clinic');
 
-    // Profile Routes - Gunakan class yang sudah di-import di atas
+    // Profile Routes
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/edit-profil', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/edit-profil', [ProfileController::class, 'update'])->name('profile.update');
@@ -132,7 +132,7 @@ Route::prefix('dokter')->middleware(['auth', 'role:dokter'])->group(function () 
     Route::get('/pemeriksaan/{id_janji?}', [DokterController::class, 'pemeriksaan'])
         ->name('dokter.pemeriksaan');
 
-    // HALAMAN PEMERIKSAAN PASIEN (FILE diagnosis.blade.php)
+    // HALAMAN PEMERIKSAAN PASIEN
     Route::get('/diagnosis-prescription/{id}', [DokterController::class, 'diagnosis'])
         ->name('dokter.diagnosis');
 
@@ -225,10 +225,4 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/listprescription', [ListprescriptionController::class, 'show']);
 });
 
-/*
-|--------------------------------------------------------------------------
-| TEST
-|--------------------------------------------------------------------------
-*/
 
-Route::get('/test-users', fn () => App\Models\User::all());

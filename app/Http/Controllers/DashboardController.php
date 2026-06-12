@@ -10,7 +10,7 @@ class DashboardController extends Controller
 
 public function index($role)
 {
-    $jadwal = JadwalDokter::all(); // atau query kamu
+    $jadwal = JadwalDokter::all(); 
 
     if ($role == 'dokter') {
         return view('dokter.dashboard', compact('jadwal'));

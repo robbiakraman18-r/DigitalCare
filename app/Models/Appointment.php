@@ -32,7 +32,7 @@ class Appointment extends Model
     |----------------------------------
     */
 
-public function rekamMedis()
+public function rekammedis()
 {
     return $this->hasOne(RekamMedis::class, 'id_janji', 'id_janji');
 }
@@ -57,7 +57,7 @@ public function rekamMedis()
     | RELASI JADWAL
     |----------------------------------
     */
-    public function jadwalDokter()
+    public function jadwaldokter()
     {
         return $this->belongsTo(JadwalDokter::class, 'id_jadwal', 'id_jadwal');
     }

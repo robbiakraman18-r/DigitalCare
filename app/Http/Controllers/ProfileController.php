@@ -39,13 +39,11 @@ class ProfileController extends Controller
             'gender'  => 'required|in:Male,Female',
         ]);
 
-        // Update tabel users
         $user->update([
             'nama'  => $request->nama,
             'email' => $request->email,
         ]);
 
-        // Update/Create tabel pasiens
         $user->pasien()->updateOrCreate(
             ['user_id' => $user->id],
             [

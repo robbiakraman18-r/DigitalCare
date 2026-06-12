@@ -20,7 +20,6 @@ return new class extends Migration
         ->constrained('pasiens', 'id_pasien')
         ->onDelete('cascade');
 
-    // 🔥 TAMBAHAN INI
     $table->foreignId('id_dokter')
         ->constrained('dokters', 'id_dokter')
         ->onDelete('cascade');

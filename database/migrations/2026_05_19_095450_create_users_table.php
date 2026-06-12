@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('nama', 60);
             $table->string('email')->unique();
-            // 💡 BARU: Menambahkan kolom untuk menyimpan waktu verifikasi email
             $table->timestamp('email_verified_at')->nullable(); 
             $table->string('password');
             $table->enum('role', ['admin', 'dokter', 'pasien']);

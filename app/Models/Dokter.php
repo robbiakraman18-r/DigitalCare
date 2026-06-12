@@ -87,8 +87,6 @@ class Dokter extends Model
     | BUSINESS LOGIC (DASHBOARD READY)
     |--------------------------------------------------------------------------
     */
-
-    // Total pasien unik (pernah appointment)
     public function totalPasien()
     {
         return $this->appointments()
