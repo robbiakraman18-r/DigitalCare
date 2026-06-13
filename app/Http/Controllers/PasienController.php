@@ -19,8 +19,6 @@ class PasienController extends Controller
     {
         $user = Auth::user();
         $pasienId = $user->pasien->id_pasien;
-
-        // 1. Ambil 1 janji terdekat, sertakan relasi dokter agar bisa dipanggil di view (e.g. $janjiTerdekat->dokter->nama_dokter)
         $janjiTerdekat = Appointment::with([
             'dokter.user',
             'jadwalDokter'
@@ -30,7 +28,6 @@ class PasienController extends Controller
         ->orderBy('tanggal_janji')
         ->first();
 
-        // 2. Ambil data Rekam Medis terakhir termasuk resep obat dan appointment terkait
         $rekamMedis = RekamMedis::with(['resepObat', 'appointment.dokter']) 
             ->whereHas('appointment', function($query) use ($pasienId) {
                 $query->where('id_pasien', $pasienId);
@@ -38,10 +35,8 @@ class PasienController extends Controller
             ->latest('waktu_pemeriksaan') 
             ->first();
 
-        // 3. Ambil daftar resep obat langsung dari objek rekam medis
         $resepObat = $rekamMedis ? $rekamMedis->resepObat : collect();
 
-        // 4. Hitung total kunjungan pasien berdasarkan rekam medis
         $totalKunjungan = RekamMedis::whereHas('appointment', function($query) use ($pasienId) {
             $query->where('id_pasien', $pasienId);
         })->count();
@@ -59,7 +54,6 @@ class PasienController extends Controller
      */
     public function createAppointment()
     {
-        // Menarik semua list dokter untuk ditaruh di dropdown select front-end
         $dokters = Dokter::all();
 
         return view('pasien.buat-janji', compact('dokters'));
@@ -70,7 +64,6 @@ class PasienController extends Controller
      */
     public function storeAppointment(Request $request)
     {
-        // 1. Validasi Inputan Pasien dari Form
         $request->validate([
             'id_dokter'     => 'required|exists:dokters,id_dokter',
             'tanggal_janji' => 'required|date|after_or_equal:today',
@@ -80,7 +73,6 @@ class PasienController extends Controller
         $user = Auth::user();
         $pasienId = $user->pasien->id_pasien;
 
-        // 2. Fitur Keamanan Ekstra: Cek apakah pasien sudah punya janji bertstatus 'pending'
         $adaJanjiPending = Appointment::where('id_pasien', $pasienId)
             ->where('status_janji', 'pending')
             ->exists();
@@ -91,11 +83,9 @@ class PasienController extends Controller
                 ->with('error', 'You already have a pending appointment request.');
         }
 
-        // 3. Gunakan Database Transaction untuk mengamankan hitungan nomor antrian dari Tabrakan Data (Race Condition)
         try {
             DB::beginTransaction();
 
-            // Lock row saat mengambil nomor antrian terakhir pada tanggal dan dokter yang sama
             $nomorAntrianTerakhir = Appointment::where('id_dokter', $request->id_dokter)
                 ->where('tanggal_janji', $request->tanggal_janji)
                 ->lockForUpdate()
@@ -107,7 +97,7 @@ class PasienController extends Controller
             $appointment = new Appointment();
             $appointment->id_pasien     = $pasienId;
             $appointment->id_dokter     = $request->id_dokter;
-            $appointment->id_jadwal     = 1; // Default 1 atau integrasikan dengan Master Jadwal Dokter Anda
+            $appointment->id_jadwal     = 1;
             $appointment->tanggal_janji = $request->tanggal_janji;
             $appointment->nomor_antrian = $nomorAntrianBaru;
             $appointment->status_janji  = 'pending';

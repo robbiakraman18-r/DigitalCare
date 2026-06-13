@@ -35,8 +35,7 @@ class AppointmentController extends Controller
 
         $dokters = Dokter::with([
             'user',
-            'jadwalDokter' => function ($query) { // Diubah dari 'JadwalDokter' ke 'jadwal'
-
+            'jadwalDokter' => function ($query) { 
                 $today = Carbon::today()->toDateString();
                 $nowTime = Carbon::now()->format('H:i:s');
 
@@ -54,7 +53,7 @@ class AppointmentController extends Controller
                     ->orderBy('jam_mulai');
             }
         ])
-        ->whereHas('jadwalDokter', function ($query) { // Diubah dari 'JadwalDokter' ke 'jadwal'
+        ->whereHas('jadwalDokter', function ($query) { 
 
             $today = Carbon::today()->toDateString();
             $nowTime = Carbon::now()->format('H:i:s');
@@ -81,7 +80,7 @@ class AppointmentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'id_jadwal'     => 'required|exists:jadwal_dokters,id_jadwal', // Diubah dari 'JadwalDokter' ke nama tabel 'jadwal_dokters'
+            'id_jadwal'     => 'required|exists:jadwal_dokters,id_jadwal', 
             'tanggal_janji' => 'required|date|after_or_equal:today',
             'keluhan_utama' => 'required|string|min:5',
         ]);
@@ -157,8 +156,7 @@ class AppointmentController extends Controller
     // =========================
     public function showQueue($id)
     {
-        // Diubah dari 'JadwalDokter' ke 'jadwal' agar sesuai dengan model Appointment.php
-        $appointment = Appointment::with(['dokter.user', 'jadwal'])->findOrFail($id);
+        $appointment = Appointment::with(['dokter', 'jadwaldokter', 'rekammedis'])->findOrFail($id);
 
         return view('/pasien/nomor-antrian', compact('appointment'));
     }
@@ -172,8 +170,8 @@ class AppointmentController extends Controller
 
         $pasien = $user->pasien;
 
-        // Diubah dari 'JadwalDokter' ke 'jadwal'
-        $appointments = Appointment::with(['dokter', 'jadwal'])
+        
+        $appointments = Appointment::with(['dokter', 'jadwaldokter'])
             ->where('id_pasien', $pasien->id_pasien)
             ->latest()
             ->get();

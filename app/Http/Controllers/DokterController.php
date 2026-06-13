@@ -190,14 +190,12 @@ class DokterController extends Controller
         return view('dokter.diagnosis', compact('appointment'));
     }
 
-    // ✅ SATU method saja — storeDiagnosis dihapus, ini yang dipakai
     public function simpanDiagnosis(Request $request, $id)
     {
         $request->validate([
             'keluhan'        => 'required|string',
             'diagnosa'       => 'required|string',
             'catatan_dokter' => 'nullable|string',
-            // ✅ Validasi resep: minimal 1 obat wajib diisi
             'nama_obat'      => 'required|array|min:1',
             'nama_obat.*'    => 'required|string',
             'dosis.*'        => 'nullable|string',
@@ -218,7 +216,7 @@ class DokterController extends Controller
             'waktu_pemeriksaan' => now(),
         ]);
 
-        // ✅ Simpan Detail Resep
+        // Simpan Detail Resep
         foreach ($request->nama_obat as $index => $obat) {
             if (empty($obat)) continue;
 
@@ -231,7 +229,6 @@ class DokterController extends Controller
             ]);
         }
 
-        // ✅ Update status appointment ke completed
         // Update status appointment
         $appointment->update([
             'status_janji' => 'completed'
@@ -239,7 +236,6 @@ class DokterController extends Controller
 
         session()->forget('active_patient');
 
-        // Hapus session pasien aktif
         session()->forget('active_patient');
         
         return redirect()

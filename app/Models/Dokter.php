@@ -29,7 +29,6 @@ class Dokter extends Model
     |--------------------------------------------------------------------------
     | RELASI KE USER
     |--------------------------------------------------------------------------
-    | Menghubungkan id_dokter -> user_id -> users.id (Tempat menyimpan kolom 'name')
     */
     public function user()
     {
@@ -87,8 +86,6 @@ class Dokter extends Model
     | BUSINESS LOGIC (DASHBOARD READY)
     |--------------------------------------------------------------------------
     */
-
-    // Total pasien unik (pernah appointment)
     public function totalPasien()
     {
         return $this->appointments()

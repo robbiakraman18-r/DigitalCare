@@ -9,8 +9,6 @@ use App\Models\Appointment;
 class JadwalDokter extends Model
 {
     use HasFactory;
-
-    // Disesuaikan dengan nama tabel yang ada di phpMyAdmin Anda (menggunakan akhiran 's')
     protected $table = 'jadwal_dokters'; 
     protected $primaryKey = 'id_jadwal';
 
@@ -23,7 +21,7 @@ class JadwalDokter extends Model
         'ruang',
         'kuota_harian',
         'terisi',
-        'current_antrian', // Menambahkan kolom ini karena ada di database dan di-increment di Controller
+        'current_antrian',
         'status_jadwal'
     ];
 

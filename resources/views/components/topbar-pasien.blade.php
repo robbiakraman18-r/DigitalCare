@@ -24,9 +24,9 @@
                 <img src="https://i.pravatar.cc/100" class="w-10 h-10 rounded-xl object-cover">
 
                 <div class="hidden md:block text-left">
-                    <h3 class="text-sm font-semibold text-slate-800">
-                        Rizki A
-                    </h3>
+                        <h2 class="font-bold text-slate-800">
+                            {{ auth()->user()->nama }}
+                        </h2>
 
                     <p class="text-xs text-slate-400">
                         Pasien
@@ -48,11 +48,11 @@
 
                     <div>
                         <h2 class="font-bold text-slate-800">
-                            Rizki A
+                            {{ auth()->user()->nama }}
                         </h2>
 
                         <p class="text-sm text-slate-400">
-                            rizki@email.com
+                            {{ auth()->user()->email }}
                         </p>
                     </div>
                 </div>

@@ -11,8 +11,6 @@ class Pasien extends Model
 
     protected $table = 'pasiens';
     protected $primaryKey = 'id_pasien';
-
-    // Kolom bahasa Inggris wajib terdaftar agar sinkron dengan database migration
     protected $fillable = [
         'user_id',
         'no_rm',

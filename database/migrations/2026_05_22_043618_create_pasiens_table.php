@@ -20,8 +20,6 @@ return new class extends Migration
 
             // Kolom Nomor Rekam Medis Baru
             $table->string('no_rm', 15)->unique();
-
-            // Semua kolom biodata diatur ->nullable() agar register awal tidak crash
             $table->date('birth_date')->nullable();
             $table->string('nik', 20)->nullable();
             $table->string('phone_number', 20)->nullable();

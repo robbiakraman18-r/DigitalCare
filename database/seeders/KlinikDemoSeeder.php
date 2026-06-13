@@ -106,7 +106,6 @@ class KlinikDemoSeeder extends Seeder
                 ]
             );
 
-            // 🔥 5 pasien hari ini, 5 pasien besok
             $jadwalDipakai = $i <= 5 ? $jadwalHariIni : $jadwalBesok;
 
             Appointment::create([
