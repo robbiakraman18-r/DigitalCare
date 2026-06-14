@@ -70,30 +70,74 @@
 
     {{-- INFO PASIEN (kalau filter 1 pasien) --}}
     @if($filterPasien)
-    <div class="bg-teal-50 border border-teal-100 rounded-2xl p-4 flex items-center gap-4">
-        @php
-            $namaPasien  = $filterPasien->user->name ?? 'Pasien';
-            $inisialPasien = collect(explode(' ', $namaPasien))->take(2)->map(fn($w) => strtoupper($w[0]))->join('');
-        @endphp
-        <div class="w-11 h-11 rounded-xl bg-teal-200 text-teal-700 flex items-center justify-center text-sm font-bold shrink-0">
-            {{ $inisialPasien }}
-        </div>
+
+@php
+    $nama = $filterPasien->user->name ?? 'Pasien';
+
+    $inisial = collect(explode(' ', $nama))
+        ->filter()
+        ->take(2)
+        ->map(fn($w) => strtoupper(substr($w, 0, 1)))
+        ->join('');
+
+    $age = $filterPasien->birth_date
+        ? \Carbon\Carbon::parse($filterPasien->birth_date)->age . ' tahun'
+        : '-';
+@endphp
+
+<div class="relative overflow-hidden rounded-3xl 
+            bg-gradient-to-br from-white via-teal-50/60 to-white 
+            border border-teal-100/60 
+            p-7 mb-7 shadow-sm">
+
+    {{-- accent blur --}}
+    <div class="absolute -top-12 -right-12 w-52 h-52 bg-teal-200/40 rounded-full blur-3xl"></div>
+    <div class="absolute -bottom-12 -left-12 w-52 h-52 bg-sky-100/40 rounded-full blur-3xl"></div>
+
+    <div class="relative flex items-center gap-5">
+
+        {{-- AVATAR (lebih besar) --}}
+        @if($filterPasien->foto)
+            <img src="{{ asset('storage/' . $filterPasien->foto) }}"
+                 class="w-16 h-16 rounded-2xl object-cover border border-slate-200 shadow-sm">
+        @else
+            <div class="w-16 h-16 rounded-2xl 
+                        bg-teal-100 border border-teal-200 
+                        flex items-center justify-center 
+                        text-teal-700 text-base font-bold">
+                {{ $inisial }}
+            </div>
+        @endif
+
+        {{-- INFO --}}
         <div class="flex-1 min-w-0">
-            <p class="text-sm font-semibold text-teal-800">{{ $namaPasien }}</p>
-            <p class="text-xs text-teal-600 mt-0.5">
+            <h2 class="text-lg font-semibold text-slate-800 truncate">
+                {{ $nama }}
+            </h2>
+
+            <p class="text-sm text-slate-600 mt-1">
                 {{ $filterPasien->gender === 'L' ? 'Laki-laki' : 'Perempuan' }}
-                &nbsp;·&nbsp;
-                {{ $filterPasien->birth_date ? \Carbon\Carbon::parse($filterPasien->birth_date)->age . ' tahun' : '-' }}
-                &nbsp;·&nbsp;
-                {{ $filterPasien->phone_number ?? '-' }}
+                · {{ $age }}
+                · {{ $filterPasien->phone_number ?? '-' }}
+            </p>
+
+            <p class="text-xs text-slate-400 mt-2">
+                DigitalCare Patient Profile • Active Record
             </p>
         </div>
+
+        {{-- ACTION --}}
         <a href="{{ route('dokter.detailpasien', $filterPasien->id_pasien) }}"
-           class="px-3 py-1.5 rounded-xl bg-white text-teal-600 text-xs font-semibold border border-teal-200 hover:bg-teal-100 transition shrink-0">
+           class="px-4 py-2 rounded-xl 
+                  bg-teal-500 text-white text-xs font-semibold 
+                  hover:bg-teal-600 transition shadow-sm">
             Lihat Profil
         </a>
+
     </div>
-    @endif
+</div>
+
+@endif
 
     {{-- LIST REKAM MEDIS --}}
     <div class="space-y-4">
