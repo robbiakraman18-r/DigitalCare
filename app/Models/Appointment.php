@@ -57,6 +57,12 @@ public function rekammedis()
     | RELASI JADWAL
     |----------------------------------
     */
+    
+    public function jadwal()
+    {
+        return $this->belongsTo(JadwalDokter::class, 'id_jadwal', 'id_jadwal');
+    }
+    
     public function jadwaldokter()
     {
         return $this->belongsTo(JadwalDokter::class, 'id_jadwal', 'id_jadwal');
