@@ -1,8 +1,8 @@
 {{-- resources/views/dokter/pasien.blade.php --}}
 @extends('layouts.dokter')
 
-@section('title', 'Data Pasien')
-@section('subtitle', 'Daftar semua pasien yang pernah ditangani')
+@section('title', 'Data Pasien Dan Rekam Medis')
+@section('subtitle', 'Daftar semua pasien dan rekam medis')
 
 @section('content')
 <div class="space-y-5">
