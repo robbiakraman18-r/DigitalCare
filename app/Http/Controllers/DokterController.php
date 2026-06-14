@@ -213,7 +213,6 @@ class DokterController extends Controller
         // Simpan Rekam Medis
         $rekamMedis = RekamMedis::create([
             'id_janji'          => $appointment->id_janji,
-            'id_pasien'         => $appointment->id_pasien,
             'id_dokter'         => $appointment->id_dokter,
             'keluhan'           => $request->keluhan,
             'diagnosa'          => $request->diagnosa,
@@ -241,8 +240,6 @@ class DokterController extends Controller
 
         session()->forget('active_patient');
 
-        session()->forget('active_patient');
-        
         return redirect()
         ->route('dokter.appointment')
         ->with('success', 'Diagnosis berhasil disimpan');
@@ -253,9 +250,56 @@ class DokterController extends Controller
     | REKAM MEDIS
     |----------------------------------
     */
-    public function rekamMedis()
+    public function rekamMedis(Request $request)
     {
-        return view('dokter.rekam-medis');
+        $dokter = Dokter::where('user_id', auth()->id())->firstOrFail();
+        $query = RekamMedis::with([
+            'appointment.pasien.user',
+            'dokter.user',
+            'detailResep'
+        ]);
+
+        $query->whereHas('appointment', function ($q) use ($dokter) {
+        $q->whereHas('pasien.appointments', function ($sub) use ($dokter) {
+            $sub->where('id_dokter', $dokter->id_dokter);
+            });
+        });
+
+        $filterPasien = null;
+
+        // Filter berdasarkan pasien
+        if ($request->filled('id_pasien')) {
+
+            $filterPasien = Pasien::with('user')
+                ->whereHas('appointments', function ($q) use ($dokter) {
+                    $q->where('id_dokter', $dokter->id_dokter);
+                })
+                ->findOrFail($request->id_pasien);
+
+            $query->whereHas('appointment', function ($q) use ($request) {
+                $q->where('id_pasien', $request->id_pasien);
+            });
+        }
+
+        // Cari diagnosis
+        if ($request->filled('search')) {
+            $query->where('diagnosa', 'like', '%' . $request->search . '%');
+        }
+
+        // Filter tanggal
+        if ($request->filled('tanggal')) {
+            $query->whereDate('waktu_pemeriksaan', $request->tanggal);
+        }
+
+        $rekamMedis = $query
+            ->orderByDesc('waktu_pemeriksaan')
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('dokter.rekam-medis', compact(
+            'rekamMedis',
+            'filterPasien'
+        ));
     }
 
     /*
@@ -275,7 +319,11 @@ class DokterController extends Controller
     */
     public function detailPasien($id)
     {
-        $pasien = Pasien::where('id_pasien', $id)->firstOrFail();
+        $pasien = Pasien::with([
+            'user',
+            'appointments.jadwal',
+            'appointments.rekammedis'
+        ])->findOrFail($id);
 
         return view('dokter.detail-pasien', compact('pasien'));
     }
@@ -361,22 +409,26 @@ class DokterController extends Controller
     }
 
     public function pasien(Request $request)
-{
-    $dokter = Dokter::where('user_id', auth()->id())->firstOrFail();
+    {
+        $dokter = Dokter::where('user_id', auth()->id())->firstOrFail();
+        
+        $query = Pasien::with([
+            'user',
+            'appointments.rekammedis'
+        ])
+            ->whereHas('appointments', function ($q) use ($dokter) {
+                $q->where('id_dokter', $dokter->id_dokter);
+            });
 
-    $query = Pasien::with(['user', 'appointments'])
-        ->whereHas('appointments', function ($q) use ($dokter) {
-            $q->where('id_dokter', $dokter->id_dokter);
-        });
-
-    if ($request->filled('search')) {
-        $query->whereHas('user', function ($q) use ($request) {
-            $q->where('name', 'like', '%' . $request->search . '%');
-        });
+            if ($request->filled('search')) {
+                $query->whereHas('user', function ($q) use ($request) {
+                    $q->where('nama', 'like', '%' . $request->search . '%')
+                    ->orWhere('email', 'like', '%' . $request->search . '%');
+            });
+        }
+        $pasiens = $query->paginate(10);
+    
+        return view('dokter.pasien', compact('pasiens'));
     }
 
-    $pasiens = $query->paginate(10);
-
-    return view('dokter.pasien', compact('pasiens'));
-}
 }

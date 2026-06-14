@@ -31,5 +31,15 @@ class Pasien extends Model
         return $this->hasMany(Appointment::class, 'id_pasien');
     }
 
-
+    public function rekamMedis()
+    {
+        return $this->hasManyThrough(
+            RekamMedis::class,
+            Appointment::class,
+            'id_pasien',
+            'id_janji',
+            'id_pasien',
+            'id_janji'
+        );
+    }
 }

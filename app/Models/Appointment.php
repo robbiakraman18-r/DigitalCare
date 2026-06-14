@@ -32,10 +32,10 @@ class Appointment extends Model
     |----------------------------------
     */
 
-public function rekammedis()
-{
-    return $this->hasOne(RekamMedis::class, 'id_janji', 'id_janji');
-}
+    public function rekamMedis()
+    {
+        return $this->hasOne(RekamMedis::class, 'id_janji', 'id_janji');
+    }
 
     public function pasien()
     {
@@ -67,4 +67,6 @@ public function rekammedis()
     {
         return $this->belongsTo(JadwalDokter::class, 'id_jadwal', 'id_jadwal');
     }
+
+    
 }

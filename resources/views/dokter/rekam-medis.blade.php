@@ -135,6 +135,9 @@
                     <p class="text-xs text-slate-400 mt-0.5">
                         {{ \Carbon\Carbon::parse($rekam->waktu_pemeriksaan)->translatedFormat('l, d F Y · H:i') }}
                     </p>
+                    <p class="text-xs text-slate-500">
+                        Dokter: {{ $rekam->dokter->user->name ?? '-' }}
+                    </p>
                 </div>
 
                 @if($index === 0)
