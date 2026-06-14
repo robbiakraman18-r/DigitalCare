@@ -335,29 +335,48 @@ class DokterController extends Controller
 
     
     public function pemeriksaan($id_janji = null)
-{
-    if (!$id_janji) {
-        $id_janji = session('active_patient');
-    }
-
-    $appointment = null;
-
-    if ($id_janji) {
-
-        $appointment = Appointment::with([
-            'pasien.user',
-            'dokter.user',
-            'jadwal'
-        ])
-        ->where('id_janji', $id_janji)
-        ->where('status_janji', 'in_consultation')
-        ->first();
-
-        if (!$appointment) {
-            session()->forget('active_patient');
+    {
+        if (!$id_janji) {
+            $id_janji = session('active_patient');
         }
+        
+        $appointment = null;
+        if ($id_janji) {
+            $appointment = Appointment::with([
+                'pasien.user',
+                'dokter.user',
+                'jadwal'
+            ])
+        
+            ->where('id_janji', $id_janji)
+            ->where('status_janji', 'in_consultation')
+            ->first();
+            
+            if (!$appointment) {
+                session()->forget('active_patient');
+            }
+        }
+            
+        return view('dokter.pemeriksaan', compact('appointment'));
     }
 
-    return view('dokter.pemeriksaan', compact('appointment'));
+    public function pasien(Request $request)
+{
+    $dokter = Dokter::where('user_id', auth()->id())->firstOrFail();
+
+    $query = Pasien::with(['user', 'appointments'])
+        ->whereHas('appointments', function ($q) use ($dokter) {
+            $q->where('id_dokter', $dokter->id_dokter);
+        });
+
+    if ($request->filled('search')) {
+        $query->whereHas('user', function ($q) use ($request) {
+            $q->where('name', 'like', '%' . $request->search . '%');
+        });
+    }
+
+    $pasiens = $query->paginate(10);
+
+    return view('dokter.pasien', compact('pasiens'));
 }
 }
