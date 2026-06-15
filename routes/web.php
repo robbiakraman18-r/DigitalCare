@@ -154,6 +154,19 @@ Route::prefix('dokter')->middleware(['auth', 'role:dokter'])->group(function () 
     Route::view('/info-klinik', 'dokter.info-klinik-dokter')
         ->name('dokter.info');
 
+    Route::get('/dokter/help', function () {
+        return view('dokter.help');
+        })->name('dokter.help');
+
+    Route::get('/dokter/settings/password', [DokterController::class, 'passwordPage'])
+        ->name('dokter.password.page');
+        
+    Route::post('/dokter/settings/password', [DokterController::class, 'updatePassword'])
+        ->name('dokter.password.update');
+
+    Route::get('/password/success', function () {
+        return view('auth.password-success');
+        })->name('password.success');
 });
 /*
 |--------------------------------------------------------------------------

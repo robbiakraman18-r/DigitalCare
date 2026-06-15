@@ -1,4 +1,4 @@
-<aside class="group fixed left-0 top-0 h-screen w-20 hover:w-72 bg-white/90 backdrop-blur-xl border-r border-white shadow-xl transition-all duration-500 ease-in-out z-50 flex flex-col justify-between overflow-hidden">
+<aside class="group fixed left-0 top-0 h-screen w-20 hover:w-72 bg-white/90 backdrop-blur-xl border-r border-white shadow-xl transition-all duration-500 ease-in-out z-50 flex flex-col justify-between overflow-y-auto scrollbar-hide">
 
     <div>
 
@@ -125,10 +125,33 @@
 
             </a>
 
+            <!-- MENU UTAMA -->
+            <div class="px-4 pt-2 pb-1">
+                <p class="text-[11px] uppercase tracking-widest text-slate-400 opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap">
+                    Menu Tambahan
+                </p>
+            </div>
+
+            <!-- HELP -->
+            <a href="{{ route('dokter.help') }}"
+            class="flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300
+            {{ request()->is('dokter/help')
+            ? 'bg-teal-500 text-white shadow-lg shadow-teal-200'
+            : 'text-slate-600 hover:bg-teal-50' }}">
+
+                <i data-lucide="help-circle" class="w-5 h-5 shrink-0"></i>
+
+                <span class="font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300">
+                    Bantuan
+                </span>
+            </a>
+
+
         </nav>
 
     </div>
 
+    
     <!-- LOGOUT -->
     <div class="p-4">
 

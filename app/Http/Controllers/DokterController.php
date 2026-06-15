@@ -10,6 +10,8 @@ use App\Models\Pasien;
 use App\Models\RekamMedis;
 use App\Models\Appointment;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class DokterController extends Controller
 {
@@ -431,4 +433,34 @@ class DokterController extends Controller
         return view('dokter.pasien', compact('pasiens'));
     }
 
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'password' => 'required|min:6|confirmed',
+        ]);
+
+        $user = \App\Models\User::find(auth()->id());
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            return back()->with('error', 'Password lama tidak sesuai');
+        }
+
+        // 🔥 INI LETAKNYA
+        $user->update([
+            'password' => Hash::make($request->password)
+        ]);
+
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/login');
+    }
+
+    public function passwordPage()
+    {
+        return view('dokter.password');
+    }
 }

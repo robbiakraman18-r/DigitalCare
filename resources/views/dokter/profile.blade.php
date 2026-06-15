@@ -141,5 +141,14 @@
     </div>
 
 </div>
+<div class="mt-6 flex justify-end">
+
+    <a href="{{ route('dokter.password.page') }}"
+       class="inline-flex items-center gap-2 bg-gradient-to-r from-teal-500 to-cyan-500 text-white px-5 py-3 rounded-2xl shadow-md hover:shadow-lg transition">
+
+        🔐 Ubah Password
+    </a>
+
+</div>
 
 @endsection
