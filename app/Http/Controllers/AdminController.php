@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Dokter;
 use App\Models\Pasien;
 use App\Models\Appointment;
+use Carbon\Carbon;
 
 class AdminController extends Controller
 {
@@ -33,7 +34,6 @@ class AdminController extends Controller
 
         Dokter::create([
             'user_id' => $user->id,
-            'nama' => $request->nama,
             'no_sip' => $request->no_sip,
             'status_ketersediaan' => 'Available',
         ]);
@@ -45,15 +45,51 @@ class AdminController extends Controller
     // =========================================
     // DASHBOARD
     // =========================================
+
     public function dashboard()
     {
-        return view('admin.dashboard', [
-            'totalDokter' => Dokter::count(),
-            'totalPasien' => Pasien::count(),
-            'totalAppointment' => Appointment::count(),
-            'dokterAktif' => Dokter::where('status_ketersediaan', 'Available')->count(),
-            'appointmentsToday' => Appointment::latest()->take(5)->get(),
-        ]);
+        $totalDokter = Dokter::count();
+
+        $totalPasien = Pasien::count();
+
+        $totalAppointment = Appointment::count();
+
+        $dokterAktif = Dokter::where('status_ketersediaan', 'Available')->count();
+
+        $pasienHariIni = Appointment::whereDate(
+            'tanggal_janji',
+            Carbon::today()
+        )->count();
+
+        $appointmentPending = Appointment::where(
+            'status_janji',
+            'pending'
+        )->count();
+
+        $appointmentsToday = Appointment::with([
+            'pasien.user',
+            'dokter.user'
+        ])
+        ->whereDate('tanggal_janji', Carbon::today())
+        ->latest()
+        ->take(5)
+        ->get();
+
+        $dokters = Dokter::with('user')
+            ->where('status_ketersediaan', 'Available')
+            ->take(4)
+            ->get();
+
+        return view('admin.dashboard', compact(
+            'totalDokter',
+            'totalPasien',
+            'totalAppointment',
+            'dokterAktif',
+            'pasienHariIni',
+            'appointmentPending',
+            'appointmentsToday',
+            'dokters'
+        ));
     }
 
     // =========================================
@@ -211,8 +247,8 @@ class AdminController extends Controller
         ]);
 
         Appointment::create([
-            'id_pasien' => 1,
-            'id_dokter' => 1,
+            'id_pasien' => $request->id_pasien,
+            'id_dokter' => $request->id_dokter,
             'tanggal_janji' => $request->tanggal_janji,
             'nomor_antrian' => rand(1, 999),
             'status_janji' => 'pending',

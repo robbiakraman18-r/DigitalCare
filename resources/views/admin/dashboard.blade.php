@@ -54,7 +54,7 @@
                     </p>
 
                     <h2 class="text-3xl font-bold mt-2">
-                        12
+                        {{ $dokterAktif }}
                     </h2>
 
                 </div>
@@ -66,7 +66,7 @@
                     </p>
 
                     <h2 class="text-3xl font-bold mt-2">
-                        48
+                        {{ $pasienHariIni }}
                     </h2>
 
                 </div>
@@ -101,7 +101,7 @@
                     </h2>
 
                     <p class="text-sm text-green-500 mt-2">
-                        +2 minggu ini
+                        Data dokter terdaftar
                     </p>
 
                 </div>
@@ -163,7 +163,7 @@
                     </h2>
 
                     <p class="text-sm text-yellow-500 mt-2">
-                        8 menunggu
+                        {{ $appointmentPending }} menunggu
                     </p>
 
                 </div>
@@ -186,15 +186,15 @@
                 <div>
 
                     <p class="text-slate-400 text-sm">
-                        Pendapatan
+                        Appointment Pending
                     </p>
 
                     <h2 class="text-3xl font-bold text-slate-800 mt-2">
-                        {{ $dokterAktif }}
+                        {{ $appointmentPending }}
                     </h2>
 
                     <p class="text-sm text-cyan-500 mt-2">
-                        Bulan ini
+                        Menunggu Konfirmasi
                     </p>
 
                 </div>
@@ -290,45 +290,15 @@
     </td>
 
     <td class="py-4">
-        <span class="px-4 py-2 rounded-xl bg-yellow-100 text-yellow-600 text-xs font-semibold">
-            Appointment
-        </span>
-    </td>
+        <span class="px-4 py-2 rounded-xl
+            {{ $appointment->status_janji == 'pending'
+                ? 'bg-yellow-100 text-yellow-600'
+                : 'bg-green-100 text-green-600' }}
+            text-xs font-semibold">
 
-</tr>
+            {{ ucfirst($appointment->status_janji) }}
 
-@empty
-
-<tr>
-    <td colspan="4" class="text-center py-6 text-slate-400">
-        Belum ada appointment
-    </td>
-</tr>
-
-@endforelse
-
-</tbody><tbody>
-
-@forelse($appointmentsToday as $appointment)
-
-<tr class="border-b border-slate-100">
-
-    <td class="py-4 font-semibold text-slate-700">
-        {{ $appointment->pasien->user->nama ?? '-' }}
-    </td>
-
-    <td class="py-4 text-slate-500">
-        {{ $appointment->dokter->user->nama ?? '-' }}
-    </td>
-
-    <td class="py-4 text-slate-500">
-        {{ $appointment->created_at->format('H:i') }}
-    </td>
-
-    <td class="py-4">
-        <span class="px-4 py-2 rounded-xl bg-yellow-100 text-yellow-600 text-xs font-semibold">
-            Appointment
-        </span>
+            </span>
     </td>
 
 </tr>
@@ -352,82 +322,72 @@
             </div>
 
             <!-- DOKTER -->
-            <div class="bg-white rounded-[32px] border border-slate-100 shadow-sm p-6">
+<div class="bg-white rounded-[32px] border border-slate-100 shadow-sm p-6">
 
-                <div class="flex items-center justify-between mb-6">
+    <div class="flex items-center justify-between mb-6">
 
-                    <div>
+        <div>
 
-                        <h2 class="text-xl font-bold text-slate-800">
-                            Dokter Aktif
-                        </h2>
+            <h2 class="text-xl font-bold text-slate-800">
+                Dokter Aktif
+            </h2>
 
-                        <p class="text-sm text-slate-400 mt-1">
-                            Dokter yang sedang praktik hari ini
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <div class="grid sm:grid-cols-2 gap-4">
-
-                    <!-- ITEM -->
-                    <div class="flex items-center gap-4 p-4 rounded-2xl bg-slate-50">
-
-                        <img
-                        src="https://i.pravatar.cc/100?img=12"
-                        class="w-14 h-14 rounded-2xl object-cover">
-
-                        <div>
-
-                            <h3 class="font-bold text-slate-800">
-                                Dr. Rizki
-                            </h3>
-
-                            <p class="text-sm text-slate-400">
-                                Dokter Umum
-                            </p>
-
-                            <span class="inline-flex mt-2 px-3 py-1 rounded-xl bg-green-100 text-green-600 text-xs font-semibold">
-                                Online
-                            </span>
-
-                        </div>
-
-                    </div>
-
-                    <!-- ITEM -->
-                    <div class="flex items-center gap-4 p-4 rounded-2xl bg-slate-50">
-
-                        <img
-                        src="https://i.pravatar.cc/100?img=15"
-                        class="w-14 h-14 rounded-2xl object-cover">
-
-                        <div>
-
-                            <h3 class="font-bold text-slate-800">
-                                Dr. Andi
-                            </h3>
-
-                            <p class="text-sm text-slate-400">
-                                Dokter Anak
-                            </p>
-
-                            <span class="inline-flex mt-2 px-3 py-1 rounded-xl bg-yellow-100 text-yellow-600 text-xs font-semibold">
-                                Praktik
-                            </span>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
+            <p class="text-sm text-slate-400 mt-1">
+                Dokter yang sedang praktik hari ini
+            </p>
 
         </div>
 
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-4">
+
+        @forelse($dokters as $dokter)
+
+        <div class="flex items-center gap-4 p-4 rounded-2xl bg-slate-50 hover:shadow transition">
+
+            @if($dokter->foto_profil)
+    <img
+        src="{{ asset('storage/' . $dokter->foto_profil) }}"
+        class="w-14 h-14 rounded-2xl object-cover"
+        alt="{{ $dokter->user->nama }}">
+@else
+    <div class="w-14 h-14 rounded-2xl bg-teal-500 flex items-center justify-center text-white font-bold text-lg">
+        {{ strtoupper(substr($dokter->user->nama, 0, 1)) }}
+    </div>
+@endif
+
+<div>
+
+    <h3 class="font-bold text-slate-800">
+        {{ $dokter->user->nama }}
+    </h3>
+
+    <p class="text-sm text-slate-400">
+        SIP : {{ $dokter->no_sip }}
+    </p>
+
+    <span class="inline-flex mt-2 px-3 py-1 rounded-xl bg-green-100 text-green-600 text-xs font-semibold">
+        {{ $dokter->status_ketersediaan }}
+    </span>
+
+</div>
+
+        </div>
+
+        @empty
+
+        <div class="col-span-2 text-center py-8 text-slate-400">
+            Belum ada dokter aktif.
+        </div>
+
+        @endforelse
+
+    </div>
+
+</div>
+</div>
+                    
         <!-- RIGHT -->
         <div class="space-y-6">
 
@@ -512,7 +472,7 @@
                 </h2>
 
                 <p class="text-sm text-teal-100 mt-2 leading-relaxed">
-                    Total 48 pasien melakukan konsultasi hari ini dan 12 appointment masih menunggu.
+                    Total {{ $pasienHariIni }} pasien melakukan konsultasi hari ini dan {{ $appointmentPending }} appointment masih menunggu.
                 </p>
 
                 <div class="space-y-4 mt-6">
