@@ -97,7 +97,7 @@ class AdminController extends Controller
     // =========================================
     public function userManagement(Request $request)
     {
-        $query = User::query();
+        $query = User::with('dokter');
 
         if ($request->search) {
             $query->where(function ($q) use ($request) {
@@ -138,13 +138,13 @@ class AdminController extends Controller
         if ($user->role == 'dokter') {
             $dokter = Dokter::where('user_id', $user->id)->first();
 
-            if ($dokter) {
-                $dokter->update([
-                    'hari_praktik' => $request->hari_praktik,
-                    'jam_mulai' => $request->jam_mulai,
-                    'jam_selesai' => $request->jam_selesai,
-                ]);
-            }
+            $dokter->update([
+                'hari_praktik' => $request->hari_praktik,
+                'jam_mulai' => $request->jam_mulai,
+                'jam_selesai' => $request->jam_selesai,
+                'no_sip' => $request->no_sip,
+                'status_ketersediaan' => $request->status_ketersediaan,
+            ]);
         }
 
         return back()->with('success', 'User updated successfully');

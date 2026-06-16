@@ -280,9 +280,19 @@
 
                             <div class="flex items-center gap-4">
 
-                                <img
-                                src="https://i.pravatar.cc/100?img={{ $user->id }}"
-                                class="w-11 h-11 rounded-2xl object-cover">
+                                @if($user->role == 'dokter' && optional($user->dokter)->foto_profil)
+
+<img
+src="{{ asset('storage/'. $user->dokter->foto_profil) }}"
+class="w-11 h-11 rounded-2xl object-cover">
+
+@else
+
+<img
+src="{{ asset('images/default-user.png') }}"
+class="w-11 h-11 rounded-2xl object-cover">
+
+@endif
 
                                 <div>
 
@@ -348,9 +358,15 @@
 
                         <td class="px-6 py-5">
 
-    <span class="px-3 py-1 rounded-xl bg-green-100 text-green-600 text-xs font-semibold">
-        Registered
-    </span>
+    @if($user->status == 'active')
+        <span class="px-3 py-1 rounded-xl bg-green-100 text-green-600 text-xs font-semibold">
+            Active
+        </span>
+    @else
+        <span class="px-3 py-1 rounded-xl bg-red-100 text-red-600 text-xs font-semibold">
+            Inactive
+        </span>
+    @endif
 
 </td>
 
@@ -627,7 +643,7 @@ class="fixed inset-0 bg-black/40 hidden z-50 flex items-center justify-center">
 @if($user->role == 'dokter')
 
 @php
-$dokter = \App\Models\Dokter::where('user_id', $user->id)->first();
+$dokter = $user->dokter;
 @endphp
 
 @if($user->role == 'dokter')

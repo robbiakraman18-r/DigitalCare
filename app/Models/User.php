@@ -28,4 +28,6 @@ public function pasien()
     public function dokter() {
         return $this->hasOne(Dokter::class, 'user_id');
     }
+
+    
 }
