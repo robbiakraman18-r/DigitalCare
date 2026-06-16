@@ -24,8 +24,8 @@ class DokterController extends Controller
             ->whereDate('tanggal', today())
             ->get();
 
-        $latestAppointments = Appointment::with('pasien')
-            ->where('id_dokter', $dokter->id_dokter)
+        $latestAppointments = Appointment::with('pasien.user')
+            ->where('id_dokter',$dokter->id_dokter)
             ->latest()
             ->take(5)
             ->get();
@@ -98,7 +98,7 @@ class DokterController extends Controller
 
         if ($request->search) {
             $query->whereHas('pasien.user', function ($q) use ($request) {
-                $q->where('name', 'like', '%' . $request->search . '%');
+                $q->where('nama', 'like', '%' . $request->search . '%');
             });
         }
 
