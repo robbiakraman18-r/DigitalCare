@@ -29,5 +29,13 @@ public function pasien()
         return $this->hasOne(Dokter::class, 'user_id');
     }
 
-    
+    public function setStatusAttribute($value)
+    {
+        if ($this->role === 'admin') {
+            $this->attributes['status'] = 'active';
+            return;
+        }
+
+        $this->attributes['status'] = $value;
+    }
 }

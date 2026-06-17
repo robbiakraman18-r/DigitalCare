@@ -154,7 +154,7 @@ Route::prefix('dokter')->middleware(['auth', 'role:dokter'])->group(function () 
     Route::view('/info-klinik', 'dokter.info-klinik-dokter')
         ->name('dokter.info');
 
-    Route::get('/dokter/help', function () {
+    Route::get('/help', function () {
         return view('dokter.help');
         })->name('dokter.help');
 
@@ -227,8 +227,6 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
 
     // COMPLAINT
 
-    Route::get('/complaint', [AdminController::class, 'complaint']);
-    Route::get('/complaint', [AdminController::class, 'complaint']);
     Route::get('/complaint', [AdminController::class, 'complaint'])->name('admin.complaint');
     Route::post('/complaint/{id}/update', [AdminController::class, 'updateComplaint'])
     ->name('admin.complaint.update');

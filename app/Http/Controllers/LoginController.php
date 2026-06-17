@@ -21,6 +21,16 @@ class LoginController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
+
+            // ✅ BLOCK USER INACTIVE
+            if (Auth::user()->status !== 'active') {
+                Auth::logout();
+
+                return back()->withErrors([
+                    'email' => 'Akun Anda dinonaktifkan oleh admin.'
+                ])->onlyInput('email');
+            }
+
             $request->session()->regenerate();
 
             $role = Auth::user()->role;
@@ -28,7 +38,7 @@ class LoginController extends Controller
             return match ($role) {
                 'admin' => redirect('/admin/dashboard'),
                 'dokter' => redirect('/dokter/dashboard'),
-                default => redirect('/pasien/dashboard'), 
+                default => redirect('/pasien/dashboard'),
             };
         }
 
@@ -36,4 +46,5 @@ class LoginController extends Controller
             'email' => 'Email atau password yang Anda masukkan salah.',
         ])->onlyInput('email');
     }
+    
 }

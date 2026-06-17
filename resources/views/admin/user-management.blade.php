@@ -255,16 +255,12 @@
                         </th>
 
                         <th class="px-6 py-4 text-left text-sm text-slate-400">
-                            Department
-                        </th>
-
-                        <th class="px-6 py-4 text-left text-sm text-slate-400">
                             Email
                         </th>
 
-                       <th class="px-6 py-4 text-left text-sm text-slate-400">
-    Account
-</th>
+                        <th class="px-6 py-4 text-left text-sm text-slate-400">
+                            Status
+                        </th>
 
                         <th class="px-6 py-4 text-left text-sm text-slate-400">
                             Created
@@ -370,24 +366,6 @@ $r = $roleUI[$user->role] ?? [
                         </td>
 
                         <td class="px-6 py-5 text-slate-600">
-
-                            @if($user->role == 'dokter')
-
-                                Medical
-
-                            @elseif($user->role == 'admin')
-
-                                Administration
-
-                            @else
-
-                                Patient
-
-                            @endif
-
-                        </td>
-
-                        <td class="px-6 py-5 text-slate-600">
                             {{ $user->email }}
                         </td>
 
@@ -434,6 +412,30 @@ $r = $roleUI[$user->role] ?? [
 
                                 </button>
 
+                                <!-- TOGGLE STATUS -->
+                                @if($user->role === 'admin')
+    <span class="px-3 py-1 rounded-xl bg-slate-200 text-slate-500 text-xs font-semibold">
+        Protected
+    </span>
+@else
+    <button
+        type="button"
+        data-id="{{ $user->id }}"
+        data-status="{{ $user->status }}"
+        onclick="openStatusModal(this)"
+        class="relative inline-flex items-center w-12 h-6 rounded-full transition
+        {{ $user->status === 'active' ? 'bg-green-500' : 'bg-gray-300' }}">
+        
+        <span class="sr-only">toggle</span>
+
+        <span class="
+            absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow-md
+            transition-transform duration-200
+            {{ $user->status === 'active' ? 'translate-x-6' : 'translate-x-0' }}">
+        </span>
+
+    </button>
+@endif
             
                                 <!-- DELETE -->
                                 <form
@@ -953,7 +955,54 @@ function closeModal() {
     modal.classList.add('hidden');
 }
 
+function openStatusModal(btn) {
+    const userId = btn.getAttribute('data-id');
 
+    const form = document.getElementById('statusForm');
+    form.action = `/admin/user/${userId}/toggle-status`;
+
+    document.getElementById('statusModal').classList.remove('hidden');
+}
+
+function closeStatusModal() {
+    document.getElementById('statusModal').classList.add('hidden');
+}
 
 </script>
+<!-- STATUS MODAL -->
+<div id="statusModal" class="fixed inset-0 bg-black/40 hidden z-50 flex items-center justify-center">
+
+    <div class="bg-white w-full max-w-md rounded-[28px] p-6 shadow-xl">
+
+        <h2 class="text-xl font-bold text-slate-800">
+            Change User Status
+        </h2>
+
+        <p class="text-slate-500 mt-2">
+            Are you sure you want to change this user's status?
+        </p>
+
+        <div class="flex justify-end gap-3 mt-6">
+
+            <button
+                onclick="closeStatusModal()"
+                class="px-4 py-2 rounded-xl border border-slate-200 text-slate-600">
+                Cancel
+            </button>
+
+            <form id="statusForm" method="POST">
+                @csrf
+                @method('PUT')
+
+                <button
+                    type="submit"
+                    class="px-4 py-2 rounded-xl bg-red-500 text-white">
+                    Yes, Continue
+                </button>
+            </form>
+
+        </div>
+
+    </div>
+</div>
 @endsection

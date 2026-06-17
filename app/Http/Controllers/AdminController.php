@@ -208,14 +208,19 @@ class AdminController extends Controller
     // =========================================
     // TOGGLE STATUS USER
     // =========================================
-    public function toggleStatus(int $id)
+    public function toggleStatus($id)
     {
         $user = User::findOrFail($id);
+
+        // ❌ PROTEKSI ADMIN UTAMA
+        if ($user->role === 'admin') {
+            return back()->with('error', 'Admin tidak bisa dinonaktifkan.');
+        }
 
         $user->status = $user->status === 'active' ? 'inactive' : 'active';
         $user->save();
 
-        return back()->with('success', 'Status updated');
+        return back()->with('success', 'Status user berhasil diubah.');
     }
 
     // =========================================
