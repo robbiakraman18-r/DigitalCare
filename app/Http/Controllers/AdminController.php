@@ -20,9 +20,12 @@ class AdminController extends Controller
     {
         $request->validate([
             'nama' => 'required|string|max:255',
-            'no_sip' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
+            'no_sip' => 'required|string|max:255',
+            'gender' => 'required',
+            'status_ketersediaan' => 'required',
+            'foto_profil' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         $user = User::create([
@@ -32,11 +35,20 @@ class AdminController extends Controller
             'role' => 'dokter',
         ]);
 
+        $foto = null;
+
+        if ($request->hasFile('foto_profil')) {
+            $foto = $request->file('foto_profil')->store('dokter', 'public');
+        }
+
         Dokter::create([
             'user_id' => $user->id,
             'no_sip' => $request->no_sip,
-            'status_ketersediaan' => 'Available',
+            'gender' => $request->gender,
+            'status_ketersediaan' => $request->status_ketersediaan,
+            'foto_profil' => $foto,
         ]);
+        
 
         return redirect()->back()
             ->with('success', 'Doctor berhasil ditambahkan');

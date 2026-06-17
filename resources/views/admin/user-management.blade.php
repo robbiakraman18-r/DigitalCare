@@ -22,7 +22,7 @@
         <div class="flex items-center gap-3">
 
             <button
-            onclick="document.getElementById('addDoctorModal').classList.remove('hidden')"
+            onclick="openModal()"
             class="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold transition">
 
                 + Add Doctor
@@ -188,31 +188,39 @@
 
                 </div>
 
-                <!-- FILTER ROLE -->
-                <select
-                name="role"
-                class="px-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 text-slate-700">
+                <div class="relative w-full lg:w-64">
 
-                    <option value="">
-                        All Roles
-                    </option>
+    <i data-lucide="filter"
+       class="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
 
-                    <option value="admin"
-                    {{ request('role') == 'admin' ? 'selected' : '' }}>
-                        Admin
-                    </option>
+    <select
+        name="role"
+        class="w-full pl-12 pr-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none">
 
-                    <option value="dokter"
-                    {{ request('role') == 'dokter' ? 'selected' : '' }}>
-                        Doctor
-                    </option>
+        <option value="">
+            All Roles
+        </option>
 
-                    <option value="pasien"
-                    {{ request('role') == 'pasien' ? 'selected' : '' }}>
-                        Patient
-                    </option>
+        <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>
+            🛡️ Admin
+        </option>
 
-                </select>
+        <option value="dokter" {{ request('role') == 'dokter' ? 'selected' : '' }}>
+            🩺 Doctor
+        </option>
+
+        <option value="pasien" {{ request('role') == 'pasien' ? 'selected' : '' }}>
+            👤 Patient
+        </option>
+
+    </select>
+
+    <!-- dropdown arrow custom -->
+    <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+        <i data-lucide="chevron-down" class="w-5 h-5 text-slate-400"></i>
+    </div>
+
+</div>
 
         
 
@@ -283,14 +291,30 @@
                                 @if($user->role == 'dokter' && optional($user->dokter)->foto_profil)
 
 <img
-src="{{ asset('storage/'. $user->dokter->foto_profil) }}"
-class="w-11 h-11 rounded-2xl object-cover">
+    src="{{ asset('storage/' . $user->dokter->foto_profil) }}"
+    class="w-11 h-11 rounded-2xl object-cover">
 
 @else
 
-<img
-src="{{ asset('images/default-user.png') }}"
-class="w-11 h-11 rounded-2xl object-cover">
+@php
+    $inisial = collect(explode(' ', $user->nama))
+        ->filter()
+        ->take(2)
+        ->map(fn($item) => strtoupper(substr($item, 0, 1)))
+        ->join('');
+
+    if($user->role == 'admin'){
+        $bg = 'bg-red-500';
+    }elseif($user->role == 'dokter'){
+        $bg = 'bg-blue-500';
+    }else{
+        $bg = 'bg-green-500';
+    }
+@endphp
+
+<div class="w-11 h-11 rounded-2xl {{ $bg }} flex items-center justify-center text-white font-bold text-sm">
+    {{ $inisial }}
+</div>
 
 @endif
 
@@ -312,25 +336,36 @@ class="w-11 h-11 rounded-2xl object-cover">
 
                         <td class="px-6 py-5">
 
-                            @if($user->role == 'admin')
+                            @php
+$roleUI = [
+    'admin' => [
+        'label' => 'Admin',
+        'class' => 'bg-gradient-to-r from-red-500 to-pink-500 text-white',
+        'icon'  => 'shield-check'
+    ],
+    'dokter' => [
+        'label' => 'Doctor',
+        'class' => 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white',
+        'icon'  => 'stethoscope'
+    ],
+    'pasien' => [
+        'label' => 'Patient',
+        'class' => 'bg-gradient-to-r from-green-500 to-emerald-500 text-white',
+        'icon'  => 'user'
+    ],
+];
 
-                            <span class="px-3 py-1 rounded-xl bg-red-100 text-red-600 text-xs font-semibold">
-                                Admin
-                            </span>
+$r = $roleUI[$user->role] ?? [
+    'label' => ucfirst($user->role),
+    'class' => 'bg-slate-200 text-slate-700',
+    'icon'  => 'user'
+];
+@endphp
 
-                            @elseif($user->role == 'dokter')
-
-                            <span class="px-3 py-1 rounded-xl bg-blue-100 text-blue-600 text-xs font-semibold">
-                                Doctor
-                            </span>
-
-                            @else
-
-                            <span class="px-3 py-1 rounded-xl bg-green-100 text-green-600 text-xs font-semibold">
-                                Patient
-                            </span>
-
-                            @endif
+<span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold shadow-sm {{ $r['class'] }}">
+    <i data-lucide="{{ $r['icon'] }}" class="w-3.5 h-3.5"></i>
+    {{ $r['label'] }}
+</span>
 
                         </td>
 
@@ -441,9 +476,9 @@ class="w-11 h-11 rounded-2xl object-cover">
 <!-- ADD DOCTOR MODAL -->
 <div
 id="addDoctorModal"
-class="fixed inset-0 bg-black/40 hidden z-50 flex items-center justify-center">
+class="fixed inset-0 bg-black/40 hidden z-50 overflow-y-auto py-10 scrollbar-hide">
 
-    <div class="bg-white w-full max-w-2xl rounded-[30px] p-8 shadow-xl">
+   <div class="bg-white w-full max-w-2xl rounded-[30px] p-8 shadow-xl mx-auto">
 
         <div class="flex items-center justify-between mb-6">
 
@@ -452,7 +487,7 @@ class="fixed inset-0 bg-black/40 hidden z-50 flex items-center justify-center">
             </h2>
 
             <button
-            onclick="document.getElementById('addDoctorModal').classList.add('hidden')"
+            onclick="closeModal()"
             class="text-slate-500 text-2xl">
 
                 ×
@@ -461,8 +496,11 @@ class="fixed inset-0 bg-black/40 hidden z-50 flex items-center justify-center">
 
         </div>
 
-        <form action="{{ route('admin.doctor.store') }}" method="POST">
+        <form action="{{ route('admin.doctor.store') }}"
+        method="POST"
+        enctype="multipart/form-data">
 
+        <div class="p-8 overflow-y-auto scrollbar-hide flex-1">
             @csrf
 
             <div class="grid grid-cols-2 gap-5">
@@ -522,13 +560,54 @@ class="fixed inset-0 bg-black/40 hidden z-50 flex items-center justify-center">
 
                 </div>
 
+                <div>
+                    <label class="font-medium text-slate-700">
+                        Gender
+                    </label>
+
+                    <select
+                        name="gender"
+                        class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
+
+                        <option value="Laki-laki">Laki-laki</option>
+                        <option value="Perempuan">Perempuan</option>
+
+                    </select>
+                </div>
+
+                <div>
+                    <label class="font-medium text-slate-700">
+                        Status
+                    </label>
+
+                    <select
+                        name="status_ketersediaan"
+                        class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
+
+                        <option value="Available">Available</option>
+                        <option value="Unavailable">Unavailable</option>
+
+                    </select>
+                </div>
+
+                <div class="col-span-2">
+                    <label class="font-medium text-slate-700">
+                        Foto Profil
+                    </label>
+
+                    <input
+                        type="file"
+                        name="foto_profil"
+                        class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
+                </div>
+
             </div>
 
            <div class="flex justify-end gap-3 mt-8">
 
     <button
     type="button"
-    onclick="document.getElementById('addDoctorModal').classList.add('hidden')"
+    onclick="closeModal()"
     class="px-5 py-3 rounded-2xl border border-slate-200">
 
         Cancel
@@ -544,7 +623,7 @@ class="fixed inset-0 bg-black/40 hidden z-50 flex items-center justify-center">
     </button>
 
 </div>
-
+</div>
 
         </form>
 
@@ -565,7 +644,13 @@ class="fixed inset-0 bg-black/40 hidden z-50 flex items-center justify-center">
         <div class="flex items-center justify-between mb-6">
 
             <h2 class="text-2xl font-bold text-slate-800">
-                User Detail
+                @if($user->role == 'dokter')
+                    Doctor Profile
+                @elseif($user->role == 'admin')
+                    Admin Profile
+                @else
+                    Patient Profile
+                @endif
             </h2>
 
             <button
@@ -580,27 +665,94 @@ class="fixed inset-0 bg-black/40 hidden z-50 flex items-center justify-center">
 
         <div class="space-y-4">
 
-            <div>
-                <p class="text-sm text-slate-400">Name</p>
-                <h3 class="font-semibold text-slate-800">{{ $user->nama }}</h3>
+            @if($user->role == 'dokter')
+
+            @php
+            $dokter = \App\Models\Dokter::where('user_id',$user->id)->first();
+            @endphp
+
+            <div class="space-y-4">
+
+                @php
+$dokter = \App\Models\Dokter::where('user_id', $user->id)->first();
+@endphp
+
+<div>
+    <p class="text-sm text-slate-400">Name</p>
+    <h3 class="font-semibold text-slate-800">
+        {{ $user->nama }}
+    </h3>
+</div>
+
+<div>
+    <p class="text-sm text-slate-400">Email</p>
+    <h3 class="font-semibold text-slate-800">
+        {{ $user->email }}
+    </h3>
+</div>
+
+@if($user->role == 'dokter')
+
+<div>
+    <p class="text-sm text-slate-400">No SIP</p>
+    <h3 class="font-semibold text-slate-800">
+        {{ optional($dokter)->no_sip ?? '-' }}
+    </h3>
+</div>
+
+<div>
+    <p class="text-sm text-slate-400">Gender</p>
+    <h3 class="font-semibold text-slate-800">
+        {{ optional($dokter)->gender ?? '-' }}
+    </h3>
+</div>
+
+<div>
+    <p class="text-sm text-slate-400">Status Ketersediaan</p>
+    <h3 class="font-semibold text-slate-800">
+        {{ optional($dokter)->status_ketersediaan ?? '-' }}
+    </h3>
+</div>
+
+@endif
+
+<div>
+    <p class="text-sm text-slate-400">Role</p>
+    <h3 class="font-semibold text-slate-800">
+        {{ ucfirst($user->role) }}
+    </h3>
+</div>
+
+<div>
+    <p class="text-sm text-slate-400">Created</p>
+    <h3 class="font-semibold text-slate-800">
+        {{ $user->created_at->format('d M Y H:i') }}
+    </h3>
+</div>
             </div>
 
-            <div>
-                <p class="text-sm text-slate-400">Email</p>
-                <h3 class="font-semibold text-slate-800">{{ $user->email }}</h3>
+            @else
+
+            <div class="space-y-4">
+
+                <div>
+                    <p class="text-sm text-slate-400">Name</p>
+                    <h3 class="font-semibold">{{ $user->nama }}</h3>
+                </div>
+
+                <div>
+                    <p class="text-sm text-slate-400">Email</p>
+                    <h3 class="font-semibold">{{ $user->email }}</h3>
+                </div>
+
+                <div>
+                    <p class="text-sm text-slate-400">Role</p>
+                    <h3 class="font-semibold">{{ ucfirst($user->role) }}</h3>
+                </div>
+
             </div>
 
-            <div>
-                <p class="text-sm text-slate-400">Role</p>
-                <h3 class="font-semibold text-slate-800">{{ $user->role }}</h3>
-            </div>
-
-            <div>
-                <p class="text-sm text-slate-400">Created</p>
-                <h3 class="font-semibold text-slate-800">
-                    {{ $user->created_at->format('d M Y H:i') }}
-                </h3>
-            </div>
+            @endif
 
         </div>
 
@@ -611,14 +763,20 @@ class="fixed inset-0 bg-black/40 hidden z-50 flex items-center justify-center">
 <!-- EDIT MODAL -->
 <div
 id="editUserModal{{ $user->id }}"
-class="fixed inset-0 bg-black/40 hidden z-50 flex items-center justify-center">
+class="fixed inset-0 bg-black/40 hidden z-50 overflow-y-auto py-10 scrollbar-hide">
 
-    <div class="bg-white w-full max-w-xl rounded-[30px] p-8 shadow-xl">
+    <div class="bg-white w-full max-w-xl rounded-[30px] p-8 shadow-xl mx-auto">
 
         <div class="flex items-center justify-between mb-6">
 
             <h2 class="text-2xl font-bold text-slate-800">
-                Edit User
+                @if($user->role == 'dokter')
+                    Edit Doctor
+                @elseif($user->role == 'admin')
+                    Edit Admin
+                @else
+                    Edit Patient
+                @endif
             </h2>
 
             <button
@@ -639,82 +797,7 @@ class="fixed inset-0 bg-black/40 hidden z-50 flex items-center justify-center">
             @method('PUT')
 
             <div class="space-y-5">
-{{-- JADWAL PRAKTIK KHUSUS DOKTER --}}
-@if($user->role == 'dokter')
 
-@php
-$dokter = $user->dokter;
-@endphp
-
-@if($user->role == 'dokter')
-
-<div>
-    <label class="font-medium text-slate-700">
-        Hari Praktik
-    </label>
-
-    <select
-    name="hari_praktik"
-    class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
-
-        <option value="">Pilih Hari</option>
-
-        <option value="Senin" {{ optional($dokter)->hari_praktik == 'Senin' ? 'selected' : '' }}>
-            Senin
-        </option>
-
-        <option value="Selasa" {{ optional($dokter)->hari_praktik == 'Selasa' ? 'selected' : '' }}>
-            Selasa
-        </option>
-
-        <option value="Rabu" {{ optional($dokter)->hari_praktik == 'Rabu' ? 'selected' : '' }}>
-            Rabu
-        </option>
-
-        <option value="Kamis" {{ optional($dokter)->hari_praktik == 'Kamis' ? 'selected' : '' }}>
-            Kamis
-        </option>
-
-        <option value="Jumat" {{ optional($dokter)->hari_praktik == 'Jumat' ? 'selected' : '' }}>
-            Jumat
-        </option>
-
-        <option value="Sabtu" {{ optional($dokter)->hari_praktik == 'Sabtu' ? 'selected' : '' }}>
-            Sabtu
-        </option>
-    </select>
-</div>
-
-<div class="grid grid-cols-2 gap-4">
-
-    <div>
-        <label class="font-medium text-slate-700">
-            Jam Mulai
-        </label>
-
-        <input
-        type="time"
-        name="jam_mulai"
-        value="{{ optional($dokter)->jam_mulai }}"
-        class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
-    </div>
-
-    <div>
-        <label class="font-medium text-slate-700">
-            Jam Selesai
-        </label>
-
-        <input
-        type="time"
-        name="jam_selesai"
-        value="{{ optional($dokter)->jam_selesai }}"
-        class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
-    </div>
-
-</div>
-
-@endif
-@endif
                 <div>
 
                     <label class="font-medium text-slate-700">
@@ -743,38 +826,84 @@ $dokter = $user->dokter;
 
                 </div>
 
+                @if($user->role == 'dokter')
+
+<div>
+    <label class="font-medium text-slate-700">
+        No SIP
+    </label>
+
+    <input
+    type="text"
+    name="no_sip"
+    value="{{ optional($dokter)->no_sip }}"
+    class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
+</div>
+
+<div>
+    <label class="font-medium text-slate-700">
+        Gender
+    </label>
+
+    <select
+    name="gender"
+    class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
+
+        <option value="Laki-laki" {{ optional($dokter)->gender=='Laki-laki'?'selected':'' }}>
+            Laki-laki
+        </option>
+
+        <option value="Perempuan" {{ optional($dokter)->gender=='Perempuan'?'selected':'' }}>
+            Perempuan
+        </option>
+
+    </select>
+</div>
+
+<div>
+    <label class="font-medium text-slate-700">
+        Status Ketersediaan
+    </label>
+
+    <select
+    name="status_ketersediaan"
+    class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
+
+        <option value="Available" {{ optional($dokter)->status_ketersediaan=='Available'?'selected':'' }}>
+            Available
+        </option>
+
+        <option value="Unavailable" {{ optional($dokter)->status_ketersediaan=='Unavailable'?'selected':'' }}>
+            Unavailable
+        </option>
+
+    </select>
+</div>
+
+@endif
+
                 <div>
 
-                    <label class="font-medium text-slate-700">
-                        Role
-                    </label>
+    <label class="font-medium text-slate-700">
+        Role
+    </label>
 
-                    <select
-                    name="role"
-                    class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
+    <input
+    type="text"
+    value="{{ ucfirst($user->role) }}"
+    readonly
+    class="w-full mt-2 px-4 py-3 rounded-2xl bg-slate-100 border border-slate-200 cursor-not-allowed">
 
-                        <option value="admin"
-                        {{ $user->role == 'admin' ? 'selected' : '' }}>
-                            Admin
-                        </option>
+    <input
+    type="hidden"
+    name="role"
+    value="{{ $user->role }}">
 
-                        <option value="dokter"
-                        {{ $user->role == 'dokter' ? 'selected' : '' }}>
-                            Doctor
-                        </option>
-
-                        <option value="pasien"
-                        {{ $user->role == 'pasien' ? 'selected' : '' }}>
-                            Patient
-                        </option>
-
-                    </select>
-
-                </div>
+</div>
 
             </div>
 
-            <div class="flex justify-end gap-3 mt-8">
+            <div class="flex justify-end gap-3 p-8 bg-white border-t border-slate-100">
 
                 <button
                 type="button"
@@ -812,5 +941,19 @@ document.querySelectorAll('form').forEach(form => {
         }
     });
 });
+
+const modal = document.getElementById('addDoctorModal');
+
+
+function openModal() {
+    modal.classList.remove('hidden');
+}
+
+function closeModal() {
+    modal.classList.add('hidden');
+}
+
+
+
 </script>
 @endsection
