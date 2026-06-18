@@ -9,7 +9,11 @@ class JadwalController extends Controller
 {
     public function jadwal()
 {
-    $jadwal = JadwalDokter::orderBy('tanggal', 'asc')->get();
+    $dokter = auth()->user()->dokter;
+
+    $jadwal = JadwalDokter::where('id_dokter', $dokter->id_dokter)
+        ->orderBy('tanggal', 'asc')
+        ->get();
 
     return view('dokter.jadwal-praktik', compact('jadwal'));
 }

@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use App\Http\Controllers\Admin\AdminJadwalController;
+
 
 // Controller Imports
 use App\Http\Controllers\{
@@ -193,8 +195,16 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::delete('/appointment/delete/{id}',
    [AdminController::class, 'deleteAppointment'])
    ->name('admin.appointment.delete');
-    Route::view('/schedule-management', 'admin.schedule-management');
-    Route::view('/medical-records', 'admin.medical-records');
+
+
+
+   
+
+
+
+
+
+   Route::view('/medical-records', 'admin.medical-records');
     Route::view('/reports', 'admin.reports');
     Route::view('/payments', 'admin.payments');
     Route::view('/settings', 'admin.settings');
@@ -234,6 +244,26 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     // LIST DATA
     Route::get('/listpatient', [ListPatientController::class, 'show']);
     Route::get('/listprescription', [ListprescriptionController::class, 'show']);
+
+    
+    
+    
+    
+   
+Route::get('/schedule-management', [AdminJadwalController::class, 'index'])
+    ->name('admin.schedule.index');
+
+Route::post('/schedule-management/store', [AdminJadwalController::class, 'store'])
+    ->name('admin.schedule.store');
+
+Route::get('/schedule-management/edit/{id}', [AdminJadwalController::class, 'edit'])
+    ->name('admin.schedule.edit');
+
+Route::put('/schedule-management/update/{id}', [AdminJadwalController::class, 'update'])
+    ->name('admin.schedule.update');
+
+Route::delete('/schedule-management/delete/{id}', [AdminJadwalController::class, 'destroy'])
+    ->name('admin.schedule.destroy');
 });
 
 

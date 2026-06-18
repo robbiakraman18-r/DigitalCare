@@ -37,4 +37,17 @@ class JadwalDokter extends Model
     {
         return $this->hasMany(Appointment::class, 'id_jadwal', 'id_jadwal');
     }
+
+    public function updateStatus()
+{
+    if ($this->terisi >= $this->kuota_harian) {
+        $this->status_jadwal = 'Full';
+    }
+
+    if (now()->toDateString() > $this->tanggal) {
+        $this->status_jadwal = 'Closed';
+    }
+
+    $this->save();
+}
 }
