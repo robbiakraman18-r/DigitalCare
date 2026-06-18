@@ -928,25 +928,6 @@ document.getElementById('editModal').classList.add('hidden');
 
 }
 
-function openDeleteModal(id){
-
-document
-.getElementById('deleteModal')
-.classList
-.remove('hidden');
-
-document
-.getElementById('deleteModal')
-.classList
-.add('flex');
-
-document
-.getElementById('deleteForm')
-.action=
-"/admin/schedule-management/delete/"+id;
-
-}
-
 function openDeleteModal(el) {
 
     const id = el.dataset.id;
@@ -959,6 +940,20 @@ function openDeleteModal(el) {
 
     document.getElementById('deleteForm').action =
         `/admin/schedule-management/delete/${id}`;
+}
+
+function closeDeleteModal(){
+
+document
+.getElementById('deleteModal')
+.classList
+.remove('flex');
+
+document
+.getElementById('deleteModal')
+.classList
+.add('hidden');
+
 }
 
 setTimeout(()=>{
