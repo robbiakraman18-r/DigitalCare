@@ -78,7 +78,7 @@ class="fixed top-8 right-8 z-[9999]">
 <div class="space-y-8">
 
     {{-- HEADER --}}
-    <div class="flex flex-col lg:flex-row justify-between gap-5">
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
 
         <div>
 
@@ -86,15 +86,16 @@ class="fixed top-8 right-8 z-[9999]">
                 Schedule Management
             </h1>
 
-            <p class="text-slate-400 mt-1">
-                Manage doctor schedule and clinic availability.
+            <p class="text-slate-500 mt-1">
+                Schedule Management - {{ \Carbon\Carbon::now()->format('F Y') }}
             </p>
 
         </div>
+        
 
         <button
         onclick="openAddModal()"
-        class="px-5 py-3 rounded-2xl bg-cyan-600 hover:bg-cyan-700 text-white font-semibold">
+        class="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold transition">
 
             + Add Schedule
 
@@ -106,529 +107,569 @@ class="fixed top-8 right-8 z-[9999]">
 
     {{-- STATS --}}
 
-    <div class="grid lg:grid-cols-4 md:grid-cols-2 gap-5">
+    <!-- STATS -->
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
 
-        <div class="bg-white rounded-[28px] p-6 shadow-sm border">
+    {{-- TOTAL SCHEDULE --}}
+    <div class="bg-white rounded-[28px] border border-slate-100 p-5 shadow-sm">
 
-            <p class="text-slate-400">
-                Total Schedule
-            </p>
-
-            <h2 class="text-3xl font-bold mt-3">
-                {{ $jadwal->count() }}
-            </h2>
-
-        </div>
-
-        <div class="bg-white rounded-[28px] p-6 shadow-sm border">
-
-            <p class="text-slate-400">
-                Available
-            </p>
-
-            <h2 class="text-3xl font-bold mt-3 text-green-600">
-
-                {{ $jadwal->where('status_jadwal','Available')->count() }}
-
-            </h2>
-
-        </div>
-
-        <div class="bg-white rounded-[28px] p-6 shadow-sm border">
-
-            <p class="text-slate-400">
-                Full
-            </p>
-
-            <h2 class="text-3xl font-bold mt-3 text-red-600">
-
-                {{ $jadwal->where('status_jadwal','Full')->count() }}
-
-            </h2>
-
-        </div>
-
-        <div class="bg-white rounded-[28px] p-6 shadow-sm border">
-
-            <p class="text-slate-400">
-                Closed
-            </p>
-
-            <h2 class="text-3xl font-bold mt-3 text-slate-700">
-
-                {{ $jadwal->where('status_jadwal','Closed')->count() }}
-
-            </h2>
-
-        </div>
-
-    </div>
-
-
-
-    {{-- FILTER --}}
-
-    <div class="bg-white rounded-[30px] shadow-sm border overflow-hidden">
-
-        <div class="p-6 border-b">
-
-            <form
-            method="GET"
-            class="flex flex-col lg:flex-row gap-4">
-
-                <input
-                type="text"
-                name="search"
-                value="{{ request('search') }}"
-                placeholder="Search doctor..."
-                class="border rounded-2xl px-5 py-3 flex-1">
-
-                <select
-                name="status"
-                class="border rounded-2xl px-5 py-3">
-
-                    <option value="">
-                        All Status
-                    </option>
-
-                    <option
-                    value="Available"
-                    {{ request('status')=="Available" ? 'selected':'' }}>
-                        Available
-                    </option>
-
-                    <option
-                    value="Full"
-                    {{ request('status')=="Full" ? 'selected':'' }}>
-                        Full
-                    </option>
-
-                    <option
-                    value="Closed"
-                    {{ request('status')=="Closed" ? 'selected':'' }}>
-                        Closed
-                    </option>
-
-                </select>
-
-                <button
-                class="bg-cyan-600 text-white rounded-2xl px-6">
-
-                    Filter
-
-                </button>
-
-            </form>
-
-        </div>
-
-
-
-        {{-- TABLE --}}
-
-        <div class="overflow-x-auto">
-
-            <table class="w-full">
-
-                <thead class="bg-slate-50">
-
-                <tr>
-
-                    <th class="py-4 px-6 text-left">
-                        Doctor
-                    </th>
-
-                    <th>
-                        Date
-                    </th>
-
-                    <th>
-                        Time
-                    </th>
-
-                    <th>
-                        Room
-                    </th>
-
-                    <th>
-                        Quota
-                    </th>
-
-                    <th>
-                        Filled
-                    </th>
-
-                    <th>
-                        Status
-                    </th>
-
-                    <th>
-                        Action
-                    </th>
-
-                </tr>
-
-                </thead>
-
-                <tbody>
-
-                @foreach($jadwal as $item)
-
-                <tr class="border-b hover:bg-slate-50">
-
-                    <td class="py-5 px-6">
-
-                        <div>
-
-                            <h2 class="font-semibold">
-
-                                {{ $item->dokter->user->nama }}
-
-                            </h2>
-
-                            <p class="text-slate-400 text-sm">
-
-                                {{ $item->dokter->spesialis }}
-
-                            </p>
-
-                        </div>
-
-                    </td>
-
-                    <td>
-
-                        {{ $item->tanggal }}
-
-                    </td>
-
-                    <td>
-
-                        {{ $item->jam_mulai }}
-
-                        -
-
-                        {{ $item->jam_selesai }}
-
-                    </td>
-
-                    <td>
-
-                        {{ $item->ruang }}
-
-                    </td>
-
-                    <td>
-
-                        {{ $item->kuota_harian }}
-
-                    </td>
-
-                    <td>
-
-                        {{ $item->terisi }}
-
-                    </td>
-
-                    <td>
-
-                        @if($item->status_jadwal=="Available")
-
-                        <span class="px-3 py-1 rounded-xl bg-green-100 text-green-600">
-                            Available
-                        </span>
-
-                        @elseif($item->status_jadwal=="Full")
-
-                        <span class="px-3 py-1 rounded-xl bg-red-100 text-red-600">
-                            Full
-                        </span>
-
-                        @else
-
-                        <span class="px-3 py-1 rounded-xl bg-slate-100 text-slate-700">
-                            Closed
-                        </span>
-
-                        @endif
-
-                    </td>
-
-                    <td>
-
-                        <div class="flex justify-center gap-2">
-
-    <button
-    type="button"
-    class="w-8 h-8 rounded-xl border border-slate-200 flex items-center justify-center hover:bg-slate-50"
-    onclick="openEditModal(this)"
-
-    data-id="{{ $item->id_jadwal }}"
-    data-dokter="{{ $item->id_dokter }}"
-    data-tanggal="{{ $item->tanggal }}"
-    data-hari="{{ $item->hari }}"
-    data-mulai="{{ $item->jam_mulai }}"
-    data-selesai="{{ $item->jam_selesai }}"
-    data-ruang="{{ $item->ruang }}"
-    data-kuota="{{ $item->kuota_harian }}"
->
-    <i data-lucide="square-pen" class="w-4 h-4"></i>
-</button>
-
-
-    <button
-    type="button"
-    onclick="openDeleteModal(this)"
-    data-id="{{ $item->id_jadwal }}"
-    class="w-8 h-8 rounded-xl border border-red-200 flex items-center justify-center hover:bg-red-50">
-
-    <i data-lucide="trash-2" class="w-4 h-4 text-red-500"></i>
-
-</button>
-
-</div>
-
-                    </td>
-
-                </tr>
-
-                @endforeach
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
-
-</div>
-{{-- ===========================
-ADD SCHEDULE MODAL
-=========================== --}}
-
-<div
-id="addModal"
-class="fixed inset-0 bg-black/40 backdrop-blur-sm hidden items-center justify-center z-[999] p-5">
-
-    <div class="bg-white rounded-[32px] w-full max-w-3xl shadow-2xl overflow-hidden">
-
-        {{-- HEADER --}}
-        <div class="px-8 py-6 border-b flex justify-between items-center">
+        <div class="flex items-center justify-between">
 
             <div>
 
-                <h2 class="text-2xl font-bold text-slate-800">
-                    Add Doctor Schedule
+                <p class="text-slate-400 text-sm">
+                    Total Schedule
+                </p>
+
+                <h2 class="text-3xl font-bold text-slate-800 mt-2">
+                    {{ $jadwal->count() }}
                 </h2>
 
-                <p class="text-slate-400 mt-1">
-                    Create new doctor schedule
+                <p class="text-blue-500 text-sm mt-2">
+                    All schedules
                 </p>
 
             </div>
 
-            <button
-            onclick="closeAddModal()"
-            class="text-2xl">
+            <div class="w-14 h-14 rounded-2xl bg-blue-100 flex items-center justify-center">
 
-                ✕
+                <i data-lucide="calendar" class="w-6 h-6 text-blue-600"></i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {{-- AVAILABLE --}}
+    <div class="bg-white rounded-[28px] border border-slate-100 p-5 shadow-sm">
+
+        <div class="flex items-center justify-between">
+
+            <div>
+
+                <p class="text-slate-400 text-sm">
+                    Available
+                </p>
+
+                <h2 class="text-3xl font-bold text-slate-800 mt-2">
+                    {{ $jadwal->where('status_jadwal','Available')->count() }}
+                </h2>
+
+                <p class="text-green-500 text-sm mt-2">
+                    Ready for booking
+                </p>
+
+            </div>
+
+            <div class="w-14 h-14 rounded-2xl bg-green-100 flex items-center justify-center">
+
+                <i data-lucide="check-circle" class="w-6 h-6 text-green-600"></i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {{-- FULL --}}
+    <div class="bg-white rounded-[28px] border border-slate-100 p-5 shadow-sm">
+
+        <div class="flex items-center justify-between">
+
+            <div>
+
+                <p class="text-slate-400 text-sm">
+                    Full
+                </p>
+
+                <h2 class="text-3xl font-bold text-slate-800 mt-2">
+                    {{ $jadwal->where('status_jadwal','Full')->count() }}
+                </h2>
+
+                <p class="text-red-500 text-sm mt-2">
+                    Fully booked
+                </p>
+
+            </div>
+
+            <div class="w-14 h-14 rounded-2xl bg-red-100 flex items-center justify-center">
+
+                <i data-lucide="x-circle" class="w-6 h-6 text-red-600"></i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {{-- CLOSED --}}
+    <div class="bg-white rounded-[28px] border border-slate-100 p-5 shadow-sm">
+
+        <div class="flex items-center justify-between">
+
+            <div>
+
+                <p class="text-slate-400 text-sm">
+                    Closed
+                </p>
+
+                <h2 class="text-3xl font-bold text-slate-800 mt-2">
+                    {{ $jadwal->where('status_jadwal','Closed')->count() }}
+                </h2>
+
+                <p class="text-slate-500 text-sm mt-2">
+                    Not active
+                </p>
+
+            </div>
+
+            <div class="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center">
+
+                <i data-lucide="lock" class="w-6 h-6 text-slate-600"></i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+    <!-- TABLE -->
+<div class="bg-white rounded-[30px] border border-slate-100 shadow-sm overflow-hidden">
+
+    <!-- FILTER -->
+<div class="bg-white rounded-[30px] border border-slate-100 shadow-sm overflow-hidden">
+
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 p-5 border-b border-slate-100">
+
+        <form
+            method="GET"
+            action="{{ url()->current() }}"
+            class="flex flex-col lg:flex-row gap-4 w-full items-end">
+
+            <!-- SEARCH -->
+            <div class="relative w-full lg:w-80">
+
+                <i data-lucide="search"
+                   class="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
+
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ request('search') }}"
+                    placeholder="Search doctor, room..."
+                    class="w-full pl-12 pr-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+
+            </div>
+
+            <!-- STATUS -->
+            <div class="relative w-full lg:w-56">
+
+                <i data-lucide="filter"
+                   class="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
+
+                <select
+                    name="status"
+                    class="w-full pl-12 pr-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-cyan-500 appearance-none">
+
+                    <option value="">All Status</option>
+                    <option value="Available" {{ request('status') == 'Available' ? 'selected' : '' }}>Available</option>
+                    <option value="Full" {{ request('status') == 'Full' ? 'selected' : '' }}>Full</option>
+                    <option value="Closed" {{ request('status') == 'Closed' ? 'selected' : '' }}>Closed</option>
+
+                </select>
+
+                <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                    <i data-lucide="chevron-down" class="w-5 h-5 text-slate-400"></i>
+                </div>
+
+            </div>
+
+            <!-- CALENDAR -->
+            <div class="relative w-full lg:w-56">
+
+                <i data-lucide="calendar"
+                   class="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
+
+                <input
+                    type="date"
+                    name="tanggal"
+                    value="{{ request('tanggal', date('Y-m-d')) }}"
+                    onchange="this.form.submit()"
+                    class="w-full pl-12 pr-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-cyan-500">
+
+            </div>
+
+            <!-- BUTTON -->
+            <button
+                type="submit"
+                class="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold transition">
+
+                Filter
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+        <!-- TABLE -->
+<div class="overflow-x-auto">
+
+    <table class="w-full">
+
+        <thead class="bg-slate-50">
+
+            <tr>
+
+                <th class="px-6 py-4 text-left text-sm text-slate-400">
+                    Doctor
+                </th>
+
+                <th class="px-6 py-4 text-left text-sm text-slate-400">
+                    Date
+                </th>
+
+                <th class="px-6 py-4 text-left text-sm text-slate-400">
+                    Time
+                </th>
+
+                <th class="px-6 py-4 text-left text-sm text-slate-400">
+                    Room
+                </th>
+
+                <th class="px-6 py-4 text-left text-sm text-slate-400">
+                    Quota
+                </th>
+
+                <th class="px-6 py-4 text-left text-sm text-slate-400">
+                    Status
+                </th>
+
+                <th class="px-6 py-4 text-center text-sm text-slate-400">
+                    Actions
+                </th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            @foreach($jadwal as $item)
+
+            <tr class="border-b border-slate-100 hover:bg-slate-50 transition">
+
+                {{-- DOCTOR --}}
+                <td class="px-6 py-5">
+
+                    <div class="flex items-center gap-4">
+
+                        {{-- FOTO DOKTER (FIXED) --}}
+                        @if(optional($item->dokter)->foto_profil)
+
+                            <img
+                                src="{{ asset('storage/' . $item->dokter->foto_profil) }}"
+                                class="w-11 h-11 rounded-2xl object-cover">
+
+                        @else
+
+                            @php
+                                $nama = $item->dokter->user->nama ?? 'DR';
+
+                                $inisial = collect(explode(' ', $nama))
+                                    ->filter()
+                                    ->take(2)
+                                    ->map(fn($i) => strtoupper(substr($i,0,1)))
+                                    ->join('');
+                            @endphp
+
+                            <div class="w-11 h-11 rounded-2xl bg-cyan-500 flex items-center justify-center text-white font-bold text-sm">
+                                {{ $inisial }}
+                            </div>
+
+                        @endif
+
+                        {{-- INFO --}}
+                        <div>
+
+                            <h3 class="font-semibold text-slate-800">
+                                {{ $item->dokter->user->nama }}
+                            </h3>
+
+                            <p class="text-sm text-slate-400">
+                                {{ $item->dokter->spesialis ?? 'Doctor' }}
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </td>
+
+                {{-- DATE --}}
+                <td class="px-6 py-5 text-slate-600">
+                    {{ $item->tanggal }}
+                </td>
+
+                {{-- TIME --}}
+                <td class="px-6 py-5 text-slate-600">
+                    {{ $item->jam_mulai }} - {{ $item->jam_selesai }}
+                </td>
+
+                {{-- ROOM --}}
+                <td class="px-6 py-5 text-slate-600">
+                    {{ $item->ruang }}
+                </td>
+
+                {{-- QUOTA --}}
+                <td class="px-6 py-5">
+
+                    <span class="font-semibold text-slate-800">
+                        {{ $item->terisi ?? 0 }}
+                    </span>
+
+                    <span class="text-slate-400">
+                        /{{ $item->kuota_harian }}
+                    </span>
+
+                </td>
+
+                {{-- STATUS --}}
+                <td class="px-6 py-5">
+
+                    @if($item->status_jadwal == 'Available')
+                        <span class="px-3 py-1 rounded-xl bg-green-100 text-green-600 text-xs font-semibold">
+                            Available
+                        </span>
+
+                    @elseif($item->status_jadwal == 'Full')
+                        <span class="px-3 py-1 rounded-xl bg-red-100 text-red-600 text-xs font-semibold">
+                            Full
+                        </span>
+
+                    @else
+                        <span class="px-3 py-1 rounded-xl bg-slate-100 text-slate-600 text-xs font-semibold">
+                            Closed
+                        </span>
+                    @endif
+
+                </td>
+
+                {{-- ACTIONS --}}
+                <td class="px-6 py-5">
+
+                    <div class="flex items-center justify-center gap-3">
+
+                        <!-- EDIT -->
+                        <button
+                            type="button"
+                            onclick="openEditModal(this)"
+                            data-id="{{ $item->id_jadwal }}"
+                            data-dokter="{{ $item->id_dokter }}"
+                            data-tanggal="{{ $item->tanggal }}"
+                            data-hari="{{ $item->hari }}"
+                            data-mulai="{{ $item->jam_mulai }}"
+                            data-selesai="{{ $item->jam_selesai }}"
+                            data-ruang="{{ $item->ruang }}"
+                            data-kuota="{{ $item->kuota_harian }}"
+                            class="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center hover:bg-slate-100 transition">
+
+                            <i data-lucide="square-pen" class="w-4 h-4"></i>
+
+                        </button>
+
+                        <!-- DELETE -->
+                        <button
+                            type="button"
+                            onclick="openDeleteModal(this)"
+                            data-id="{{ $item->id_jadwal }}"
+                            class="w-9 h-9 rounded-xl border border-red-200 flex items-center justify-center hover:bg-red-50 transition">
+
+                            <i data-lucide="trash-2" class="w-4 h-4 text-red-500"></i>
+
+                        </button>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+            @endforeach
+
+        </tbody>
+
+    </table>
+
+</div>
+
+<!-- ADD SCHEDULE MODAL -->
+<div
+id="addScheduleModal"
+class="fixed inset-0 bg-black/40 hidden z-50 overflow-y-auto py-10 scrollbar-hide">
+
+    <div class="bg-white w-full max-w-2xl rounded-[30px] p-8 shadow-xl mx-auto">
+
+        {{-- HEADER --}}
+        <div class="flex items-center justify-between mb-6">
+
+            <h2 class="text-2xl font-bold text-slate-800">
+                Add Doctor Schedule
+            </h2>
+
+            <button
+                type="button"
+                onclick="closeAddModal()"
+                class="text-slate-500 text-2xl">
+
+                ×
 
             </button>
 
         </div>
 
         {{-- FORM --}}
-        <form
-        action="{{ route('admin.schedule.store') }}"
-        method="POST">
-
+        <form action="{{ route('admin.schedule.store') }}" method="POST">
             @csrf
 
-            <div class="grid lg:grid-cols-2 gap-5 p-8">
+            <div class="grid grid-cols-2 gap-5">
 
                 {{-- DOCTOR --}}
-                <div>
+                <div class="col-span-2">
 
-                    <label class="font-semibold text-slate-700">
+                    <label class="font-medium text-slate-700">
                         Doctor
                     </label>
 
                     <select
-                    name="id_dokter"
-                    required
-                    class="w-full mt-2 rounded-2xl border px-4 py-3">
+                        name="id_dokter"
+                        required
+                        class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
 
-                        <option value="">
-                            Select Doctor
-                        </option>
+                        <option value="">Select Doctor</option>
 
                         @foreach($dokters as $dokter)
-
-                        <option value="{{ $dokter->id_dokter }}">
-
-                            {{ $dokter->user->nama }}
-
-                        </option>
-
+                            <option value="{{ $dokter->id_dokter }}">
+                                {{ $dokter->user->nama }}
+                            </option>
                         @endforeach
 
                     </select>
 
                 </div>
 
-
-                {{-- TANGGAL --}}
-
+                {{-- DATE --}}
                 <div>
 
-                    <label class="font-semibold">
-
+                    <label class="font-medium text-slate-700">
                         Date
-
                     </label>
 
                     <input
-                    type="date"
-                    name="tanggal"
-                    required
-                    class="w-full mt-2 rounded-2xl border px-4 py-3">
+                        type="date"
+                        name="tanggal"
+                        required
+                        class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
 
                 </div>
 
-
-                {{-- HARI --}}
-
+                {{-- START TIME --}}
                 <div>
 
-                    <label class="font-semibold">
-
-                        Day
-
-                    </label>
-
-                    <select
-                    name="hari"
-                    required
-                    class="w-full mt-2 rounded-2xl border px-4 py-3">
-
-                        <option>Monday</option>
-                        <option>Tuesday</option>
-                        <option>Wednesday</option>
-                        <option>Thursday</option>
-                        <option>Friday</option>
-                        <option>Saturday</option>
-                        <option>Sunday</option>
-
-                    </select>
-
-                </div>
-
-
-                {{-- JAM MULAI --}}
-
-                <div>
-
-                    <label class="font-semibold">
-
+                    <label class="font-medium text-slate-700">
                         Start Time
-
                     </label>
 
                     <input
-                    type="time"
-                    name="jam_mulai"
-                    required
-                    class="w-full mt-2 rounded-2xl border px-4 py-3">
+                        type="time"
+                        name="jam_mulai"
+                        required
+                        class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
 
                 </div>
 
-
-                {{-- JAM SELESAI --}}
-
+                {{-- END TIME --}}
                 <div>
 
-                    <label class="font-semibold">
-
+                    <label class="font-medium text-slate-700">
                         End Time
-
                     </label>
 
                     <input
-                    type="time"
-                    name="jam_selesai"
-                    required
-                    class="w-full mt-2 rounded-2xl border px-4 py-3">
+                        type="time"
+                        name="jam_selesai"
+                        required
+                        class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
 
                 </div>
 
-
-                {{-- RUANG --}}
-
+                {{-- ROOM --}}
                 <div>
 
-                    <label class="font-semibold">
-
+                    <label class="font-medium text-slate-700">
                         Room
-
                     </label>
 
                     <input
-                    type="text"
-                    name="ruang"
-                    required
-                    class="w-full mt-2 rounded-2xl border px-4 py-3">
+                        type="text"
+                        name="ruang"
+                        required
+                        class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
 
                 </div>
 
-
-                {{-- KUOTA --}}
-
+                {{-- QUOTA --}}
                 <div>
 
-                    <label class="font-semibold">
-
+                    <label class="font-medium text-slate-700">
                         Daily Quota
-
                     </label>
 
                     <input
-                    type="number"
-                    name="kuota_harian"
-                    required
-                    class="w-full mt-2 rounded-2xl border px-4 py-3">
+                        type="number"
+                        name="kuota_harian"
+                        required
+                        class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
 
                 </div>
 
-            </div>
-
-
-            {{-- FOOTER --}}
-
-            <div class="px-8 py-5 border-t flex justify-end gap-3">
+                
+                {{-- FOOTER --}}
+                <div class="flex justify-end gap-3 mt-8">
 
                 <button
-                type="button"
-                onclick="closeAddModal()"
-                class="px-5 py-3 rounded-2xl border">
+                    type="button"
+                    onclick="closeAddModal()"
+                    class="px-5 py-3 rounded-2xl border border-slate-200">
 
                     Cancel
 
                 </button>
 
                 <button
-                class="px-5 py-3 rounded-2xl bg-cyan-600 text-white">
-
-                    Save Schedule
-
-                </button>
-
-            </div>
+                type="submit"
+                class="px-5 py-3 rounded-2xl bg-blue-600 text-white">
+                
+                Save Schedule
+                
+            </button>
+            
+        </div>
+        </div>
 
         </form>
 
     </div>
-
 </div>
 {{-- =========================
 EDIT MODAL
@@ -871,75 +912,16 @@ Delete
 </div>
 <script>
 
-function openAddModal(){
-
-    document
-    .getElementById('addModal')
-    .classList
-    .remove('hidden');
-
-    document
-    .getElementById('addModal')
-    .classList
-    .add('flex');
-
-}
-
-function closeAddModal(){
-
-    document
-    .getElementById('addModal')
-    .classList
-    .remove('flex');
-
-    document
-    .getElementById('addModal')
-    .classList
-    .add('hidden');
-
-}
-
-function openEditModal(el) {
-
-    const data = el.dataset;
-
-    const modal = document.getElementById('editModal');
-    const form = document.getElementById('editForm');
-
+function openAddModal() {
+    const modal = document.getElementById('addScheduleModal');
     modal.classList.remove('hidden');
     modal.classList.add('flex');
-
-    form.action = `/admin/schedule-management/update/${data.id}`;
-
-    document.getElementById('edit_dokter').value = data.dokter;
-    document.getElementById('edit_tanggal').value = data.tanggal;
-    document.getElementById('edit_hari').value = data.hari;
-    document.getElementById('edit_mulai').value = data.mulai;
-    document.getElementById('edit_selesai').value = data.selesai;
-    document.getElementById('edit_ruang').value = data.ruang;
-    document.getElementById('edit_quota').value = data.kuota;
 }
 
-function closeEditModal(){
-
-document.getElementById('editModal').classList.remove('flex');
-
-document.getElementById('editModal').classList.add('hidden');
-
-}
-
-function openDeleteModal(el) {
-
-    const id = el.dataset.id;
-
-    document.getElementById('deleteModal')
-        .classList.remove('hidden');
-
-    document.getElementById('deleteModal')
-        .classList.add('flex');
-
-    document.getElementById('deleteForm').action =
-        `/admin/schedule-management/delete/${id}`;
+function closeAddModal() {
+    const modal = document.getElementById('addScheduleModal');
+    modal.classList.remove('flex');
+    modal.classList.add('hidden');
 }
 
 function closeDeleteModal(){

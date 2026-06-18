@@ -13,17 +13,27 @@ class AdminJadwalController extends Controller
 {
     $query = JadwalDokter::with('dokter.user');
 
+    // SEARCH
     if ($request->search) {
         $query->whereHas('dokter.user', function ($q) use ($request) {
             $q->where('nama', 'like', '%' . $request->search . '%');
         });
     }
 
+    // STATUS
     if ($request->status) {
         $query->where('status_jadwal', $request->status);
     }
 
-    $jadwal = $query->orderBy('tanggal')->get();
+    // 📅 FILTER TANGGAL (INI YANG KAMU BUTUH)
+    if ($request->tanggal) {
+        $query->whereDate('tanggal', $request->tanggal);
+    } else {
+        // default: hari ini
+        $query->whereDate('tanggal', now()->toDateString());
+    }
+
+    $jadwal = $query->orderBy('tanggal')->orderBy('jam_mulai')->get();
 
     $dokters = Dokter::with('user')->get();
 
@@ -31,17 +41,6 @@ class AdminJadwalController extends Controller
         'jadwal',
         'dokters'
     ));
-    $dokterList = Dokter::with('user')
-    ->orderBy('id_dokter')
-    ->get();
-
-return view(
-    'admin.schedule-management',
-    compact(
-        'jadwal',
-        'dokterList'
-    )
-);
 }
 
     public function create()
