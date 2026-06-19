@@ -651,7 +651,6 @@ class="fixed inset-0 bg-black/40 hidden z-50 overflow-y-auto py-10 scrollbar-hid
                     type="button"
                     onclick="closeAddModal()"
                     class="px-5 py-3 rounded-2xl border border-slate-200">
-
                     Cancel
 
                 </button>
