@@ -46,15 +46,15 @@ class AdminJadwalController extends Controller
     public function create()
     {
         $dokters = Dokter::all();
-        return view('admin.jadwal.create', compact('dokters'));
+        return view('admin.schedule.create', compact('dokters'));
     }
 
     public function store(Request $request)
     {
+        
         $request->validate([
             'id_dokter' => 'required|exists:dokters,id_dokter',
             'tanggal' => 'required|date',
-            'hari' => 'required',
             'jam_mulai' => 'required',
             'jam_selesai' => 'required',
             'ruang' => 'required',
@@ -78,11 +78,12 @@ class AdminJadwalController extends Controller
             return back()->with('error', 'Jadwal bentrok dengan jadwal dokter yang sudah ada');
         }
 
+        
         // CREATE JADWAL
         $jadwal = JadwalDokter::create([
             'id_dokter' => $request->id_dokter,
             'tanggal' => $request->tanggal,
-            'hari' => $request->hari,
+            'hari' => date('l', strtotime($request->tanggal)),
             'jam_mulai' => $request->jam_mulai,
             'jam_selesai' => $request->jam_selesai,
             'ruang' => $request->ruang,
@@ -91,6 +92,7 @@ class AdminJadwalController extends Controller
             'current_antrian' => 0,
             'status_jadwal' => 'Available',
         ]);
+        
 
         // AUTO STATUS CHECK
         $jadwal->status_jadwal = $this->getStatus($jadwal);
@@ -122,7 +124,7 @@ class AdminJadwalController extends Controller
             'status_jadwal' => $request->status_jadwal,
         ]);
 
-        return redirect()->route('admin.jadwal.index');
+        return redirect()->route('admin.schedule.index');
     }
 
     public function destroy($id)
