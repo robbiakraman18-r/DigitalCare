@@ -208,8 +208,7 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::view('/reports', 'admin.reports');
     Route::view('/payments', 'admin.payments');
     Route::view('/settings', 'admin.settings');
-    Route::view('/profile', 'admin.profile');
-
+    Route::view('/profile', 'admin.profile')->name('admin.profile');
     // CRUD DOCTOR
     Route::post('/doctor', [AdminController::class, 'storeDokter'])
     ->name('admin.doctor.store');

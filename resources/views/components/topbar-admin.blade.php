@@ -294,7 +294,7 @@
                 <!-- BUTTON -->
                 <div class="mt-5">
 
-                    <a href="/profil-admin"
+                    <a href="{{ route('admin.profile') }}"
                     class="w-full flex items-center justify-center gap-2 py-3 rounded-2xl bg-teal-500 hover:bg-teal-600 text-white font-semibold transition">
 
                         <i data-lucide="user-circle-2" class="w-5 h-5"></i>
