@@ -82,7 +82,7 @@ class AppointmentController extends Controller
         $request->validate([
             'id_jadwal'     => 'required|exists:jadwal_dokters,id_jadwal', 
             'tanggal_janji' => 'required|date|after_or_equal:today',
-            'keluhan_utama' => 'required|string|min:5',
+            'keluhan_utama'=>'required|string|min:5|max:1000',
         ]);
             
         /** @var \App\Models\Appointment|null $appointment */
@@ -116,8 +116,10 @@ class AppointmentController extends Controller
                     throw new \Exception('Kuota penuh.');
                 }
 
-                $jadwal->increment('current_antrian');
+                $jadwal->current_antrian++;
                 $nomorAntrian = $jadwal->current_antrian;
+                
+                
 
                 $jadwal->terisi += 1;
 
@@ -145,7 +147,10 @@ class AppointmentController extends Controller
                 ->with('success', 'Janji berhasil dibuat!');
 
         } catch (\Exception $e) {
-            Log::error($e->getMessage());
+            Log::error($e->getMessage(),[
+                'line'=>$e->getLine(),
+                'file'=>$e->getFile()
+            ]);
 
             return back()->with('error', $e->getMessage());
         }
@@ -156,7 +161,7 @@ class AppointmentController extends Controller
     // =========================
     public function showQueue($id)
     {
-        $appointment = Appointment::with(['dokter', 'jadwaldokter', 'rekammedis'])->findOrFail($id);
+        $appointment = Appointment::with(['dokter', 'jadwaldokter', 'rekamMedis'])->findOrFail($id);
 
         return view('/pasien/nomor-antrian', compact('appointment'));
     }

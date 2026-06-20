@@ -52,9 +52,13 @@ class Dokter extends Model
     |--------------------------------------------------------------------------
     */
     public function appointments()
-    {
-        return $this->hasMany(Appointment::class, 'id_dokter', 'id_dokter');
-    }
+{
+    return $this->hasMany(
+        Appointment::class,
+        'id_pasien',
+        'id_pasien'
+    );
+}
 
     /*
     |--------------------------------------------------------------------------

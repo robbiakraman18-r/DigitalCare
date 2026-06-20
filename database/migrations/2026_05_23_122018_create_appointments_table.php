@@ -20,10 +20,6 @@ return new class extends Migration
         ->constrained('pasiens', 'id_pasien')
         ->onDelete('cascade');
 
-    $table->foreignId('id_dokter')
-        ->constrained('dokters', 'id_dokter')
-        ->onDelete('cascade');
-
     $table->date('tanggal_janji');
     $table->integer('nomor_antrian');
 

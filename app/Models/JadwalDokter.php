@@ -40,12 +40,12 @@ class JadwalDokter extends Model
 
     public function updateStatus()
 {
-    if ($this->terisi >= $this->kuota_harian) {
-        $this->status_jadwal = 'Full';
-    }
-
     if (now()->toDateString() > $this->tanggal) {
         $this->status_jadwal = 'Closed';
+    } elseif ($this->terisi >= $this->kuota_harian) {
+        $this->status_jadwal = 'Full';
+    } else {
+        $this->status_jadwal = 'Available';
     }
 
     $this->save();

@@ -242,14 +242,36 @@ class AdminController extends Controller
     // =========================================
     // APPOINTMENT LIST
     // =========================================
-    public function appointment()
-    {
-        return view('admin.appointment', [
-            'appointments' => Appointment::with(['pasien', 'dokter'])
-                ->latest()
-                ->get()
-        ]);
-    }
+    public function appointment(Request $request)
+{
+    $appointments = Appointment::with([
+        'pasien.user',
+        'dokter.user',
+        'jadwal'
+    ])->latest()->get();
+
+    $today = Appointment::whereDate('tanggal_janji', today())->count();
+
+    $pending = Appointment::where('status_janji', 'pending')->count();
+
+    $called = Appointment::where('status_janji', 'called')->count();
+
+    $consultation = Appointment::where('status_janji', 'in_consultation')->count();
+
+    $completed = Appointment::where('status_janji', 'completed')->count();
+
+    $cancelled = Appointment::where('status_janji', 'cancelled')->count();
+
+    return view('admin.appointment', compact(
+        'appointments',
+        'today',
+        'pending',
+        'called',
+        'consultation',
+        'completed',
+        'cancelled'
+    ));
+}
 
     // =========================================
     // STORE APPOINTMENT
@@ -257,17 +279,22 @@ class AdminController extends Controller
     public function storeAppointment(Request $request)
     {
         $request->validate([
-            'nama_pasien' => 'required',
-            'nama_dokter' => 'required',
-            'tanggal_janji' => 'required',
-            'keluhan_utama' => 'required',
+            'id_pasien'=>'required',
+            'id_jadwal'=>'required',
+            'keluhan_utama'=>'required',
         ]);
+
+        $nomorAntrian = Appointment::where('id_dokter', $request->id_dokter)
+    ->whereDate('tanggal_janji', $request->tanggal_janji)
+    ->max('nomor_antrian');
+
+$nomorAntrian = ($nomorAntrian ?? 0) + 1;
 
         Appointment::create([
             'id_pasien' => $request->id_pasien,
             'id_dokter' => $request->id_dokter,
             'tanggal_janji' => $request->tanggal_janji,
-            'nomor_antrian' => rand(1, 999),
+            'nomor_antrian' => $nomorAntrian,
             'status_janji' => 'pending',
             'keluhan_utama' => $request->keluhan_utama,
         ]);

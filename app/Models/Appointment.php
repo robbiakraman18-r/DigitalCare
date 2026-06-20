@@ -17,13 +17,15 @@ class Appointment extends Model
     protected $primaryKey = 'id_janji';
 
     protected $fillable = [
-        'id_jadwal',
-        'id_pasien',
-        'id_dokter',
-        'tanggal_janji',
-        'nomor_antrian',
-        'status_janji',
-        'keluhan_utama'
+        
+'id_janji',
+'id_pasien',
+'id_jadwal',
+'id_dokter',
+'tanggal_janji',
+'nomor_antrian',
+'status_janji',
+'keluhan_utama'
     ];
 
     /*
@@ -48,10 +50,9 @@ class Appointment extends Model
     |----------------------------------
     */
     public function dokter()
-    {
-        return $this->belongsTo(Dokter::class, 'id_dokter', 'id_dokter');
-    }
-
+{
+    return $this->belongsTo(Dokter::class, 'id_dokter', 'id_dokter');
+}
     /*
     |----------------------------------
     | RELASI JADWAL
@@ -62,11 +63,5 @@ class Appointment extends Model
     {
         return $this->belongsTo(JadwalDokter::class, 'id_jadwal', 'id_jadwal');
     }
-    
-    public function jadwaldokter()
-    {
-        return $this->belongsTo(JadwalDokter::class, 'id_jadwal', 'id_jadwal');
-    }
-
     
 }

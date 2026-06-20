@@ -2,22 +2,15 @@
 
 @section('content')
 
-<div class="space-y-6">
+<div class="space-y-8">
 
-    <!-- TOP -->
-    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-
-        <div>
-            <h1 class="text-3xl font-bold text-slate-800">
-                Appointments
-            </h1>
-
-           @if(session('success'))
+    {{-- SUCCESS ALERT --}}
+    @if(session('success'))
     <div id="success-alert"
-        class="mt-4 flex items-center gap-3 bg-green-50 border-l-4 border-green-500 text-green-700 p-4 rounded-2xl shadow-sm">
+        class="flex items-center gap-3 bg-green-50 border border-green-200 text-green-700 px-5 py-4 rounded-3xl shadow-sm">
 
         <svg xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5 text-green-600"
+            class="w-5 h-5"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor">
@@ -26,182 +19,454 @@
                 stroke-linejoin="round"
                 stroke-width="2"
                 d="M5 13l4 4L19 7"/>
+
         </svg>
 
-        <span>{{ session('success') }}</span>
+        {{ session('success') }}
+
     </div>
 
     <script>
         setTimeout(() => {
             const alert = document.getElementById('success-alert');
+
             if(alert){
-                alert.style.transition = "0.5s";
-                alert.style.opacity = "0";
-                setTimeout(() => alert.remove(), 500);
+
+                alert.style.opacity="0";
+                alert.style.transition="0.4s";
+
+                setTimeout(()=>{
+                    alert.remove();
+                },400);
+
             }
-        }, 3000);
+
+        },3000);
     </script>
-@endif
 
-            <p class="text-slate-400 mt-1">
-                View and manage patient appointments.
+    @endif
+
+
+    <!-- HEADER -->
+
+    <div class="flex flex-col lg:flex-row justify-between items-center gap-5">
+
+        <div>
+
+            <h1 class="text-3xl font-bold text-slate-800">
+
+                Appointment Management
+
+            </h1>
+
+            <p class="text-slate-400 mt-2">
+
+                Manage appointments, patient queue and consultation status.
+
             </p>
-        </div>
-
-        <div class="flex items-center gap-3">
-
-            <button class="px-5 py-3 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold transition">
-                Export
-            </button>
-
-            <button onclick="document.getElementById('modalAppointment').classList.remove('hidden')"
-                class="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold transition">
-                + New Appointment
-            </button>
 
         </div>
+
+        <button
+            onclick="document.getElementById('modalAppointment').classList.remove('hidden')"
+            class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 rounded-2xl text-white font-semibold shadow-lg transition">
+
+            + New Appointment
+
+        </button>
+
     </div>
 
-    <!-- TABLE -->
-    <div class="bg-white rounded-[30px] border border-slate-100 shadow-sm overflow-hidden">
 
-        <div class="overflow-x-auto">
 
-            <table class="w-full">
+    <!-- STATISTIC -->
 
-                <thead class="bg-slate-50">
-                    <tr>
-                        <th class="px-6 py-4 text-left text-sm text-slate-400">Appointment ID</th>
-                        <th class="px-6 py-4 text-left text-sm text-slate-400">Date & Time</th>
-                        <th class="px-6 py-4 text-left text-sm text-slate-400">Patient</th>
-                        <th class="px-6 py-4 text-left text-sm text-slate-400">Doctor</th>
-                        <th class="px-6 py-4 text-left text-sm text-slate-400">Department</th>
-                        <th class="px-6 py-4 text-left text-sm text-slate-400">Type</th>
-                        <th class="px-6 py-4 text-left text-sm text-slate-400">Status</th>
-                        <th class="px-6 py-4 text-center text-sm text-slate-400">Actions</th>
-                    </tr>
-                </thead>
+    <div class="grid grid-cols-2 xl:grid-cols-5 gap-5">
 
-                <tbody>
+        <div class="bg-white rounded-3xl shadow p-6">
+
+            <p class="text-slate-400 text-sm">
+                Today
+            </p>
+
+            <h2 class="text-3xl font-bold mt-2 text-slate-800">
+                {{ $today }}
+            </h2>
+
+        </div>
+
+
+        <div class="bg-yellow-50 rounded-3xl shadow p-6">
+
+            <p class="text-yellow-600 text-sm">
+
+                Pending
+
+            </p>
+
+            <h2 class="text-3xl font-bold mt-2 text-yellow-700">
+
+                {{ $pending }}
+
+            </h2>
+
+        </div>
+
+
+
+        <div class="bg-blue-50 rounded-3xl shadow p-6">
+
+            <p class="text-blue-600 text-sm">
+
+                Called
+
+            </p>
+
+            <h2 class="text-3xl font-bold mt-2 text-blue-700">
+
+                {{ $called }}
+
+            </h2>
+
+        </div>
+
+
+
+        <div class="bg-purple-50 rounded-3xl shadow p-6">
+
+            <p class="text-purple-600 text-sm">
+
+                Consultation
+
+            </p>
+
+            <h2 class="text-3xl font-bold mt-2 text-purple-700">
+
+                {{ $consultation }}
+
+            </h2>
+
+        </div>
+
+
+
+        <div class="bg-green-50 rounded-3xl shadow p-6">
+
+            <p class="text-green-600 text-sm">
+
+                Completed
+
+            </p>
+
+            <h2 class="text-3xl font-bold mt-2 text-green-700">
+
+                {{ $completed }}
+
+            </h2>
+
+        </div>
+
+    </div>
+
+    <!-- SEARCH & FILTER -->
+
+<div class="bg-white rounded-3xl shadow p-6">
+
+    <div class="flex flex-col lg:flex-row gap-4">
+
+        <!-- SEARCH -->
+
+        <div class="flex-1 relative">
+
+            <input
+                type="text"
+                id="searchAppointment"
+                placeholder="Search patient, doctor or queue number..."
+                class="w-full border border-slate-200 rounded-2xl pl-12 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+
+            <svg xmlns="http://www.w3.org/2000/svg"
+                class="w-5 h-5 absolute left-4 top-3.5 text-slate-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor">
+
+                <path stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+
+            </svg>
+
+        </div>
+
+        <!-- FILTER STATUS -->
+
+        <select id="statusFilter"
+            class="border border-slate-200 rounded-2xl px-4 py-3">
+
+            <option value="">All Status</option>
+            <option value="pending">Pending</option>
+            <option value="called">Called</option>
+            <option value="in_consultation">Consultation</option>
+            <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
+
+        </select>
+
+        <!-- RESET -->
+
+        <button
+            onclick="location.reload()"
+            class="px-5 py-3 rounded-2xl bg-slate-100 hover:bg-slate-200 font-semibold">
+
+            Reset
+
+        </button>
+
+    </div>
+    
+</div>
+<!-- APPOINTMENT TABLE -->
+
+<div class="bg-white rounded-3xl shadow overflow-hidden">
+
+    <div class="overflow-x-auto">
+
+        <table class="w-full text-sm">
+
+            <thead class="bg-slate-50">
+
+                <tr>
+
+                    <th class="px-6 py-4 text-left font-semibold text-slate-500">
+                        Queue
+                    </th>
+
+                    <th class="px-6 py-4 text-left font-semibold text-slate-500">
+                        Patient
+                    </th>
+
+                    <th class="px-6 py-4 text-left font-semibold text-slate-500">
+                        Doctor
+                    </th>
+
+                    <th class="px-6 py-4 text-left font-semibold text-slate-500">
+                        Schedule
+                    </th>
+
+                    <th class="px-6 py-4 text-left font-semibold text-slate-500">
+                        Complaint
+                    </th>
+
+                    <th class="px-6 py-4 text-center font-semibold text-slate-500">
+                        Status
+                    </th>
+
+                    <th class="px-6 py-4 text-center font-semibold text-slate-500">
+                        Action
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="appointmentTable">
+
                 @forelse($appointments as $appointment)
 
-                    <tr class="border-b border-slate-100 hover:bg-slate-50 transition">
+                <tr class="border-b hover:bg-slate-50 transition">
 
-                        <td class="px-6 py-5 font-medium text-slate-700">
-                            #{{ $appointment->nomor_antrian }}
-                        </td>
+                    <!-- QUEUE -->
 
-                        <td class="px-6 py-5 text-slate-600">
-                            {{ $appointment->tanggal_janji }}
-                        </td>
+                    <td class="px-6 py-5">
 
-                        <td class="px-6 py-5">
-                            {{ $appointment->pasien->nama ?? '-' }}
-                        </td>
+                        <span class="font-bold text-indigo-600 text-lg">
 
-                        <td class="px-6 py-5">
-                            {{ $appointment->dokter->nama ?? '-' }}
-                        </td>
+                            #{{ str_pad($appointment->nomor_antrian,3,'0',STR_PAD_LEFT) }}
 
-                        <td class="px-6 py-5">Klinik</td>
+                        </span>
 
-                        <td class="px-6 py-5">
-                            {{ $appointment->keluhan_utama }}
-                        </td>
+                    </td>
 
-                        <td class="px-6 py-5">
-                            <form action="{{ route('admin.appointment.status', $appointment->id_janji) }}" method="POST">
+                    <!-- PATIENT -->
+
+                    <td class="px-6 py-5">
+
+                        <div class="font-semibold">
+
+                            {{ $appointment->pasien->user->nama ?? '-' }}
+
+                        </div>
+
+                    </td>
+
+                    <!-- DOCTOR -->
+
+                    <td class="px-6 py-5">
+
+                        {{ $appointment->dokter->user->nama ?? '-' }}
+
+                    </td>
+
+                    <!-- SCHEDULE -->
+
+                    <td class="px-6 py-5">
+
+                        <div>
+
+                            {{ $appointment->jadwal->tanggal ?? '-' }}
+
+                        </div>
+
+                        <div class="text-xs text-slate-400">
+
+                            {{ $appointment->jadwal->jam_mulai ?? '' }}
+                            -
+                            {{ $appointment->jadwal->jam_selesai ?? '' }}
+
+                        </div>
+
+                    </td>
+
+                    <!-- COMPLAINT -->
+
+                    <td class="px-6 py-5">
+
+                        {{ Str::limit($appointment->keluhan_utama,30) }}
+
+                    </td>
+
+                    <!-- STATUS -->
+
+                    <td class="px-6 py-5 text-center">
+
+                        @if($appointment->status_janji=="pending")
+
+                            <span class="px-3 py-2 rounded-full bg-yellow-100 text-yellow-700 text-xs font-semibold">
+                                Pending
+                            </span>
+
+                        @elseif($appointment->status_janji=="called")
+
+                            <span class="px-3 py-2 rounded-full bg-blue-100 text-blue-700 text-xs font-semibold">
+                                Called
+                            </span>
+
+                        @elseif($appointment->status_janji=="in_consultation")
+
+                            <span class="px-3 py-2 rounded-full bg-purple-100 text-purple-700 text-xs font-semibold">
+                                Consultation
+                            </span>
+
+                        @elseif($appointment->status_janji=="completed")
+
+                            <span class="px-3 py-2 rounded-full bg-green-100 text-green-700 text-xs font-semibold">
+                                Completed
+                            </span>
+
+                        @else
+
+                            <span class="px-3 py-2 rounded-full bg-red-100 text-red-700 text-xs font-semibold">
+                                Cancelled
+                            </span>
+
+                        @endif
+
+                    </td>
+
+                    <!-- ACTION -->
+
+                    <td class="px-6 py-5">
+
+                        <div class="flex justify-center gap-2">
+
+                            <form
+                                action="{{ route('admin.appointment.status',$appointment->id_janji) }}"
+                                method="POST">
+
                                 @csrf
                                 @method('PUT')
 
-                                <select name="status_janji" onchange="this.form.submit()"
-                                    class="px-3 py-2 rounded-xl border border-slate-200">
+                                <select
+                                    name="status_janji"
+                                    onchange="this.form.submit()"
+                                    class="border rounded-xl px-2 py-2 text-xs">
 
-                                    <option value="Menunggu" {{ $appointment->status_janji == 'Menunggu' ? 'selected' : '' }}>Menunggu</option>
-                                    <option value="Dipanggil" {{ $appointment->status_janji == 'Dipanggil' ? 'selected' : '' }}>Dipanggil</option>
-                                    <option value="Selesai" {{ $appointment->status_janji == 'Selesai' ? 'selected' : '' }}>Selesai</option>
-                                    <option value="Batal" {{ $appointment->status_janji == 'Batal' ? 'selected' : '' }}>Batal</option>
+                                    <option value="pending"
+                                    {{ $appointment->status_janji=="pending"?'selected':'' }}>
+                                        Pending
+                                    </option>
+
+                                    <option value="called"
+                                    {{ $appointment->status_janji=="called"?'selected':'' }}>
+                                        Called
+                                    </option>
+
+                                    <option value="in_consultation"
+                                    {{ $appointment->status_janji=="in_consultation"?'selected':'' }}>
+                                        Consultation
+                                    </option>
+
+                                    <option value="completed"
+                                    {{ $appointment->status_janji=="completed"?'selected':'' }}>
+                                        Completed
+                                    </option>
+
+                                    <option value="cancelled"
+                                    {{ $appointment->status_janji=="cancelled"?'selected':'' }}>
+                                        Cancelled
+                                    </option>
 
                                 </select>
-                            </form>
-                        </td>
 
-                        <td class="px-6 py-5">
-                            <form action="{{ route('admin.appointment.delete', $appointment->id_janji) }}" method="POST">
+                            </form>
+
+                            <form
+                                action="{{ route('admin.appointment.delete',$appointment->id_janji) }}"
+                                method="POST">
+
                                 @csrf
                                 @method('DELETE')
 
-                                <button onclick="return confirm('Hapus antrean ini?')"
-                                    class="w-9 h-9 rounded-xl border border-red-200 flex items-center justify-center hover:bg-red-100">
+                                <button
+                                    onclick="return confirm('Delete appointment?')"
+                                    class="w-10 h-10 rounded-xl bg-red-50 hover:bg-red-100">
 
-                                    <i data-lucide="trash-2" class="w-4 h-4 text-red-500"></i>
+                                    🗑️
 
                                 </button>
-                            </form>
-                        </td>
 
-                    </tr>
+                            </form>
+
+                        </div>
+
+                    </td>
+
+                </tr>
 
                 @empty
-                    <tr>
-                        <td colspan="8" class="text-center py-10 text-slate-400">
-                            Belum ada appointment pasien
-                        </td>
-                    </tr>
+
+                <tr>
+
+                    <td colspan="7"
+                        class="py-14 text-center text-slate-400">
+
+                        No appointment data available.
+
+                    </td>
+
+                </tr>
+
                 @endforelse
-                </tbody>
 
-            </table>
+            </tbody>
 
-        </div>
+        </table>
 
     </div>
 
 </div>
 
-<!-- MODAL -->
-<div id="modalAppointment"
-class="fixed inset-0 hidden z-50 bg-black/40 flex items-center justify-center p-4">
-
-    <div class="bg-white w-full max-w-lg rounded-3xl p-8 shadow-2xl">
-
-        <div class="flex items-center justify-between mb-6">
-
-            <h2 class="text-2xl font-bold">Confirm Appointment</h2>
-
-            <button onclick="document.getElementById('modalAppointment').classList.add('hidden')"
-                class="text-slate-500 text-2xl hover:text-slate-700">
-                ×
-            </button>
-
-        </div>
-
-        <form action="{{ route('admin.appointment.store') }}" method="POST">
-            @csrf
-
-            <input type="text" name="nama_pasien" placeholder="Nama Pasien"
-                class="w-full mb-3 border rounded-2xl px-4 py-3">
-
-            <input type="text" name="nama_dokter" placeholder="Nama Dokter"
-                class="w-full mb-3 border rounded-2xl px-4 py-3">
-
-            <input type="date" name="tanggal_janji"
-                class="w-full mb-3 border rounded-2xl px-4 py-3">
-
-            <input type="time" name="jam_janji"
-                class="w-full mb-3 border rounded-2xl px-4 py-3">
-
-            <textarea name="keluhan_utama" placeholder="Keluhan"
-                class="w-full mb-4 border rounded-2xl px-4 py-3"></textarea>
-
-            <button type="submit"
-                class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-2xl font-semibold transition">
-                Confirm Appointment
-            </button>
-
-        </form>
-
-    </div>
 </div>
 
 @endsection
