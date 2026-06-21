@@ -55,8 +55,8 @@ class Dokter extends Model
 {
     return $this->hasMany(
         Appointment::class,
-        'id_pasien',
-        'id_pasien'
+        'id_dokter',
+        'id_dokter'
     );
 }
 

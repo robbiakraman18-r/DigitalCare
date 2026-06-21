@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\Admin\AdminJadwalController;
+use App\Http\Controllers\Admin\AdminRekamMedisController;
 
 
 // Controller Imports
@@ -12,6 +13,7 @@ use App\Http\Controllers\{
     LoginController, AdminController, PasienController, RegisterController, 
     VerificationController, DokterController, ListPatientController, 
     ListprescriptionController, AppointmentController, JadwalController, ProfileController
+    
 };
 
 
@@ -263,6 +265,13 @@ Route::put('/schedule-management/update/{id}', [AdminJadwalController::class, 'u
 
 Route::delete('/schedule-management/delete/{id}', [AdminJadwalController::class, 'destroy'])
     ->name('admin.schedule.destroy');
+
+
+   Route::get('/medical-records', [AdminRekamMedisController::class, 'index'])
+    ->name('admin.medical-records.index');
+
+    Route::get('/medical-records/{id}', [AdminRekamMedisController::class, 'show'])
+    ->name('admin.medical-records.show');
 });
 
 

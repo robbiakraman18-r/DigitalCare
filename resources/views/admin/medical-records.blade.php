@@ -1,236 +1,131 @@
 @extends('layouts.admin')
 
-@section('title', 'Medical Records')
-@section('subtitle', 'Manage and monitor all patient medical records.')
 
 @section('content')
 
-<div
-x-data="{
-    detailModal:false
-}"
-class="space-y-6">
+<div class="space-y-6">
 
-    <!-- TOP -->
-    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
+    {{-- HEADER --}}
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
 
-        <!-- CARD -->
-        <div class="bg-white rounded-[28px] border border-slate-100 shadow-sm p-5">
+        <div>
+            <h1 class="text-3xl font-bold text-slate-800">
+                Medical Records
+            </h1>
 
-            <div class="flex items-center justify-between">
-
-                <div>
-
-                    <p class="text-sm text-slate-400">
-                        Total Records
-                    </p>
-
-                    <h2 class="text-3xl font-bold text-slate-800 mt-2">
-                        3,562
-                    </h2>
-
-                </div>
-
-                <div class="w-14 h-14 rounded-2xl bg-blue-100 flex items-center justify-center">
-
-                    <i data-lucide="file-text" class="w-6 h-6 text-blue-600"></i>
-
-                </div>
-
-            </div>
-
-            <p class="text-xs text-green-500 mt-4 font-medium">
-                +12% from last month
+            <p class="text-slate-500 mt-1">
+                {{ $totalRecords }} medical records stored
             </p>
-
         </div>
 
-        <!-- CARD -->
-        <div class="bg-white rounded-[28px] border border-slate-100 shadow-sm p-5">
+        <button
+            class="px-5 py-3 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 font-medium text-slate-600">
+            Export
+        </button>
 
-            <div class="flex items-center justify-between">
+    </div>
 
-                <div>
+    {{-- STATS --}}
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
-                    <p class="text-sm text-slate-400">
-                        Active Patients
-                    </p>
-
-                    <h2 class="text-3xl font-bold text-slate-800 mt-2">
-                        1,248
-                    </h2>
-
-                </div>
-
-                <div class="w-14 h-14 rounded-2xl bg-teal-100 flex items-center justify-center">
-
-                    <i data-lucide="users" class="w-6 h-6 text-teal-600"></i>
-
-                </div>
-
-            </div>
-
-            <p class="text-xs text-green-500 mt-4 font-medium">
-                +8% from last month
+        <div class="bg-white rounded-3xl border border-slate-100 p-5">
+            <p class="text-sm text-slate-500">
+                Total Records
             </p>
 
+            <h2 class="text-3xl font-bold text-slate-800 mt-2">
+                {{ $totalRecords }}
+            </h2>
         </div>
 
-        <!-- CARD -->
-        <div class="bg-white rounded-[28px] border border-slate-100 shadow-sm p-5">
-
-            <div class="flex items-center justify-between">
-
-                <div>
-
-                    <p class="text-sm text-slate-400">
-                        New Records
-                    </p>
-
-                    <h2 class="text-3xl font-bold text-slate-800 mt-2">
-                        86
-                    </h2>
-
-                </div>
-
-                <div class="w-14 h-14 rounded-2xl bg-yellow-100 flex items-center justify-center">
-
-                    <i data-lucide="clipboard-plus" class="w-6 h-6 text-yellow-600"></i>
-
-                </div>
-
-            </div>
-
-            <p class="text-xs text-green-500 mt-4 font-medium">
-                +15 today
+        <div class="bg-white rounded-3xl border border-slate-100 p-5">
+            <p class="text-sm text-slate-500">
+                Active Doctors
             </p>
 
+            <h2 class="text-3xl font-bold text-blue-600 mt-2">
+                {{ $totalDoctors }}
+            </h2>
         </div>
 
-        <!-- CARD -->
-        <div class="bg-white rounded-[28px] border border-slate-100 shadow-sm p-5">
-
-            <div class="flex items-center justify-between">
-
-                <div>
-
-                    <p class="text-sm text-slate-400">
-                        Archived
-                    </p>
-
-                    <h2 class="text-3xl font-bold text-slate-800 mt-2">
-                        214
-                    </h2>
-
-                </div>
-
-                <div class="w-14 h-14 rounded-2xl bg-red-100 flex items-center justify-center">
-
-                    <i data-lucide="archive" class="w-6 h-6 text-red-500"></i>
-
-                </div>
-
-            </div>
-
-            <p class="text-xs text-slate-400 mt-4 font-medium">
-                Last updated today
+        <div class="bg-white rounded-3xl border border-slate-100 p-5">
+            <p class="text-sm text-slate-500">
+                Prescriptions
             </p>
 
+            <h2 class="text-3xl font-bold text-purple-600 mt-2">
+                {{ $totalPrescriptions }}
+            </h2>
         </div>
 
     </div>
 
-    <!-- TABLE -->
-    <div class="bg-white rounded-[30px] border border-slate-100 shadow-sm overflow-hidden">
+    {{-- FILTER --}}
+    <div class="bg-white rounded-3xl border border-slate-100 p-5">
 
-        <!-- HEADER -->
-        <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4 p-6 border-b border-slate-100">
+        <form
+            method="GET"
+            action="{{ route('admin.medical-records.index') }}"
+            class="grid grid-cols-1 md:grid-cols-3 gap-3">
 
-            <div>
+            <input
+                type="text"
+                name="search"
+                value="{{ request('search') }}"
+                placeholder="Search patient or diagnosis..."
+                class="border border-slate-200 rounded-2xl px-4 py-3">
 
-                <h2 class="text-xl font-bold text-slate-800">
-                    Medical Record List
-                </h2>
+            <input
+                type="date"
+                name="tanggal"
+                value="{{ request('tanggal') }}"
+                class="border border-slate-200 rounded-2xl px-4 py-3">
 
-                <p class="text-sm text-slate-400 mt-1">
-                    View and manage patient medical history.
-                </p>
+            <button
+                class="bg-teal-500 hover:bg-teal-600 text-white rounded-2xl font-semibold py-3">
 
-            </div>
+                Filter
 
-            <!-- RIGHT -->
-            <div class="flex flex-col lg:flex-row gap-3">
+            </button>
 
-                <!-- SEARCH -->
-                <div class="relative">
+        </form>
 
-                    <i data-lucide="search"
-                    class="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
+    </div>
 
-                    <input
-                    type="text"
-                    placeholder="Search patient..."
-                    class="w-full lg:w-72 pl-12 pr-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
+    {{-- LIST --}}
+    <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden">
 
-                </div>
+        @if($rekamMedis->count() > 0)
 
-                <!-- FILTER -->
-                <select
-                class="px-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 text-slate-700">
-
-                    <option>All Doctors</option>
-                    <option>Cardiology</option>
-                    <option>Neurology</option>
-                    <option>Orthopedic</option>
-
-                </select>
-
-                <!-- BUTTON -->
-                <button
-                class="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold transition">
-
-                    Export Record
-
-                </button>
-
-            </div>
-
-        </div>
-
-        <!-- TABLE -->
         <div class="overflow-x-auto">
 
-            <table class="w-full min-w-[1200px]">
+            <table class="w-full text-sm">
 
                 <thead class="bg-slate-50">
 
                     <tr>
 
-                        <th class="px-6 py-4 text-left text-sm font-semibold text-slate-400">
-                            Patient
-                        </th>
-
-                        <th class="px-6 py-4 text-left text-sm font-semibold text-slate-400">
-                            Doctor
-                        </th>
-
-                        <th class="px-6 py-4 text-left text-sm font-semibold text-slate-400">
-                            Diagnosis
-                        </th>
-
-                        <th class="px-6 py-4 text-left text-sm font-semibold text-slate-400">
-                            Treatment
-                        </th>
-
-                        <th class="px-6 py-4 text-left text-sm font-semibold text-slate-400">
+                        <th class="px-6 py-4 text-left text-slate-500 font-medium">
                             Date
                         </th>
 
-                        <th class="px-6 py-4 text-left text-sm font-semibold text-slate-400">
+                        <th class="px-6 py-4 text-left text-slate-500 font-medium">
+                            Patient
+                        </th>
+
+                        <th class="px-6 py-4 text-left text-slate-500 font-medium">
+                            Diagnosis
+                        </th>
+
+                        <th class="px-6 py-4 text-left text-slate-500 font-medium">
+                            Doctor
+                        </th>
+
+                        <th class="px-6 py-4 text-left text-slate-500 font-medium">
                             Status
                         </th>
 
-                        <th class="px-6 py-4 text-center text-sm font-semibold text-slate-400">
+                        <th class="px-6 py-4 text-right text-slate-500 font-medium">
                             Action
                         </th>
 
@@ -240,155 +135,108 @@ class="space-y-6">
 
                 <tbody>
 
-                    <!-- ROW -->
-                    @foreach([
-                        [
-                            'name'=>'John Smith',
-                            'img'=>'12',
-                            'doctor'=>'Dr. Emily Carter',
-                            'diagnosis'=>'Hypertension',
-                            'treatment'=>'Medication & Monitoring',
-                            'date'=>'14 May 2025',
-                            'status'=>'Active'
-                        ],
-                        [
-                            'name'=>'Sarah Johnson',
-                            'img'=>'32',
-                            'doctor'=>'Dr. James Wilson',
-                            'diagnosis'=>'Migraine',
-                            'treatment'=>'Pain Therapy',
-                            'date'=>'13 May 2025',
-                            'status'=>'Recovered'
-                        ],
-                        [
-                            'name'=>'Michael Brown',
-                            'img'=>'45',
-                            'doctor'=>'Dr. David Lee',
-                            'diagnosis'=>'Diabetes',
-                            'treatment'=>'Insulin Therapy',
-                            'date'=>'12 May 2025',
-                            'status'=>'Monitoring'
-                        ],
-                        [
-                            'name'=>'Emily Davis',
-                            'img'=>'28',
-                            'doctor'=>'Dr. Robert Kim',
-                            'diagnosis'=>'Asthma',
-                            'treatment'=>'Inhaler Treatment',
-                            'date'=>'11 May 2025',
-                            'status'=>'Active'
-                        ],
-                        [
-                            'name'=>'Robert Lee',
-                            'img'=>'55',
-                            'doctor'=>'Dr. Carter',
-                            'diagnosis'=>'Fracture',
-                            'treatment'=>'Physical Therapy',
-                            'date'=>'10 May 2025',
-                            'status'=>'Recovered'
-                        ]
-                    ] as $record)
+                    @foreach($rekamMedis as $index => $rekam)
 
-                    <tr class="border-b border-slate-100 hover:bg-slate-50 transition">
+                    @php
 
-                        <!-- PATIENT -->
-                        <td class="px-6 py-5">
+                        $pasien = $rekam->appointment->pasien ?? null;
 
-                            <div class="flex items-center gap-4">
+                        $namaPasien =
+                            $pasien->user->nama
+                            ?? 'Unknown Patient';
 
-                                <img
-                                src="https://i.pravatar.cc/100?img={{ $record['img'] }}"
-                                class="w-12 h-12 rounded-2xl object-cover">
+                        $namaDokter =
+                            $rekam->dokter->user->nama
+                            ?? '-';
+
+                    @endphp
+
+                    <tr class="border-t border-slate-100 hover:bg-slate-50">
+
+                        <td class="px-6 py-4 align-top">
+
+                            <div class="flex items-center gap-3">
+
+                                <div
+                                    class="w-11 h-11 rounded-2xl bg-teal-50 flex flex-col items-center justify-center shrink-0">
+
+                                    <span class="text-sm font-bold text-teal-700">
+                                        {{ \Carbon\Carbon::parse($rekam->waktu_pemeriksaan)->format('d') }}
+                                    </span>
+
+                                    <span class="text-[9px] text-teal-500">
+                                        {{ \Carbon\Carbon::parse($rekam->waktu_pemeriksaan)->translatedFormat('M') }}
+                                    </span>
+
+                                </div>
 
                                 <div>
-
-                                    <h3 class="font-semibold text-slate-800">
-                                        {{ $record['name'] }}
-                                    </h3>
-
-                                    <p class="text-sm text-slate-400">
-                                        MR-2025-00{{ $loop->iteration }}
+                                    <p class="font-medium text-slate-800">
+                                        {{ \Carbon\Carbon::parse($rekam->waktu_pemeriksaan)->translatedFormat('d F Y') }}
                                     </p>
 
+                                    <p class="text-xs text-slate-400">
+                                        {{ \Carbon\Carbon::parse($rekam->waktu_pemeriksaan)->format('H:i') }}
+                                    </p>
                                 </div>
 
                             </div>
 
                         </td>
 
-                        <!-- DOCTOR -->
-                        <td class="px-6 py-5 text-slate-600">
-                            {{ $record['doctor'] }}
+                        <td class="px-6 py-4 align-top">
+
+                            <p class="font-medium text-slate-800">
+                                {{ $namaPasien }}
+                            </p>
+
+                            <p class="text-xs text-slate-400">
+                                {{ $pasien->no_rm ?? '-' }}
+                            </p>
+
                         </td>
 
-                        <!-- DIAGNOSIS -->
-                        <td class="px-6 py-5 text-slate-600">
-                            {{ $record['diagnosis'] }}
+                        <td class="px-6 py-4 align-top max-w-xs">
+
+                            <p class="text-slate-700 truncate">
+                                {{ $rekam->diagnosa ?? 'Diagnosis belum diisi' }}
+                            </p>
+
                         </td>
 
-                        <!-- TREATMENT -->
-                        <td class="px-6 py-5 text-slate-600">
-                            {{ $record['treatment'] }}
+                        <td class="px-6 py-4 align-top text-slate-700">
+                            {{ $namaDokter }}
                         </td>
 
-                        <!-- DATE -->
-                        <td class="px-6 py-5 text-slate-600">
-                            {{ $record['date'] }}
-                        </td>
+                        <td class="px-6 py-4 align-top">
 
-                        <!-- STATUS -->
-                        <td class="px-6 py-5">
+                            @if($index == 0)
 
-                            @if($record['status'] == 'Active')
-
-                            <span class="px-4 py-2 rounded-xl bg-blue-100 text-blue-600 text-xs font-semibold">
-                                Active
-                            </span>
-
-                            @elseif($record['status'] == 'Recovered')
-
-                            <span class="px-4 py-2 rounded-xl bg-green-100 text-green-600 text-xs font-semibold">
-                                Recovered
+                            <span
+                                class="px-3 py-1 bg-teal-100 text-teal-700 rounded-xl text-xs font-semibold">
+                                Terbaru
                             </span>
 
                             @else
 
-                            <span class="px-4 py-2 rounded-xl bg-yellow-100 text-yellow-600 text-xs font-semibold">
-                                Monitoring
+                            <span
+                                class="px-3 py-1 bg-slate-100 text-slate-500 rounded-xl text-xs font-semibold">
+                                Selesai
                             </span>
 
                             @endif
 
                         </td>
 
-                        <!-- ACTION -->
-                        <td class="px-6 py-5">
+                        <td class="px-6 py-4 align-top text-right">
 
-                            <div class="flex items-center justify-center gap-2">
+                            <a
+                                href="{{ route('admin.medical-records.show', $rekam->id_rekam_medis) }}"
+                                class="px-4 py-2 rounded-xl bg-blue-50 text-blue-600 hover:bg-blue-100 font-medium text-xs inline-block">
 
-                                <button
-                                @click="detailModal=true"
-                                class="w-10 h-10 rounded-xl bg-blue-100 hover:bg-blue-200 flex items-center justify-center transition">
+                                View Detail
 
-                                    <i data-lucide="eye" class="w-4 h-4 text-blue-600"></i>
-
-                                </button>
-
-                                <button
-                                class="w-10 h-10 rounded-xl bg-green-100 hover:bg-green-200 flex items-center justify-center transition">
-
-                                    <i data-lucide="download" class="w-4 h-4 text-green-600"></i>
-
-                                </button>
-
-                                <button
-                                class="w-10 h-10 rounded-xl bg-red-100 hover:bg-red-200 flex items-center justify-center transition">
-
-                                    <i data-lucide="trash-2" class="w-4 h-4 text-red-500"></i>
-
-                                </button>
-
-                            </div>
+                            </a>
 
                         </td>
 
@@ -402,117 +250,34 @@ class="space-y-6">
 
         </div>
 
-    </div>
+        @else
 
-    <!-- MODAL -->
-    <div
-    x-show="detailModal"
-    x-transition
-    class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-5"
-    style="display:none;">
+        {{-- EMPTY STATE --}}
+        <div class="p-16 text-center">
 
-        <div
-        @click.away="detailModal=false"
-        class="bg-white w-full max-w-3xl rounded-[32px] shadow-2xl overflow-hidden">
+            <i
+                data-lucide="file-x"
+                class="w-10 h-10 mx-auto text-slate-300 mb-4">
+            </i>
 
-            <!-- TOP -->
-            <div class="flex items-center justify-between px-6 py-5 border-b border-slate-100">
-
-                <div>
-
-                    <h2 class="text-xl font-bold text-slate-800">
-                        Medical Record Detail
-                    </h2>
-
-                    <p class="text-sm text-slate-400 mt-1">
-                        Patient diagnosis and treatment detail
-                    </p>
-
-                </div>
-
-                <button
-                @click="detailModal=false"
-                class="w-11 h-11 rounded-2xl bg-slate-100 hover:bg-slate-200 flex items-center justify-center">
-
-                    <i data-lucide="x" class="w-5 h-5 text-slate-600"></i>
-
-                </button>
-
-            </div>
-
-            <!-- BODY -->
-            <div class="p-6 space-y-6 max-h-[70vh] overflow-y-auto">
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-
-                    <div class="bg-slate-50 rounded-2xl p-5">
-
-                        <p class="text-sm text-slate-400">
-                            Patient Name
-                        </p>
-
-                        <h3 class="font-bold text-slate-800 mt-2">
-                            John Smith
-                        </h3>
-
-                    </div>
-
-                    <div class="bg-slate-50 rounded-2xl p-5">
-
-                        <p class="text-sm text-slate-400">
-                            Doctor
-                        </p>
-
-                        <h3 class="font-bold text-slate-800 mt-2">
-                            Dr. Emily Carter
-                        </h3>
-
-                    </div>
-
-                    <div class="bg-slate-50 rounded-2xl p-5">
-
-                        <p class="text-sm text-slate-400">
-                            Diagnosis
-                        </p>
-
-                        <h3 class="font-bold text-slate-800 mt-2">
-                            Hypertension
-                        </h3>
-
-                    </div>
-
-                    <div class="bg-slate-50 rounded-2xl p-5">
-
-                        <p class="text-sm text-slate-400">
-                            Treatment
-                        </p>
-
-                        <h3 class="font-bold text-slate-800 mt-2">
-                            Medication Therapy
-                        </h3>
-
-                    </div>
-
-                </div>
-
-                <div class="bg-slate-50 rounded-2xl p-5">
-
-                    <h3 class="font-bold text-slate-800 mb-3">
-                        Doctor Notes
-                    </h3>
-
-                    <p class="text-slate-600 leading-relaxed">
-                        Patient shows stable blood pressure after medication adjustment.
-                        Continue monitoring every 2 weeks and maintain healthy diet.
-                    </p>
-
-                </div>
-
-            </div>
+            <p class="text-slate-500">
+                No medical records found
+            </p>
 
         </div>
 
+        @endif
+
     </div>
+
+    {{-- PAGINATION --}}
+    @if($rekamMedis->hasPages())
+
+    <div class="pt-2">
+        {{ $rekamMedis->links() }}
+    </div>
+
+    @endif
 
 </div>
 

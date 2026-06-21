@@ -229,9 +229,9 @@ class DokterController extends Controller
             DetailResep::create([
                 'id_rekam_medis' => $rekamMedis->id_rekam_medis,
                 'nama_obat'      => $obat,
-                'dosis'          => $request->dosis[$index] ?? null,
-                'jumlah'         => $request->jumlah[$index] ?? null,
-                'aturan_pakai'   => $request->aturan_pakai[$index] ?? null,
+                'dosis' => $request->dosis[$index] ?? 'tidak ada dosis',
+                'jumlah' => $request->jumlah[$index] ?? 0,
+                'aturan_pakai' => $request->aturan_pakai[$index] ?? 'tidak ada aturan',
             ]);
         }
 

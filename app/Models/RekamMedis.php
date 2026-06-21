@@ -3,8 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Dokter;
-use App\Models\DetailResep;
 
 class RekamMedis extends Model
 {
@@ -22,16 +20,28 @@ class RekamMedis extends Model
 
     public function dokter()
     {
-        return $this->belongsTo(Dokter::class, 'id_dokter', 'id_dokter');
+        return $this->belongsTo(
+            Dokter::class,
+            'id_dokter',
+            'id_dokter'
+        );
     }
 
     public function appointment()
     {
-        return $this->belongsTo(Appointment::class, 'id_janji', 'id_janji');
+        return $this->belongsTo(
+            Appointment::class,
+            'id_janji',
+            'id_janji'
+        );
     }
 
     public function detailResep()
     {
-        return $this->hasMany(DetailResep::class, 'id_rekam_medis');
+        return $this->hasMany(
+            DetailResep::class,
+            'id_rekam_medis',
+            'id_rekam_medis'
+        );
     }
 }

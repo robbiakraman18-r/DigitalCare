@@ -14,22 +14,25 @@ return new class extends Migration
         Schema::create('rekam_medis', function (Blueprint $table) {
     $table->id('id_rekam_medis');
 
-    // FK ke janji temu (appointment)
-    $table->unsignedBigInteger('id_janji');
+    $table->foreignId('id_janji')
+        ->constrained('appointments', 'id_janji')
+        ->onDelete('cascade');
 
-$table->foreign('id_janji')
-    ->references('id_janji')
-    ->on('appointments')
-    ->onDelete('cascade');
-
-    // FK ke dokter
     $table->foreignId('id_dokter')
         ->constrained('dokters', 'id_dokter')
         ->onDelete('cascade');
 
-    $table->text('diagnosa');
+    // 🔥 TAMBAHAN PENTING (HARUS ADA)
+    $table->foreignId('id_pasien')
+        ->constrained('pasiens', 'id_pasien')
+        ->onDelete('cascade');
+
     $table->text('keluhan');
+    $table->text('diagnosa');
     $table->text('catatan_dokter')->nullable();
+
+    // optional tapi bagus untuk real hospital flow
+    $table->enum('status', ['draft', 'completed'])->default('completed');
 
     $table->dateTime('waktu_pemeriksaan');
 

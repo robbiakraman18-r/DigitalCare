@@ -119,19 +119,6 @@
                 </span>
             </a>
 
-            <!-- PAYMENTS -->
-            <a href="/admin/payments"
-            class="relative flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300
-            {{ request()->is('admin/payments')
-            ? 'bg-teal-500 text-white shadow-lg shadow-cyan-200'
-            : 'text-slate-600 hover:bg-teal-50' }}">
-
-                <i data-lucide="wallet" class="w-5 h-5 shrink-0"></i>
-
-                <span class="font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300">
-                    Payments
-                </span>
-            </a>
 
             <!-- COMPLAINT -->
             <a href="/admin/complaint"
@@ -141,7 +128,6 @@
             : 'text-slate-600 hover:bg-teal-50' }}">
 
                 @if(request()->is('admin/complaint'))
-                <div class="absolute right-0 top-1/2 -translate-y-1/2 w-1.5 h-10 rounded-l-full bg-white"></div>
                 @endif
 
                 <i data-lucide="message-square-warning" class="w-5 h-5 shrink-0"></i>

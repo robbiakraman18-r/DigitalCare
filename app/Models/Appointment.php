@@ -63,5 +63,9 @@ class Appointment extends Model
     {
         return $this->belongsTo(JadwalDokter::class, 'id_jadwal', 'id_jadwal');
     }
+    public function jadwaldokter()
+{
+    return $this->belongsTo(JadwalDokter::class, 'id_jadwal', 'id_jadwal');
+}
     
 }
