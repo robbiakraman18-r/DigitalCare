@@ -10,6 +10,7 @@ use App\Models\Pasien;
 use App\Models\RekamMedis;
 use App\Models\Appointment;
 use Carbon\Carbon;
+use App\Models\ClinicSetting;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -462,5 +463,11 @@ class DokterController extends Controller
     public function passwordPage()
     {
         return view('dokter.password');
+    }
+
+    public function clinicInfo()
+    {
+        $setting = ClinicSetting::instance();
+        return view('dokter.info-klinik-dokter', compact('setting'));
     }
 }

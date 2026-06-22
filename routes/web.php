@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\Admin\AdminJadwalController;
 use App\Http\Controllers\Admin\AdminRekamMedisController;
 use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Admin\SettingController;
 
 
 // Controller Imports
@@ -87,7 +88,10 @@ Route::prefix('pasien')->middleware(['auth', 'role:pasien'])->group(function () 
     Route::view('/detail-rekam-medis', 'pasien.detail-rekam-medis');
     Route::view('/download-rekam-medis', 'pasien.download-rekam-medis');
     Route::view('/payment', 'pasien.payment');
-    Route::view('/info-klinik', 'pasien.info-clinic');
+
+    // Info klinik
+    Route::get('/info-klinik', [PasienController::class, 'clinicInfo'])
+    ->name('pasien.info-klinik');
 
     // Profile Routes
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
@@ -156,17 +160,19 @@ Route::prefix('dokter')->middleware(['auth', 'role:dokter'])->group(function () 
     Route::get('/medical-history', [DokterController::class, 'medicalHistory'])
         ->name('dokter.medicalhistory');
 
-    Route::view('/info-klinik', 'dokter.info-klinik-dokter')
-        ->name('dokter.info');
 
     Route::get('/help', function () {
         return view('dokter.help');
         })->name('dokter.help');
 
-    Route::get('/dokter/settings/password', [DokterController::class, 'passwordPage'])
+    // ✅ BENAR
+    Route::get('/info-klinik', [DokterController::class, 'clinicInfo'])
+        ->name('dokter.info-klinik');
+
+    Route::get('/settings/password', [DokterController::class, 'passwordPage'])
         ->name('dokter.password.page');
-        
-    Route::post('/dokter/settings/password', [DokterController::class, 'updatePassword'])
+
+    Route::post('/settings/password', [DokterController::class, 'updatePassword'])
         ->name('dokter.password.update');
 
     Route::get('/password/success', function () {
@@ -285,6 +291,24 @@ Route::delete('/schedule-management/delete/{id}', [AdminJadwalController::class,
  
     Route::get('/reports/{type}/excel', [ReportController::class, 'exportExcel'])
         ->name('admin.reports.excel');
+
+    Route::get('/settings', [SettingController::class, 'index'])
+        ->name('admin.settings.index');
+ 
+    Route::put('/settings/general', [SettingController::class, 'updateGeneral'])
+        ->name('admin.settings.general');
+ 
+    Route::put('/settings/address', [SettingController::class, 'updateAddress'])
+        ->name('admin.settings.address');
+ 
+    Route::put('/settings/hours', [SettingController::class, 'updateHours'])
+        ->name('admin.settings.hours');
+ 
+    Route::put('/settings/social', [SettingController::class, 'updateSocial'])
+        ->name('admin.settings.social');
+ 
+    Route::put('/settings/legal', [SettingController::class, 'updateLegal'])
+        ->name('admin.settings.legal');
 });
 
 

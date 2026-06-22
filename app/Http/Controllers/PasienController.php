@@ -7,6 +7,7 @@ use App\Models\RekamMedis;
 use App\Models\Dokter;
 use App\Models\JadwalDokter;
 use Illuminate\Http\Request;
+use App\Models\ClinicSetting;
 use Illuminate\Support\Facades\Auth; 
 use Illuminate\Support\Facades\DB;
 
@@ -116,5 +117,10 @@ class PasienController extends Controller
                 ->withInput()
                 ->with('error', 'Something went wrong while booking. Please try again.');
         }
+    }
+    public function clinicInfo()
+    {
+        $setting = ClinicSetting::instance();
+        return view('pasien.info-klinik', compact('setting'));
     }
 }

@@ -1,477 +1,562 @@
-{{-- resources/views/admin/settings.blade.php --}}
-
 @extends('layouts.admin')
 
 @section('title', 'Settings')
-@section('subtitle', 'Manage clinic system settings and preferences.')
+@section('subtitle', 'Manage clinic information and configuration')
 
 @section('content')
 
-<div
-x-data="{
-    saveModal:false
-}"
-class="space-y-6">
+<div class="space-y-6">
 
-    <!-- TOP -->
-    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
-
-        <!-- CARD -->
-        <div class="bg-white rounded-[28px] border border-slate-100 shadow-sm p-5">
-
-            <div class="flex items-center justify-between">
-
-                <div>
-
-                    <p class="text-sm text-slate-400">
-                        System Status
-                    </p>
-
-                    <h2 class="text-2xl font-bold text-green-500 mt-2">
-                        Online
-                    </h2>
-
-                </div>
-
-                <div class="w-14 h-14 rounded-2xl bg-green-100 flex items-center justify-center">
-
-                    <i data-lucide="server" class="w-6 h-6 text-green-600"></i>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- CARD -->
-        <div class="bg-white rounded-[28px] border border-slate-100 shadow-sm p-5">
-
-            <div class="flex items-center justify-between">
-
-                <div>
-
-                    <p class="text-sm text-slate-400">
-                        Active Users
-                    </p>
-
-                    <h2 class="text-2xl font-bold text-slate-800 mt-2">
-                        1,284
-                    </h2>
-
-                </div>
-
-                <div class="w-14 h-14 rounded-2xl bg-blue-100 flex items-center justify-center">
-
-                    <i data-lucide="users" class="w-6 h-6 text-blue-600"></i>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- CARD -->
-        <div class="bg-white rounded-[28px] border border-slate-100 shadow-sm p-5">
-
-            <div class="flex items-center justify-between">
-
-                <div>
-
-                    <p class="text-sm text-slate-400">
-                        Database
-                    </p>
-
-                    <h2 class="text-2xl font-bold text-cyan-500 mt-2">
-                        Stable
-                    </h2>
-
-                </div>
-
-                <div class="w-14 h-14 rounded-2xl bg-cyan-100 flex items-center justify-center">
-
-                    <i data-lucide="database" class="w-6 h-6 text-cyan-600"></i>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- CARD -->
-        <div class="bg-white rounded-[28px] border border-slate-100 shadow-sm p-5">
-
-            <div class="flex items-center justify-between">
-
-                <div>
-
-                    <p class="text-sm text-slate-400">
-                        Security
-                    </p>
-
-                    <h2 class="text-2xl font-bold text-yellow-500 mt-2">
-                        Protected
-                    </h2>
-
-                </div>
-
-                <div class="w-14 h-14 rounded-2xl bg-yellow-100 flex items-center justify-center">
-
-                    <i data-lucide="shield-check" class="w-6 h-6 text-yellow-600"></i>
-
-                </div>
-
-            </div>
-
-        </div>
-
+    {{-- HEADER --}}
+    <div>
+        <h1 class="text-3xl font-bold text-slate-800">
+            Clinic Settings
+        </h1>
+        <p class="text-slate-500 mt-1">
+            Manage your clinic profile, operational hours, and legal information
+        </p>
     </div>
 
-    <!-- SETTINGS -->
-    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+    {{-- ALERT SUCCESS --}}
+    @if(session('success'))
+    <div class="bg-green-50 border border-green-200 rounded-2xl px-5 py-4 flex items-center gap-3">
+        <i data-lucide="check-circle-2" class="w-5 h-5 text-green-500 shrink-0"></i>
+        <p class="text-green-700 text-sm font-medium">{{ session('success') }}</p>
+    </div>
+    @endif
 
-        <!-- LEFT -->
-        <div class="xl:col-span-2 space-y-6">
+    {{-- 1. INFO UMUM --}}
+    <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden">
 
-            <!-- CLINIC -->
-            <div class="bg-white rounded-[30px] border border-slate-100 shadow-sm p-6">
+        <div class="px-6 py-5 border-b border-slate-100 flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-teal-50 flex items-center justify-center">
+                <i data-lucide="building-2" class="w-4 h-4 text-teal-600"></i>
+            </div>
+            <div>
+                <h2 class="font-semibold text-slate-800">General Information</h2>
+                <p class="text-xs text-slate-400">Clinic name, type, and contact details</p>
+            </div>
+        </div>
 
-                <div class="flex items-center gap-3 mb-6">
+        <form
+            action="{{ route('admin.settings.general') }}"
+            method="POST"
+            enctype="multipart/form-data"
+            class="p-6 space-y-5">
 
-                    <div class="w-12 h-12 rounded-2xl bg-teal-100 flex items-center justify-center">
+            @csrf
+            @method('PUT')
 
-                        <i data-lucide="building-2" class="w-6 h-6 text-teal-600"></i>
+            {{-- LOGO --}}
+            <div class="flex items-center gap-5">
 
-                    </div>
-
-                    <div>
-
-                        <h2 class="text-xl font-bold text-slate-800">
-                            Clinic Information
-                        </h2>
-
-                        <p class="text-sm text-slate-400">
-                            Manage clinic details
-                        </p>
-
-                    </div>
-
+                <div class="w-20 h-20 rounded-2xl bg-slate-100 overflow-hidden shrink-0 flex items-center justify-center">
+                    @if($setting->clinic_logo)
+                        <img
+                            src="{{ Storage::url($setting->clinic_logo) }}"
+                            alt="Logo"
+                            class="w-full h-full object-cover">
+                    @else
+                        <i data-lucide="image" class="w-7 h-7 text-slate-300"></i>
+                    @endif
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">
+                        Clinic Logo
+                    </label>
+                    <input
+                        type="file"
+                        name="clinic_logo"
+                        accept="image/png,image/jpeg"
+                        class="text-sm text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-teal-50 file:text-teal-600 file:font-medium hover:file:bg-teal-100">
+                    <p class="text-xs text-slate-400 mt-1">PNG atau JPG, maks 2MB</p>
+                </div>
 
-                    <!-- INPUT -->
-                    <div>
+            </div>
 
-                        <label class="text-sm font-semibold text-slate-700">
-                            Clinic Name
-                        </label>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-                        <input
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">
+                        Clinic Name <span class="text-red-400">*</span>
+                    </label>
+                    <input
                         type="text"
-                        value="DoctorCare Clinic"
-                        class="mt-2 w-full px-5 py-4 rounded-2xl border border-slate-200 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                        name="clinic_name"
+                        value="{{ old('clinic_name', $setting->clinic_name) }}"
+                        class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-300"
+                        required>
+                </div>
 
-                    </div>
-
-                    <!-- INPUT -->
-                    <div>
-
-                        <label class="text-sm font-semibold text-slate-700">
-                            Phone Number
-                        </label>
-
-                        <input
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">
+                        Tagline
+                    </label>
+                    <input
                         type="text"
-                        value="+62 812 3456 7890"
-                        class="mt-2 w-full px-5 py-4 rounded-2xl border border-slate-200 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                        name="clinic_tagline"
+                        value="{{ old('clinic_tagline', $setting->clinic_tagline) }}"
+                        placeholder="e.g. Kesehatan Anda, Prioritas Kami"
+                        class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-300">
+                </div>
 
-                    </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">
+                        Clinic Type
+                    </label>
+                    <select
+                        name="clinic_type"
+                        class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-300">
+                        @foreach(['General Clinic', 'Specialist Clinic', 'Dental Clinic', 'Maternity Clinic', 'Eye Clinic', 'Hospital'] as $type)
+                        <option value="{{ $type }}" {{ old('clinic_type', $setting->clinic_type) == $type ? 'selected' : '' }}>
+                            {{ $type }}
+                        </option>
+                        @endforeach
+                    </select>
+                </div>
 
-                    <!-- INPUT -->
-                    <div class="md:col-span-2">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">
+                        Email
+                    </label>
+                    <input
+                        type="email"
+                        name="clinic_email"
+                        value="{{ old('clinic_email', $setting->clinic_email) }}"
+                        class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-300">
+                </div>
 
-                        <label class="text-sm font-semibold text-slate-700">
-                            Address
-                        </label>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">
+                        Phone
+                    </label>
+                    <input
+                        type="text"
+                        name="clinic_phone"
+                        value="{{ old('clinic_phone', $setting->clinic_phone) }}"
+                        class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-300">
+                </div>
 
-                        <textarea
-                        rows="4"
-                        class="mt-2 w-full px-5 py-4 rounded-2xl border border-slate-200 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-teal-500">Batam Center, Batam City, Indonesia</textarea>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">
+                        WhatsApp
+                    </label>
+                    <input
+                        type="text"
+                        name="clinic_whatsapp"
+                        value="{{ old('clinic_whatsapp', $setting->clinic_whatsapp) }}"
+                        placeholder="e.g. 08112345678"
+                        class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-300">
+                </div>
 
-                    </div>
-
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-slate-700 mb-1">
+                        Website
+                    </label>
+                    <input
+                        type="url"
+                        name="clinic_website"
+                        value="{{ old('clinic_website', $setting->clinic_website) }}"
+                        placeholder="https://digitalcare.id"
+                        class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-300">
                 </div>
 
             </div>
 
-            <!-- SYSTEM -->
-            <div class="bg-white rounded-[30px] border border-slate-100 shadow-sm p-6">
-
-                <div class="flex items-center gap-3 mb-6">
-
-                    <div class="w-12 h-12 rounded-2xl bg-blue-100 flex items-center justify-center">
-
-                        <i data-lucide="monitor-cog" class="w-6 h-6 text-blue-600"></i>
-
-                    </div>
-
-                    <div>
-
-                        <h2 class="text-xl font-bold text-slate-800">
-                            System Preferences
-                        </h2>
-
-                        <p class="text-sm text-slate-400">
-                            Configure dashboard system
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <div class="space-y-5">
-
-                    <!-- ITEM -->
-                    <div class="flex items-center justify-between p-5 rounded-2xl bg-slate-50">
-
-                        <div>
-
-                            <h3 class="font-semibold text-slate-800">
-                                Email Notifications
-                            </h3>
-
-                            <p class="text-sm text-slate-400 mt-1">
-                                Receive clinic activity notifications
-                            </p>
-
-                        </div>
-
-                        <label class="relative inline-flex items-center cursor-pointer">
-
-                            <input type="checkbox" checked class="sr-only peer">
-
-                            <div class="w-14 h-7 bg-slate-200 rounded-full peer peer-checked:bg-teal-500 transition"></div>
-
-                            <div class="absolute left-1 top-1 w-5 h-5 bg-white rounded-full transition peer-checked:translate-x-7"></div>
-
-                        </label>
-
-                    </div>
-
-                    <!-- ITEM -->
-                    <div class="flex items-center justify-between p-5 rounded-2xl bg-slate-50">
-
-                        <div>
-
-                            <h3 class="font-semibold text-slate-800">
-                                Auto Backup
-                            </h3>
-
-                            <p class="text-sm text-slate-400 mt-1">
-                                Backup system database automatically
-                            </p>
-
-                        </div>
-
-                        <label class="relative inline-flex items-center cursor-pointer">
-
-                            <input type="checkbox" checked class="sr-only peer">
-
-                            <div class="w-14 h-7 bg-slate-200 rounded-full peer peer-checked:bg-teal-500 transition"></div>
-
-                            <div class="absolute left-1 top-1 w-5 h-5 bg-white rounded-full transition peer-checked:translate-x-7"></div>
-
-                        </label>
-
-                    </div>
-
-                    <!-- ITEM -->
-                    <div class="flex items-center justify-between p-5 rounded-2xl bg-slate-50">
-
-                        <div>
-
-                            <h3 class="font-semibold text-slate-800">
-                                Maintenance Mode
-                            </h3>
-
-                            <p class="text-sm text-slate-400 mt-1">
-                                Temporarily disable system access
-                            </p>
-
-                        </div>
-
-                        <label class="relative inline-flex items-center cursor-pointer">
-
-                            <input type="checkbox" class="sr-only peer">
-
-                            <div class="w-14 h-7 bg-slate-200 rounded-full peer peer-checked:bg-red-500 transition"></div>
-
-                            <div class="absolute left-1 top-1 w-5 h-5 bg-white rounded-full transition peer-checked:translate-x-7"></div>
-
-                        </label>
-
-                    </div>
-
-                </div>
-
+            <div class="flex justify-end pt-2">
+                <button
+                    type="submit"
+                    class="px-6 py-3 rounded-2xl bg-teal-500 hover:bg-teal-600 text-white font-semibold text-sm transition">
+                    Save General Info
+                </button>
             </div>
 
-        </div>
-
-        <!-- RIGHT -->
-        <div class="space-y-6">
-
-            <!-- ADMIN PROFILE -->
-            <div class="bg-white rounded-[30px] border border-slate-100 shadow-sm p-6">
-
-                <div class="text-center">
-
-                    <img
-                    src="https://i.pravatar.cc/120?img=68"
-                    class="w-24 h-24 rounded-3xl mx-auto object-cover">
-
-                    <h2 class="text-xl font-bold text-slate-800 mt-4">
-                        Admin Clinic
-                    </h2>
-
-                    <p class="text-sm text-slate-400">
-                        Super Administrator
-                    </p>
-
-                </div>
-
-                <div class="mt-6 space-y-4">
-
-                    <div class="flex justify-between">
-
-                        <span class="text-slate-400">
-                            ID Admin
-                        </span>
-
-                        <span class="font-semibold text-slate-700">
-                            ADM-001
-                        </span>
-
-                    </div>
-
-                    <div class="flex justify-between">
-
-                        <span class="text-slate-400">
-                            Email
-                        </span>
-
-                        <span class="font-semibold text-slate-700">
-                            admin@clinic.com
-                        </span>
-
-                    </div>
-
-                    <div class="flex justify-between">
-
-                        <span class="text-slate-400">
-                            Status
-                        </span>
-
-                        <span class="font-semibold text-green-500">
-                            Active
-                        </span>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <!-- SECURITY -->
-            <div class="bg-white rounded-[30px] border border-slate-100 shadow-sm p-6">
-
-                <div class="flex items-center gap-3 mb-6">
-
-                    <div class="w-12 h-12 rounded-2xl bg-red-100 flex items-center justify-center">
-
-                        <i data-lucide="shield-alert" class="w-6 h-6 text-red-500"></i>
-
-                    </div>
-
-                    <div>
-
-                        <h2 class="text-lg font-bold text-slate-800">
-                            Security
-                        </h2>
-
-                        <p class="text-sm text-slate-400">
-                            Account protection
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <div class="space-y-4">
-
-                    <button class="w-full py-4 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold transition">
-                        Change Password
-                    </button>
-
-                    <button class="w-full py-4 rounded-2xl bg-red-500 hover:bg-red-600 text-white font-semibold transition">
-                        Logout All Devices
-                    </button>
-
-                </div>
-
-            </div>
-
-        </div>
+        </form>
 
     </div>
 
-    <!-- SAVE -->
-    <div class="flex justify-end">
+    {{-- 2. ALAMAT --}}
+    <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden">
 
-        <button
-        @click="saveModal=true"
-        class="px-8 py-4 rounded-2xl bg-teal-500 hover:bg-teal-600 text-white font-semibold shadow-lg shadow-teal-200 transition">
+        <div class="px-6 py-5 border-b border-slate-100 flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center">
+                <i data-lucide="map-pin" class="w-4 h-4 text-blue-600"></i>
+            </div>
+            <div>
+                <h2 class="font-semibold text-slate-800">Address</h2>
+                <p class="text-xs text-slate-400">Clinic location and Google Maps link</p>
+            </div>
+        </div>
 
-            Save Settings
+        <form
+            action="{{ route('admin.settings.address') }}"
+            method="POST"
+            class="p-6 space-y-4">
 
-        </button>
+            @csrf
+            @method('PUT')
 
-    </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">
+                    Street Address
+                </label>
+                <textarea
+                    name="address"
+                    rows="2"
+                    class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-300 resize-none">{{ old('address', $setting->address) }}</textarea>
+            </div>
 
-    <!-- MODAL -->
-    <div
-    x-show="saveModal"
-    x-transition
-    class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-5"
-    style="display:none;">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
-        <div
-        @click.away="saveModal=false"
-        class="bg-white w-full max-w-md rounded-[32px] p-8 text-center shadow-2xl">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">City</label>
+                    <input
+                        type="text"
+                        name="city"
+                        value="{{ old('city', $setting->city) }}"
+                        class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-300">
+                </div>
 
-            <div class="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mx-auto">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Province</label>
+                    <input
+                        type="text"
+                        name="province"
+                        value="{{ old('province', $setting->province) }}"
+                        class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-300">
+                </div>
 
-                <i data-lucide="check" class="w-10 h-10 text-green-600"></i>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Postal Code</label>
+                    <input
+                        type="text"
+                        name="postal_code"
+                        value="{{ old('postal_code', $setting->postal_code) }}"
+                        class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-300">
+                </div>
 
             </div>
 
-            <h2 class="text-2xl font-bold text-slate-800 mt-5">
-                Settings Saved
-            </h2>
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">
+                    Google Maps URL
+                </label>
+                <input
+                    type="url"
+                    name="google_maps_url"
+                    value="{{ old('google_maps_url', $setting->google_maps_url) }}"
+                    placeholder="https://maps.google.com/..."
+                    class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-300">
+            </div>
 
-            <p class="text-slate-400 mt-2">
-                System settings updated successfully.
-            </p>
+            <div class="flex justify-end pt-2">
+                <button
+                    type="submit"
+                    class="px-6 py-3 rounded-2xl bg-teal-500 hover:bg-teal-600 text-white font-semibold text-sm transition">
+                    Save Address
+                </button>
+            </div>
 
-            <button
-            @click="saveModal=false"
-            class="mt-6 w-full py-4 rounded-2xl bg-teal-500 hover:bg-teal-600 text-white font-semibold transition">
+        </form>
 
-                Done
+    </div>
 
-            </button>
+    {{-- 3. JAM OPERASIONAL --}}
+    <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden">
 
+        <div class="px-6 py-5 border-b border-slate-100 flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-orange-50 flex items-center justify-center">
+                <i data-lucide="clock" class="w-4 h-4 text-orange-500"></i>
+            </div>
+            <div>
+                <h2 class="font-semibold text-slate-800">Operational Hours</h2>
+                <p class="text-xs text-slate-400">Opening hours and availability</p>
+            </div>
         </div>
+
+        <form
+            action="{{ route('admin.settings.hours') }}"
+            method="POST"
+            class="p-6 space-y-4">
+
+            @csrf
+            @method('PUT')
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">
+                        Open Days
+                    </label>
+                    <input
+                        type="text"
+                        name="open_days"
+                        value="{{ old('open_days', $setting->open_days) }}"
+                        placeholder="e.g. Senin - Sabtu"
+                        class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-300">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">
+                        Open Time
+                    </label>
+                    <input
+                        type="time"
+                        name="open_time"
+                        value="{{ old('open_time', $setting->open_time ? \Carbon\Carbon::parse($setting->open_time)->format('H:i') : '08:00') }}"
+                        class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-300">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">
+                        Close Time
+                    </label>
+                    <input
+                        type="time"
+                        name="close_time"
+                        value="{{ old('close_time', $setting->close_time ? \Carbon\Carbon::parse($setting->close_time)->format('H:i') : '17:00') }}"
+                        class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-300">
+                </div>
+
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-4">
+
+                <label class="flex items-center gap-3 cursor-pointer">
+                    <input
+                        type="checkbox"
+                        name="is_open_sunday"
+                        value="1"
+                        {{ old('is_open_sunday', $setting->is_open_sunday) ? 'checked' : '' }}
+                        class="w-4 h-4 rounded accent-teal-500">
+                    <span class="text-sm text-slate-700">Open on Sunday</span>
+                </label>
+
+                <label class="flex items-center gap-3 cursor-pointer">
+                    <input
+                        type="checkbox"
+                        name="is_open_24h"
+                        value="1"
+                        {{ old('is_open_24h', $setting->is_open_24h) ? 'checked' : '' }}
+                        class="w-4 h-4 rounded accent-teal-500">
+                    <span class="text-sm text-slate-700">Open 24 Hours</span>
+                </label>
+
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">
+                    Sunday Hours <span class="text-slate-400 font-normal">(if open)</span>
+                </label>
+                <input
+                    type="text"
+                    name="sunday_hours"
+                    value="{{ old('sunday_hours', $setting->sunday_hours) }}"
+                    placeholder="e.g. 08:00 - 12:00"
+                    class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-300">
+            </div>
+
+            <div class="flex justify-end pt-2">
+                <button
+                    type="submit"
+                    class="px-6 py-3 rounded-2xl bg-teal-500 hover:bg-teal-600 text-white font-semibold text-sm transition">
+                    Save Hours
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+
+    {{-- 4. SOSIAL MEDIA --}}
+    <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden">
+
+        <div class="px-6 py-5 border-b border-slate-100 flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-purple-50 flex items-center justify-center">
+                <i data-lucide="share-2" class="w-4 h-4 text-purple-600"></i>
+            </div>
+            <div>
+                <h2 class="font-semibold text-slate-800">Social Media</h2>
+                <p class="text-xs text-slate-400">Clinic social media links</p>
+            </div>
+        </div>
+
+        <form
+            action="{{ route('admin.settings.social') }}"
+            method="POST"
+            class="p-6 space-y-4">
+
+            @csrf
+            @method('PUT')
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">
+                        Facebook
+                    </label>
+                    <div class="flex items-center border border-slate-200 rounded-2xl overflow-hidden">
+                        <span class="px-4 py-3 bg-slate-50 text-slate-400 text-sm border-r border-slate-200">
+                            <i data-lucide="facebook" class="w-4 h-4"></i>
+                        </span>
+                        <input
+                            type="url"
+                            name="facebook"
+                            value="{{ old('facebook', $setting->facebook) }}"
+                            placeholder="https://facebook.com/..."
+                            class="flex-1 px-4 py-3 text-sm focus:outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">
+                        Instagram
+                    </label>
+                    <div class="flex items-center border border-slate-200 rounded-2xl overflow-hidden">
+                        <span class="px-4 py-3 bg-slate-50 text-slate-400 text-sm border-r border-slate-200">
+                            <i data-lucide="instagram" class="w-4 h-4"></i>
+                        </span>
+                        <input
+                            type="url"
+                            name="instagram"
+                            value="{{ old('instagram', $setting->instagram) }}"
+                            placeholder="https://instagram.com/..."
+                            class="flex-1 px-4 py-3 text-sm focus:outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">
+                        Twitter / X
+                    </label>
+                    <div class="flex items-center border border-slate-200 rounded-2xl overflow-hidden">
+                        <span class="px-4 py-3 bg-slate-50 text-slate-400 text-sm border-r border-slate-200">
+                            <i data-lucide="twitter" class="w-4 h-4"></i>
+                        </span>
+                        <input
+                            type="url"
+                            name="twitter"
+                            value="{{ old('twitter', $setting->twitter) }}"
+                            placeholder="https://twitter.com/..."
+                            class="flex-1 px-4 py-3 text-sm focus:outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">
+                        YouTube
+                    </label>
+                    <div class="flex items-center border border-slate-200 rounded-2xl overflow-hidden">
+                        <span class="px-4 py-3 bg-slate-50 text-slate-400 text-sm border-r border-slate-200">
+                            <i data-lucide="youtube" class="w-4 h-4"></i>
+                        </span>
+                        <input
+                            type="url"
+                            name="youtube"
+                            value="{{ old('youtube', $setting->youtube) }}"
+                            placeholder="https://youtube.com/..."
+                            class="flex-1 px-4 py-3 text-sm focus:outline-none">
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="flex justify-end pt-2">
+                <button
+                    type="submit"
+                    class="px-6 py-3 rounded-2xl bg-teal-500 hover:bg-teal-600 text-white font-semibold text-sm transition">
+                    Save Social Media
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+
+    {{-- 5. LEGAL --}}
+    <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden">
+
+        <div class="px-6 py-5 border-b border-slate-100 flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center">
+                <i data-lucide="shield-check" class="w-4 h-4 text-slate-600"></i>
+            </div>
+            <div>
+                <h2 class="font-semibold text-slate-800">Legal Information</h2>
+                <p class="text-xs text-slate-400">Clinic license and tax information</p>
+            </div>
+        </div>
+
+        <form
+            action="{{ route('admin.settings.legal') }}"
+            method="POST"
+            class="p-6 space-y-4">
+
+            @csrf
+            @method('PUT')
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">
+                        License Number <span class="text-slate-400 font-normal">(No. Izin Klinik)</span>
+                    </label>
+                    <input
+                        type="text"
+                        name="license_number"
+                        value="{{ old('license_number', $setting->license_number) }}"
+                        class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-300">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">
+                        Tax Number <span class="text-slate-400 font-normal">(NPWP)</span>
+                    </label>
+                    <input
+                        type="text"
+                        name="tax_number"
+                        value="{{ old('tax_number', $setting->tax_number) }}"
+                        class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-300">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">
+                        License Expiry Date
+                    </label>
+                    <input
+                        type="date"
+                        name="license_expiry"
+                        value="{{ old('license_expiry', $setting->license_expiry?->format('Y-m-d')) }}"
+                        class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-300">
+                </div>
+
+            </div>
+
+            @if($setting->license_expiry)
+            @php
+                $daysLeft = now()->diffInDays($setting->license_expiry, false);
+            @endphp
+            <div class="flex items-center gap-2 text-sm {{ $daysLeft < 30 ? 'text-red-500' : 'text-slate-500' }}">
+                <i data-lucide="{{ $daysLeft < 30 ? 'alert-triangle' : 'info' }}" class="w-4 h-4"></i>
+                @if($daysLeft < 0)
+                    License has expired {{ abs($daysLeft) }} days ago.
+                @elseif($daysLeft < 30)
+                    License expires in {{ $daysLeft }} days. Please renew soon.
+                @else
+                    License is valid for {{ $daysLeft }} more days.
+                @endif
+            </div>
+            @endif
+
+            <div class="flex justify-end pt-2">
+                <button
+                    type="submit"
+                    class="px-6 py-3 rounded-2xl bg-teal-500 hover:bg-teal-600 text-white font-semibold text-sm transition">
+                    Save Legal Info
+                </button>
+            </div>
+
+        </form>
 
     </div>
 

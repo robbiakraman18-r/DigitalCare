@@ -111,7 +111,7 @@
 
 
             <!-- INFO -->
-            <a href="{{ route('dokter.info') }}"
+            <a href="{{ route('dokter.info-klinik') }}"
             class="flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300
             {{ request()->is('dokter/info-klinik')
             ? 'bg-teal-500 text-white shadow-lg shadow-teal-200'
