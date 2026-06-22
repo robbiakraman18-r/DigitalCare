@@ -1,11 +1,23 @@
 @extends('layouts.admin')
 
-@section('title', 'Reports')
-@section('subtitle', 'Monitor clinic analytics, appointments, patients and performance.')
 
 @section('content')
 
 <div class="space-y-6">
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+
+        <div>
+
+            <h1 class="text-3xl font-bold text-slate-800">
+                Reports
+            </h1>
+
+            <p class="text-slate-500 mt-1">
+                Monitor clinic analytics, appointments, patients and performance
+            </p>
+
+        </div>
+    </div>
 
     <!-- TOP STATS -->
     <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
