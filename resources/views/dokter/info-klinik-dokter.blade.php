@@ -8,31 +8,46 @@
 <div class="space-y-6">
 
     {{-- HEADER KLINIK --}}
-    <div class="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm flex items-center gap-5">
+<div class="bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-sm">
 
-        <div class="w-16 h-16 rounded-2xl bg-teal-50 overflow-hidden flex items-center justify-center shrink-0">
-            @if($setting->clinic_logo)
-                <img src="{{ Storage::url($setting->clinic_logo) }}" class="w-full h-full object-cover">
-            @else
-                <i data-lucide="building-2" class="w-7 h-7 text-teal-500"></i>
-            @endif
-        </div>
+    {{-- HERO LOGO --}}
+    <div class="w-full h-64 bg-slate-100 overflow-hidden relative">
+
+        @if($setting->clinic_logo)
+            <img
+                src="{{ Storage::url($setting->clinic_logo) }}"
+                class="w-full h-full object-cover"
+                alt="Clinic Logo">
+        @else
+            <div class="w-full h-full flex items-center justify-center">
+                <i data-lucide="building-2" class="w-10 h-10 text-slate-300"></i>
+            </div>
+        @endif
+
+    </div>
+
+    {{-- INFO --}}
+    <div class="p-6 flex items-center gap-5">
 
         <div>
             <h1 class="text-2xl font-bold text-slate-800">
                 {{ $setting->clinic_name }}
             </h1>
+
             @if($setting->clinic_tagline)
-            <p class="text-slate-500 mt-0.5">
-                {{ $setting->clinic_tagline }}
-            </p>
+                <p class="text-slate-500 mt-0.5">
+                    {{ $setting->clinic_tagline }}
+                </p>
             @endif
+
             <span class="inline-block mt-1 px-3 py-1 bg-teal-50 text-teal-600 text-xs font-semibold rounded-xl">
                 {{ $setting->clinic_type }}
             </span>
         </div>
 
     </div>
+
+</div>
 
     <div class="grid lg:grid-cols-3 gap-6">
 
