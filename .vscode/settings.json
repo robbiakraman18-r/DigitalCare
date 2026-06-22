@@ -1,0 +1,19 @@
+{
+    "css.validate": true,
+    "files.associations": {
+        "*.blade.php": "html"
+    },
+    "css.lint.validProperties": [],
+    "[html]": {
+        "editor.suggest.insertMode": "replace"
+    },
+    "emmet.includeLanguages": {
+        "blade": "html"
+    },
+    "blade.format.enable": true,
+
+    // Matikan CSS validation di dalam atribut style pada file blade/html
+    // karena {{ }} Blade dianggap invalid CSS oleh VS Code linter
+    "css.customData": [],
+    "html.validate.styles": false
+}

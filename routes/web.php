@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\Admin\AdminJadwalController;
 use App\Http\Controllers\Admin\AdminRekamMedisController;
+use App\Http\Controllers\Admin\ReportController;
 
 
 // Controller Imports
@@ -272,6 +273,18 @@ Route::delete('/schedule-management/delete/{id}', [AdminJadwalController::class,
 
     Route::get('/medical-records/{id}', [AdminRekamMedisController::class, 'show'])
     ->name('admin.medical-records.show');
+
+    Route::get('/reports', [ReportController::class, 'index'])
+        ->name('admin.reports.index');
+ 
+    Route::get('/reports/summary/pdf', [ReportController::class, 'exportSummaryPdf'])
+        ->name('admin.reports.summary.pdf');
+ 
+    Route::get('/reports/{type}/pdf', [ReportController::class, 'exportPdf'])
+        ->name('admin.reports.pdf');
+ 
+    Route::get('/reports/{type}/excel', [ReportController::class, 'exportExcel'])
+        ->name('admin.reports.excel');
 });
 
 
