@@ -48,7 +48,7 @@
                         📷 Upload
 
                         <input type="file"
-                               name="foto_profil"
+                               nama="foto_profil"
                                class="hidden"
                                onchange="this.form.submit()">
 
@@ -62,7 +62,7 @@
             <div class="text-center lg:text-left">
 
                 <h2 class="text-3xl font-bold">
-                    {{ $dokter->user->name }}
+                    Dr. {{ $dokter->user->nama}}
                 </h2>
 
                 <p class="text-teal-100 mt-2">
@@ -91,7 +91,7 @@
 
                 <div class="flex justify-between border-b pb-3">
                     <span class="text-slate-400">Full Name</span>
-                    <span class="font-semibold">{{ $dokter->user->name }}</span>
+                    <span class="font-semibold">{{ $dokter->user->nama }}</span>
                 </div>
 
                 <div class="flex justify-between border-b pb-3">

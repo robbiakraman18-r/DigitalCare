@@ -12,7 +12,7 @@
         <div class="relative z-10">
 
             <h1 class="text-2xl lg:text-3xl font-bold leading-tight">
-                Welcome, Dr. {{ $dokter->user->name }}👋
+                Welcome, Dr. {{ $dokter->user->nama }}👋
             </h1>
 
             <p class="mt-2 text-teal-100 text-sm">
@@ -314,7 +314,7 @@
                             <tr class="border-b">
 
                                 <td class="py-3 text-sm font-medium">
-                                    {{ $item->pasien->user->name ?? 'Pasien' }}
+                                    {{ $item->pasien->user->nama ?? 'Pasien' }}
                                 </td>
 
                                 <td class="py-3 text-sm">
