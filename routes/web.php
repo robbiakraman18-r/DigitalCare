@@ -68,32 +68,26 @@ Route::post('/logout', function (Request $request) {
 */
 
 Route::prefix('pasien')->middleware(['auth', 'role:pasien'])->group(function () {
+
+    // Dashboard
     Route::get('/dashboard', [PasienController::class, 'dashboard'])->name('pasien.dashboard');
 
-    // Appointment
+    // Janji Temu
     Route::get('/buat-janji', [AppointmentController::class, 'create'])->name('pasien.buat-janji');
     Route::post('/buat-janji/store', [AppointmentController::class, 'store'])->name('pasien.buat-janji.store');
-    Route::get('/dokter/{id}/jadwal', [AppointmentController::class, 'getJadwal']);
-    Route::post('/appointment', [AppointmentController::class, 'store']);
-
-    // Rute memproses form booking
-    Route::post('/book-appointment', [AppointmentController::class, 'store'])->name('appointment.store');
-    // Rute menampilkan halaman nomor antrean
     Route::get('/nomor-antrian/{id}', [AppointmentController::class, 'showQueue'])->name('nomor.antrian');
+    Route::get('/on-going', [AppointmentController::class, 'onGoing'])->name('pasien.on-going');
+    Route::get('/janji-temu', [AppointmentController::class, 'index'])->name('pasien.janji-temu');
 
-    // Static Views
-    Route::view('/janji-temu', 'pasien.janji-temu');
-    Route::view('/on-going', 'pasien.on-going');
-    Route::view('/listrekam-medis', 'pasien.listrekam-medis');
-    Route::view('/detail-rekam-medis', 'pasien.detail-rekam-medis');
-    Route::view('/download-rekam-medis', 'pasien.download-rekam-medis');
-    Route::view('/payment', 'pasien.payment');
+    // Rekam Medis
+    Route::get('/listrekam-medis', [PasienController::class, 'listRekamMedis'])->name('pasien.listrekam-medis');
+    Route::get('/detail-rekam-medis/{id}', [PasienController::class, 'detailRekamMedis'])->name('pasien.detail-rekam-medis');
 
-    // Info klinik
-    Route::get('/info-klinik', [PasienController::class, 'clinicInfo'])
-    ->name('pasien.info-klinik');
+    // Info & Help
+    Route::get('/info-klinik', [PasienController::class, 'clinicInfo'])->name('pasien.info-klinik');
+    Route::get('/help', [PasienController::class, 'help'])->name('pasien.help');
 
-    // Profile Routes
+    // Profile
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/edit-profil', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/edit-profil', [ProfileController::class, 'update'])->name('profile.update');

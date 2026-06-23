@@ -17,6 +17,12 @@
         </div>
 
         <nav class="mt-6 px-3 space-y-2">
+            <!-- MENU UTAMA -->
+            <div class="px-4 pt-2 pb-1">
+                <p class="text-[11px] uppercase tracking-widest text-slate-400 opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap">
+                    Menu Utama
+                </p>
+            </div>
 
             <a href="{{ route('pasien.dashboard') }}"
             class="flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300 hover:scale-[1.02]
@@ -33,7 +39,7 @@
 
             <a href="{{ route('pasien.buat-janji') }}"
             class="flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300
-            {{ request()->is('pasien/buat-janji') || request()->is('pasien/janji-temu') || request()->is('pasien/on-going')
+            {{ request()->is('pasien.buat-janji') || request()->is('pasien.janji-temu') || request()->is('pasien.on-going')
             ? 'bg-teal-500 text-white shadow-lg shadow-teal-200'
             : 'text-slate-600 hover:bg-teal-50' }}">
 
@@ -57,18 +63,6 @@
                 </span>
             </a>
 
-            <a href="/pasien/payment"
-            class="flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300
-            {{ request()->is('pasien/payment')
-            ? 'bg-teal-500 text-white shadow-lg shadow-teal-200'
-            : 'text-slate-600 hover:bg-teal-50' }}">
-
-                <i data-lucide="wallet" class="w-5 h-5 shrink-0"></i>
-
-                <span class="font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300">
-                    Payment
-                </span>
-            </a>
 
             <a href="/pasien/info-klinik"
             class="flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300
@@ -80,6 +74,27 @@
 
                 <span class="font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300">
                     Info Klinik
+                </span>
+            </a>
+
+            <!-- MENU UTAMA -->
+            <div class="px-4 pt-2 pb-1">
+                <p class="text-[11px] uppercase tracking-widest text-slate-400 opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap">
+                    Menu Tambahan
+                </p>
+            </div>
+
+            <!-- HELP -->
+            <a href="{{ route('pasien.help') }}"
+            class="flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300
+            {{ request()->is('pasien/help')
+            ? 'bg-teal-500 text-white shadow-lg shadow-teal-200'
+            : 'text-slate-600 hover:bg-teal-50' }}">
+
+                <i data-lucide="help-circle" class="w-5 h-5 shrink-0"></i>
+
+                <span class="font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300">
+                    Bantuan
                 </span>
             </a>
 
