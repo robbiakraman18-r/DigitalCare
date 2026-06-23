@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\ClinicSetting;
 use Illuminate\Support\Facades\Auth; 
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PasienController extends Controller
 {
@@ -122,5 +123,72 @@ class PasienController extends Controller
     {
         $setting = ClinicSetting::instance();
         return view('pasien.info-klinik', compact('setting'));
+    }
+
+
+        /**
+     * List Rekam Medis Pasien
+     */
+    public function listRekamMedis()
+    {
+        $user     = Auth::user();
+        $pasienId = $user->pasien->id_pasien;
+
+        $rekamMedisList = RekamMedis::with(['detailResep', 'appointment.jadwaldokter'])
+            ->whereHas('appointment', function ($q) use ($pasienId) {
+                $q->where('id_pasien', $pasienId);
+            })
+            ->orderByDesc('waktu_pemeriksaan')
+            ->get();
+
+        return view('pasien.listrekam-medis', compact('rekamMedisList'));
+    }
+
+    /**
+     * Detail Rekam Medis
+     */
+    
+    public function detailRekamMedis($id)
+    {
+        $user     = Auth::user();
+        $pasienId = $user->pasien->id_pasien;
+
+        $rekamMedis = RekamMedis::with([
+            'dokter.user',
+            'detailResep',
+            'appointment.jadwaldokter'
+        ])
+        ->whereHas('appointment', function ($q) use ($pasienId) {
+            $q->where('id_pasien', $pasienId);
+        })
+        ->findOrFail($id);
+
+        if (request('download') == 1) {
+            $setting  = ClinicSetting::instance();
+            $pasien   = $user->pasien;
+
+            $pdf = Pdf::loadView('pasien.pdf-rekam-medis', compact(
+                'rekamMedis',
+                'setting',
+                'pasien'
+            ))->setPaper('a4', 'portrait');
+
+            $filename = 'RekamMedis-' 
+                . str_replace(' ', '_', $user->nama) . '-'
+                . \Carbon\Carbon::parse($rekamMedis->waktu_pemeriksaan)->format('d-m-Y') 
+                . '.pdf';
+
+            return $pdf->download($filename);
+        }
+
+        return view('pasien.detail-rekam-medis', compact('rekamMedis'));
+    }
+
+    /**
+     * Halaman Bantuan
+     */
+    public function help()
+    {
+        return view('pasien.help');
     }
 }
