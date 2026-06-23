@@ -18,6 +18,7 @@ class AdminController extends Controller
     // =========================================
     public function storeDokter(Request $request)
     {
+        
         $request->validate([
             'nama' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',

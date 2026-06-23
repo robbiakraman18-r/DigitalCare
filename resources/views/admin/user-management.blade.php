@@ -501,9 +501,9 @@ class="fixed inset-0 bg-black/40 hidden z-50 overflow-y-auto py-10 scrollbar-hid
         <form action="{{ route('admin.doctor.store') }}"
         method="POST"
         enctype="multipart/form-data">
+        @csrf
 
         <div class="p-8 overflow-y-auto scrollbar-hide flex-1">
-            @csrf
 
             <div class="grid grid-cols-2 gap-5">
 
@@ -571,8 +571,8 @@ class="fixed inset-0 bg-black/40 hidden z-50 overflow-y-auto py-10 scrollbar-hid
                         name="gender"
                         class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
 
-                        <option value="Laki-laki">Laki-laki</option>
-                        <option value="Perempuan">Perempuan</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
 
                     </select>
                 </div>
@@ -851,12 +851,12 @@ class="fixed inset-0 bg-black/40 hidden z-50 overflow-y-auto py-10 scrollbar-hid
     name="gender"
     class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
 
-        <option value="Laki-laki" {{ optional($dokter)->gender=='Laki-laki'?'selected':'' }}>
-            Laki-laki
+        <option value="Male" {{ optional($dokter)->gender=='Male'?'selected':'' }}>
+            Male
         </option>
 
-        <option value="Perempuan" {{ optional($dokter)->gender=='Perempuan'?'selected':'' }}>
-            Perempuan
+        <option value="Female" {{ optional($dokter)->gender=='Female'?'selected':'' }}>
+            Female
         </option>
 
     </select>
