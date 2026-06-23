@@ -29,14 +29,14 @@ class PasienController extends Controller
         ->orderBy('tanggal_janji')
         ->first();
 
-        $rekamMedis = RekamMedis::with(['resepObat', 'appointment.dokter']) 
+        $rekamMedis = RekamMedis::with(['detailResep', 'appointment.dokter']) 
             ->whereHas('appointment', function($query) use ($pasienId) {
                 $query->where('id_pasien', $pasienId);
             })
             ->latest('waktu_pemeriksaan') 
             ->first();
 
-        $resepObat = $rekamMedis ? $rekamMedis->resepObat : collect();
+        $detailResep = $rekamMedis ? $rekamMedis->detailResep : collect();
 
         $totalKunjungan = RekamMedis::whereHas('appointment', function($query) use ($pasienId) {
             $query->where('id_pasien', $pasienId);
@@ -45,7 +45,7 @@ class PasienController extends Controller
         return view('pasien.dashboard', compact(
             'janjiTerdekat',
             'rekamMedis',
-            'resepObat',
+            'detailResep',
             'totalKunjungan'
         ));
     }
