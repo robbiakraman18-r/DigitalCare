@@ -11,6 +11,7 @@ use App\Models\ClinicSetting;
 use Illuminate\Support\Facades\Auth; 
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Hash;
 
 class PasienController extends Controller
 {
@@ -190,5 +191,28 @@ class PasienController extends Controller
     public function help()
     {
         return view('pasien.help');
+    }
+
+    public function showChangePasswordForm()
+    {
+        return view('pasien.change-password');
+    }
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|min:8|confirmed',
+        ]);
+
+        $user = Auth::user();
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            return back()->with('error', 'Password lama tidak sesuai.');
+        }
+
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        return back()->with('success', 'Password berhasil diubah.');
     }
 }

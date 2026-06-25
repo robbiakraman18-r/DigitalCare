@@ -91,6 +91,10 @@ Route::prefix('pasien')->middleware(['auth', 'role:pasien'])->group(function () 
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/edit-profil', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/edit-profil', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/pasien/change-password', [PasienController::class, 'showChangePasswordForm'])
+    ->name('pasien.change-password');
+    Route::post('/pasien/change-password', [PasienController::class, 'changePassword'])
+        ->name('pasien.change-password.update');
 });
 
 /*

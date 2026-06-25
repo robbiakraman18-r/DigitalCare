@@ -213,7 +213,6 @@ class AdminController extends Controller
     {
         $user = User::findOrFail($id);
 
-        // ❌ PROTEKSI ADMIN UTAMA
         if ($user->role === 'admin') {
             return back()->with('error', 'Admin tidak bisa dinonaktifkan.');
         }
