@@ -17,12 +17,13 @@
                     <div class="w-2 h-2 rounded-full bg-white animate-pulse"></div>
                     Layanan Kesehatan Smart Campus Aktif
                 </div>
-                <h1 class="text-3xl lg:text-4xl font-extrabold text-white leading-tight">
-                    Welcome Back, {{ Auth::user()->name }}!
-                </h1>
-                <p class="text-white/90 mt-2 text-sm leading-relaxed max-w-xl">
-                    Selalu pantau kondisi fisik Anda di sela-sela kesibukan akademik.
-                </p>
+            <h1 class="text-3xl lg:text-4xl font-extrabold text-white leading-tight">
+                DigitalCare Smart Campus
+            </h1>
+
+            <p class="text-white/90 mt-2 text-sm leading-relaxed max-w-xl">
+                Kelola janji temu, pantau riwayat kesehatan, dan akses layanan klinik kampus dengan mudah dalam satu aplikasi.
+            </p>
             </div>
             <div class="flex gap-3 shrink-0">
                 <a href="/pasien/buat-janji" class="px-5 py-3 rounded-2xl bg-white text-teal-600 font-semibold shadow-md hover:bg-teal-50 transition text-sm">
@@ -32,12 +33,10 @@
         </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
-        <div class="lg:col-span-2 space-y-6">
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                
+    <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+
+    {{-- KOLOM KIRI --}}
+    <div class="space-y-6">
                 {{-- Janji Temu Terdekat --}}
                 <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 flex flex-col justify-between">
                     <div>
@@ -49,14 +48,43 @@
                                 </div>
                                 <div>
                                     <h4 class="font-bold text-slate-800 text-sm">
-                                        Dr. {{ $janjiTerdekat->dokter->user->nama ?? 'Dokter' }}
+                                        {{ $janjiTerdekat->dokter->user->nama ?? 'Dokter' }}
                                     </h4>
-
-                                    <p class="text-xs text-teal-600 font-medium">
+                                    <p class="text-xs text-teal-600 font-medium mb-3">
                                         {{ $janjiTerdekat->dokter->spesialisasi ?? 'Dokter Umum' }}
                                     </p>
-                                </div>
-                            </div>
+                                <div class="space-y-1 text-xs text-slate-500">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="calendar-days" class="w-4 h-4 text-teal-500"></i>
+                                        <span>
+                                            {{ \Carbon\Carbon::parse($janjiTerdekat->tanggal_janji)->translatedFormat('d F Y') }}
+                                        </span>
+                                    </div>
+                <div class="flex items-center gap-2">
+                            <i data-lucide="clock-3" class="w-4 h-4 text-teal-500"></i>
+                            <span>
+                                {{ \Carbon\Carbon::parse($janjiTerdekat->jadwal->jam_mulai)->format('H:i') }}
+                                -
+                                {{ \Carbon\Carbon::parse($janjiTerdekat->jadwal->jam_selesai)->format('H:i') }}
+                            </span>
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="map-pin" class="w-4 h-4 text-teal-500"></i>
+                            <span>
+                                {{ $janjiTerdekat->jadwal->ruang }}
+                            </span>
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="ticket" class="w-4 h-4 text-teal-500"></i>
+                            <span>
+                                Nomor Antrean :
+                                <strong>A-{{ str_pad($janjiTerdekat->nomor_antrian, 2, '0', STR_PAD_LEFT) }}</strong>
+                            </span>
+                        </div>
+                    </div>
+                </div>
                         @else
                             <div class="text-center py-6 text-slate-400 text-sm">
                                 Belum ada janji temu terjadwal.
@@ -74,6 +102,7 @@
                 </div>
 
                 {{-- Tanda Vital Terakhir --}}
+                <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-100 flex items-center justify-between"></div>
                 <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
                     <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Tanda Vital Terakhir</h3>
                     <div class="grid grid-cols-2 gap-3">
@@ -102,6 +131,10 @@
 
             </div>
 
+        </div>
+
+        {{-- KOLOM KANAN --}}
+        <div class="space-y-6">
             {{-- Konsumsi Obat Aktif --}}
             <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
                 <div class="flex items-center justify-between mb-4">
@@ -135,38 +168,32 @@
                     @endforelse
                 </div>
             </div>
-
-        </div>
-
-        {{-- Sidebar Kanan --}}
-        <div class="space-y-6">
-            
             <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
                 <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Akses Cepat</h3>
-                <div class="grid grid-cols-2 gap-3">
-                    <a href="/buat-janji" class="p-4 rounded-2xl border border-slate-100 hover:border-teal-500 hover:bg-teal-50/20 transition group text-center">
-                        <div class="w-10 h-10 mx-auto rounded-xl bg-teal-50 text-teal-500 flex items-center justify-center mb-2 group-hover:bg-teal-500 group-hover:text-white transition">
+                <div class="grid grid-cols-2 gap-4">
+                    <a href="/pasien/buat-janji" class="p-5 rounded-2xl border border-slate-100 hover:border-teal-500 hover:bg-teal-50/20 transition group text-center">
+                        <div class="w-12 h-12 mx-auto rounded-xl bg-teal-50 text-teal-500 flex items-center justify-center mb-2 group-hover:bg-teal-500 group-hover:text-white transition">
                             <i data-lucide="calendar" class="w-5 h-5"></i>
                         </div>
                         <span class="text-xs font-bold text-slate-700 block">Daftar Periksa</span>
                     </a>
                     
-                    <a href="/rekam-medis" class="p-4 rounded-2xl border border-slate-100 hover:border-teal-500 hover:bg-teal-50/20 transition group text-center">
-                        <div class="w-10 h-10 mx-auto rounded-xl bg-green-50 text-green-500 flex items-center justify-center mb-2 group-hover:bg-green-500 group-hover:text-white transition">
+                    <a href="/pasien/rekam-medis" class="p-5 rounded-2xl border border-slate-100 hover:border-teal-500 hover:bg-teal-50/20 transition group text-center">
+                        <div class="w-12 h-12 mx-auto rounded-xl bg-green-50 text-green-500 flex items-center justify-center mb-2 group-hover:bg-green-500 group-hover:text-white transition">
                             <i data-lucide="file-text" class="w-5 h-5"></i>
                         </div>
                         <span class="text-xs font-bold text-slate-700 block">Riwayat Medis</span>
                     </a>
 
-                    <a href="/resep-obat" class="p-4 rounded-2xl border border-slate-100 hover:border-teal-500 hover:bg-teal-50/20 transition group text-center">
-                        <div class="w-10 h-10 mx-auto rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center mb-2 group-hover:bg-amber-500 group-hover:text-white transition">
+                    <a href="/pasien/resep-obat" class="p-5 rounded-2xl border border-slate-100 hover:border-teal-500 hover:bg-teal-50/20 transition group text-center">
+                        <div class="w-12 h-12 mx-auto rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center mb-2 group-hover:bg-amber-500 group-hover:text-white transition">
                             <i data-lucide="pill" class="w-5 h-5"></i>
                         </div>
                         <span class="text-xs font-bold text-slate-700 block">E-Resep</span>
                     </a>
 
-                    <a href="/bantuan" class="p-4 rounded-2xl border border-slate-100 hover:border-teal-500 hover:bg-teal-50/20 transition group text-center">
-                        <div class="w-10 h-10 mx-auto rounded-xl bg-indigo-50 text-indigo-500 flex items-center justify-center mb-2 group-hover:bg-indigo-500 group-hover:text-white transition">
+                    <a href="/pasien/bantuan" class="p-5 rounded-2xl border border-slate-100 hover:border-teal-500 hover:bg-teal-50/20 transition group text-center">
+                        <div class="w-12 h-12 mx-auto rounded-xl bg-indigo-50 text-indigo-500 flex items-center justify-center mb-2 group-hover:bg-indigo-500 group-hover:text-white transition">
                             <i data-lucide="phone-call" class="w-5 h-5"></i>
                         </div>
                         <span class="text-xs font-bold text-slate-700 block">Info Darurat</span>
@@ -174,7 +201,6 @@
                 </div>
             </div>
 
-            <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-100 flex items-center justify-between">
                 <div class="flex items-center gap-3">
                     <div class="w-12 h-12 rounded-2xl bg-teal-50 text-teal-500 flex items-center justify-center">
                         <i data-lucide="activity" class="w-6 h-6"></i>
@@ -184,7 +210,7 @@
                         <p class="text-xs text-slate-400">Total Kunjungan Klinik</p>
                     </div>
                 </div>
-                <a href="/rekam-medis" class="text-xs text-teal-600 font-semibold hover:underline">Lihat Semua</a>
+                <a href="/pasien/rekam-medis" class="text-xs text-teal-600 font-semibold hover:underline">Lihat Semua</a>
             </div>
 
             <button @click="openLogout()" class="w-full py-3 rounded-2xl bg-slate-100 hover:bg-red-50 hover:text-red-600 text-slate-600 font-medium transition flex items-center justify-center gap-2">

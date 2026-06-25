@@ -67,14 +67,6 @@
 
         </div>
 
-        <button
-            onclick="document.getElementById('modalAppointment').classList.remove('hidden')"
-            class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 rounded-2xl text-white font-semibold shadow-lg transition">
-
-            + New Appointment
-
-        </button>
-
     </div>
 
 

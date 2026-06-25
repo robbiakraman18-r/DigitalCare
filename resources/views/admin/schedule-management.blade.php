@@ -299,7 +299,7 @@ class="fixed top-8 right-8 z-[9999]">
                 <input
                     type="date"
                     name="tanggal"
-                    value="{{ request('tanggal', date('Y-m-d')) }}"
+                    value="{{ request('tanggal') }}"
                     onchange="this.form.submit()"
                     class="w-full pl-12 pr-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-cyan-500">
 
@@ -937,6 +937,18 @@ document
 
 }
 
+function openDeleteModal(button){
+
+    const id = button.dataset.id;
+
+    document.getElementById('deleteForm').action =
+        "/admin/schedule-management/delete/" + id;
+
+    document.getElementById('deleteModal').classList.remove('hidden');
+    document.getElementById('deleteModal').classList.add('flex');
+
+}
+
 setTimeout(()=>{
 
 const success=document.getElementById('toast-success');
@@ -972,6 +984,37 @@ error.remove();
 }
 
 },3000);
+
+
+function openEditModal(button){
+
+    const id = button.dataset.id;
+
+    document.getElementById('edit_dokter').value = button.dataset.dokter;
+    document.getElementById('edit_tanggal').value = button.dataset.tanggal;
+    document.getElementById('edit_hari').value = button.dataset.hari;
+    document.getElementById('edit_mulai').value = button.dataset.mulai;
+    document.getElementById('edit_selesai').value = button.dataset.selesai;
+    document.getElementById('edit_ruang').value = button.dataset.ruang;
+    document.getElementById('edit_kuota').value = button.dataset.kuota;
+
+    document.getElementById('editForm').action =
+        "/admin/schedule-management/update/" + id;
+
+    const modal = document.getElementById('editModal');
+
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+function closeEditModal(){
+
+    const modal = document.getElementById('editModal');
+
+    modal.classList.remove('flex');
+    modal.classList.add('hidden');
+
+}
 
 </script>
 @endsection

@@ -48,11 +48,10 @@
                 <div class="bg-slate-50 rounded-3xl p-5">
                     <p class="text-sm text-slate-400">Estimasi Jam Konsultasi</p>
                     <h3 class="font-bold text-slate-700 mt-2">
-                        @if($appointment->jam_konsultasi)
-                            {{ \Carbon\Carbon::parse($appointment->jam_konsultasi)->format('H:i') }} WIB
-                        @else
+                            {{ \Carbon\Carbon::parse($appointment->jadwaldokter->jam_mulai)->format('H:i') }}
                             -
-                        @endif
+                            {{ \Carbon\Carbon::parse($appointment->jadwaldokter->jam_selesai)->format('H:i') }}
+                            WIB
                     </h3>
                 </div>
 

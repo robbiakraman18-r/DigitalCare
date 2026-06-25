@@ -14,7 +14,7 @@
             </h2>
 
             <p class="text-sm text-teal-100 mt-1">
-                Practice schedule for today and tomorrow.
+                View your practice schedule.
             </p>
 
         </div>
@@ -35,8 +35,7 @@
         <input
             type="date"
             name="tanggal"
-            min="{{ now()->format('Y-m-d') }}"
-            value="{{ request('tanggal', now()->format('Y-m-d')) }}"
+            value="{{ request('tanggal') }}"
             onchange="this.form.submit()"
             class="px-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-400"
         >

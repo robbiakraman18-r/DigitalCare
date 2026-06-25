@@ -27,8 +27,8 @@
         
         <x-topbar-pasien />
         
-        <main class="px-6 lg:px-10 pb-10">
-            @yield('content')
+        <main class="w-full max-w-screen-2xl mx-auto px-6 xl:px-10 2xl:px-14 pb-10">
+        @yield('content')
         </main>
         
     </div>

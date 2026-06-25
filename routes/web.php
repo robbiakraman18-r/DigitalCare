@@ -206,14 +206,6 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
    [AdminController::class, 'deleteAppointment'])
    ->name('admin.appointment.delete');
 
-
-
-   
-
-
-
-
-
    Route::view('/medical-records', 'admin.medical-records');
     Route::view('/reports', 'admin.reports');
     Route::view('/payments', 'admin.payments');

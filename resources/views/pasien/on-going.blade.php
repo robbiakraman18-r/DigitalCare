@@ -104,14 +104,13 @@
             </div>
 
             <div class="bg-slate-50 rounded-2xl p-5">
-                <p class="text-xs text-slate-400">Estimasi Jam Konsultasi</p>
-                <p class="font-bold text-slate-700 mt-1">
-                    @if($appointment->jam_konsultasi)
-                        {{ $appointment->jam_konsultasi ? \Carbon\Carbon::parse($appointment->jam_konsultasi)->format('H:i') . ' WIB' : '-' }}
-                    @else
-                        -
-                    @endif
-                </p>
+                <p class="text-sm text-slate-400">Estimasi Jam Konsultasi</p>
+                    <h3 class="font-bold text-slate-700 mt-2">
+                            {{ \Carbon\Carbon::parse($appointment->jadwaldokter->jam_mulai)->format('H:i') }}
+                            -
+                            {{ \Carbon\Carbon::parse($appointment->jadwaldokter->jam_selesai)->format('H:i') }}
+                            WIB
+                    </h3>
             </div>
 
             <div class="bg-slate-50 rounded-2xl p-5">

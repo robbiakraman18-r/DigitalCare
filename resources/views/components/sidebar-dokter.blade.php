@@ -109,22 +109,6 @@
 
             </a>
 
-
-            <!-- INFO -->
-            <a href="{{ route('dokter.info-klinik') }}"
-            class="flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300
-            {{ request()->is('dokter/info-klinik')
-            ? 'bg-teal-500 text-white shadow-lg shadow-teal-200'
-            : 'text-slate-600 hover:bg-teal-50' }}">
-
-                <i data-lucide="building-2" class="w-5 h-5 shrink-0"></i>
-
-                <span class="font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300">
-                    Info Klinik
-                </span>
-
-            </a>
-
             <!-- MENU UTAMA -->
             <div class="px-4 pt-2 pb-1">
                 <p class="text-[11px] uppercase tracking-widest text-slate-400 opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap">

@@ -31,10 +31,10 @@
     <form action="{{ route('pasien.buat-janji.store') }}" method="POST" class="w-full">
         @csrf
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 items-start">
             
             {{-- 1. Personal Information --}}
-            <div class="lg:col-span-3 bg-white border border-slate-100 rounded-3xl p-5 sm:p-6 shadow-sm">
+            <div class="lg:col-span-2 bg-white border border-slate-100 rounded-3xl p-5 sm:p-6 shadow-sm">
                 <div class="flex items-center gap-3 mb-6">
                     <div class="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-sm shrink-0">
                         1
@@ -116,7 +116,7 @@
             </div>
 
             {{-- 2. Appointment Details --}}
-            <div class="lg:col-span-1 bg-white border border-slate-100 rounded-3xl p-5 sm:p-6 shadow-sm flex flex-col justify-between">
+            <div class="lg:col-span-3 bg-white border border-slate-100 rounded-3xl p-5 sm:p-6 shadow-sm flex flex-col justify-between">
                 <div>
                     <div class="flex items-center gap-3 mb-6">
                         <div class="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-sm shrink-0">
@@ -140,120 +140,138 @@
                             @enderror
                         </div>
 
+                        {{-- Select Doctor --}}
                         <div>
-                            <label for="id_jadwal" class="text-xs sm:text-sm font-semibold text-slate-700 block mb-1.5">Select Doctor & Schedule</label>
-                            <select name="id_jadwal" 
-                                    id="id_jadwal" 
-                                    class="w-full px-4 py-2.5 sm:py-3 border @error('id_jadwal') border-red-500 @else border-slate-200 @enderror rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-emerald-400 text-slate-700 text-sm" 
-                                    required>
-                                <option value="">Select Doctor</option>
-                                @if(isset($dokters) && $dokters->count() > 0)
-                                    @foreach($dokters as $dokter)
-                                        @foreach($dokter->jadwalDokter as $jadwal)
-                                            {{-- Menyimpan data tanggal pada atribut data-tanggal untuk difilter oleh JS --}}
-                                            <option value="{{ $jadwal->id_jadwal }}" 
-                                                    data-tanggal="{{ $jadwal->tanggal }}"
-                                                    {{ old('id_jadwal') == $jadwal->id_jadwal ? 'selected' : '' }}>
-                                                Dr. {{ $dokter->user->nama ?? 'Unknown' }} @if(!empty($dokter->user->spesialis)) ({{ $dokter->user->spesialis }}) @endif 
-                                                — Jam {{ \Carbon\Carbon::parse($jadwal->jam_mulai)->format('H:i') }}
-                                                (Sisa Kuota: {{ $jadwal->kuota_harian - $jadwal->terisi }})
-                                            </option>
-                                        @endforeach
-                                    @endforeach
-                                @else
-                                    <option value="" disabled>No doctors with active schedules</option>
-                                @endif
+
+                            <label
+                                class="text-xs sm:text-sm font-semibold text-slate-700 block mb-1.5">
+                                Select Doctor
+                            </label>
+                            <select
+                                name="id_dokter"
+                                id="id_dokter"
+                                class="w-full px-4 py-3 border border-slate-200 rounded-xl">
+                                <option value="">
+                                    Select Doctor
+                                </option>
+                                @foreach($dokters as $dokter)
+                                    <option
+                                        value="{{ $dokter->id_dokter }}">
+                                        {{ $dokter->user->nama }}
+                                    </option>
+                                @endforeach
                             </select>
-                            @error('id_jadwal')
+                        </div>
+                        {{-- Select Time --}}
+                        <div class="mt-4">
+                            <label
+                                class="text-xs sm:text-sm font-semibold text-slate-700 block mb-1.5">
+                                Select Time
+                            </label>
+                            <select
+                                name="id_jadwal"
+                                id="id_jadwal"
+                                class="w-full px-4 py-3 border border-slate-200 rounded-xl"
+                                required>
+                                <option value="">
+                                    Select Time
+                                </option>
+                                @foreach($dokters as $dokter)
+                                    @foreach($dokter->jadwalDokter as $jadwal)
+                                        <option
+                                            value="{{ $jadwal->id_jadwal }}"
+                                            data-tanggal="{{ $jadwal->tanggal }}"
+                                            data-dokter="{{ $dokter->id_dokter }}">
+                                            {{ \Carbon\Carbon::parse($jadwal->jam_mulai)->format('H:i') }}
+                                            -
+                                            {{ \Carbon\Carbon::parse($jadwal->jam_selesai)->format('H:i') }}
+                                            • Sisa
+                                            {{ $jadwal->kuota_harian-$jadwal->terisi }}
+                                        </option>
+                                    @endforeach
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                {{-- 3. Visit Details --}}
+                <div class="mt-8 border-t border-slate-100 pt-6">
+                    <div class="h-full flex flex-col">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div class="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-sm shrink-0">
+                                3
+                            </div>
+                            <h2 class="text-base sm:text-lg font-bold text-slate-800">Visit Details</h2>
+                        </div>
+
+                        <div class="flex-1 flex flex-col">
+                            <label for="keluhan_utama" class="text-xs sm:text-sm font-semibold text-slate-700 block mb-1.5">Reason for Visit</label>
+                            <textarea name="keluhan_utama" 
+                                    id="keluhan_utama" 
+                                    class="w-full flex-1 min-h-[150px] lg:min-h-[120px] px-4 py-2.5 sm:py-3 border @error('keluhan_utama') border-red-500 @else border-slate-200 @enderror rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-400 text-slate-700 text-sm resize-none" 
+                                    placeholder="Write your symptoms or reason here..." 
+                                    required>{{ old('keluhan_utama') }}</textarea>
+                            @error('keluhan_utama')
                                 <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span>
                             @enderror
                         </div>
                     </div>
                 </div>
             </div>
-
-            {{-- 3. Visit Details --}}
-            <div class="lg:col-span-2 bg-white border border-slate-100 rounded-3xl p-5 sm:p-6 shadow-sm flex flex-col justify-between">
-                <div class="h-full flex flex-col">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-sm shrink-0">
-                            3
+                {{-- Footer Action --}}
+                <div class="mt-8 col-span-full w-full">
+                    <button
+                        type="submit"
+                        class="w-full bg-emerald-500 hover:bg-emerald-600
+                            text-white font-bold py-4 rounded-2xl
+                            shadow-lg shadow-emerald-100
+                            flex items-center justify-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                            <i data-lucide="calendar" class="w-5 h-5"></i>
                         </div>
-                        <h2 class="text-base sm:text-lg font-bold text-slate-800">Visit Details</h2>
-                    </div>
-
-                    <div class="flex-1 flex flex-col">
-                        <label for="keluhan_utama" class="text-xs sm:text-sm font-semibold text-slate-700 block mb-1.5">Reason for Visit</label>
-                        <textarea name="keluhan_utama" 
-                                  id="keluhan_utama" 
-                                  class="w-full flex-1 min-h-[150px] lg:min-h-[120px] px-4 py-2.5 sm:py-3 border @error('keluhan_utama') border-red-500 @else border-slate-200 @enderror rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-400 text-slate-700 text-sm resize-none" 
-                                  placeholder="Write your symptoms or reason here..." 
-                                  required>{{ old('keluhan_utama') }}</textarea>
-                        @error('keluhan_utama')
-                            <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span>
-                        @enderror
-                    </div>
+                        <span>Book Appointment</span>
+                    </button>
                 </div>
             </div>
-
-        </div>
-
-        <div class="mt-6">
-            <button type="submit" 
-                    class="w-full bg-emerald-500 hover:bg-emerald-600 active:scale-[0.99] text-white font-bold py-3.5 sm:py-4 rounded-xl shadow-lg shadow-emerald-100 flex items-center justify-center gap-3 transition-all duration-200 text-sm sm:text-base">
-                <div class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                    <i data-lucide="calendar" class="w-5 h-5 text-white"></i>
-                </div>
-                <span>Book Appointment</span>
-            </button>
-        </div>
-
     </form>
 </div>
 
-{{-- JavaScript Dinamis Filter Tanggal & Dokter --}}
 <script>
+
 document.addEventListener('DOMContentLoaded', function () {
-    const inputTanggal = document.getElementById('tanggal_janji');
-    const selectJadwal = document.getElementById('id_jadwal');
-    const optionsJadwal = Array.from(selectJadwal.querySelectorAll('option')).filter(opt => opt.value !== "");
 
-    function filterSchedules() {
-        const tanggalTerpilih = inputTanggal.value;
-        
-        // Bersihkan opsi dropdown terlebih dahulu
-        selectJadwal.innerHTML = '<option value="">Select Doctor</option>';
-        
-        let adaJadwal = false;
+    const tanggal = document.getElementById('tanggal_janji');
+    const dokter  = document.getElementById('id_dokter');
+    const jadwal  = document.getElementById('id_jadwal');
 
-        if (tanggalTerpilih) {
-            optionsJadwal.forEach(option => {
-                // Ambil data-tanggal dari option tag
-                const tanggalJadwal = option.getAttribute('data-tanggal');
-                
-                if (tanggalJadwal === tanggalTerpilih) {
-                    selectJadwal.appendChild(option.cloneNode(true));
-                    adaJadwal = true;
-                }
-            });
-        }
+    // Simpan semua option jam
+    const semuaOption = [...jadwal.options].slice(1);
 
-        if (!adaJadwal && tanggalTerpilih) {
-            const noScheduleOpt = document.createElement('option');
-            noScheduleOpt.value = "";
-            noScheduleOpt.disabled = true;
-            noScheduleOpt.textContent = "No doctors available on this date";
-            selectJadwal.appendChild(noScheduleOpt);
-        }
+    function filterJam() {
+
+        jadwal.innerHTML =
+            '<option value="">Select Time</option>';
+
+        semuaOption.forEach(function(option){
+
+            if(
+                option.dataset.tanggal === tanggal.value &&
+                option.dataset.dokter === dokter.value
+            ){
+
+                jadwal.appendChild(option.cloneNode(true));
+
+            }
+
+        });
+
     }
 
-    // Jalankan filter saat halaman pertama kali dimuat (jika ada data 'old')
-    if (inputTanggal.value) {
-        filterSchedules();
-    }
+    tanggal.addEventListener('change', filterJam);
 
-    // Jalankan filter setiap kali elemen input tanggal berubah
-    inputTanggal.addEventListener('change', filterSchedules);
+    dokter.addEventListener('change', filterJam);
+
 });
+
 </script>
 @endsection

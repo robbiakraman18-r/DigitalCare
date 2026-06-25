@@ -152,7 +152,6 @@ class AppointmentController extends Controller
                     'id_pasien'      => $pasien->id_pasien,
                     'id_dokter'      => $jadwal->id_dokter,
                     'tanggal_janji'  => $jadwal->tanggal,
-                    'jam_konsultasi' => $jamKonsultasi,
                     'nomor_antrian'  => $nomorAntrian,
                     'status_janji'   => 'pending',
                     'keluhan_utama'  => $request->keluhan_utama,

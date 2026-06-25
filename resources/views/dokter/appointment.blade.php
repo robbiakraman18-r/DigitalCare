@@ -47,8 +47,7 @@
             <input
                 type="date"
                 name="tanggal"
-                value="{{ request('tanggal', now()->format('Y-m-d')) }}"
-                min="{{ now()->format('Y-m-d') }}"
+                value="{{ request('tanggal') }}"
                 onchange="this.form.submit()"
                 class="px-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-400 text-sm"
             >

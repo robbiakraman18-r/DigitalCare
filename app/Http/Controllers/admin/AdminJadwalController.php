@@ -26,22 +26,21 @@ class AdminJadwalController extends Controller
     }
 
     // 📅 FILTER TANGGAL (INI YANG KAMU BUTUH)
-    if ($request->tanggal) {
+        if ($request->tanggal) {
         $query->whereDate('tanggal', $request->tanggal);
-    } else {
-        // default: hari ini
-        $query->whereDate('tanggal', now()->toDateString());
     }
 
-    $jadwal = $query->orderBy('tanggal')->orderBy('jam_mulai')->get();
-
+    $jadwal = $query
+        ->orderBy('tanggal')
+        ->orderBy('jam_mulai')
+        ->get();
     $dokters = Dokter::with('user')->get();
-
-    return view('admin.schedule-management', compact(
-        'jadwal',
-        'dokters'
-    ));
-}
+    
+        return view('admin.schedule-management', compact(
+            'jadwal',
+            'dokters'
+        ));
+    }
 
     public function create()
     {

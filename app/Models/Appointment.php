@@ -18,7 +18,6 @@ class Appointment extends Model
         'id_jadwal',
         'id_dokter',
         'tanggal_janji',
-        'jam_konsultasi',
         'nomor_antrian',
         'status_janji',
         'keluhan_utama',
@@ -26,7 +25,6 @@ class Appointment extends Model
     
     protected $casts = [
         'tanggal_janji'  => 'date',
-        'jam_konsultasi' => 'string', // time tetap string, jangan di-cast ke datetime
     ];
 
     public function rekamMedis()
