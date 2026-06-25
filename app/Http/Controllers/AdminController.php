@@ -328,4 +328,10 @@ $nomorAntrian = ($nomorAntrian ?? 0) + 1;
 
         return back()->with('success', 'Appointment successfully deleted!');
     }
+
+    public function profile()
+    {
+        return view('admin.profile');
+        // Data user sudah tersedia via auth()->user() langsung di blade
+    }
 }
