@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use App\Http\Controllers\ChangePasswordController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\Admin\AdminJadwalController;
@@ -89,6 +90,8 @@ Route::prefix('pasien')->middleware(['auth', 'role:pasien'])->group(function () 
 
     // Profile
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::put('/password', [ChangePasswordController::class, 'update'])
+        ->name('pasien.password.update');
     Route::get('/edit-profil', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/edit-profil', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('/pasien/change-password', [PasienController::class, 'showChangePasswordForm'])
@@ -215,7 +218,11 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::view('/reports', 'admin.reports');
     Route::view('/payments', 'admin.payments');
     Route::view('/settings', 'admin.settings');
-    Route::view('/profile', 'admin.profile')->name('admin.profile');
+
+
+    Route::get('/profile', [AdminController::class, 'profile'])->name('admin.profile');
+    
+    
     // CRUD DOCTOR
     Route::post('/doctor', [AdminController::class, 'storeDokter'])
     ->name('admin.doctor.store');
@@ -307,6 +314,12 @@ Route::delete('/schedule-management/delete/{id}', [AdminJadwalController::class,
  
     Route::put('/settings/legal', [SettingController::class, 'updateLegal'])
         ->name('admin.settings.legal');
+
+    // Tambah import di atas:
+
+// Tambah di dalam group prefix('admin')->middleware(['auth', 'role:admin']):
+    Route::put('/password', [ChangePasswordController::class, 'update'])
+        ->name('admin.password.update');
 });
 
 

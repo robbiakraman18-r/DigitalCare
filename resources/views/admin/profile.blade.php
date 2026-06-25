@@ -1,453 +1,271 @@
-{{-- resources/views/admin/profile.blade.php --}}
-
 @extends('layouts.admin')
 
-@section('title', 'Admin Profile')
-@section('subtitle', 'Administrator account information and activity.')
+@section('title', 'Profil Saya')
+@section('subtitle', 'Informasi akun dan aktivitas administrator.')
 
 @section('content')
 
+@php
+    $user   = auth()->user();
+    $nama   = $user->nama;
+    $email  = $user->email;
+    $userId = $user->id;
+    $inisial = collect(explode(' ', $nama))
+        ->filter()->take(2)
+        ->map(fn($w) => strtoupper(substr($w, 0, 1)))
+        ->join('');
+@endphp
+
+@if(session('success'))
+<div class="mb-4 px-5 py-3.5 bg-green-50 border border-green-200 rounded-2xl text-green-700 text-sm font-medium flex items-center gap-2">
+    <i data-lucide="circle-check" class="w-4 h-4"></i> {{ session('success') }}
+</div>
+@endif
+
 <div class="space-y-6">
 
-    <!-- PROFILE TOP -->
+    {{-- HERO --}}
     <div class="bg-white rounded-[32px] border border-slate-100 shadow-sm overflow-hidden">
-
-        <!-- COVER -->
-        <div class="h-52 bg-gradient-to-r from-teal-500 via-cyan-500 to-blue-500 relative">
-
-            <!-- IMAGE -->
-            <div class="absolute -bottom-16 left-8">
-
-                <img
-                src="https://i.pravatar.cc/200?img=68"
-                class="w-32 h-32 rounded-[30px] border-4 border-white object-cover shadow-xl">
-
-            </div>
-
+        <div class="h-44 relative overflow-hidden bg-gradient-to-br from-slate-50 to-red-50">
+            <div class="absolute inset-0" style="background-image: radial-gradient(circle, #e2e8f0 1px, transparent 1px); background-size: 24px 24px;"></div>
+            <div class="absolute top-4 right-8 w-32 h-32 rounded-full bg-red-400/10 border border-red-200/30"></div>
+            <div class="absolute -bottom-4 right-32 w-20 h-20 rounded-full bg-red-300/10 border border-red-200/20"></div>
+            <div class="absolute top-8 left-1/3 w-16 h-16 rounded-full bg-red-200/20"></div>
         </div>
 
-        <!-- CONTENT -->
-        <div class="pt-20 pb-8 px-8">
-
-            <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6">
-
-                <!-- LEFT -->
-                <div>
-
-                    <h1 class="text-3xl font-bold text-slate-800">
-                        Admin Clinic
-                    </h1>
-
-                    <p class="text-slate-400 mt-2">
-                        Super Administrator • DoctorCare System
-                    </p>
-
-                    <div class="flex flex-wrap items-center gap-3 mt-5">
-
-                        <span class="px-4 py-2 rounded-xl bg-green-100 text-green-600 text-sm font-semibold">
-                            Active
-                        </span>
-
-                        <span class="px-4 py-2 rounded-xl bg-blue-100 text-blue-600 text-sm font-semibold">
-                            Full Access
-                        </span>
-
-                        <span class="px-4 py-2 rounded-xl bg-cyan-100 text-cyan-600 text-sm font-semibold">
-                            Verified
-                        </span>
-
+        <div class="px-8 pb-8">
+            <div class="flex flex-col xl:flex-row xl:items-end xl:justify-between gap-6 -mt-12">
+                <div class="flex items-end gap-5">
+                    <div class="w-24 h-24 rounded-full bg-red-500 border-4 border-white shadow-xl
+                                flex items-center justify-center text-white font-bold text-3xl shrink-0">
+                        {{ $inisial }}
                     </div>
-
+                    <div class="mb-1">
+                        <h1 class="text-2xl font-bold text-slate-800">{{ $nama }}</h1>
+                        <p class="text-slate-400 text-sm mt-0.5">{{ $email }}</p>
+                        <div class="flex flex-wrap gap-2 mt-3">
+                            <span class="px-3 py-1 rounded-xl bg-red-100 text-red-700 text-xs font-semibold">Super Admin</span>
+                            <span class="px-3 py-1 rounded-xl bg-green-100 text-green-700 text-xs font-semibold">● Aktif</span>
+                            <span class="px-3 py-1 rounded-xl bg-blue-100 text-blue-700 text-xs font-semibold">Full Access</span>
+                        </div>
+                    </div>
                 </div>
-
-                <!-- RIGHT -->
-                <div class="flex flex-wrap gap-3">
-
-                    <button class="px-6 py-3 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold transition">
-                        Edit Profile
+                <div class="flex gap-3">
+                    <button onclick="document.getElementById('modalPassword').classList.remove('hidden')"
+                            class="px-5 py-2.5 rounded-2xl bg-red-500 hover:bg-red-600 text-white font-semibold text-sm transition shadow-lg shadow-red-100 flex items-center gap-2">
+                        <i data-lucide="lock-keyhole" class="w-4 h-4"></i> Ubah Password
                     </button>
-
-                    <button class="px-6 py-3 rounded-2xl bg-teal-500 hover:bg-teal-600 text-white font-semibold transition shadow-lg shadow-teal-200">
-                        Change Password
-                    </button>
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
 
-    <!-- INFO -->
+    {{-- GRID --}}
     <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-
-        <!-- LEFT -->
         <div class="xl:col-span-2 space-y-6">
 
-            <!-- PERSONAL -->
-            <div class="bg-white rounded-[30px] border border-slate-100 shadow-sm p-6">
-
+            <div class="bg-white rounded-[28px] border border-slate-100 shadow-sm p-7">
                 <div class="flex items-center gap-3 mb-6">
-
-                    <div class="w-12 h-12 rounded-2xl bg-teal-100 flex items-center justify-center">
-
-                        <i data-lucide="user" class="w-6 h-6 text-teal-600"></i>
-
+                    <div class="w-10 h-10 rounded-2xl bg-red-50 flex items-center justify-center">
+                        <i data-lucide="user-round" class="w-5 h-5 text-red-500"></i>
                     </div>
-
                     <div>
-
-                        <h2 class="text-xl font-bold text-slate-800">
-                            Personal Information
-                        </h2>
-
-                        <p class="text-sm text-slate-400">
-                            Administrator personal data
-                        </p>
-
+                        <h2 class="font-bold text-slate-800">Informasi Pribadi</h2>
+                        <p class="text-xs text-slate-400">Data akun administrator</p>
                     </div>
-
                 </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-
-                    <!-- ITEM -->
-                    <div class="bg-slate-50 rounded-2xl p-5">
-
-                        <p class="text-sm text-slate-400">
-                            Full Name
-                        </p>
-
-                        <h3 class="font-bold text-slate-800 mt-2">
-                            Admin Clinic
-                        </h3>
-
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-slate-50 rounded-2xl p-4">
+                        <p class="text-xs text-slate-400 mb-1">Nama Lengkap</p>
+                        <p class="font-semibold text-slate-800">{{ $nama }}</p>
                     </div>
-
-                    <!-- ITEM -->
-                    <div class="bg-slate-50 rounded-2xl p-5">
-
-                        <p class="text-sm text-slate-400">
-                            Email Address
-                        </p>
-
-                        <h3 class="font-bold text-slate-800 mt-2">
-                            admin@doctorcare.com
-                        </h3>
-
+                    <div class="bg-slate-50 rounded-2xl p-4">
+                        <p class="text-xs text-slate-400 mb-1">Email</p>
+                        <p class="font-semibold text-slate-800">{{ $email }}</p>
                     </div>
-
-                    <!-- ITEM -->
-                    <div class="bg-slate-50 rounded-2xl p-5">
-
-                        <p class="text-sm text-slate-400">
-                            Phone Number
-                        </p>
-
-                        <h3 class="font-bold text-slate-800 mt-2">
-                            +62 812 3456 7890
-                        </h3>
-
+                    <div class="bg-slate-50 rounded-2xl p-4">
+                        <p class="text-xs text-slate-400 mb-1">ID Admin</p>
+                        <p class="font-semibold text-slate-800">ADM-{{ str_pad($userId, 3, '0', STR_PAD_LEFT) }}</p>
                     </div>
-
-                    <!-- ITEM -->
-                    <div class="bg-slate-50 rounded-2xl p-5">
-
-                        <p class="text-sm text-slate-400">
-                            Admin ID
-                        </p>
-
-                        <h3 class="font-bold text-slate-800 mt-2">
-                            ADM-001
-                        </h3>
-
+                    <div class="bg-slate-50 rounded-2xl p-4">
+                        <p class="text-xs text-slate-400 mb-1">Nomor Telepon</p>
+                        <p class="font-semibold text-slate-800">{{ $user->phone ?? '-' }}</p>
                     </div>
-
-                    <!-- ITEM -->
-                    <div class="md:col-span-2 bg-slate-50 rounded-2xl p-5">
-
-                        <p class="text-sm text-slate-400">
-                            Address
-                        </p>
-
-                        <h3 class="font-bold text-slate-800 mt-2">
-                            Batam Center, Batam City, Indonesia
-                        </h3>
-
+                    <div class="bg-slate-50 rounded-2xl p-4 md:col-span-2">
+                        <p class="text-xs text-slate-400 mb-1">Alamat</p>
+                        <p class="font-semibold text-slate-800">{{ $user->address ?? '-' }}</p>
                     </div>
-
                 </div>
-
             </div>
 
-            <!-- ACTIVITY -->
-            <div class="bg-white rounded-[30px] border border-slate-100 shadow-sm p-6">
-
+            <div class="bg-white rounded-[28px] border border-slate-100 shadow-sm p-7">
                 <div class="flex items-center gap-3 mb-6">
-
-                    <div class="w-12 h-12 rounded-2xl bg-blue-100 flex items-center justify-center">
-
-                        <i data-lucide="activity" class="w-6 h-6 text-blue-600"></i>
-
+                    <div class="w-10 h-10 rounded-2xl bg-blue-50 flex items-center justify-center">
+                        <i data-lucide="activity" class="w-5 h-5 text-blue-500"></i>
                     </div>
-
                     <div>
-
-                        <h2 class="text-xl font-bold text-slate-800">
-                            Recent Activity
-                        </h2>
-
-                        <p class="text-sm text-slate-400">
-                            Latest administrator actions
-                        </p>
-
+                        <h2 class="font-bold text-slate-800">Aktivitas Terbaru</h2>
+                        <p class="text-xs text-slate-400">Tindakan administrator terkini</p>
                     </div>
-
                 </div>
-
-                <div class="space-y-5">
-
-                    <!-- ITEM -->
-                    <div class="flex gap-4">
-
-                        <div class="w-12 h-12 rounded-2xl bg-green-100 flex items-center justify-center shrink-0">
-
-                            <i data-lucide="badge-check" class="w-5 h-5 text-green-600"></i>
-
+                <div class="space-y-4">
+                    @php
+                        $activities = [
+                            ['icon' => 'badge-check',      'color' => 'green', 'title' => 'Pembayaran Dikonfirmasi',   'desc' => 'Pembayaran tunai pasien berhasil dikonfirmasi.',   'time' => '10 menit lalu'],
+                            ['icon' => 'calendar-check-2', 'color' => 'blue',  'title' => 'Janji Diperbarui',          'desc' => 'Jadwal appointment klinik telah diperbarui.',      'time' => '1 jam lalu'],
+                            ['icon' => 'user-plus',        'color' => 'cyan',  'title' => 'Pengguna Baru Ditambahkan', 'desc' => 'Akun dokter baru berhasil ditambahkan ke sistem.', 'time' => '3 jam lalu'],
+                        ];
+                    @endphp
+                    @foreach($activities as $act)
+                    <div class="flex gap-4 p-4 rounded-2xl hover:bg-slate-50 transition">
+                        <div class="w-10 h-10 rounded-xl bg-{{ $act['color'] }}-100 flex items-center justify-center shrink-0">
+                            <i data-lucide="{{ $act['icon'] }}" class="w-5 h-5 text-{{ $act['color'] }}-600"></i>
                         </div>
-
                         <div>
-
-                            <h3 class="font-semibold text-slate-800">
-                                Payment Confirmed
-                            </h3>
-
-                            <p class="text-sm text-slate-400 mt-1">
-                                Confirmed patient cash payment successfully.
-                            </p>
-
-                            <span class="text-xs text-slate-400 mt-2 block">
-                                10 minutes ago
-                            </span>
-
+                            <p class="font-semibold text-slate-800 text-sm">{{ $act['title'] }}</p>
+                            <p class="text-slate-400 text-xs mt-0.5">{{ $act['desc'] }}</p>
+                            <p class="text-slate-300 text-xs mt-1">{{ $act['time'] }}</p>
                         </div>
-
                     </div>
-
-                    <!-- ITEM -->
-                    <div class="flex gap-4">
-
-                        <div class="w-12 h-12 rounded-2xl bg-blue-100 flex items-center justify-center shrink-0">
-
-                            <i data-lucide="calendar-check-2" class="w-5 h-5 text-blue-600"></i>
-
-                        </div>
-
-                        <div>
-
-                            <h3 class="font-semibold text-slate-800">
-                                Appointment Updated
-                            </h3>
-
-                            <p class="text-sm text-slate-400 mt-1">
-                                Updated clinic appointment schedule.
-                            </p>
-
-                            <span class="text-xs text-slate-400 mt-2 block">
-                                1 hour ago
-                            </span>
-
-                        </div>
-
-                    </div>
-
-                    <!-- ITEM -->
-                    <div class="flex gap-4">
-
-                        <div class="w-12 h-12 rounded-2xl bg-cyan-100 flex items-center justify-center shrink-0">
-
-                            <i data-lucide="users" class="w-5 h-5 text-cyan-600"></i>
-
-                        </div>
-
-                        <div>
-
-                            <h3 class="font-semibold text-slate-800">
-                                New User Added
-                            </h3>
-
-                            <p class="text-sm text-slate-400 mt-1">
-                                Added new doctor account to the system.
-                            </p>
-
-                            <span class="text-xs text-slate-400 mt-2 block">
-                                3 hours ago
-                            </span>
-
-                        </div>
-
-                    </div>
-
+                    @endforeach
                 </div>
-
             </div>
 
         </div>
 
-        <!-- RIGHT -->
         <div class="space-y-6">
-
-            <!-- ACCOUNT -->
-            <div class="bg-white rounded-[30px] border border-slate-100 shadow-sm p-6">
-
-                <div class="flex items-center gap-3 mb-6">
-
-                    <div class="w-12 h-12 rounded-2xl bg-yellow-100 flex items-center justify-center">
-
-                        <i data-lucide="shield-check" class="w-6 h-6 text-yellow-600"></i>
-
+            <div class="bg-white rounded-[28px] border border-slate-100 shadow-sm p-6">
+                <div class="flex items-center gap-3 mb-5">
+                    <div class="w-10 h-10 rounded-2xl bg-yellow-50 flex items-center justify-center">
+                        <i data-lucide="shield-check" class="w-5 h-5 text-yellow-500"></i>
                     </div>
-
                     <div>
-
-                        <h2 class="text-lg font-bold text-slate-800">
-                            Account Status
-                        </h2>
-
-                        <p class="text-sm text-slate-400">
-                            Security & permissions
-                        </p>
-
+                        <h2 class="font-bold text-slate-800">Status Akun</h2>
+                        <p class="text-xs text-slate-400">Keamanan & izin akses</p>
                     </div>
-
                 </div>
-
-                <div class="space-y-5">
-
-                    <div class="flex justify-between">
-
-                        <span class="text-slate-400">
-                            Role
-                        </span>
-
-                        <span class="font-semibold text-slate-700">
-                            Super Admin
-                        </span>
-
+                <div class="space-y-3">
+                    @php
+                        $accountInfo = [
+                            ['label' => 'Role',          'value' => 'Super Admin', 'color' => 'text-slate-700'],
+                            ['label' => 'Level Akses',   'value' => 'Full Access', 'color' => 'text-red-500'],
+                            ['label' => 'Login Terakhir','value' => 'Hari ini',    'color' => 'text-slate-700'],
+                            ['label' => 'Status',        'value' => 'Online',      'color' => 'text-green-500'],
+                        ];
+                    @endphp
+                    @foreach($accountInfo as $info)
+                    <div class="flex justify-between items-center py-2 border-b border-slate-50 last:border-0">
+                        <span class="text-slate-400 text-sm">{{ $info['label'] }}</span>
+                        <span class="font-semibold text-sm {{ $info['color'] }}">{{ $info['value'] }}</span>
                     </div>
-
-                    <div class="flex justify-between">
-
-                        <span class="text-slate-400">
-                            Access Level
-                        </span>
-
-                        <span class="font-semibold text-teal-500">
-                            Full Access
-                        </span>
-
-                    </div>
-
-                    <div class="flex justify-between">
-
-                        <span class="text-slate-400">
-                            Last Login
-                        </span>
-
-                        <span class="font-semibold text-slate-700">
-                            Today
-                        </span>
-
-                    </div>
-
-                    <div class="flex justify-between">
-
-                        <span class="text-slate-400">
-                            Status
-                        </span>
-
-                        <span class="font-semibold text-green-500">
-                            Online
-                        </span>
-
-                    </div>
-
+                    @endforeach
                 </div>
-
             </div>
 
-            <!-- SYSTEM -->
-            <div class="bg-white rounded-[30px] border border-slate-100 shadow-sm p-6">
-
-                <div class="flex items-center gap-3 mb-6">
-
-                    <div class="w-12 h-12 rounded-2xl bg-red-100 flex items-center justify-center">
-
-                        <i data-lucide="monitor-smartphone" class="w-6 h-6 text-red-500"></i>
-
+            <div class="bg-white rounded-[28px] border border-slate-100 shadow-sm p-6">
+                <div class="flex items-center gap-3 mb-5">
+                    <div class="w-10 h-10 rounded-2xl bg-slate-100 flex items-center justify-center">
+                        <i data-lucide="monitor-smartphone" class="w-5 h-5 text-slate-500"></i>
                     </div>
-
                     <div>
-
-                        <h2 class="text-lg font-bold text-slate-800">
-                            System Info
-                        </h2>
-
-                        <p class="text-sm text-slate-400">
-                            Device & login activity
-                        </p>
-
+                        <h2 class="font-bold text-slate-800">Info Sistem</h2>
+                        <p class="text-xs text-slate-400">Perangkat & sesi aktif</p>
                     </div>
-
                 </div>
-
-                <div class="space-y-5">
-
-                    <div class="bg-slate-50 rounded-2xl p-5">
-
-                        <p class="text-sm text-slate-400">
-                            Browser
-                        </p>
-
-                        <h3 class="font-bold text-slate-800 mt-2">
-                            Google Chrome
-                        </h3>
-
+                <div class="space-y-3">
+                    @foreach([['Browser','Google Chrome'],['Perangkat','Windows Desktop'],['IP Address','192.168.1.1']] as [$label, $val])
+                    <div class="bg-slate-50 rounded-xl p-4">
+                        <p class="text-xs text-slate-400">{{ $label }}</p>
+                        <p class="font-semibold text-slate-800 mt-1 text-sm">{{ $val }}</p>
                     </div>
-
-                    <div class="bg-slate-50 rounded-2xl p-5">
-
-                        <p class="text-sm text-slate-400">
-                            Device
-                        </p>
-
-                        <h3 class="font-bold text-slate-800 mt-2">
-                            Windows Desktop
-                        </h3>
-
-                    </div>
-
-                    <div class="bg-slate-50 rounded-2xl p-5">
-
-                        <p class="text-sm text-slate-400">
-                            IP Address
-                        </p>
-
-                        <h3 class="font-bold text-slate-800 mt-2">
-                            192.168.1.1
-                        </h3>
-
-                    </div>
-
+                    @endforeach
                 </div>
-
             </div>
-
         </div>
-
     </div>
-
 </div>
+
+{{-- MODAL PASSWORD --}}
+<div id="modalPassword" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
+    <div class="bg-white rounded-[28px] shadow-2xl w-full max-w-md overflow-hidden">
+        <div class="bg-red-500 px-7 py-5 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center">
+                    <i data-lucide="lock-keyhole" class="w-5 h-5 text-white"></i>
+                </div>
+                <div>
+                    <h2 class="font-bold text-white">Ubah Password</h2>
+                    <p class="text-red-100 text-xs">Perbarui kata sandi akun Anda</p>
+                </div>
+            </div>
+            <button onclick="document.getElementById('modalPassword').classList.add('hidden')"
+                    class="w-8 h-8 rounded-xl bg-white/20 hover:bg-white/30 flex items-center justify-center transition">
+                <i data-lucide="x" class="w-4 h-4 text-white"></i>
+            </button>
+        </div>
+        <form action="{{ route('admin.password.update') }}" method="POST" class="px-7 py-6 space-y-4">
+            @csrf
+            @method('PUT')
+            <div>
+                <label class="text-sm font-semibold text-slate-700 block mb-1.5">Password Saat Ini</label>
+                <div class="relative">
+                    <input type="password" name="current_password" placeholder="••••••••"
+                           class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-400 pr-11">
+                    <button type="button" onclick="togglePass(this)" class="absolute right-3 top-3 text-slate-400 hover:text-slate-600">
+                        <i data-lucide="eye" class="w-5 h-5"></i>
+                    </button>
+                </div>
+                @error('current_password')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+            </div>
+            <div>
+                <label class="text-sm font-semibold text-slate-700 block mb-1.5">Password Baru</label>
+                <div class="relative">
+                    <input type="password" name="password" placeholder="••••••••"
+                           class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-400 pr-11">
+                    <button type="button" onclick="togglePass(this)" class="absolute right-3 top-3 text-slate-400 hover:text-slate-600">
+                        <i data-lucide="eye" class="w-5 h-5"></i>
+                    </button>
+                </div>
+                @error('password')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+            </div>
+            <div>
+                <label class="text-sm font-semibold text-slate-700 block mb-1.5">Konfirmasi Password Baru</label>
+                <div class="relative">
+                    <input type="password" name="password_confirmation" placeholder="••••••••"
+                           class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-400 pr-11">
+                    <button type="button" onclick="togglePass(this)" class="absolute right-3 top-3 text-slate-400 hover:text-slate-600">
+                        <i data-lucide="eye" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="flex gap-3 pt-2">
+                <button type="button" onclick="document.getElementById('modalPassword').classList.add('hidden')"
+                        class="flex-1 py-3 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm transition">Batal</button>
+                <button type="submit"
+                        class="flex-1 py-3 rounded-2xl bg-red-500 hover:bg-red-600 text-white font-semibold text-sm transition shadow-lg shadow-red-100">Simpan</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@push('scripts')
+<script>
+function togglePass(btn) {
+    const input = btn.parentElement.querySelector('input');
+    const icon  = btn.querySelector('i');
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.setAttribute('data-lucide', 'eye-off');
+    } else {
+        input.type = 'password';
+        icon.setAttribute('data-lucide', 'eye');
+    }
+    lucide.createIcons();
+}
+</script>
+@if($errors->has('current_password') || $errors->has('password'))
+<script>document.getElementById('modalPassword').classList.remove('hidden');</script>
+@endif
+@endpush
 
 @endsection
