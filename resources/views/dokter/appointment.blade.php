@@ -71,16 +71,14 @@
 
                 @foreach($appointments as $item)
 
-                <div class="group bg-white border rounded-2xl p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:shadow-md transition">
-
+                <div class="group bg-white border border-slate-200 rounded-2xl px-6 py-5 flex flex-col md:flex-row md:items-center justify-between gap-5 hover:shadow-lg hover:border-teal-300 transition-all duration-200">
                     <!-- LEFT -->
                     <div class="flex items-center gap-4 cursor-pointer"
                         @click="if('{{ $item->status_janji }}' !== 'completed') { detailModal=true; selected={{ Js::from($item) }} }">
 
                         <!-- NUMBER -->
                         <div class="relative group">
-
-                            <div class="w-12 h-12 flex items-center justify-center rounded-2xl bg-teal-50 text-teal-600 font-bold text-lg cursor-pointer">
+                        <div class="w-14 h-14 flex items-center justify-center rounded-2xl bg-teal-50 text-teal-600 font-bold text-xl shadow-sm">
                                 #{{ $item->nomor_antrian }}
                             </div>
 
@@ -106,48 +104,25 @@
 
                         </div>
 
-                        <!-- INFO -->
-<div class="space-y-2">
-
-    <!-- NAME -->
-    <div class="font-semibold text-slate-800 text-base">
-        {{ $item->pasien->user->name ?? $item->pasien->nama }}
-    </div>
-
-    <!-- COMPLAINT -->
-    <div class="text-sm text-slate-500">
-        {{ $item->keluhan_utama }}
-    </div>
-
-    <!-- META INFO -->
-    <div class="flex flex-wrap gap-2 text-xs mt-2">
-        <!-- JAM -->
-        <span class="px-2 py-1 rounded-lg bg-slate-100 text-slate-600">
-
-            @if(isset($item->jadwal->jam_mulai))
-                {{ \Carbon\Carbon::parse($item->jadwal->jam_mulai)->format('H:i') }}
-            @elseif(isset($item->jam_janji))
-                {{ \Carbon\Carbon::parse($item->jam_janji)->format('H:i') }}
-            @else
-                -
-            @endif
-
-        </span>
-
-        <!-- STATUS QUICK -->
-        <span class="px-2 py-1 rounded-lg
-            @if($item->status_janji == 'pending') bg-yellow-50 text-yellow-700
-            @elseif($item->status_janji == 'called') bg-blue-50 text-blue-700
-            @elseif($item->status_janji == 'in_consultation') bg-purple-50 text-purple-700
-            @else bg-green-50 text-green-700
-            @endif
-        ">
-            {{ ucfirst(str_replace('_',' ', $item->status_janji)) }}
-        </span>
-
-    </div>
-
-</div>
+            <div class="text-right">
+                @if($item->status_janji == 'pending')
+                    <span class="inline-flex px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-semibold">
+                        🟡 Pending
+                    </span>
+                @elseif($item->status_janji == 'called')
+                    <span class="inline-flex px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-semibold">
+                        🔵 Called
+                    </span>
+                @elseif($item->status_janji == 'in_consultation')
+                    <span class="inline-flex px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-xs font-semibold">
+                        🟣 In Consultation
+                    </span>
+                @elseif($item->status_janji == 'completed')
+                    <span class="inline-flex px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">
+                        🟢 Completed
+                    </span>
+                @endif
+            </div>
 
                     </div>
 

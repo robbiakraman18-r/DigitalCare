@@ -94,7 +94,7 @@ class DokterController extends Controller
         if ($request->filled('tanggal')) {
             $query->whereDate('tanggal_janji', $request->tanggal);
             } else {
-                $query->whereDate('tanggal_janji', today());
+                $query->whereDate('tanggal_janji', '>=', today());
         }
 
         if ($request->search) {
@@ -134,25 +134,44 @@ class DokterController extends Controller
 
     public function panggilPasien($id)
     {
-        $appointment = Appointment::findOrFail($id);
-        $appointment->update(['status_janji' => 'called']);
+        $appointment = Appointment::with('jadwal')->findOrFail($id);
 
-        return back()->with('success', 'Pasien dipanggil');
+        if (!$this->appointmentSudahDimulai($appointment)) {
+            return back()->with(
+                'error',
+                'Belum waktunya memanggil pasien.'
+            );
+        }
+
+        $appointment->update([
+            'status_janji' => 'called'
+        ]);
+
+        return back()->with('success','Pasien dipanggil');
     }
 
     public function startConsultation($id)
     {
-        $appointment = Appointment::findOrFail($id);
-        
+        $appointment = Appointment::with('jadwal')->findOrFail($id);
+
+        if (!$this->appointmentSudahDimulai($appointment)) {
+
+            return back()->with(
+                'error',
+                'Belum waktunya memulai pemeriksaan.'
+            );
+        }
+
         $appointment->update([
-            'status_janji' => 'in_consultation'
-        ]);
-        
-        session([
-            'active_patient' => $appointment->id_janji
+            'status_janji'=>'in_consultation'
         ]);
 
-        return redirect()->route('dokter.diagnosis', $appointment->id_janji);
+        session([
+            'active_patient'=>$appointment->id_janji
+        ]);
+
+        return redirect()
+            ->route('dokter.diagnosis',$appointment->id_janji);
     }
 
     public function cancelPasien(int $id)
@@ -162,24 +181,34 @@ class DokterController extends Controller
 
         return back()->with('success', 'Janji dibatalkan');
     }
-
-    public function nextPasien()
+    
+        public function nextPasien()
     {
         $dokter = Dokter::where('user_id', auth()->id())->firstOrFail();
 
-        $next = Appointment::where('id_dokter', $dokter->id_dokter)
+        $next = Appointment::with('jadwal')
+            ->where('id_dokter', $dokter->id_dokter)
             ->where('status_janji', 'pending')
             ->whereDate('tanggal_janji', today())
             ->orderBy('nomor_antrian')
             ->first();
 
         if (!$next) {
-            return back()->with('error', 'Tidak ada antrian');
+            return back()->with('error', 'Tidak ada antrian.');
         }
 
-        $next->update(['status_janji' => 'called']);
+        if (!$this->appointmentSudahDimulai($next)) {
+            return back()->with(
+                'error',
+                'Belum ada pasien yang jadwalnya dimulai.'
+            );
+        }
 
-        return back()->with('success', 'Pasien dipanggil');
+        $next->update([
+            'status_janji' => 'called'
+        ]);
+
+        return back()->with('success', 'Pasien dipanggil.');
     }
 
     /*
@@ -195,6 +224,14 @@ class DokterController extends Controller
             'jadwal'
         ])->findOrFail($id);
 
+        if ($appointment->status_janji != 'in_consultation') {
+        return redirect()
+            ->route('dokter.appointment')
+            ->with(
+                'error',
+                'Pasien belum memasuki proses pemeriksaan.'
+            );
+    }
         return view('dokter.diagnosis', compact('appointment'));
     }
 
@@ -212,6 +249,13 @@ class DokterController extends Controller
         ]);
 
         $appointment = Appointment::findOrFail($id);
+    if ($appointment->status_janji != 'in_consultation') {
+
+        return back()->with(
+            'error',
+            'Pasien belum diperiksa.'
+        );
+    }
 
         // Simpan Rekam Medis
         $rekamMedis = RekamMedis::create([
@@ -458,6 +502,15 @@ class DokterController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/login');
+    }
+
+    private function appointmentSudahDimulai(Appointment $appointment): bool
+    {
+        $waktuAppointment = Carbon::parse(
+            $appointment->tanggal_janji->format('Y-m-d') . ' ' . $appointment->jadwal->jam_mulai
+        );
+
+        return now('Asia/Jakarta')->greaterThanOrEqualTo($waktuAppointment);
     }
 
     public function passwordPage()

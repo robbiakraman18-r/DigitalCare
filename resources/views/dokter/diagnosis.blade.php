@@ -41,22 +41,21 @@
                             <div>
                                 <label class="text-sm font-semibold">Patient Name</label>
                                 <input type="text"
-                                    value="{{ $appointment->pasien->user->name ?? '-' }}"
+                                    value="{{ $appointment->pasien->user->nama ?? '-' }}"
                                     readonly
                                     class="mt-2 w-full rounded-2xl border px-5 py-4 bg-slate-100 text-slate-500 cursor-not-allowed">
                             </div>
-                            {{-- ✅ FIX #3: Hapus tanggal_lahir & gender — tidak ada di DB --}}
                             <div>
                                 <label class="text-sm font-semibold">Date of Birth</label>
                                 <input type="text"
-                                    value="{{ $appointment->pasien->tanggal_lahir ? \Carbon\Carbon::parse($appointment->pasien->tanggal_lahir)->format('d M Y') : '-' }}"
+                                    value="{{ $appointment->pasien->birth_date ? \Carbon\Carbon::parse($appointment->pasien->birth_date)->format('d M Y') : '-' }}"
                                     readonly
                                     class="mt-2 w-full rounded-2xl border px-5 py-4 bg-slate-100 text-slate-500 cursor-not-allowed">
                             </div>
                             <div>
                                 <label class="text-sm font-semibold">Gender</label>
                                 <input type="text"
-                                    value="{{ $appointment->pasien->jenis_kelamin ?? '-' }}"
+                                    value="{{ $appointment->pasien->gender ?? '-' }}"
                                     readonly
                                     class="mt-2 w-full rounded-2xl border px-5 py-4 bg-slate-100 text-slate-500 cursor-not-allowed">
                             </div>
@@ -68,7 +67,7 @@
                                 <label class="text-sm font-semibold">Doctor Name</label>
                                 {{-- ✅ FIX #2: readonly ditambahkan --}}
                                 <input type="text"
-                                    value="{{ $appointment->dokter->user->name ?? '-' }}"
+                                    value="{{ $appointment->dokter->user->nama ?? '-' }}"
                                     readonly
                                     class="mt-2 w-full rounded-2xl border px-5 py-4 bg-slate-100 text-slate-500 cursor-not-allowed">
                             </div>
@@ -116,19 +115,59 @@
                         <div class="bg-white border rounded-[30px] p-6 shadow-sm">
                             <h3 class="text-xl font-bold mb-5">Physical Examination</h3>
                             <div class="grid grid-cols-2 gap-4">
-                                <input name="temperature" placeholder="Temperature"
-                                    class="rounded-2xl border px-4 py-3 bg-slate-50">
-                                <input name="blood_pressure" placeholder="Blood Pressure"
-                                    class="rounded-2xl border px-4 py-3 bg-slate-50">
-                                <input name="heart_rate" placeholder="Heart Rate"
-                                    class="rounded-2xl border px-4 py-3 bg-slate-50">
-                                <input name="respiratory_rate" placeholder="Respiratory Rate"
-                                    class="rounded-2xl border px-4 py-3 bg-slate-50">
+                                    <!-- Temperature -->
+                                <div class="relative">
+                                    <input
+                                        type="number"
+                                        step="0.1"
+                                        name="temperature"
+                                        placeholder="Temperature"
+                                        class="w-full rounded-2xl border px-4 py-3 pr-14 bg-slate-50">
+
+                                    <span class="absolute right-5 top-1/2 -translate-y-1/2 text-slate-500">
+                                        °C
+                                    </span>
+                                </div>
+                                    <!-- Blood Pressure -->
+                                <div class="relative flex items-center">
+                                    <input
+                                        type="text"
+                                        name="blood_pressure"
+                                        placeholder="Blood Pressure"
+                                        class="w-full rounded-2xl border px-4 py-3 pr-20 bg-slate-50">
+                                    <span class="absolute right-5 text-slate-500">
+                                        mmHg
+                                    </span>
+                                </div>
+                                    <!-- Heart Rate -->
+                                <div class="relative">
+                                    <input
+                                        type="number"
+                                        name="heart_rate"
+                                        placeholder="Heart Rate"
+                                        class="w-full rounded-2xl border px-4 py-3 pr-16 bg-slate-50">
+
+                                    <span class="absolute right-5 top-1/2 -translate-y-1/2 text-slate-500">
+                                        bpm
+                                    </span>
+                                </div>
+
+                                <!-- Respiratory -->
+                                <div class="relative">
+                                    <input
+                                        type="number"
+                                        name="respiratory_rate"
+                                        placeholder="Respiratory Rate"
+                                        class="w-full rounded-2xl border px-4 py-3 pr-20 bg-slate-50">
+
+                                    <span class="absolute right-5 top-1/2 -translate-y-1/2 text-slate-500">
+                                        x/min
+                                    </span>
+                                </div>
+                    
                             </div>
                         </div>
-
                     </div>
-
                     <!-- RIGHT -->
                     <div class="space-y-6">
 
