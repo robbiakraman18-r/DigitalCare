@@ -22,12 +22,32 @@ class PasienController extends Controller
     {
         $user = Auth::user();
         $pasienId = $user->pasien->id_pasien;
+        $now = \Carbon\Carbon::parse('2026-06-29 17:00:00');
+
         $janjiTerdekat = Appointment::with([
             'dokter.user',
-            'jadwalDokter'
+            'jadwal'
         ])
         ->where('id_pasien', $pasienId)
-        ->whereDate('tanggal_janji', '>=', now())
+        ->whereIn('status_janji', ['pending', 'waiting', 'called'])
+        ->where(function ($query) use ($now) {
+
+            // Appointment setelah hari ini
+            $query->whereDate('tanggal_janji', '>', $now->toDateString())
+
+                // Appointment hari ini tetapi jam selesai belum lewat
+                ->orWhere(function ($q) use ($now) {
+
+                    $q->whereDate('tanggal_janji', $now->toDateString())
+                        ->whereHas('jadwal', function ($jadwal) use ($now) {
+
+                            $jadwal->where('jam_selesai', '>', $now->format('H:i:s'));
+
+                        });
+
+                });
+
+        })
         ->orderBy('tanggal_janji')
         ->first();
 
@@ -100,7 +120,7 @@ class PasienController extends Controller
             $appointment = new Appointment();
             $appointment->id_pasien     = $pasienId;
             $appointment->id_dokter     = $request->id_dokter;
-            $appointment->id_jadwal     = 1;
+            $appointment->id_jadwal     = $request->id_jadwal;
             $appointment->tanggal_janji = $request->tanggal_janji;
             $appointment->nomor_antrian = $nomorAntrianBaru;
             $appointment->status_janji  = 'pending';
@@ -135,7 +155,7 @@ class PasienController extends Controller
         $user     = Auth::user();
         $pasienId = $user->pasien->id_pasien;
 
-        $rekamMedisList = RekamMedis::with(['detailResep', 'appointment.jadwaldokter'])
+        $rekamMedisList = RekamMedis::with(['detailResep', 'appointment.jadwal'])
             ->whereHas('appointment', function ($q) use ($pasienId) {
                 $q->where('id_pasien', $pasienId);
             })
@@ -157,7 +177,7 @@ class PasienController extends Controller
         $rekamMedis = RekamMedis::with([
             'dokter.user',
             'detailResep',
-            'appointment.jadwaldokter'
+            'appointment.jadwal'
         ])
         ->whereHas('appointment', function ($q) use ($pasienId) {
             $q->where('id_pasien', $pasienId);

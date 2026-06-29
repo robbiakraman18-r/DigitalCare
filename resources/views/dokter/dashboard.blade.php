@@ -12,7 +12,7 @@
         <div class="relative z-10">
 
             <h1 class="text-2xl lg:text-3xl font-bold leading-tight">
-                Welcome, Dr. {{ $dokter->user->nama }}👋
+                Welcome, {{ $dokter->user->nama }}👋
             </h1>
 
             <p class="mt-2 text-teal-100 text-sm">

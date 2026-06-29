@@ -38,7 +38,7 @@
     {{-- KOLOM KIRI --}}
     <div class="space-y-6">
                 {{-- Janji Temu Terdekat --}}
-                <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 flex flex-col justify-between">
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 flex flex-col justify-between min-h-[360px]">
                     <div>
                         <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Janji Temu Terdekat</h3>
                         @if(isset($janjiTerdekat) && $janjiTerdekat)
@@ -86,9 +86,21 @@
                     </div>
                 </div>
                         @else
-                            <div class="text-center py-6 text-slate-400 text-sm">
-                                Belum ada janji temu terjadwal.
+                        <div class="h-[210px] flex flex-col items-center justify-center text-center">
+
+                            <div class="w-16 h-16 rounded-2xl bg-teal-50 flex items-center justify-center mb-4">
+                                <i data-lucide="calendar-days" class="w-8 h-8 text-teal-500"></i>
                             </div>
+
+                            <h4 class="font-bold text-slate-700">
+                                Belum Ada Janji Temu
+                            </h4>
+
+                            <p class="text-sm text-slate-400 mt-2 max-w-xs">
+                                Kamu belum memiliki jadwal pemeriksaan.
+                                Yuk buat janji temu dengan dokter.
+                            </p>
+                        </div>
                         @endif
                     </div>
                     <div class="flex gap-2 mt-4 pt-4 border-t border-slate-100">
@@ -102,7 +114,6 @@
                 </div>
 
                 {{-- Tanda Vital Terakhir --}}
-                <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-100 flex items-center justify-between"></div>
                 <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
                     <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Tanda Vital Terakhir</h3>
                     <div class="grid grid-cols-2 gap-3">
@@ -130,9 +141,6 @@
                 </div>
 
             </div>
-
-        </div>
-
         {{-- KOLOM KANAN --}}
         <div class="space-y-6">
             {{-- Konsumsi Obat Aktif --}}
@@ -200,7 +208,7 @@
                     </a>
                 </div>
             </div>
-
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
                 <div class="flex items-center gap-3">
                     <div class="w-12 h-12 rounded-2xl bg-teal-50 text-teal-500 flex items-center justify-center">
                         <i data-lucide="activity" class="w-6 h-6"></i>
@@ -212,7 +220,7 @@
                 </div>
                 <a href="/pasien/rekam-medis" class="text-xs text-teal-600 font-semibold hover:underline">Lihat Semua</a>
             </div>
-
+            </div>
             <button @click="openLogout()" class="w-full py-3 rounded-2xl bg-slate-100 hover:bg-red-50 hover:text-red-600 text-slate-600 font-medium transition flex items-center justify-center gap-2">
                 <i data-lucide="log-out" class="w-4 h-4"></i> Keluar Aplikasi
             </button>
