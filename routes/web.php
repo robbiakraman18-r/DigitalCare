@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\AdminJadwalController;
 use App\Http\Controllers\Admin\AdminRekamMedisController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\WelcomeController;
 
 
 // Controller Imports
@@ -27,7 +28,7 @@ use App\Http\Controllers\{
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', fn () => view('welcome'));
+Route::get('/', [WelcomeController::class, 'index']);
 Route::get('/app', fn () => view('app'));
 
 /*
