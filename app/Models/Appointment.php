@@ -21,6 +21,7 @@ class Appointment extends Model
         'nomor_antrian',
         'status_janji',
         'keluhan_utama',
+        'jam_konsultasi',
     ];
     
     protected $casts = [

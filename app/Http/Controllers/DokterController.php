@@ -122,49 +122,39 @@ class DokterController extends Controller
     {
         $dokter = Dokter::where('user_id', auth()->id())->firstOrFail();
 
-        $query = Appointment::with(['pasien.user', 'jadwal'])
-        ->where('id_dokter', $dokter->id_dokter);
-        
-        if ($request->filled('tanggal')) {
-            $query->whereDate('tanggal_janji', $request->tanggal);
-            } else {
-                $query->whereDate('tanggal_janji', '>=', today());
-        }
+        // Default selalu hari ini kalau tidak ada filter tanggal
+        $tanggal = $request->filled('tanggal') ? $request->tanggal : today()->format('Y-m-d');
 
-        if ($request->search) {
+        $query = Appointment::with(['pasien.user', 'jadwal'])
+            ->where('id_dokter', $dokter->id_dokter)
+            ->whereDate('tanggal_janji', $tanggal);
+
+        if ($request->filled('search')) {
             $query->whereHas('pasien.user', function ($q) use ($request) {
                 $q->where('nama', 'like', '%' . $request->search . '%');
             });
         }
 
-        if ($request->status) {
+        if ($request->filled('status')) {
             $query->where('status_janji', $request->status);
         }
 
-        if ($request->filter == 'today') {
-            $query->whereDate('tanggal_janji', today());
-        }
-
-        if ($request->filter == 'tomorrow') {
-            $query->whereDate('tanggal_janji', now()->addDay());
-        }
-
         $appointments = $query
-        ->orderByRaw("
-        CASE
-            WHEN status_janji = 'pending' THEN 1
-            WHEN status_janji = 'called' THEN 2
-            WHEN status_janji = 'in_consultation' THEN 3
-            WHEN status_janji = 'completed' THEN 4
-            WHEN status_janji = 'cancelled' THEN 5
-            ELSE 6
-            END
-        ")
-            ->orderBy('tanggal_janji')
+            ->orderByRaw("
+                CASE
+                    WHEN status_janji = 'pending' THEN 1
+                    WHEN status_janji = 'called' THEN 2
+                    WHEN status_janji = 'in_consultation' THEN 3
+                    WHEN status_janji = 'completed' THEN 4
+                    WHEN status_janji = 'cancelled' THEN 5
+                    ELSE 6
+                END
+            ")
             ->orderBy('nomor_antrian')
             ->get();
-            return view('dokter.appointment', compact('appointments'));
-        }
+
+        return view('dokter.appointment', compact('appointments', 'tanggal'));
+    }
 
     public function panggilPasien($id)
     {
@@ -210,10 +200,22 @@ class DokterController extends Controller
 
     public function cancelPasien(int $id)
     {
-        $appointment = Appointment::findOrFail($id);
+        $appointment = Appointment::with('jadwal')->findOrFail($id);
+
+        if (in_array($appointment->status_janji, ['completed', 'cancelled'])) {
+            return back()->with('error', 'Janji ini tidak bisa dibatalkan.');
+        }
+
+        if ($appointment->jadwal) {
+            $appointment->jadwal->decrement('terisi');
+            if ($appointment->jadwal->status_jadwal === 'Full') {
+                $appointment->jadwal->update(['status_jadwal' => 'Available']);
+            }
+        }
+
         $appointment->update(['status_janji' => 'cancelled']);
 
-        return back()->with('success', 'Janji dibatalkan');
+        return back()->with('success', 'Janji temu pasien dibatalkan');
     }
     
         public function nextPasien()
@@ -541,7 +543,8 @@ class DokterController extends Controller
     private function appointmentSudahDimulai(Appointment $appointment): bool
     {
         $waktuAppointment = Carbon::parse(
-            $appointment->tanggal_janji->format('Y-m-d') . ' ' . $appointment->jadwal->jam_mulai
+            $appointment->tanggal_janji->format('Y-m-d') . ' ' . $appointment->jadwal->jam_mulai,
+            'Asia/Jakarta'
         );
 
         return now('Asia/Jakarta')->greaterThanOrEqualTo($waktuAppointment);
