@@ -6,9 +6,11 @@
 
         <i data-lucide="bell" class="w-5 h-5"></i>
 
+        @if($jumlahNotif > 0)
         <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center">
-            2
+            {{ $jumlahNotif }}
         </span>
+        @endif
 
     </button>
 

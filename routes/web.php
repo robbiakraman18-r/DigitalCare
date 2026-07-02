@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\AdminRekamMedisController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\NotifikasiController;
 
 
 // Controller Imports
@@ -180,6 +181,13 @@ Route::prefix('dokter')->middleware(['auth', 'role:dokter'])->group(function () 
     Route::get('/password/success', function () {
         return view('auth.password-success');
         })->name('password.success');
+
+    //notifikasi
+    Route::get('/dokter/notifikasi/{notifikasi}/read', [NotifikasiController::class, 'markAsRead'])
+        ->name('dokter.notifikasi.read');
+
+    Route::post('/dokter/notifikasi/read-all', [NotifikasiController::class, 'markAllAsRead'])
+        ->name('dokter.notifikasi.read-all');
 });
 /*
 |--------------------------------------------------------------------------

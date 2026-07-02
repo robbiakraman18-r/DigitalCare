@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Dokter;
 use App\Models\JadwalDokter;
+use Carbon\Carbon;
+use App\Models\Notifikasi;
 
 class AdminJadwalController extends Controller
 {
@@ -98,6 +100,20 @@ class AdminJadwalController extends Controller
         // AUTO STATUS CHECK
         $jadwal->status_jadwal = $this->getStatus($jadwal);
         $jadwal->save();
+
+        Notifikasi::create([
+    'dokter_id' => $jadwal->id_dokter,
+    'tipe'      => 'jadwal',
+    'judul'     => 'Jadwal Praktik Baru',
+    'pesan'     => 'Jadwal praktik pada '
+                    . Carbon::parse($jadwal->tanggal)->format('d M Y')
+                    . ' pukul '
+                    . Carbon::parse($jadwal->jam_mulai)->format('H:i')
+                    . ' - '
+                    . Carbon::parse($jadwal->jam_selesai)->format('H:i'),
+    'link'      => route('dokter.jadwal'),
+    'is_read'   => false,
+]);
 
         return back()->with('success', 'Jadwal dokter berhasil dibuat');
     }

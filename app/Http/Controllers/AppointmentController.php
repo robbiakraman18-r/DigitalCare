@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\JadwalDokter;
 use App\Models\Appointment;
 use App\Models\Dokter;
+use App\Models\Notifikasi;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
@@ -156,6 +157,17 @@ class AppointmentController extends Controller
                     'jam_konsultasi' => $jamKonsultasi,
                     'status_janji'   => 'pending',
                     'keluhan_utama'  => $request->keluhan_utama,
+                ]);
+                
+                Notifikasi::create([
+                    'dokter_id' => $jadwal->id_dokter,
+                    'tipe'      => 'appointment',
+                    'judul'     => 'Appointment Baru',
+                    'pesan'     => 'Pasien membuat janji konsultasi tanggal '
+                                    . Carbon::parse($jadwal->tanggal)->format('d M Y')
+                                    . ' pukul ' . $jamKonsultasi,
+                    'link'      => route('dokter.appointment'),
+                    'is_read'   => false,
                 ]);
             });
 

@@ -27,7 +27,11 @@
             <button @click="openNotif = !openNotif"
                 class="relative w-12 h-12 rounded-2xl bg-white border border-slate-100 shadow-sm flex items-center justify-center hover:scale-105 transition">
                 <i data-lucide="bell" class="w-5 h-5 text-slate-700"></i>
-                <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-semibold">2</span>
+                @if($notifTotalUnread > 0)
+                <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-semibold">
+                    {{ $notifTotalUnread }}
+                </span>
+                @endif
             </button>
 
             <div x-show="openNotif" @click.away="openNotif = false" x-transition
@@ -39,34 +43,78 @@
                         <h2 class="font-bold text-slate-800">Notifikasi</h2>
                         <p class="text-xs text-slate-400 mt-1">Aktivitas terbaru</p>
                     </div>
-                    <span class="px-3 py-1 rounded-xl bg-red-100 text-red-500 text-xs font-semibold">2 Baru</span>
+                    @if($notifTotalUnread > 0)
+                    <span class="px-3 py-1 rounded-xl bg-red-100 text-red-500 text-xs font-semibold">
+                        {{ $notifTotalUnread }} Baru
+                    </span>
+                    @endif
                 </div>
 
-                <a href="{{ route('dokter.jadwal') }}" class="flex gap-4 px-5 py-4 hover:bg-slate-50 transition border-b border-slate-100">
-                    <div class="w-11 h-11 rounded-2xl bg-teal-100 flex items-center justify-center shrink-0">
-                        <i data-lucide="calendar-check" class="w-5 h-5 text-teal-500"></i>
-                    </div>
-                    <div class="flex-1">
-                        <div class="flex items-center justify-between">
-                            <h3 class="font-semibold text-sm text-slate-800">Jadwal Konsultasi Baru</h3>
-                            <span class="text-[11px] text-slate-400">2m</span>
-                        </div>
-                        <p class="text-sm text-slate-500 mt-1">Hari ini pukul 10:00</p>
-                    </div>
-                </a>
+                @if($notifikasiList->isEmpty())
 
-                <a href="{{ route('dokter.pasien') }}" class="flex gap-4 px-5 py-4 hover:bg-slate-50 transition">
-                    <div class="w-11 h-11 rounded-2xl bg-teal-100 flex items-center justify-center shrink-0">
-                        <i data-lucide="users" class="w-5 h-5 text-teal-500"></i>
-                    </div>
-                    <div class="flex-1">
-                        <div class="flex items-center justify-between">
-                            <h3 class="font-semibold text-sm text-slate-800">Pasien Baru Masuk</h3>
-                            <span class="text-[11px] text-slate-400">10m</span>
-                        </div>
-                        <p class="text-sm text-slate-500 mt-1">Ruang konsultasi 2</p>
-                    </div>
-                </a>
+<div class="p-6 text-center text-slate-400">
+    Tidak ada notifikasi
+</div>
+
+@else
+
+@foreach($notifikasiList as $notif)
+
+<a href="{{ route('dokter.notifikasi.read', $notif) }}"
+   class="flex gap-4 px-5 py-4 hover:bg-slate-50 transition border-b border-slate-100">
+
+    <div class="w-11 h-11 rounded-2xl bg-teal-100 flex items-center justify-center shrink-0">
+
+        @switch($notif->tipe)
+
+            @case('appointment')
+                <i data-lucide="calendar-check" class="w-5 h-5 text-teal-500"></i>
+                @break
+
+            @case('pasien')
+                <i data-lucide="users" class="w-5 h-5 text-blue-500"></i>
+                @break
+
+            @case('jadwal')
+                <i data-lucide="calendar-clock" class="w-5 h-5 text-cyan-500"></i>
+                @break
+
+            @case('pemeriksaan')
+                <i data-lucide="stethoscope" class="w-5 h-5 text-emerald-500"></i>
+                @break
+
+            @default
+                <i data-lucide="bell" class="w-5 h-5 text-slate-500"></i>
+
+        @endswitch
+
+    </div>
+
+    <div class="flex-1">
+
+        <div class="flex justify-between">
+
+            <h3 class="font-semibold text-sm">
+                {{ $notif->judul }}
+            </h3>
+
+            <span class="text-[11px] text-slate-400">
+                {{ $notif->created_at->diffForHumans() }}
+            </span>
+
+        </div>
+
+        <p class="text-sm text-slate-500 mt-1">
+            {{ $notif->pesan }}
+        </p>
+
+    </div>
+
+</a>
+
+@endforeach
+
+@endif
 
             </div>
 

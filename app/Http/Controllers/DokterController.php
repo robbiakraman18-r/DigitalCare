@@ -11,6 +11,7 @@ use App\Models\RekamMedis;
 use App\Models\Appointment;
 use Carbon\Carbon;
 use App\Models\ClinicSetting;
+use App\Models\Notifikasi;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -89,7 +90,9 @@ class DokterController extends Controller
             'totalCancelled',
             'latestAppointments',
             'appointmentTrendLabels',
-            'appointmentTrendData'
+            'appointmentTrendData',
+            'notifikasi',
+            'jumlahNotif'
         ));
     }
 
@@ -170,6 +173,13 @@ class DokterController extends Controller
         $appointment->update([
             'status_janji' => 'called'
         ]);
+        Notifikasi::create([
+            'dokter_id' => $appointment->id_dokter,
+            'tipe'      => 'pasien',
+            'judul'     => 'Pasien Dipanggil',
+            'pesan'     => 'Antrian nomor ' . $appointment->nomor_antrian . ' telah dipanggil.',
+            'link'      => route('dokter.appointment'),
+        ]);
 
         return back()->with('success','Pasien dipanggil');
     }
@@ -188,6 +198,14 @@ class DokterController extends Controller
 
         $appointment->update([
             'status_janji'=>'in_consultation'
+        ]);
+
+        Notifikasi::create([
+            'dokter_id' => $appointment->id_dokter,
+            'tipe'      => 'pemeriksaan',
+            'judul'     => 'Pemeriksaan Dimulai',
+            'pesan'     => 'Pemeriksaan pasien telah dimulai.',
+            'link'      => route('dokter.diagnosis', $appointment->id_janji),
         ]);
 
         session([
@@ -319,6 +337,14 @@ class DokterController extends Controller
         // Update status appointment
         $appointment->update([
             'status_janji' => 'completed'
+        ]);
+
+        Notifikasi::create([
+            'dokter_id' => $appointment->id_dokter,
+            'tipe'      => 'pemeriksaan',
+            'judul'     => 'Pemeriksaan Selesai',
+            'pesan'     => 'Diagnosis dan rekam medis berhasil disimpan.',
+            'link'      => route('dokter.rekam-medis'),
         ]);
 
         session()->forget('active_patient');
