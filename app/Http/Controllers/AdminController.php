@@ -243,35 +243,62 @@ class AdminController extends Controller
     // APPOINTMENT LIST
     // =========================================
     public function appointment(Request $request)
-{
-    $appointments = Appointment::with([
-        'pasien.user',
-        'dokter.user',
-        'jadwal'
-    ])->latest()->get();
+    {
+        // Default selalu hari ini kalau tidak ada filter tanggal
+        $tanggal = $request->filled('tanggal') ? $request->tanggal : today()->format('Y-m-d');
 
-    $today = Appointment::whereDate('tanggal_janji', today())->count();
+        $query = Appointment::with(['pasien.user', 'dokter.user', 'jadwal'])
+            ->whereDate('tanggal_janji', $tanggal);
 
-    $pending = Appointment::where('status_janji', 'pending')->count();
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('pasien.user', function ($sub) use ($search) {
+                    $sub->where('nama', 'like', "%{$search}%");
+                })
+                ->orWhereHas('dokter.user', function ($sub) use ($search) {
+                    $sub->where('nama', 'like', "%{$search}%");
+                })
+                ->orWhere('nomor_antrian', 'like', "%{$search}%");
+            });
+        }
 
-    $called = Appointment::where('status_janji', 'called')->count();
+        if ($request->filled('status')) {
+            $query->where('status_janji', $request->status);
+        }
 
-    $consultation = Appointment::where('status_janji', 'in_consultation')->count();
+        $appointments = $query
+            ->orderByRaw("
+                CASE
+                    WHEN status_janji = 'pending' THEN 1
+                    WHEN status_janji = 'called' THEN 2
+                    WHEN status_janji = 'in_consultation' THEN 3
+                    WHEN status_janji = 'completed' THEN 4
+                    WHEN status_janji = 'cancelled' THEN 5
+                    ELSE 6
+                END
+            ")
+            ->orderBy('nomor_antrian')
+            ->get();
 
-    $completed = Appointment::where('status_janji', 'completed')->count();
+        $total        = $appointments->count();
+        $pending      = $appointments->where('status_janji', 'pending')->count();
+        $called       = $appointments->where('status_janji', 'called')->count();
+        $consultation = $appointments->where('status_janji', 'in_consultation')->count();
+        $completed    = $appointments->where('status_janji', 'completed')->count();
+        $cancelled    = $appointments->where('status_janji', 'cancelled')->count();
 
-    $cancelled = Appointment::where('status_janji', 'cancelled')->count();
-
-    return view('admin.appointment', compact(
-        'appointments',
-        'today',
-        'pending',
-        'called',
-        'consultation',
-        'completed',
-        'cancelled'
-    ));
-}
+        return view('admin.appointment', compact(
+            'appointments',
+            'tanggal',
+            'total',
+            'pending',
+            'called',
+            'consultation',
+            'completed',
+            'cancelled'
+        ));
+    }
 
     // =========================================
     // STORE APPOINTMENT
@@ -303,17 +330,32 @@ $nomorAntrian = ($nomorAntrian ?? 0) + 1;
     }
 
     // =========================================
-    // UPDATE STATUS APPOINTMENT
+    // UPDATE STATUS APPOINTMENT (CANCEL ONLY)
     // =========================================
     public function updateAppointmentStatus(Request $request, $id)
     {
-        $appointment = Appointment::findOrFail($id);
+        $appointment = Appointment::with('jadwal')->findOrFail($id);
 
-        $appointment->update([
-            'status_janji' => $request->status_janji
-        ]);
+        // Status final tidak bisa diubah lagi
+        if (in_array($appointment->status_janji, ['completed', 'cancelled'])) {
+            return back()->with('error', 'Appointment yang sudah ' . $appointment->status_janji . ' tidak bisa diubah.');
+        }
 
-        return back()->with('success', 'Status antrean berhasil diupdate');
+        // Admin hanya boleh membatalkan, bukan bebas pindah status
+        if ($request->status_janji !== 'cancelled') {
+            return back()->with('error', 'Admin hanya bisa membatalkan appointment yang masih aktif.');
+        }
+
+        if ($appointment->jadwal) {
+            $appointment->jadwal->decrement('terisi');
+            if ($appointment->jadwal->status_jadwal === 'Full') {
+                $appointment->jadwal->update(['status_jadwal' => 'Available']);
+            }
+        }
+
+        $appointment->update(['status_janji' => 'cancelled']);
+
+        return back()->with('success', 'Appointment berhasil dibatalkan');
     }
 
     // =========================================
@@ -321,16 +363,25 @@ $nomorAntrian = ($nomorAntrian ?? 0) + 1;
     // =========================================
     public function deleteAppointment($id)
     {
-        $appointment = Appointment::findOrFail($id);
+        $appointment = Appointment::with('jadwal')->findOrFail($id);
+
+        // Appointment yang sudah completed punya rekam medis terkait,
+        // jangan sampai riwayat medis pasien nyangkut tanpa induknya
+        if ($appointment->status_janji === 'completed') {
+            return back()->with('error', 'Appointment yang sudah selesai diperiksa tidak bisa dihapus karena punya rekam medis terkait.');
+        }
+
+        // Kalau appointment masih aktif (belum cancelled) pas dihapus,
+        // kuota jadwal ikut dibalikin biar tetap konsisten
+        if ($appointment->jadwal && $appointment->status_janji !== 'cancelled') {
+            $appointment->jadwal->decrement('terisi');
+            if ($appointment->jadwal->status_jadwal === 'Full') {
+                $appointment->jadwal->update(['status_jadwal' => 'Available']);
+            }
+        }
 
         $appointment->delete();
 
         return back()->with('success', 'Appointment successfully deleted!');
-    }
-
-    public function profile()
-    {
-        return view('admin.profile');
-        // Data user sudah tersedia via auth()->user() langsung di blade
     }
 }
