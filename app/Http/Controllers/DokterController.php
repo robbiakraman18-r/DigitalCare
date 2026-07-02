@@ -21,28 +21,58 @@ class DokterController extends Controller
     {
         $dokter = Dokter::where('user_id', auth()->id())->firstOrFail();
 
+        $dari = Carbon::today('Asia/Jakarta')->subDays(29);
+        $sampai = Carbon::today('Asia/Jakarta');
+
         $jadwalHariIni = JadwalDokter::where('id_dokter', $dokter->id_dokter)
             ->whereDate('tanggal', today())
             ->get();
 
-        $latestAppointments = Appointment::with('pasien.user')
-            ->where('id_dokter',$dokter->id_dokter)
-            ->latest()
-            ->take(5)
-            ->get();
-
         $todayAppointments = $dokter->appointments()
             ->whereDate('tanggal_janji', Carbon::today('Asia/Jakarta'))
-            ->with('pasien')
+            ->with('pasien.user')
             ->orderBy('nomor_antrian')
             ->get();
 
-        $totalPasien       = $dokter->appointments()->distinct('id_pasien')->count('id_pasien');
-        $totalAppointment  = $dokter->appointments()->count();
-        $totalPending      = $dokter->appointments()->where('status_janji', 'pending')->count();
-        $totalCompleted    = $dokter->appointments()->where('status_janji', 'completed')->count();
-        $todaySchedule     = $dokter->appointments()->whereDate('tanggal_janji', Carbon::today('Asia/Jakarta'))->count();
-        $totalRekamMedis   = RekamMedis::where('id_dokter', $dokter->id_dokter)->count();
+        // Semua stat berdasarkan 30 hari terakhir
+        $dari   = Carbon::today('Asia/Jakarta')->subDays(29);
+        $sampai = Carbon::today('Asia/Jakarta');
+
+        $base = $dokter->appointments()
+            ->whereBetween('tanggal_janji', [$dari, $sampai]);
+
+        $totalPasien      = (clone $base)->distinct('id_pasien')->count('id_pasien');
+        $totalAppointment = (clone $base)->count();
+        $totalPending     = (clone $base)->where('status_janji', 'pending')->count();
+        $totalCompleted   = (clone $base)->where('status_janji', 'completed')->count();
+        $totalCalled      = (clone $base)->where('status_janji', 'called')->count();
+        $totalInConsultation = (clone $base)->where('status_janji', 'in_consultation')->count();
+        $totalCancelled   = (clone $base)->where('status_janji', 'cancelled')->count();
+        $totalRekamMedis  = RekamMedis::where('id_dokter', $dokter->id_dokter)
+            ->whereBetween('waktu_pemeriksaan', [$dari, $sampai])
+            ->count();
+
+        $todaySchedule = $dokter->appointments()
+            ->whereDate('tanggal_janji', Carbon::today('Asia/Jakarta'))
+            ->count();
+
+        // Trend 30 hari
+        $appointmentTrendLabels = [];
+        $appointmentTrendData   = [];
+
+        for ($i = 29; $i >= 0; $i--) {
+            $tanggal = Carbon::today('Asia/Jakarta')->subDays($i);
+            $appointmentTrendLabels[] = $tanggal->format('d M');
+            $appointmentTrendData[]   = $dokter->appointments()
+                ->whereDate('tanggal_janji', $tanggal)
+                ->count();
+        }
+
+        $latestAppointments = Appointment::with('pasien.user')
+            ->where('id_dokter', $dokter->id_dokter)
+            ->latest()
+            ->take(5)
+            ->get();
 
         return view('dokter.dashboard', compact(
             'dokter',
@@ -54,7 +84,12 @@ class DokterController extends Controller
             'totalRekamMedis',
             'totalPending',
             'totalCompleted',
-            'latestAppointments'
+            'totalCalled',
+            'totalInConsultation',
+            'totalCancelled',
+            'latestAppointments',
+            'appointmentTrendLabels',
+            'appointmentTrendData'
         ));
     }
 
