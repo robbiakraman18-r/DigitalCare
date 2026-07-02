@@ -423,7 +423,7 @@ class="fixed top-8 right-8 z-[9999]">
 
                 {{-- TIME --}}
                 <td class="px-6 py-5 text-slate-600">
-                    {{ $item->jam_mulai }} - {{ $item->jam_selesai }}
+                    {{ \Carbon\Carbon::parse($item->jam_mulai)->format('H:i') }} – {{ \Carbon\Carbon::parse($item->jam_selesai)->format('H:i') }}
                 </td>
 
                 {{-- ROOM --}}

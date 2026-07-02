@@ -9,6 +9,7 @@ class JadwalController extends Controller
 {
     public function jadwal()
 {
+    JadwalDokter::tutupJadwalKadaluarsa();
     $dokter = auth()->user()->dokter;
 
     $jadwal = JadwalDokter::where('id_dokter', $dokter->id_dokter)

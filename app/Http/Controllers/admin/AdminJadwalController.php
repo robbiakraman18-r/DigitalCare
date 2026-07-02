@@ -9,8 +9,10 @@ use App\Models\JadwalDokter;
 
 class AdminJadwalController extends Controller
 {
-   public function index(Request $request)
-{
+    public function index(Request $request)
+    {
+    JadwalDokter::tutupJadwalKadaluarsa();
+
     $query = JadwalDokter::with('dokter.user');
 
     // SEARCH
@@ -143,7 +145,9 @@ class AdminJadwalController extends Controller
      */
     private function getStatus($jadwal)
     {
-        if (now()->toDateString() > $jadwal->tanggal) {
+        $selesai = \Carbon\Carbon::parse($jadwal->tanggal . ' ' . $jadwal->jam_selesai);
+
+        if (now()->greaterThan($selesai)) {
             return 'Closed';
         }
 

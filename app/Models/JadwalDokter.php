@@ -39,15 +39,22 @@ class JadwalDokter extends Model
     }
 
     public function updateStatus()
-{
-    if (now()->toDateString() > $this->tanggal) {
-        $this->status_jadwal = 'Closed';
-    } elseif ($this->terisi >= $this->kuota_harian) {
-        $this->status_jadwal = 'Full';
-    } else {
-        $this->status_jadwal = 'Available';
+    {
+        if (now()->toDateString() > $this->tanggal) {
+            $this->status_jadwal = 'Closed';
+        } elseif ($this->terisi >= $this->kuota_harian) {
+            $this->status_jadwal = 'Full';
+        } else {
+            $this->status_jadwal = 'Available';
+        }
+
+        $this->save();
     }
 
-    $this->save();
-}
+    public static function tutupJadwalKadaluarsa()
+    {
+        static::where('status_jadwal', '!=', 'Closed')
+            ->whereRaw("TIMESTAMP(tanggal, jam_selesai) < ?", [now()])
+            ->update(['status_jadwal' => 'Closed']);
+    }
 }
