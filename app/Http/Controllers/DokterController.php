@@ -102,16 +102,15 @@ class DokterController extends Controller
     {
         $dokter = Dokter::where('user_id', auth()->id())->firstOrFail();
 
-        $tanggal = request('tanggal');
-        $query   = JadwalDokter::where('id_dokter', $dokter->id_dokter);
+        // Default ke hari ini kalau tidak ada filter
+        $tanggal = request('tanggal', today()->format('Y-m-d'));
 
-        if ($tanggal) {
-            $query->whereDate('tanggal', $tanggal);
-        }
+        $jadwal = JadwalDokter::where('id_dokter', $dokter->id_dokter)
+            ->whereDate('tanggal', $tanggal)
+            ->orderBy('jam_mulai')
+            ->get();
 
-        $jadwal = $query->orderBy('tanggal')->get();
-
-        return view('dokter.jadwal-praktik', compact('jadwal'));
+        return view('dokter.jadwal-praktik', compact('jadwal', 'tanggal'));
     }
 
     /*
