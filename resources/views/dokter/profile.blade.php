@@ -24,22 +24,22 @@
 <div class="space-y-6">
 
     {{-- HERO --}}
-    <div class="bg-white rounded-[32px] border border-slate-100 shadow-sm overflow-hidden">
-        <div class="h-44 relative overflow-hidden bg-gradient-to-br from-slate-50 to-blue-50">
-            <div class="absolute inset-0" style="background-image: radial-gradient(circle, #e2e8f0 1px, transparent 1px); background-size: 24px 24px;"></div>
-            <div class="absolute top-4 right-8 w-32 h-32 rounded-full bg-blue-400/10 border border-blue-200/30"></div>
-            <div class="absolute -bottom-4 right-32 w-20 h-20 rounded-full bg-blue-300/10 border border-blue-200/20"></div>
-            <div class="absolute top-8 left-1/3 w-16 h-16 rounded-full bg-blue-200/20"></div>
-        </div>
+    <div class="bg-white rounded-[32px] border border-slate-100 shadow-sm overflow-visible">
+    <div class="h-44 relative overflow-hidden bg-gradient-to-br from-slate-50 to-teal-50 rounded-t-[32px]">
+        <div class="absolute inset-0" style="background-image: radial-gradient(circle, #e2e8f0 1px, transparent 1px); background-size: 24px 24px;"></div>
+        <div class="absolute top-4 right-8 w-32 h-32 rounded-full bg-teal-400/10 border border-teal-200/30"></div>
+        <div class="absolute -bottom-4 right-32 w-20 h-20 rounded-full bg-teal-300/10 border border-teal-200/20"></div>
+        <div class="absolute top-8 left-1/3 w-16 h-16 rounded-full bg-teal-200/20"></div>
+    </div>
 
-        <div class="px-8 pb-8">
-            <div class="flex flex-col xl:flex-row xl:items-end xl:justify-between gap-6 -mt-12">
-                <div class="flex items-end gap-5">
-                    <div class="relative group w-24 h-24 shrink-0">
+    <div class="px-8 pb-8 pt-4">
+        <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6">
+            <div class="flex items-center gap-5">
+                <div class="relative group w-24 h-24 shrink-0 -mt-12 z-10">
                         @if($foto)
                             <img src="{{ $foto }}" class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-xl">
                         @else
-                            <div class="w-24 h-24 rounded-full bg-blue-500 border-4 border-white shadow-xl flex items-center justify-center text-white font-bold text-3xl">
+                            <div class="w-24 h-24 rounded-full bg-teal-500 border-4 border-white shadow-xl flex items-center justify-center text-white font-bold text-3xl">
                                 {{ $inisial }}
                             </div>
                         @endif
@@ -64,7 +64,7 @@
                 </div>
                 <div class="flex gap-3">
                     <button onclick="document.getElementById('modalPassword').classList.remove('hidden')"
-                            class="px-5 py-2.5 rounded-2xl bg-blue-500 hover:bg-blue-600 text-white font-semibold text-sm transition shadow-lg shadow-blue-100 flex items-center gap-2">
+                            class="px-5 py-2.5 rounded-2xl bg-teal-500 hover:bg-teal-600 text-white font-semibold text-sm transition shadow-lg shadow-teal-100 flex items-center gap-2">
                         <i data-lucide="lock-keyhole" class="w-4 h-4"></i> Ubah Password
                     </button>
                 </div>
@@ -201,14 +201,14 @@
 {{-- MODAL PASSWORD --}}
 <div id="modalPassword" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
     <div class="bg-white rounded-[28px] shadow-2xl w-full max-w-md overflow-hidden">
-        <div class="bg-blue-500 px-7 py-5 flex items-center justify-between">
+        <div class="bg-teal-500 px-7 py-5 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <div class="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center">
                     <i data-lucide="lock-keyhole" class="w-5 h-5 text-white"></i>
                 </div>
                 <div>
                     <h2 class="font-bold text-white">Ubah Password</h2>
-                    <p class="text-blue-100 text-xs">Perbarui kata sandi akun Anda</p>
+                    <p class="text-teal-100 text-xs">Perbarui kata sandi akun Anda</p>
                 </div>
             </div>
             <button onclick="document.getElementById('modalPassword').classList.add('hidden')"
@@ -222,7 +222,7 @@
                 <label class="text-sm font-semibold text-slate-700 block mb-1.5">Password Saat Ini</label>
                 <div class="relative">
                     <input type="password" name="current_password" placeholder="••••••••"
-                           class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 pr-11">
+                           class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-400 pr-11">
                     <button type="button" onclick="togglePass(this)" class="absolute right-3 top-3 text-slate-400 hover:text-slate-600">
                         <i data-lucide="eye" class="w-5 h-5"></i>
                     </button>
@@ -233,7 +233,7 @@
                 <label class="text-sm font-semibold text-slate-700 block mb-1.5">Password Baru</label>
                 <div class="relative">
                     <input type="password" name="password" placeholder="••••••••"
-                           class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 pr-11">
+                           class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-400 pr-11">
                     <button type="button" onclick="togglePass(this)" class="absolute right-3 top-3 text-slate-400 hover:text-slate-600">
                         <i data-lucide="eye" class="w-5 h-5"></i>
                     </button>
@@ -244,7 +244,7 @@
                 <label class="text-sm font-semibold text-slate-700 block mb-1.5">Konfirmasi Password Baru</label>
                 <div class="relative">
                     <input type="password" name="password_confirmation" placeholder="••••••••"
-                           class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 pr-11">
+                           class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-400 pr-11">
                     <button type="button" onclick="togglePass(this)" class="absolute right-3 top-3 text-slate-400 hover:text-slate-600">
                         <i data-lucide="eye" class="w-5 h-5"></i>
                     </button>
@@ -254,7 +254,7 @@
                 <button type="button" onclick="document.getElementById('modalPassword').classList.add('hidden')"
                         class="flex-1 py-3 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm transition">Batal</button>
                 <button type="submit"
-                        class="flex-1 py-3 rounded-2xl bg-blue-500 hover:bg-blue-600 text-white font-semibold text-sm transition shadow-lg shadow-blue-100">Simpan</button>
+                        class="flex-1 py-3 rounded-2xl bg-teal-500 hover:bg-blue-600 text-white font-semibold text-sm transition shadow-lg shadow-teal-100">Simpan</button>
             </div>
         </form>
     </div>

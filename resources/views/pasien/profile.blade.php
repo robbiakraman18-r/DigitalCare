@@ -24,22 +24,22 @@
 <div class="space-y-6">
 
     {{-- HERO --}}
-    <div class="bg-white rounded-[32px] border border-slate-100 shadow-sm overflow-hidden">
-        <div class="h-44 relative overflow-hidden bg-gradient-to-br from-slate-50 to-teal-50">
+    <div class="bg-white rounded-[32px] border border-slate-100 shadow-sm overflow-visible">
+    <div class="h-44 relative bg-gradient-to-br from-slate-50 to-teal-50 rounded-t-[32px] overflow-hidden">
             <div class="absolute inset-0" style="background-image: radial-gradient(circle, #e2e8f0 1px, transparent 1px); background-size: 24px 24px;"></div>
             <div class="absolute top-4 right-8 w-32 h-32 rounded-full bg-teal-400/10 border border-teal-200/30"></div>
             <div class="absolute -bottom-4 right-32 w-20 h-20 rounded-full bg-teal-300/10 border border-teal-200/20"></div>
             <div class="absolute top-8 left-1/3 w-16 h-16 rounded-full bg-teal-200/20"></div>
         </div>
 
-        <div class="px-8 pb-8">
-            <div class="flex flex-col xl:flex-row xl:items-end xl:justify-between gap-6 -mt-12">
-                <div class="flex items-end gap-5">
+        <div class="px-8 pb-8 pt-4">
+            <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6">
+                <div class="flex items-center gap-5">
                     <div class="w-24 h-24 rounded-full bg-teal-500 border-4 border-white shadow-xl
-                                flex items-center justify-center text-white font-bold text-3xl shrink-0">
+            flex items-center justify-center text-white font-bold text-3xl shrink-0 -mt-12 relative z-10">
                         {{ $inisial }}
                     </div>
-                    <div class="mb-1">
+                    <div class="mt-2">
                         <h1 class="text-2xl font-bold text-slate-800">{{ $user->nama }}</h1>
                         <p class="text-slate-400 text-sm mt-0.5">{{ $user->email }}</p>
                         <div class="flex flex-wrap gap-2 mt-3">
