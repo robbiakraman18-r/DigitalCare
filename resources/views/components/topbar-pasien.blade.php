@@ -25,7 +25,11 @@
             <button @click="openNotif = !openNotif"
                 class="relative w-12 h-12 rounded-2xl bg-white border border-slate-100 shadow-sm flex items-center justify-center hover:scale-105 transition">
                 <i data-lucide="bell" class="w-5 h-5 text-slate-700"></i>
-                <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-semibold">1</span>
+                @if($notifTotalUnreadPasien > 0)
+                <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-semibold">
+                    {{ $notifTotalUnreadPasien }}
+                </span>
+                @endif
             </button>
 
             <div x-show="openNotif" @click.away="openNotif = false" x-transition
@@ -37,7 +41,11 @@
                         <h2 class="font-bold text-slate-800">Notifikasi</h2>
                         <p class="text-xs text-slate-400 mt-1">Update terbaru kamu</p>
                     </div>
-                    <span class="px-3 py-1 rounded-xl bg-red-100 text-red-500 text-xs font-semibold">1 Baru</span>
+                    @if($notifTotalUnreadPasien > 0)
+                    <span class="px-3 py-1 rounded-xl bg-red-100 text-red-500 text-xs font-semibold">
+                        {{ $notifTotalUnreadPasien }} Baru
+                    </span>
+                    @endif
                 </div>
 
                 @include('components.notifikasi-pasien')

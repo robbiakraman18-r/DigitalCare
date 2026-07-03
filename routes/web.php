@@ -100,6 +100,12 @@ Route::prefix('pasien')->middleware(['auth', 'role:pasien'])->group(function () 
     ->name('pasien.change-password');
     Route::post('/pasien/change-password', [PasienController::class, 'changePassword'])
         ->name('pasien.change-password.update');
+
+    // Notifikasi
+    Route::get('/notifikasi/{notifikasi}/read', function (\App\Models\Notifikasi $notifikasi) {
+        $notifikasi->update(['is_read' => true]);
+        return $notifikasi->link ? redirect($notifikasi->link) : back();
+        })->name('pasien.notifikasi.read');
 });
 
 /*

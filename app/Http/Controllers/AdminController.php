@@ -363,6 +363,15 @@ $nomorAntrian = ($nomorAntrian ?? 0) + 1;
         }
 
         $appointment->update(['status_janji' => 'cancelled']);
+        
+        Notifikasi::create([
+            'pasien_id' => $appointment->id_pasien,
+            'tipe'      => 'appointment',
+            'judul'     => 'Appointment Dibatalkan',
+            'pesan'     => 'Janji konsultasi Anda telah dibatalkan oleh admin.',
+            'link'      => route('pasien.janji-temu'),
+            'is_read'   => false,
+        ]);
 
         return back()->with('success', 'Appointment berhasil dibatalkan');
     }

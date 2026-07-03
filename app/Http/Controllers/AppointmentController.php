@@ -180,6 +180,17 @@ class AppointmentController extends Controller
                     'link'      => route('admin.appointment'),
                     'is_read'   => false,
                 ]);
+
+                Notifikasi::create([
+                    'pasien_id' => $pasien->id_pasien,
+                    'tipe'      => 'appointment',
+                    'judul'     => 'Appointment Berhasil Dibuat',
+                    'pesan'     => 'Janji konsultasi berhasil dibuat pada '
+                                    . Carbon::parse($jadwal->tanggal)->format('d M Y')
+                                    . ' pukul ' . $jamKonsultasi,
+                    'link'      => route('pasien.on-going'),
+                    'is_read'   => false,
+                ]);
             });
 
             if (!$appointment) {

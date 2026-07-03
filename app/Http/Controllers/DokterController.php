@@ -173,6 +173,16 @@ class DokterController extends Controller
         $appointment->update([
             'status_janji' => 'called'
         ]);
+
+        Notifikasi::create([
+            'pasien_id' => $appointment->id_pasien,
+            'tipe'      => 'appointment',
+            'judul'     => 'Nomor Antrian Dipanggil',
+            'pesan'     => 'Nomor antrian ' . $appointment->nomor_antrian . ' sedang dipanggil. Silakan menuju ruang pemeriksaan.',
+            'link'      => route('pasien.on-going'),
+            'is_read'   => false,
+        ]);
+
         Notifikasi::create([
             'dokter_id' => $appointment->id_dokter,
             'tipe'      => 'pasien',
@@ -198,6 +208,15 @@ class DokterController extends Controller
 
         $appointment->update([
             'status_janji'=>'in_consultation'
+        ]);
+
+        Notifikasi::create([
+            'pasien_id' => $appointment->id_pasien,
+            'tipe'      => 'appointment',
+            'judul'     => 'Pemeriksaan Dimulai',
+            'pesan'     => 'Dokter telah memulai pemeriksaan Anda.',
+            'link'      => route('pasien.on-going'),
+            'is_read'   => false,
         ]);
 
         Notifikasi::create([
@@ -232,6 +251,15 @@ class DokterController extends Controller
         }
 
         $appointment->update(['status_janji' => 'cancelled']);
+        
+        Notifikasi::create([
+            'pasien_id' => $appointment->id_pasien,
+            'tipe'      => 'appointment',
+            'judul'     => 'Appointment Dibatalkan',
+            'pesan'     => 'Janji konsultasi Anda telah dibatalkan oleh dokter.',
+            'link'      => route('pasien.janji-temu'),
+            'is_read'   => false,
+        ]);
 
         return back()->with('success', 'Janji temu pasien dibatalkan');
     }
@@ -337,6 +365,15 @@ class DokterController extends Controller
         // Update status appointment
         $appointment->update([
             'status_janji' => 'completed'
+        ]);
+
+        Notifikasi::create([
+            'pasien_id' => $appointment->id_pasien,
+            'tipe'      => 'rekam_medis',
+            'judul'     => 'Rekam Medis Tersedia',
+            'pesan'     => 'Hasil pemeriksaan dan rekam medis Anda telah tersedia.',
+            'link'      => route('pasien.listrekam-medis'),
+            'is_read'   => false,
         ]);
 
         Notifikasi::create([

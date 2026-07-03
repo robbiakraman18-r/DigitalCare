@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\View\Composers\AdminNotifikasiComposer;
 use App\View\Composers\NotifikasiComposer;
+use App\View\Composers\PasienNotifikasiComposer;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -18,5 +19,6 @@ class ViewComposerServiceProvider extends ServiceProvider
         // kondisinya sendiri (role admin / relasi dokter) sebelum isi data.
         View::composer('*', NotifikasiComposer::class);
         View::composer('*', AdminNotifikasiComposer::class);
+        View::composer('*', PasienNotifikasiComposer::class);
     }
 }
