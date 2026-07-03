@@ -25,7 +25,11 @@
             <button @click="openNotif = !openNotif"
                 class="relative w-12 h-12 rounded-2xl bg-white border border-slate-100 shadow-sm flex items-center justify-center hover:scale-105 transition">
                 <i data-lucide="bell" class="w-5 h-5 text-slate-700"></i>
-                <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-semibold">4</span>
+                @if($notifTotalUnreadAdmin > 0)
+                <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-semibold">
+                    {{ $notifTotalUnreadAdmin }}
+                </span>
+                @endif
             </button>
 
             <div x-show="openNotif" @click.away="openNotif = false" x-transition
@@ -37,60 +41,74 @@
                         <h2 class="font-bold text-slate-800">Notifikasi Admin</h2>
                         <p class="text-xs text-slate-400 mt-1">Aktivitas terbaru klinik</p>
                     </div>
-                    <span class="px-3 py-1 rounded-xl bg-red-100 text-red-500 text-xs font-semibold">4 Baru</span>
+                    @if($notifTotalUnreadAdmin > 0)
+                    <span class="px-3 py-1 rounded-xl bg-red-100 text-red-500 text-xs font-semibold">
+                        {{ $notifTotalUnreadAdmin }} Baru
+                    </span>
+                    @endif
                 </div>
 
-                <a href="/admin-appointment" class="flex gap-4 px-5 py-4 hover:bg-slate-50 transition border-b border-slate-100">
-                    <div class="w-11 h-11 rounded-2xl bg-yellow-100 flex items-center justify-center shrink-0">
-                        <i data-lucide="clipboard-list" class="w-5 h-5 text-yellow-500"></i>
+                @if($notifikasiListAdmin->isEmpty())
+
+                <div class="p-6 text-center text-slate-400">
+                    Tidak ada notifikasi
+                </div>
+
+                @else
+
+                @foreach($notifikasiListAdmin as $notif)
+
+                <a href="{{ route('admin.notifikasi.read', $notif) }}"
+                   class="flex gap-4 px-5 py-4 hover:bg-slate-50 transition border-b border-slate-100">
+
+                    <div class="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0
+                        @switch($notif->tipe)
+                            @case('appointment') bg-yellow-100 @break
+                            @case('dokter') bg-cyan-100 @break
+                            @case('pasien') bg-teal-100 @break
+                            @case('laporan') bg-green-100 @break
+                            @default bg-slate-100
+                        @endswitch
+                    ">
+
+                        @switch($notif->tipe)
+
+                            @case('appointment')
+                                <i data-lucide="clipboard-list" class="w-5 h-5 text-yellow-500"></i>
+                                @break
+
+                            @case('dokter')
+                                <i data-lucide="stethoscope" class="w-5 h-5 text-cyan-500"></i>
+                                @break
+
+                            @case('pasien')
+                                <i data-lucide="users" class="w-5 h-5 text-teal-500"></i>
+                                @break
+
+                            @case('laporan')
+                                <i data-lucide="file-text" class="w-5 h-5 text-green-500"></i>
+                                @break
+
+                            @default
+                                <i data-lucide="bell" class="w-5 h-5 text-slate-500"></i>
+
+                        @endswitch
+
                     </div>
+
                     <div class="flex-1">
                         <div class="flex items-center justify-between">
-                            <h3 class="font-semibold text-sm text-slate-800">Appointment Baru</h3>
-                            <span class="text-[11px] text-slate-400">2m</span>
+                            <h3 class="font-semibold text-sm text-slate-800">{{ $notif->judul }}</h3>
+                            <span class="text-[11px] text-slate-400">{{ $notif->created_at->diffForHumans() }}</span>
                         </div>
-                        <p class="text-sm text-slate-500 mt-1">3 pasien melakukan booking konsultasi hari ini.</p>
+                        <p class="text-sm text-slate-500 mt-1">{{ $notif->pesan }}</p>
                     </div>
+
                 </a>
 
-                <a href="/admin-dokter" class="flex gap-4 px-5 py-4 hover:bg-slate-50 transition border-b border-slate-100">
-                    <div class="w-11 h-11 rounded-2xl bg-cyan-100 flex items-center justify-center shrink-0">
-                        <i data-lucide="stethoscope" class="w-5 h-5 text-cyan-500"></i>
-                    </div>
-                    <div class="flex-1">
-                        <div class="flex items-center justify-between">
-                            <h3 class="font-semibold text-sm text-slate-800">Dokter Online</h3>
-                            <span class="text-[11px] text-slate-400">10m</span>
-                        </div>
-                        <p class="text-sm text-slate-500 mt-1">Dr. Rizki memulai jadwal praktik pagi.</p>
-                    </div>
-                </a>
+                @endforeach
 
-                <a href="/admin-pasien" class="flex gap-4 px-5 py-4 hover:bg-slate-50 transition border-b border-slate-100">
-                    <div class="w-11 h-11 rounded-2xl bg-teal-100 flex items-center justify-center shrink-0">
-                        <i data-lucide="users" class="w-5 h-5 text-teal-500"></i>
-                    </div>
-                    <div class="flex-1">
-                        <div class="flex items-center justify-between">
-                            <h3 class="font-semibold text-sm text-slate-800">Pasien Baru</h3>
-                            <span class="text-[11px] text-slate-400">25m</span>
-                        </div>
-                        <p class="text-sm text-slate-500 mt-1">Data pasien baru berhasil ditambahkan.</p>
-                    </div>
-                </a>
-
-                <a href="/admin-laporan" class="flex gap-4 px-5 py-4 hover:bg-slate-50 transition">
-                    <div class="w-11 h-11 rounded-2xl bg-green-100 flex items-center justify-center shrink-0">
-                        <i data-lucide="file-text" class="w-5 h-5 text-green-500"></i>
-                    </div>
-                    <div class="flex-1">
-                        <div class="flex items-center justify-between">
-                            <h3 class="font-semibold text-sm text-slate-800">Laporan Klinik</h3>
-                            <span class="text-[11px] text-slate-400">1j</span>
-                        </div>
-                        <p class="text-sm text-slate-500 mt-1">Laporan harian klinik berhasil dibuat.</p>
-                    </div>
-                </a>
+                @endif
 
             </div>
 

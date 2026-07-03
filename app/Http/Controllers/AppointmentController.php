@@ -169,6 +169,17 @@ class AppointmentController extends Controller
                     'link'      => route('dokter.appointment'),
                     'is_read'   => false,
                 ]);
+
+                Notifikasi::create([
+                    'dokter_id' => null,
+                    'tipe'      => 'appointment',
+                    'judul'     => 'Appointment Baru',
+                    'pesan'     => 'Pasien booking konsultasi tanggal '
+                                    . Carbon::parse($jadwal->tanggal)->format('d M Y')
+                                    . ' pukul ' . $jamKonsultasi,
+                    'link'      => route('admin.appointment'),
+                    'is_read'   => false,
+                ]);
             });
 
             if (!$appointment) {

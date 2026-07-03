@@ -8,6 +8,7 @@ use App\Models\Complaint;
 use App\Models\User;
 use App\Models\Dokter;
 use App\Models\Pasien;
+use App\Models\Notifikasi;
 use App\Models\Appointment;
 use Carbon\Carbon;
 
@@ -50,6 +51,14 @@ class AdminController extends Controller
             'foto_profil' => $foto,
         ]);
         
+        Notifikasi::create([
+            'dokter_id' => null,
+            'tipe'      => 'dokter',
+            'judul'     => 'Dokter Baru Ditambahkan',
+            'pesan'     => 'Dr. ' . $user->nama . ' berhasil ditambahkan ke sistem.',
+            'link'      => route('admin.dashboard'), // ganti kalau ada halaman detail dokter
+            'is_read'   => false,
+        ]);
 
         return redirect()->back()
             ->with('success', 'Doctor berhasil ditambahkan');

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Appointment;
 use App\Models\Pasien;
 use App\Models\Dokter;
+use App\Models\Notifikasi;
 use App\Models\RekamMedis;
 use App\Exports\AppointmentsExport;
 use App\Exports\PatientsExport;
@@ -191,6 +192,15 @@ class ReportController extends Controller
             'totalMedicalRecords',
             'recentAppointments'
         ))->setPaper('a4', 'portrait');
+
+        Notifikasi::create([
+            'dokter_id' => null,
+            'tipe'      => 'laporan',
+            'judul'     => 'Laporan Klinik',
+            'pesan'     => 'Laporan ringkasan klinik berhasil dibuat.',
+            'link'      => route('admin.reports.index'),
+            'is_read'   => false,
+        ]);
 
         return $pdf->download('clinic-summary-report-' . now()->format('Y-m-d') . '.pdf');
     }

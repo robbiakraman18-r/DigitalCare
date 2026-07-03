@@ -217,7 +217,6 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
 
    Route::view('/medical-records', 'admin.medical-records');
     Route::view('/reports', 'admin.reports');
-    Route::view('/payments', 'admin.payments');
     Route::view('/settings', 'admin.settings');
 
 
@@ -321,6 +320,11 @@ Route::delete('/schedule-management/delete/{id}', [AdminJadwalController::class,
 // Tambah di dalam group prefix('admin')->middleware(['auth', 'role:admin']):
     Route::put('/password', [ChangePasswordController::class, 'update'])
         ->name('admin.password.update');
+
+    Route::get('/admin/notifikasi/{notifikasi}/read', function (\App\Models\Notifikasi $notifikasi) {
+        $notifikasi->update(['is_read' => true]);
+        return $notifikasi->link ? redirect($notifikasi->link) : back();
+        })->name('admin.notifikasi.read')->middleware('auth');
 });
 
 

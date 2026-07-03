@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Pasien;
+use App\Models\Notifikasi;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth; 
@@ -41,6 +42,16 @@ class RegisterController extends Controller
             return $createdUser;
         });
         event(new Registered($user));
+        
+        Notifikasi::create([
+            'dokter_id' => null,
+            'tipe'      => 'pasien',
+            'judul'     => 'Pasien Baru',
+            'pesan'     => $user->nama . ' baru saja mendaftar sebagai pasien.',
+            'link'      => route('admin.listpatient'), // ganti sesuai nama route yg sudah kamu tambahin
+            'is_read'   => false,
+        ]);
+
         Auth::login($user);
         return redirect('/verification')
             ->with('success', 'Akun berhasil dibuat!')
