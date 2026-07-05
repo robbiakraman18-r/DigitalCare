@@ -5,6 +5,9 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Support\Facades\View;
+use App\Models\Dokter;
+use App\Models\Notifikasi;
 
 class AppServiceProvider extends ServiceProvider
 {

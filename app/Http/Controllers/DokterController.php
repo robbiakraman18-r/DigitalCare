@@ -12,6 +12,7 @@ use App\Models\Appointment;
 use Carbon\Carbon;
 use App\Models\ClinicSetting;
 use App\Models\Notifikasi;
+use App\Models\Complaint;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -74,6 +75,17 @@ class DokterController extends Controller
             ->latest()
             ->take(5)
             ->get();
+
+        $dokter = Dokter::where('user_id', auth()->id())->firstOrFail(); // ini udah ada di baris paling atas dashboard()
+
+        $notifikasi = Notifikasi::where('dokter_id', $dokter->id_dokter)
+            ->latest()
+            ->take(5)
+            ->get();
+
+        $jumlahNotif = Notifikasi::where('dokter_id', $dokter->id_dokter)
+            ->where('is_read', false)
+            ->count();
 
         return view('dokter.dashboard', compact(
             'dokter',
@@ -622,5 +634,62 @@ class DokterController extends Controller
     {
         $setting = ClinicSetting::instance();
         return view('dokter.info-klinik-dokter', compact('setting'));
+    }
+
+    // =========================================
+    // COMPLAINT (DOKTER)
+    // =========================================
+
+    /**
+     * List komplain milik dokter yang sedang login.
+     */
+    public function complaint()
+    {
+        $complaints = Complaint::where('user_id', auth()->id())
+            ->latest()
+            ->get();
+
+        return view('dokter.complaint', compact('complaints'));
+    }
+
+    /**
+     * Dokter mengirim komplain baru -> otomatis status 'pending'.
+     */
+    public function storeComplaint(Request $request)
+    {
+        $request->validate([
+            'message' => 'required|string|max:2000',
+        ]);
+
+        Complaint::create([
+            'user_id' => auth()->id(),
+            'message' => $request->message,
+            'status'  => 'pending',
+        ]);
+
+        return back()->with('success', 'Komplain berhasil dikirim, mohon tunggu tanggapan admin.');
+    }
+
+    /**
+     * Dokter konfirmasi puas dengan tanggapan admin -> status jadi 'closed'.
+     * Hanya bisa dilakukan kalau status saat ini 'resolved', dan hanya
+     * untuk komplain miliknya sendiri (dicek lewat where user_id).
+     */
+    public function confirmComplaint($id)
+    {
+        $complaint = Complaint::where('id', $id)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
+
+        if ($complaint->status !== 'resolved') {
+            return back()->with('error', 'Komplain hanya bisa dikonfirmasi setelah admin memberi tanggapan (status Resolved).');
+        }
+
+        $complaint->update([
+            'status'       => 'closed',
+            'confirmed_at' => now(),
+        ]);
+
+        return back()->with('success', 'Terima kasih atas konfirmasinya!');
     }
 }

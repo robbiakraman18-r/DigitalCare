@@ -190,26 +190,71 @@ class AdminController extends Controller
     // =========================================
     // COMPLAINT
     // =========================================
-    public function complaint()
+
+    /**
+     * List semua komplain, bisa difilter by status lewat ?status=pending dst.
+     * Sudah eager-load 'user' supaya nama pengirim (pasien/dokter) tampil tanpa N+1.
+     */
+    public function complaint(Request $request)
     {
-        return view('admin.complaint', [
-            'complaints' => Complaint::latest()->get()
-        ]);
+        $query = Complaint::with('user')->latest();
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $complaints = $query->get();
+
+        $countPending    = Complaint::where('status', 'pending')->count();
+        $countInProgress = Complaint::where('status', 'in_progress')->count();
+        $countResolved   = Complaint::where('status', 'resolved')->count();
+        $countClosed     = Complaint::where('status', 'closed')->count();
+
+        return view('admin.complaint', compact(
+            'complaints',
+            'countPending',
+            'countInProgress',
+            'countResolved',
+            'countClosed'
+        ));
     }
 
-    // =========================================
-    // UPDATE COMPLAINT (NO RESPONSE)
-    // =========================================
+    /**
+     * Admin menangani komplain: bisa set ke 'in_progress' (baru mulai ditangani)
+     * atau 'resolved' (sudah dikasih tanggapan/solusi).
+     * Admin TIDAK bisa langsung set 'closed' -> itu wewenang pasien/dokter
+     * lewat endpoint confirmComplaint (konfirmasi puas).
+     */
     public function updateComplaint(Request $request, $id)
     {
         $request->validate([
-            'status' => 'required'
+            'status'   => 'required|in:in_progress,resolved',
+            'response' => 'nullable|string|max:2000',
         ]);
 
         $complaint = Complaint::findOrFail($id);
 
+        if ($complaint->status === 'closed') {
+            return back()->with('error', 'Komplain ini sudah closed dan tidak bisa diubah lagi.');
+        }
+
         $complaint->update([
-            'status' => $request->status
+            'status'   => $request->status,
+            'response' => $request->filled('response') ? $request->response : $complaint->response,
+        ]);
+
+        // Kirim notifikasi ke pengirim komplain (pasien atau dokter)
+        $pasien = Pasien::where('user_id', $complaint->user_id)->first();
+        $dokter = Dokter::where('user_id', $complaint->user_id)->first();
+
+        Notifikasi::create([
+            'pasien_id' => $pasien->id_pasien ?? null,
+            'dokter_id' => $dokter->id_dokter ?? null,
+            'tipe'      => 'complaint',
+            'judul'     => 'Update Komplain Anda',
+            'pesan'     => 'Status komplain Anda diperbarui menjadi "' . $complaint->status_label . '".',
+            'link'      => '#',
+            'is_read'   => false,
         ]);
 
         return back()->with('success', 'Complaint berhasil diupdate');

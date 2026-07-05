@@ -106,6 +106,12 @@ Route::prefix('pasien')->middleware(['auth', 'role:pasien'])->group(function () 
         $notifikasi->update(['is_read' => true]);
         return $notifikasi->link ? redirect($notifikasi->link) : back();
         })->name('pasien.notifikasi.read');
+
+    //complaint
+   Route::get('/complaint', [PasienController::class, 'complaint'])->name('pasien.complaint');
+Route::post('/complaint', [PasienController::class, 'storeComplaint'])->name('pasien.complaint.store');
+Route::put('/complaint/{id}/confirm', [PasienController::class, 'confirmComplaint'])->name('pasien.complaint.confirm');
+
 });
 
 /*
@@ -194,6 +200,11 @@ Route::prefix('dokter')->middleware(['auth', 'role:dokter'])->group(function () 
 
     Route::post('/dokter/notifikasi/read-all', [NotifikasiController::class, 'markAllAsRead'])
         ->name('dokter.notifikasi.read-all');
+
+    //complaint
+    Route::get('/complaint', [DokterController::class, 'complaint'])->name('dokter.complaint');
+Route::post('/complaint', [DokterController::class, 'storeComplaint'])->name('dokter.complaint.store');
+Route::put('/complaint/{id}/confirm', [DokterController::class, 'confirmComplaint'])->name('dokter.complaint.confirm');
 });
 /*
 |--------------------------------------------------------------------------
@@ -255,11 +266,10 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
 ->name('admin.doctor.schedule.update');
 
     // COMPLAINT
+    Route::get('/complaint', [App\Http\Controllers\AdminController::class, 'complaint']);
+    Route::put('/complaint/{id}', [App\Http\Controllers\AdminController::class, 'updateComplaint']);
 
-    Route::get('/complaint', [AdminController::class, 'complaint'])->name('admin.complaint');
-    Route::post('/complaint/{id}/update', [AdminController::class, 'updateComplaint'])
-    ->name('admin.complaint.update');
-    
+
     // LIST DATA
     Route::get('/listpatient', [ListPatientController::class, 'show']);
     Route::get('/listprescription', [ListprescriptionController::class, 'show']);
@@ -331,6 +341,8 @@ Route::delete('/schedule-management/delete/{id}', [AdminJadwalController::class,
         $notifikasi->update(['is_read' => true]);
         return $notifikasi->link ? redirect($notifikasi->link) : back();
         })->name('admin.notifikasi.read')->middleware('auth');
+
+    
 });
 
 

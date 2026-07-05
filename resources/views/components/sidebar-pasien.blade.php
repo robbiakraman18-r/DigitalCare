@@ -88,7 +88,7 @@
             </div>
 
             <!-- HELP -->
-            <a href="{{ route('pasien.help') }}"
+            <a href="{{ route('pasien.complaint') }}"
             class="flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300
             {{ $isHelp
             ? 'bg-teal-500 text-white shadow-lg shadow-teal-200'

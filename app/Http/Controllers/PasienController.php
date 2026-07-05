@@ -8,6 +8,7 @@ use App\Models\Dokter;
 use App\Models\JadwalDokter;
 use Illuminate\Http\Request;
 use App\Models\ClinicSetting;
+use App\Models\Complaint;
 use Illuminate\Support\Facades\Auth; 
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -234,5 +235,63 @@ class PasienController extends Controller
         $user->save();
 
         return back()->with('success', 'Password berhasil diubah.');
+    }
+
+
+    // =========================================
+    // COMPLAINT (PASIEN)
+    // =========================================
+
+    /**
+     * List komplain milik pasien yang sedang login.
+     */
+    public function complaint()
+    {
+        $complaints = Complaint::where('user_id', auth()->id())
+            ->latest()
+            ->get();
+
+        return view('pasien.complaint', compact('complaints'));
+    }
+
+    /**
+     * Pasien mengirim komplain baru -> otomatis status 'pending'.
+     */
+    public function storeComplaint(Request $request)
+    {
+        $request->validate([
+            'message' => 'required|string|max:2000',
+        ]);
+
+        Complaint::create([
+            'user_id' => auth()->id(),
+            'message' => $request->message,
+            'status'  => 'pending',
+        ]);
+
+        return back()->with('success', 'Komplain berhasil dikirim, mohon tunggu tanggapan admin.');
+    }
+
+    /**
+     * Pasien konfirmasi puas dengan tanggapan admin -> status jadi 'closed'.
+     * Hanya bisa dilakukan kalau status saat ini 'resolved', dan hanya
+     * untuk komplain miliknya sendiri.
+     */
+    public function confirmComplaint($id)
+    {
+        $complaint = Complaint::where('id', $id)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
+
+        if ($complaint->status !== 'resolved') {
+            return back()->with('error', 'Komplain hanya bisa dikonfirmasi setelah admin memberi tanggapan (status Resolved).');
+        }
+
+        $complaint->update([
+            'status'       => 'closed',
+            'confirmed_at' => now(),
+        ]);
+
+        return back()->with('success', 'Terima kasih atas konfirmasinya!');
     }
 }
