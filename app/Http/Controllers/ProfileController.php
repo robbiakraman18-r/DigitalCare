@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
 {
@@ -30,29 +31,36 @@ class ProfileController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
-        $user->update([
-            'nama'    => 'required|string|max:100',
-            'nik'     => 'required|string|max:20',
-            'email'   => 'required|email|max:255|unique:users,email,' . $user->id,
-            'phone'   => 'required|string|max:20',
-            'address' => 'required|string|min:5',
-            'gender'  => 'required|in:Male,Female',
+        $request->validate([
+            'nama'         => 'required|string|max:60',
+            'email'        => 'required|email|max:255|unique:users,email,' . $user->id,
+
+            'nik'          => 'required|string|max:20|unique:pasiens,nik,' . optional($user->pasien)->id_pasien . ',id_pasien',
+            'birth_date'   => 'required|date',
+            'gender'       => 'required|in:Male,Female',
+            'phone_number' => 'required|string|max:20',
+            'address'      => 'required|string|max:255',
         ]);
 
-        $user->update([
-            'nama'  => $request->nama,
-            'email' => $request->email,
-        ]);
+        DB::transaction(function () use ($request, $user) {
 
-        $user->pasien()->updateOrCreate(
-            ['user_id' => $user->id],
-            [
-                'nik'          => $request->nik,
-                'phone_number' => $request->phone,
-                'address'      => $request->address,
-                'gender'       => $request->gender,
-            ]
-        );
+            $user->update([
+                'nama'  => $request->nama,
+                'email' => $request->email,
+            ]);
+
+            $user->pasien()->updateOrCreate(
+                ['user_id' => $user->id],
+                [
+                    'nik'          => $request->nik,
+                    'birth_date'   => $request->birth_date,
+                    'gender'       => $request->gender,
+                    'phone_number' => $request->phone_number,
+                    'address'      => $request->address,
+                ]
+            );
+
+        });
 
         return redirect()
             ->route('profile.show')

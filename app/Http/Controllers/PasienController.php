@@ -78,6 +78,23 @@ class PasienController extends Controller
      */
     public function createAppointment()
     {
+        $pasien = Auth::user()->pasien;
+
+        if (
+            empty($pasien->nik) ||
+            empty($pasien->birth_date) ||
+            empty($pasien->gender) ||
+            empty($pasien->phone_number) ||
+            empty($pasien->address)
+        ) {
+            return redirect()
+                ->route('pasien.profile')
+                ->with(
+                    'warning',
+                    'Silakan lengkapi profil terlebih dahulu sebelum membuat janji temu.'
+                );
+        }
+
         $dokters = Dokter::all();
 
         return view('pasien.buat-janji', compact('dokters'));
@@ -88,6 +105,22 @@ class PasienController extends Controller
      */
     public function storeAppointment(Request $request)
     {
+        $pasien = Auth::user()->pasien;
+
+        if (
+            empty($pasien->nik) ||
+            empty($pasien->birth_date) ||
+            empty($pasien->gender) ||
+            empty($pasien->phone_number) ||
+            empty($pasien->address)
+        ) {
+            return redirect()
+                ->route('pasien.profile')
+                ->with(
+                    'warning',
+                    'Lengkapi profil terlebih dahulu.'
+                );
+        }
         $request->validate([
             'id_dokter'     => 'required|exists:dokters,id_dokter',
             'tanggal_janji' => 'required|date|after_or_equal:today',

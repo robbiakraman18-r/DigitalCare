@@ -28,9 +28,16 @@ class AppointmentController extends Controller
         $user->load('pasien');
         $pasien = $user->pasien;
 
+        // Kalau data pasien belum ada
         if (!$pasien) {
             return redirect()->route('profile.edit')
                 ->with('error', 'Silakan lengkapi profil Anda terlebih dahulu.');
+        }
+
+        // Kalau data pasien ada tapi belum lengkap
+        if (!$pasien->isProfileComplete()) {
+            return redirect()->route('profile.edit')
+                ->with('warning', 'Lengkapi profil terlebih dahulu sebelum membuat appointment.');
         }
 
         // Cek apakah pasien sudah punya janji aktif
@@ -107,6 +114,11 @@ class AppointmentController extends Controller
 
                 if (!$pasien) {
                     throw new \Exception('Data pasien tidak ditemukan.');
+                }
+
+                // Cek apakah profil pasien sudah lengkap
+                if (!$pasien->isProfileComplete()) {
+                    throw new \Exception('Lengkapi profil terlebih dahulu sebelum membuat appointment.');
                 }
 
                 // Cek sudah punya janji aktif

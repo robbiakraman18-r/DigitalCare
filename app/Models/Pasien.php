@@ -42,4 +42,13 @@ class Pasien extends Model
             'id_janji'
         );
     }
+
+    public function isProfileComplete()
+    {
+        return !empty($this->nik)
+            && !empty($this->birth_date)
+            && !empty($this->gender)
+            && !empty($this->phone_number)
+            && !empty($this->address);
+    }
 }

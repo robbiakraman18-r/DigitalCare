@@ -79,10 +79,30 @@
                 @error('email')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
             </div>
             <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-1.5">
+                    NIK
+                </label>
+
+                <input
+                    type="text"
+                    name="nik"
+                    value="{{ old('nik', $pasien?->nik ?? '') }}"
+                    class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-400">
+
+                @error('nik')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+            <div>
                 <label class="block text-sm font-semibold text-slate-700 mb-1.5">Nomor Telepon</label>
-                <input type="text" name="phone" value="{{ old('phone', $pasien?->phone_number ?? '') }}"
-                       class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-400">
-                @error('phone')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                <input type="text"
+                    name="phone_number"
+                    value="{{ old('phone_number', $pasien?->phone_number ?? '') }}"
+                    class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-400">
+
+                @error('phone_number')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
             </div>
             <div>
                 <label class="block text-sm font-semibold text-slate-700 mb-1.5">Jenis Kelamin</label>
@@ -93,7 +113,21 @@
                 @error('gender')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
             </div>
         </div>
+        <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5">
+                Tanggal Lahir
+            </label>
 
+            <input
+                type="date"
+                name="birth_date"
+                value="{{ old('birth_date', $pasien?->birth_date ?? '') }}"
+                class="w-full px-4 py-3 border border-slate-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-400">
+
+            @error('birth_date')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+            @enderror
+        </div>
         <div class="mt-5">
             <label class="block text-sm font-semibold text-slate-700 mb-1.5">Alamat</label>
             <textarea name="address" rows="3"

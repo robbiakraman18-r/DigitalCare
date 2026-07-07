@@ -20,6 +20,53 @@
     <i data-lucide="circle-check" class="w-4 h-4"></i> {{ session('success') }}
 </div>
 @endif
+@if(session('warning'))
+<div class="mb-4 px-5 py-3.5 bg-yellow-50 border border-yellow-200 rounded-2xl text-yellow-700 text-sm font-medium flex items-center gap-2">
+    <i data-lucide="triangle-alert" class="w-4 h-4"></i>
+    {{ session('warning') }}
+</div>
+@endif
+@if(!$pasien->isProfileComplete())
+
+<div class="mb-6 rounded-3xl border border-amber-200 bg-gradient-to-r from-amber-50 to-yellow-50 p-6">
+
+    <div class="flex items-start gap-4">
+
+        <div class="w-12 h-12 rounded-2xl bg-amber-100 flex items-center justify-center">
+            <i data-lucide="triangle-alert" class="w-6 h-6 text-amber-600"></i>
+        </div>
+
+        <div class="flex-1">
+
+            <h2 class="font-bold text-amber-700 text-lg">
+                Profil Belum Lengkap
+            </h2>
+
+            <p class="text-sm text-amber-700 mt-1 leading-relaxed">
+                Sebelum dapat membuat appointment, silakan lengkapi data diri Anda terlebih dahulu seperti:
+                <strong>NIK</strong>,
+                <strong>Tanggal Lahir</strong>,
+                <strong>Jenis Kelamin</strong>,
+                <strong>Nomor Telepon</strong>,
+                dan <strong>Alamat</strong>.
+            </p>
+
+            <a href="{{ route('profile.edit') }}"
+               class="inline-flex items-center gap-2 mt-4 px-5 py-3 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-semibold transition">
+
+                <i data-lucide="user-round-pen" class="w-4 h-4"></i>
+
+                Lengkapi Profil
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+@endif
 
 <div class="space-y-6">
 

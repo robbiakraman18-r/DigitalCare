@@ -14,6 +14,10 @@ use Carbon\Carbon;
 
 class AdminController extends Controller
 {
+    public function profile()
+    {
+        return view('admin.profile');
+    }
     // =========================================
     // STORE DOKTER
     // =========================================

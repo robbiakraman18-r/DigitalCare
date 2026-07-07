@@ -7,6 +7,51 @@
 @section('subtitle', 'Selamat datang kembali di DigitalCare')
 
 @section('content')
+@php
+    $pasien = auth()->user()->pasien;
+@endphp
+
+@if($pasien && !$pasien->isProfileComplete())
+
+<div class="mb-6 rounded-3xl border border-amber-200 bg-gradient-to-r from-amber-50 to-yellow-50 p-6">
+
+    <div class="flex items-start gap-4">
+
+        <div class="w-12 h-12 rounded-2xl bg-amber-100 flex items-center justify-center shrink-0">
+            <i data-lucide="triangle-alert" class="w-6 h-6 text-amber-600"></i>
+        </div>
+
+        <div class="flex-1">
+
+            <h2 class="font-bold text-amber-700 text-lg">
+                Profil Belum Lengkap
+            </h2>
+
+            <p class="text-sm text-amber-700 mt-1 leading-relaxed">
+                Sebelum dapat membuat appointment, silakan lengkapi data diri Anda terlebih dahulu seperti:
+                <strong>NIK</strong>,
+                <strong>Tanggal Lahir</strong>,
+                <strong>Jenis Kelamin</strong>,
+                <strong>Nomor Telepon</strong>,
+                dan <strong>Alamat</strong>.
+            </p>
+
+            <a href="{{ route('profile.edit') }}"
+               class="inline-flex items-center gap-2 mt-4 px-5 py-3 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-semibold transition">
+
+                <i data-lucide="user-round-pen" class="w-4 h-4"></i>
+
+                Lengkapi Profil
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+@endif
 <div class="space-y-8" x-data="pasienDashboard">
     {{-- Banner Selamat Datang --}}
     <div class="relative overflow-hidden rounded-[32px] bg-gradient-to-r from-teal-500 to-cyan-500 p-8 lg:p-10 shadow-xl shadow-teal-100">

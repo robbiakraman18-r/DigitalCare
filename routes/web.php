@@ -279,7 +279,7 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
 
 
     // LIST DATA
-    Route::get('/listpatient', [ListPatientController::class, 'show']);
+    Route::get('/listpatient', [ListPatientController::class, 'show'])->name('admin.listpatient');
     Route::get('/listprescription', [ListprescriptionController::class, 'show']);
 
     

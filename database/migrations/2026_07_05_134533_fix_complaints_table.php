@@ -11,13 +11,10 @@ use Illuminate\Support\Facades\Schema;
  *
  * Perubahan:
  * - tambah kolom `user_id` (relasi ke tabel users, pengganti user_name bebas)
+ * - tambah kolom `response` (jawaban admin/dokter atas komplain)
  * - kolom `status` diubah jadi ENUM 4 tahap (sebelumnya varchar bebas)
  * - tambah kolom `confirmed_at` (diisi saat pasien/dokter konfirmasi puas -> closed)
  * - hapus kolom `user_name` (sudah digantikan relasi user_id)
- *
- * Catatan: tabel complaints di dump SQL yang dikirim masih kosong (belum ada data),
- * jadi migration ini aman dijalankan tanpa risiko kehilangan data.
- * Kalau di DB production kamu sudah ada data complaint lama, backup dulu sebelum migrate.
  */
 return new class extends Migration
 {
@@ -25,6 +22,7 @@ return new class extends Migration
     {
         Schema::table('complaints', function (Blueprint $table) {
             $table->unsignedBigInteger('user_id')->after('id')->nullable();
+            $table->text('response')->nullable()->after('message');
         });
 
         // Ubah status jadi ENUM 4 tahap. Pakai raw statement karena
@@ -47,7 +45,7 @@ return new class extends Migration
     {
         Schema::table('complaints', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
-            $table->dropColumn(['user_id', 'confirmed_at']);
+            $table->dropColumn(['user_id', 'response', 'confirmed_at']);
             $table->string('user_name')->nullable();
         });
 
