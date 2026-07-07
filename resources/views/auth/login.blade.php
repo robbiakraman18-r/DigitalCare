@@ -84,8 +84,8 @@
                 @endif
 
                 @if ($errors->any())
-                    <div class="mb-4 p-3 rounded-2xl bg-red-50 text-red-600 text-sm">
-                        {{ $errors->first('email') }}
+                    <div class="mb-4 p-3 rounded-2xl bg-red-50 border border-red-100 text-red-600 text-sm">
+                        {{ $errors->first() }}
                     </div>
                 @endif
 
@@ -99,7 +99,8 @@
                         type="email"
                         name="email"
                         value="{{ old('email') }}"
-                        placeholder="Email"
+                        placeholder="Masukkan Email"
+                        pattern=".+@gmail\.com"
                         class="w-full pl-12 pr-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-teal-500 outline-none transition"
                         required
                     >
@@ -112,10 +113,11 @@
                         </svg>
                     </div>
                     <input
-                        id="password"
-                        type="password"
-                        name="password"
-                        placeholder="Password"
+                    id="password"
+                    type="password"
+                    name="password"
+                    minlength="8"
+                    placeholder="Password minimal 8 karakter"
                         class="w-full pl-12 pr-12 py-3 rounded-2xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-teal-500 outline-none transition"
                         required
                     >
