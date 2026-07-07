@@ -142,31 +142,40 @@
 
     </div>
 
-    <div class="hidden md:block relative bg-gradient-to-br from-teal-500 via-teal-600 to-cyan-600 overflow-hidden">
-        
-        <div class="absolute -top-16 -right-16 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
-        <div class="absolute -bottom-20 -left-16 w-80 h-80 bg-cyan-300/20 rounded-full blur-3xl"></div>
-        
-        <div class="absolute right-6 bottom-6 text-white opacity-[0.04] font-bold text-[15rem] select-none pointer-events-none leading-none">
-            🩺
-        </div>
+    <div class="hidden md:block relative overflow-hidden bg-slate-900">
 
-        <div class="absolute inset-0 flex flex-col justify-center px-12 z-10">
-            <div class="backdrop-blur-xl bg-white/10 border border-white/20 p-8 rounded-[32px] shadow-2xl shadow-teal-900/20 max-w-sm">
-                <h1 class="text-4xl font-extrabold text-white leading-tight">
-                    Join DigitalCare
-                </h1>
-                <p class="text-teal-50/90 mt-4 text-sm leading-relaxed">
-                    Nikmati pengalaman layanan kesehatan digital kampus yang modern, cepat, dan terintegrasi langsung dalam satu platform praktis.
-                </p>
-                <div class="mt-6 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 text-white text-[10px] font-semibold tracking-wider uppercase backdrop-blur-md">
-                    <span class="w-1.5 h-1.5 bg-cyan-300 rounded-full animate-pulse"></span>
-                    PoliBatam Smart Campus Clinic
-                </div>
+    <img 
+        src="/images/clinic_design.png" 
+        alt="DigitalCare Clinic" 
+        class="absolute inset-0 w-full h-full object-cover opacity-80"
+    >
+
+    <div class="absolute inset-0 bg-gradient-to-br from-teal-600/80 via-teal-600/50 to-cyan-700/60 flex flex-col justify-center px-12">
+
+        <div class="backdrop-blur-xl bg-white/10 border border-white/20 p-8 rounded-[32px] shadow-2xl">
+
+            <h1 class="text-4xl font-extrabold text-white leading-tight">
+                Join DigitalCare
+            </h1>
+
+            <p class="text-white/90 mt-4 text-sm leading-relaxed">
+                Nikmati pengalaman layanan kesehatan digital kampus yang modern,
+                cepat, dan terintegrasi langsung dalam satu platform praktis.
+            </p>
+
+            <div class="mt-6 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 text-white text-[10px] font-semibold tracking-wider uppercase backdrop-blur-md">
+
+                <span class="w-1.5 h-1.5 bg-cyan-300 rounded-full animate-pulse"></span>
+
+                PoliBatam Smart Campus Clinic
+
             </div>
+
         </div>
 
     </div>
+
+</div>
 
 </div>
 
