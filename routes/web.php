@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\ChangePasswordController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Admin\AdminJadwalController;
 use App\Http\Controllers\Admin\AdminRekamMedisController;
 use App\Http\Controllers\Admin\ReportController;
@@ -50,6 +51,13 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
     $request->fulfill();
     return redirect('/login')->with('success', 'Register berhasil, Login menggunakan akun anda');
 })->middleware(['auth', 'signed'])->name('verification.verify');
+
+Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+
+Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-password', [ForgotPasswordController::class, 'reset'])->name('password.update');
+
 
 /*
 |--------------------------------------------------------------------------

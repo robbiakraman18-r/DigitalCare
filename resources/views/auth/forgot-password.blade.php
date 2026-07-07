@@ -46,51 +46,45 @@
         </div>
 
         <!-- FORM -->
-        <form>
+        @if (session('success'))
+            <div class="mb-4 p-4 rounded-2xl bg-emerald-50 border border-emerald-100 text-emerald-700 text-sm">
+                {{ session('success') }}
+            </div>
+        @endif
 
-            <!-- EMAIL -->
+        @if ($errors->any())
+            <div class="mb-4 p-4 rounded-2xl bg-red-50 border border-red-100 text-red-600 text-sm">
+                {{ $errors->first('email') }}
+            </div>
+        @endif
+
+        <form action="{{ route('password.email') }}" method="POST">
+            @csrf
+
             <div class="mb-5">
-
                 <input
                     type="email"
-                    id="email"
+                    name="email"
+                    value="{{ old('email') }}"
                     placeholder="Masukkan Email"
                     class="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-teal-500 outline-none transition"
+                    required
                 >
-
             </div>
 
-            <!-- BUTTON -->
-            <button
-                type="button"
-                onclick="kirim()"
-                class="w-full py-3 rounded-2xl bg-teal-500 hover:bg-teal-600 text-white font-semibold shadow-lg shadow-teal-200 transition duration-300"
-            >
+            <button type="submit" class="w-full py-3 rounded-2xl bg-teal-500 hover:bg-teal-600 text-white font-semibold shadow-lg shadow-teal-200 transition duration-300">
                 KIRIM INSTRUKSI
             </button>
 
-            <!-- DIVIDER -->
             <div class="flex items-center gap-3 my-6">
-
                 <div class="h-px bg-slate-200 flex-1"></div>
-
-                <span class="text-sm text-slate-400">
-                    atau
-                </span>
-
+                <span class="text-sm text-slate-400">atau</span>
                 <div class="h-px bg-slate-200 flex-1"></div>
             </div>
 
-
-            <!-- BACK LOGIN -->
-            <button
-                type="button"
-                onclick="window.location.href='/login'"
-                class="w-full py-3 rounded-2xl border border-slate-300 text-slate-600 font-medium hover:bg-slate-50 transition"
-            >
+            <button type="button" onclick="window.location.href='/login'" class="w-full py-3 rounded-2xl border border-slate-300 text-slate-600 font-medium hover:bg-slate-50 transition">
                 Kembali ke Login
             </button>
-
         </form>
 
     </div>

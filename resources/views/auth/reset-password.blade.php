@@ -45,62 +45,45 @@
         </div>
 
         <!-- FORM -->
-        <form>
+        @if ($errors->any())
+    <div class="mb-4 p-4 rounded-2xl bg-red-50 border border-red-100 text-red-600 text-sm">
+        <ul class="list-disc pl-4">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
-            <!-- PASSWORD -->
-            <div class="mb-4">
+<form action="{{ route('password.update') }}" method="POST">
+    @csrf
+    <input type="hidden" name="token" value="{{ $token }}">
+    <input type="hidden" name="email" value="{{ $email }}">
 
-                <input
-                    type="password"
-                    placeholder="Password Baru"
-                    class="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-teal-500 outline-none transition"
-                >
+    <div class="mb-4">
+        <input type="password" name="password" minlength="8" placeholder="Password Baru"
+            class="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-teal-500 outline-none transition" required>
+    </div>
 
-            </div>
+    <div class="mb-6">
+        <input type="password" name="password_confirmation" minlength="8" placeholder="Konfirmasi Password"
+            class="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-teal-500 outline-none transition" required>
+    </div>
 
-            <!-- CONFIRM PASSWORD -->
-            <div class="mb-6">
+    <button type="submit" class="w-full py-3 rounded-2xl bg-teal-500 hover:bg-teal-600 text-white font-semibold shadow-lg shadow-teal-200 transition duration-300">
+        SIMPAN PASSWORD
+    </button>
 
-                <input
-                    type="password"
-                    placeholder="Konfirmasi Password"
-                    class="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-teal-500 outline-none transition"
-                >
+    <div class="flex items-center gap-3 my-6">
+        <div class="h-px bg-slate-200 flex-1"></div>
+        <span class="text-sm text-slate-400">atau</span>
+        <div class="h-px bg-slate-200 flex-1"></div>
+    </div>
 
-            </div>
-
-            <!-- BUTTON -->
-            <button
-                type="button"
-                onclick="resetPassword()"
-                class="w-full py-3 rounded-2xl bg-teal-500 hover:bg-teal-600 text-white font-semibold shadow-lg shadow-teal-200 transition duration-300"
-            >
-                SIMPAN PASSWORD
-            </button>
-
-            <!-- DIVIDER -->
-            <div class="flex items-center gap-3 my-6">
-
-                <div class="h-px bg-slate-200 flex-1"></div>
-
-                <span class="text-sm text-slate-400">
-                    atau
-                </span>
-
-                <div class="h-px bg-slate-200 flex-1"></div>
-
-            </div>
-
-            <!-- BACK -->
-            <button
-                type="button"
-                onclick="window.location.href='/login'"
-                class="w-full py-3 rounded-2xl border border-slate-300 text-slate-600 font-medium hover:bg-slate-50 transition"
-            >
-                Kembali ke Login
-            </button>
-
-        </form>
+    <button type="button" onclick="window.location.href='/login'" class="w-full py-3 rounded-2xl border border-slate-300 text-slate-600 font-medium hover:bg-slate-50 transition">
+        Kembali ke Login
+    </button>
+</form>
 
     </div>
 
