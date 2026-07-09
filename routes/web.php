@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\AdminRekamMedisController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\WelcomeController;
+use App\Models\User;
 use App\Http\Controllers\NotifikasiController;
 
 
@@ -47,10 +48,28 @@ Route::post('/register', [RegisterController::class, 'store']);
 
 Route::get('/verification', [VerificationController::class, 'index'])->name('verification');
 
-Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill();
-    return redirect('/login')->with('success', 'Register berhasil, Login menggunakan akun anda');
-})->middleware(['auth', 'signed'])->name('verification.verify');
+
+
+Route::get('/email/verify/{id}/{hash}', function (Request $request, $id, $hash) {
+
+    $user = User::findOrFail($id);
+
+    // Pastikan hash sesuai
+    if (! hash_equals(sha1($user->getEmailForVerification()), $hash)) {
+        abort(403);
+    }
+
+    // Tandai email sudah diverifikasi
+    if (! $user->hasVerifiedEmail()) {
+        $user->markEmailAsVerified();
+    }
+
+    return redirect('/login')->with(
+        'success',
+        'Email berhasil diverifikasi. Silakan login.'
+    );
+
+})->middleware('signed')->name('verification.verify');
 
 Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
 Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');

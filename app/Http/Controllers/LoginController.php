@@ -66,11 +66,24 @@ class LoginController extends Controller
             ])->onlyInput('email');
         }
 
+        // BLOCK jika email belum diverifikasi
+        if (Auth::user()->email_verified_at === null) {
+
+            $user->sendEmailVerificationNotification();
+
+            Auth::logout();
+
+            return back()->withErrors([
+                'email' => 'Email belum diverifikasi. Email verifikasi baru telah dikirim. Silakan cek Gmail Anda.'
+            ])->onlyInput('email');
+        }
+
 
         $request->session()->regenerate();
 
 
         $role = Auth::user()->role;
+        
 
         return match ($role) {
             'admin' => redirect('/admin/dashboard'),

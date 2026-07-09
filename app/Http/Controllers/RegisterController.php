@@ -52,7 +52,6 @@ class RegisterController extends Controller
             'is_read'   => false,
         ]);
 
-        Auth::login($user);
         return redirect('/verification')
             ->with('success', 'Akun berhasil dibuat!')
             ->with('email', $user->email); 
