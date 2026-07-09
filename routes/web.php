@@ -241,9 +241,9 @@ Route::put('/complaint/{id}/confirm', [DokterController::class, 'confirmComplain
 
 Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
 
-    Route::get('/dashboard', [AdminController::class, 'dashboard']);
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
-    Route::get('/user-management', [AdminController::class, 'userManagement']);
+    Route::get('/user-management', [AdminController::class, 'userManagement'])->name('admin.user-management');
 
 
     Route::get('/appointment',
