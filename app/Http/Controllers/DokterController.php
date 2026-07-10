@@ -369,6 +369,7 @@ class DokterController extends Controller
         // Simpan Rekam Medis
         $rekamMedis = RekamMedis::create([
             'id_janji'          => $appointment->id_janji,
+            'id_pasien'         => $appointment->id_pasien,
             'id_dokter'         => $appointment->jadwal->id_dokter,
             'keluhan'           => $request->keluhan,
             'diagnosa'          => $request->diagnosa,
@@ -408,7 +409,7 @@ class DokterController extends Controller
             'tipe'      => 'pemeriksaan',
             'judul'     => 'Pemeriksaan Selesai',
             'pesan'     => 'Diagnosis dan rekam medis berhasil disimpan.',
-            'link'      => route('dokter.rekam-medis'),
+            'link'      => route('dokter.rekammedis'),
         ]);
 
         session()->forget('active_patient');

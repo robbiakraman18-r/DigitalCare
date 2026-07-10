@@ -39,7 +39,8 @@
         <div class="divide-y divide-slate-50">
             @forelse($pasiens as $pasien)
             @php
-                $nama    = $pasien->user->name ?? 'Pasien';
+                // FIX: kolom di tabel users bernama `nama`, bukan `name`
+                $nama    = $pasien->user->nama ?? 'Pasien';
                 $inisial = collect(explode(' ', $nama))->take(2)->map(fn($w) => strtoupper($w[0]))->join('');
                 $colors  = ['teal','cyan','indigo','purple','orange','pink'];
                 $color   = $colors[$pasien->id_pasien % count($colors)];
@@ -55,7 +56,8 @@
                     <div>
                         <p class="text-sm font-semibold text-slate-800">{{ $nama }}</p>
                         <p class="text-xs text-slate-400 mt-0.5">
-                            {{ $pasien->gender === 'L' ? 'Laki-laki' : 'Perempuan' }}
+                            {{-- FIX: nilai enum gender di DB adalah 'Male'/'Female', bukan 'L'/'P' --}}
+                            {{ $pasien->gender === 'Male' ? 'Laki-laki' : 'Perempuan' }}
                             &nbsp;·&nbsp;
                             {{ $pasien->birth_date ? \Carbon\Carbon::parse($pasien->birth_date)->age . ' thn' : '-' }}
                         </p>

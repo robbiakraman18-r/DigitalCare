@@ -22,7 +22,8 @@
             <div>
                 <h1 class="text-xl font-bold text-slate-800">
                     @if($filterPasien)
-                        Rekam Medis &mdash; {{ $filterPasien->user->name ?? 'Pasien' }}
+                        {{-- FIX: kolom di tabel users bernama `nama`, bukan `name` --}}
+                        Rekam Medis &mdash; {{ $filterPasien->user->nama ?? 'Pasien' }}
                     @else
                         Rekam Medis
                     @endif
@@ -72,7 +73,8 @@
     @if($filterPasien)
 
 @php
-    $nama = $filterPasien->user->name ?? 'Pasien';
+    // FIX: kolom users bernama `nama`, bukan `name`
+    $nama = $filterPasien->user->nama ?? 'Pasien';
 
     $inisial = collect(explode(' ', $nama))
         ->filter()
@@ -96,18 +98,14 @@
 
     <div class="relative flex items-center gap-5">
 
-        {{-- AVATAR (lebih besar) --}}
-        @if($filterPasien->foto)
-            <img src="{{ asset('storage/' . $filterPasien->foto) }}"
-                 class="w-16 h-16 rounded-2xl object-cover border border-slate-200 shadow-sm">
-        @else
-            <div class="w-16 h-16 rounded-2xl 
-                        bg-teal-100 border border-teal-200 
-                        flex items-center justify-center 
-                        text-teal-700 text-base font-bold">
-                {{ $inisial }}
-            </div>
-        @endif
+        {{-- AVATAR --}}
+        {{-- FIX: tabel pasiens tidak punya kolom `foto`, jadi selalu pakai inisial --}}
+        <div class="w-16 h-16 rounded-2xl 
+                    bg-teal-100 border border-teal-200 
+                    flex items-center justify-center 
+                    text-teal-700 text-base font-bold">
+            {{ $inisial }}
+        </div>
 
         {{-- INFO --}}
         <div class="flex-1 min-w-0">
@@ -115,8 +113,9 @@
                 {{ $nama }}
             </h2>
 
+            {{-- FIX: nilai enum gender di DB adalah 'Male'/'Female', bukan 'L'/'P' --}}
             <p class="text-sm text-slate-600 mt-1">
-                {{ $filterPasien->gender === 'L' ? 'Laki-laki' : 'Perempuan' }}
+                {{ $filterPasien->gender === 'Male' ? 'Laki-laki' : 'Perempuan' }}
                 · {{ $age }}
                 · {{ $filterPasien->phone_number ?? '-' }}
             </p>
@@ -144,7 +143,8 @@
         @forelse($rekamMedis as $index => $rekam)
         @php
             $pasienRekam  = $rekam->appointment->pasien ?? null;
-            $namaPasienRekam  = $pasienRekam->user->name ?? 'Pasien';
+            // FIX: kolom users bernama `nama`, bukan `name`
+            $namaPasienRekam  = $pasienRekam->user->nama ?? 'Pasien';
             $inisialRekam = collect(explode(' ', $namaPasienRekam))->take(2)->map(fn($w) => strtoupper($w[0]))->join('');
         @endphp
 
@@ -180,7 +180,8 @@
                         {{ \Carbon\Carbon::parse($rekam->waktu_pemeriksaan)->translatedFormat('l, d F Y · H:i') }}
                     </p>
                     <p class="text-xs text-slate-500">
-                        Dokter: {{ $rekam->dokter->user->name ?? '-' }}
+                        {{-- FIX: kolom users bernama `nama`, bukan `name` --}}
+                        Dokter: {{ $rekam->dokter->user->nama ?? '-' }}
                     </p>
                 </div>
 
@@ -208,7 +209,8 @@
                             <div>
                                 <p class="text-xs font-semibold text-slate-700">{{ $namaPasienRekam }}</p>
                                 <p class="text-[10px] text-slate-400">
-                                    {{ $pasienRekam->gender === 'L' ? 'Laki-laki' : 'Perempuan' }}
+                                    {{-- FIX: nilai enum gender di DB adalah 'Male'/'Female' --}}
+                                    {{ $pasienRekam->gender === 'Male' ? 'Laki-laki' : 'Perempuan' }}
                                     &nbsp;·&nbsp;
                                     {{ $pasienRekam->birth_date ? \Carbon\Carbon::parse($pasienRekam->birth_date)->age . ' thn' : '-' }}
                                 </p>

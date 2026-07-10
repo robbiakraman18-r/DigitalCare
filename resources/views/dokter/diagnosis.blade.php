@@ -14,9 +14,12 @@
                     <p class="mt-2 text-cyan-100 text-lg">Pemeriksaan</p>
                 </div>
                 <div class="bg-white/20 px-6 py-4 rounded-3xl text-sm space-y-2">
-                    <div><span class="font-semibold">Medical Record :</span> {{ $appointment->no_rekam_medis ?? 'DCM26-' . $appointment->id_janji }}</div>
+                    {{-- FIX: kolom no_rekam_medis tidak ada di tabel appointments,
+                         jadi langsung pakai format DCM26-{id_janji} tanpa akses kolom yang tidak ada --}}
+                    <div><span class="font-semibold">Medical Record :</span> DCM26-{{ $appointment->id_janji }}</div>
                     <div><span class="font-semibold">Date :</span> {{ \Carbon\Carbon::parse($appointment->tanggal_janji)->format('d M Y') }}</div>
-                    <div><span class="font-semibold">Time :</span> {{ \Carbon\Carbon::parse($appointment->jam_janji)->format('H:i') }} WIB</div>
+                    {{-- FIX: kolom di tabel appointments bernama jam_konsultasi, bukan jam_janji --}}
+                    <div><span class="font-semibold">Time :</span> {{ \Carbon\Carbon::parse($appointment->jam_konsultasi)->format('H:i') }} WIB</div>
                 </div>
             </div>
         </div>
@@ -65,23 +68,26 @@
                         <div class="space-y-4">
                             <div>
                                 <label class="text-sm font-semibold">Doctor Name</label>
-                                {{-- ✅ FIX #2: readonly ditambahkan --}}
                                 <input type="text"
                                     value="{{ $appointment->dokter->user->nama ?? '-' }}"
                                     readonly
                                     class="mt-2 w-full rounded-2xl border px-5 py-4 bg-slate-100 text-slate-500 cursor-not-allowed">
                             </div>
+                            {{-- FIX: tabel dokters tidak punya kolom spesialisasi, jadi field ini
+                                 diganti jadi No. SIP (kolom yang memang ada) --}}
                             <div>
-                                <label class="text-sm font-semibold">Department</label>
+                                <label class="text-sm font-semibold">No. SIP</label>
                                 <input type="text"
-                                    value="{{ $appointment->dokter->spesialisasi ?? 'Internal Medicine' }}"
+                                    value="{{ $appointment->dokter->no_sip ?? '-' }}"
                                     readonly
                                     class="mt-2 w-full rounded-2xl border px-5 py-4 bg-slate-100 text-slate-500 cursor-not-allowed">
                             </div>
+                            {{-- FIX: tabel appointments tidak punya kolom jenis_kunjungan,
+                                 field ini diganti menampilkan Status Janji (status_janji) yang memang ada --}}
                             <div>
-                                <label class="text-sm font-semibold">Visit Type</label>
+                                <label class="text-sm font-semibold">Status Janji</label>
                                 <input type="text"
-                                    value="{{ $appointment->jenis_kunjungan ?? 'General Consultation' }}"
+                                    value="{{ ucfirst(str_replace('_', ' ', $appointment->status_janji)) ?? '-' }}"
                                     readonly
                                     class="mt-2 w-full rounded-2xl border px-5 py-4 bg-slate-100 text-slate-500 cursor-not-allowed">
                             </div>
@@ -99,74 +105,19 @@
                         <!-- ANAMNESIS -->
                         <div class="bg-white border rounded-[30px] p-6 shadow-sm">
                             <h3 class="text-xl font-bold mb-5">Anamnesis</h3>
-                            {{-- ✅ FIX #1: trim() + tidak ada spasi di dalam tag --}}
                             <textarea name="keluhan" rows="5"
                                 class="w-full rounded-2xl border px-5 py-4 bg-slate-50">{{ trim($appointment->keluhan_utama) }}</textarea>
                         </div>
 
-                        <!-- HISTORY -->
-                        <div class="bg-white border rounded-[30px] p-6 shadow-sm">
-                            <h3 class="text-xl font-bold mb-5">Medical History</h3>
-                            <textarea name="riwayat_medis" rows="4"
-                                class="w-full rounded-2xl border px-5 py-4 bg-slate-50">{{ trim($appointment->riwayat_medis ?? 'No history of chronic disease.') }}</textarea>
-                        </div>
+                        {{-- DIHAPUS: section "Medical History" (riwayat_medis) dihapus karena
+                             tidak ada kolom riwayat_medis baik di tabel appointments maupun rekam_medis.
+                             Kalau field ini tetap dikirim (name="riwayat_medis"), insert ke rekam_medis
+                             akan gagal dengan error "Unknown column". --}}
 
-                        <!-- PHYSICAL EXAMINATION -->
-                        <div class="bg-white border rounded-[30px] p-6 shadow-sm">
-                            <h3 class="text-xl font-bold mb-5">Physical Examination</h3>
-                            <div class="grid grid-cols-2 gap-4">
-                                    <!-- Temperature -->
-                                <div class="relative">
-                                    <input
-                                        type="number"
-                                        step="0.1"
-                                        name="temperature"
-                                        placeholder="Temperature"
-                                        class="w-full rounded-2xl border px-4 py-3 pr-14 bg-slate-50">
+                        {{-- DIHAPUS: section "Physical Examination" (temperature, blood_pressure,
+                             heart_rate, respiratory_rate) dihapus karena tabel rekam_medis tidak
+                             punya kolom untuk menyimpan data vital sign ini. --}}
 
-                                    <span class="absolute right-5 top-1/2 -translate-y-1/2 text-slate-500">
-                                        °C
-                                    </span>
-                                </div>
-                                    <!-- Blood Pressure -->
-                                <div class="relative flex items-center">
-                                    <input
-                                        type="text"
-                                        name="blood_pressure"
-                                        placeholder="Blood Pressure"
-                                        class="w-full rounded-2xl border px-4 py-3 pr-20 bg-slate-50">
-                                    <span class="absolute right-5 text-slate-500">
-                                        mmHg
-                                    </span>
-                                </div>
-                                    <!-- Heart Rate -->
-                                <div class="relative">
-                                    <input
-                                        type="number"
-                                        name="heart_rate"
-                                        placeholder="Heart Rate"
-                                        class="w-full rounded-2xl border px-4 py-3 pr-16 bg-slate-50">
-
-                                    <span class="absolute right-5 top-1/2 -translate-y-1/2 text-slate-500">
-                                        bpm
-                                    </span>
-                                </div>
-
-                                <!-- Respiratory -->
-                                <div class="relative">
-                                    <input
-                                        type="number"
-                                        name="respiratory_rate"
-                                        placeholder="Respiratory Rate"
-                                        class="w-full rounded-2xl border px-4 py-3 pr-20 bg-slate-50">
-
-                                    <span class="absolute right-5 top-1/2 -translate-y-1/2 text-slate-500">
-                                        x/min
-                                    </span>
-                                </div>
-                    
-                            </div>
-                        </div>
                     </div>
                     <!-- RIGHT -->
                     <div class="space-y-6">
@@ -177,7 +128,6 @@
                             <label class="text-sm font-semibold">
                                 Final Diagnosis <span class="text-red-500">*</span>
                             </label>
-                            {{-- ✅ FIX #4: required --}}
                             <input type="text" name="diagnosa" required
                                 placeholder="Masukkan diagnosis akhir..."
                                 class="mt-2 w-full rounded-2xl border px-5 py-4 bg-slate-50">
@@ -190,7 +140,6 @@
                             <div id="resep-container" class="space-y-3">
                                 {{-- Baris pertama tidak bisa dihapus --}}
                                 <div class="resep-row grid grid-cols-4 gap-3">
-                                    {{-- ✅ FIX #5: nama_obat[] baris pertama required --}}
                                     <input type="text" name="nama_obat[]" placeholder="Medicine Name" required
                                         class="rounded-2xl border px-4 py-3 bg-white">
                                     <input type="text" name="dosis[]" placeholder="Dosage"

@@ -12,6 +12,8 @@ class RekamMedis extends Model
     protected $fillable = [
         'id_janji',
         'id_dokter',
+        'id_pasien',
+        'status',
         'diagnosa',
         'keluhan',
         'catatan_dokter',
@@ -27,6 +29,15 @@ class RekamMedis extends Model
         );
     }
 
+    public function pasien()
+    {
+        return $this->belongsTo(
+            Pasien::class,
+            'id_pasien',
+            'id_pasien'
+        );
+    }
+    
     public function appointment()
     {
         return $this->belongsTo(

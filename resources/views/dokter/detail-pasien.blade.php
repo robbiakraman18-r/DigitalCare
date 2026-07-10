@@ -32,18 +32,20 @@
 
         <div class="flex flex-col lg:flex-row lg:items-center gap-6">
 
+            {{-- FIX: tabel pasiens tidak punya kolom foto, jadi pakai avatar generik --}}
             <img
                 src="https://i.pravatar.cc/150?img=12"
                 class="w-28 h-28 rounded-3xl object-cover">
 
             <div class="flex-1">
 
+                {{-- FIX: kolom di tabel users bernama `nama`, bukan `name` --}}
                 <h2 class="text-3xl font-bold text-slate-800">
-                    {{ $pasien->user->name }}
+                    {{ $pasien->user->nama ?? '-' }}
                 </h2>
 
                 <p class="text-slate-400 mt-1">
-                    {{ $pasien->user->email }}
+                    {{ $pasien->user->email ?? '-' }}
                 </p>
 
                 <div class="flex flex-wrap gap-3 mt-5">
@@ -54,7 +56,7 @@
 
                     @if($latestAppointment)
                     <span class="px-4 py-2 rounded-xl bg-cyan-100 text-cyan-600 text-sm font-semibold">
-                        Last Visit: {{ $latestAppointment->tanggal_janji }}
+                        Last Visit: {{ \Carbon\Carbon::parse($latestAppointment->tanggal_janji)->format('d M Y') }}
                     </span>
                     @endif
 
@@ -80,8 +82,9 @@
 
                 <div class="flex justify-between">
                     <span class="text-slate-400">Full Name</span>
+                    {{-- FIX: kolom di tabel users bernama `nama`, bukan `name` --}}
                     <span class="font-semibold text-slate-700">
-                        {{ $pasien->user->name }}
+                        {{ $pasien->user->nama ?? '-' }}
                     </span>
                 </div>
 
@@ -92,10 +95,12 @@
                     </span>
                 </div>
 
+                {{-- FIX: nilai enum gender di DB adalah 'Male'/'Female', bukan 'L'/'P',
+                     jadi tinggal ditampilkan langsung tanpa ternary yang salah bandingin --}}
                 <div class="flex justify-between">
                     <span class="text-slate-400">Gender</span>
                     <span class="font-semibold text-slate-700">
-                        {{ $pasien->gender == 'L' ? 'Male' : 'Female' }}
+                        {{ $pasien->gender ?? '-' }}
                     </span>
                 </div>
 
@@ -131,24 +136,29 @@
                 <div class="flex justify-between">
                     <span class="text-slate-400">Date</span>
                     <span class="font-semibold text-slate-700">
-                        {{ $latestAppointment->tanggal_janji }}
+                        {{ \Carbon\Carbon::parse($latestAppointment->tanggal_janji)->format('d M Y') }}
                     </span>
                 </div>
 
                 <div class="flex justify-between">
                     <span class="text-slate-400">Complaint</span>
                     <span class="font-semibold text-slate-700">
-                        {{ $latestAppointment->keluhan_utama }}
+                        {{ $latestAppointment->keluhan_utama ?? '-' }}
                     </span>
                 </div>
 
                 <div class="flex justify-between">
                     <span class="text-slate-400">Status</span>
                     <span class="font-semibold text-green-600">
-                        {{ ucfirst($latestAppointment->status_janji) }}
+                        {{ ucfirst(str_replace('_', ' ', $latestAppointment->status_janji)) }}
                     </span>
                 </div>
 
+                {{-- NOTE: pastikan nama relasi ini (rekammedis) memang sama persis dengan
+                     yang didefinisikan di model Appointment. Di file rekam-medis.blade.php
+                     akses ke rekam medis selalu lewat relasi `appointment` pada model
+                     RekamMedis, jadi relasi kebalikannya di model Appointment perlu dicek
+                     namanya apa — kalau beda, sesuaikan `rekammedis` di bawah ini. --}}
                 @if($latestAppointment->rekammedis)
 
                 <div class="pt-4 border-t">
@@ -158,7 +168,7 @@
                     </p>
 
                     <p class="text-slate-700 leading-relaxed">
-                        {{ $latestAppointment->rekammedis->catatan_dokter }}
+                        {{ $latestAppointment->rekammedis->catatan_dokter ?? '-' }}
                     </p>
 
                 </div>
@@ -175,7 +185,7 @@
 
     </div>
 
-    <!-- RIWAYAT REKAM MEDIS (OPSIONAL TAPI RECOMMENDED) -->
+    <!-- RIWAYAT REKAM MEDIS -->
     <div class="bg-white rounded-[32px] border border-slate-100 shadow-sm p-7">
 
         <h2 class="text-xl font-bold text-slate-800 mb-6">
@@ -193,21 +203,22 @@
                     <div class="flex justify-between">
                         <div>
                             <p class="font-semibold text-slate-800">
-                                {{ $apt->rekammedis->diagnosa }}
+                                {{ $apt->rekammedis->diagnosa ?? '-' }}
                             </p>
 
+                            {{-- FIX: kolom di tabel users bernama `nama`, bukan `name` --}}
                             <p class="text-xs text-slate-400">
-                                {{ $apt->tanggal_janji }} • {{ $apt->dokter->user->name ?? '-' }}
+                                {{ \Carbon\Carbon::parse($apt->tanggal_janji)->format('d M Y') }} • {{ $apt->dokter->user->nama ?? '-' }}
                             </p>
                         </div>
 
                         <span class="text-xs px-3 py-1 bg-slate-100 rounded-xl">
-                            {{ ucfirst($apt->status_janji) }}
+                            {{ ucfirst(str_replace('_', ' ', $apt->status_janji)) }}
                         </span>
                     </div>
 
                     <p class="text-sm text-slate-600 mt-2">
-                        {{ $apt->rekammedis->keluhan }}
+                        {{ $apt->rekammedis->keluhan ?? '-' }}
                     </p>
 
                 </div>

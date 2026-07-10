@@ -62,15 +62,13 @@
                         </h3>
                     </div>
 
+                    {{-- FIX: dulu ada 2 field ("Keluhan Utama" dari appointment->keluhan_utama
+                         dan "Keluhan Saat Pemeriksaan" dari rekamMedis->keluhan) yang isinya
+                         sering sama persis, karena textarea Anamnesis di form dokter di-prefill
+                         dari keluhan_utama. Sekarang cuma tampilkan rekamMedis->keluhan, yaitu
+                         data final yang benar-benar diinput/dikonfirmasi dokter. --}}
                     <div class="bg-slate-50 rounded-2xl p-4 md:col-span-2">
-                        <p class="text-slate-400 text-xs uppercase tracking-wide">Keluhan Utama</p>
-                        <h3 class="font-semibold text-slate-700 mt-1">
-                            {{ $rekamMedis->appointment->keluhan_utama ?? '-' }}
-                        </h3>
-                    </div>
-
-                    <div class="bg-slate-50 rounded-2xl p-4 md:col-span-2">
-                        <p class="text-slate-400 text-xs uppercase tracking-wide">Keluhan Saat Pemeriksaan</p>
+                        <p class="text-slate-400 text-xs uppercase tracking-wide">Keluhan</p>
                         <h3 class="font-semibold text-slate-700 mt-1">
                             {{ $rekamMedis->keluhan ?? '-' }}
                         </h3>
