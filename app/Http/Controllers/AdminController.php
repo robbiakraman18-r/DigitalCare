@@ -12,6 +12,8 @@ use App\Models\Pasien;
 use App\Models\JadwalDokter as Jadwal;
 use Illuminate\Auth\Events\Registered;
 use App\Models\Notifikasi;
+use Illuminate\Support\Facades\DB;
+use App\Models\JadwalDokter;
 use App\Models\Appointment;
 use Carbon\Carbon;
 
@@ -313,7 +315,7 @@ class AdminController extends Controller
             'tipe'      => 'complaint',
             'judul'     => 'Update Komplain Anda',
             'pesan'     => 'Status komplain Anda diperbarui menjadi "' . $complaint->status_label . '".',
-            'link'      => '#',
+            'link'      => 'link',
             'is_read'   => false,
         ]);
 
@@ -570,24 +572,42 @@ class AdminController extends Controller
     public function storeAppointment(Request $request)
     {
         $request->validate([
-            'id_pasien'     => 'required',
-            'id_jadwal'     => 'required',
-            'keluhan_utama' => 'required',
+            'id_pasien'     => 'required|exists:pasiens,id_pasien',
+            'id_jadwal'     => 'required|exists:jadwal_dokters,id_jadwal',
+            'keluhan_utama' => 'required|string|min:5|max:1000',
         ]);
 
-        $nomorAntrian = Appointment::where('id_jadwal', $request->id_jadwal)
-            ->max('nomor_antrian');
+        DB::transaction(function () use ($request) {
 
-        $nomorAntrian = ($nomorAntrian ?? 0) + 1;
+            $jadwal = JadwalDokter::lockForUpdate()->findOrFail($request->id_jadwal);
 
-        Appointment::create([
-            'id_pasien'     => $request->id_pasien,
-            'id_jadwal'     => $request->id_jadwal,
-            'tanggal_janji' => $request->tanggal_janji,
-            'nomor_antrian' => $nomorAntrian,
-            'status_janji'  => 'pending',
-            'keluhan_utama' => $request->keluhan_utama,
-        ]);
+            if ($jadwal->terisi >= $jadwal->kuota_harian) {
+                throw new \Exception('Kuota jadwal ini sudah penuh.');
+            }
+
+            $jadwal->current_antrian++;
+            $nomorAntrian = $jadwal->current_antrian;
+
+            $jamKonsultasi = Carbon::parse($jadwal->jam_mulai)
+                ->addMinutes(($nomorAntrian - 1) * 30)
+                ->format('H:i');
+
+            $jadwal->terisi += 1;
+            if ($jadwal->terisi >= $jadwal->kuota_harian) {
+                $jadwal->status_jadwal = 'Full';
+            }
+            $jadwal->save();
+
+            Appointment::create([
+                'id_pasien'      => $request->id_pasien,
+                'id_jadwal'      => $jadwal->id_jadwal,
+                'tanggal_janji'  => $jadwal->tanggal,
+                'nomor_antrian'  => $nomorAntrian,
+                'jam_konsultasi' => $jamKonsultasi,
+                'status_janji'   => 'pending',
+                'keluhan_utama'  => $request->keluhan_utama,
+            ]);
+        });
 
         return back()->with('success', 'Appointment successfully created!');
     }

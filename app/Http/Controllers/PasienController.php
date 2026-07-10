@@ -23,14 +23,14 @@ class PasienController extends Controller
     {
         $user = Auth::user();
         $pasienId = $user->pasien->id_pasien;
-        $now = \Carbon\Carbon::parse('2026-06-29 17:00:00');
+        $now = \Carbon\Carbon::now('Asia/Jakarta');
 
         $janjiTerdekat = Appointment::with([
             'dokter.user',
             'jadwal'
         ])
         ->where('id_pasien', $pasienId)
-        ->whereIn('status_janji', ['pending', 'waiting', 'called'])
+        ->whereIn('status_janji', ['pending', 'called', 'in_consultation'])
         ->where(function ($query) use ($now) {
 
             // Appointment setelah hari ini
@@ -73,107 +73,6 @@ class PasienController extends Controller
         ));
     }
 
-    /**
-     * Menampilkan Form Buat Janji Temu (Aesthetic Form)
-     */
-    public function createAppointment()
-    {
-        $pasien = Auth::user()->pasien;
-
-        if (
-            empty($pasien->nik) ||
-            empty($pasien->birth_date) ||
-            empty($pasien->gender) ||
-            empty($pasien->phone_number) ||
-            empty($pasien->address)
-        ) {
-            return redirect()
-                ->route('pasien.profile')
-                ->with(
-                    'warning',
-                    'Silakan lengkapi profil terlebih dahulu sebelum membuat janji temu.'
-                );
-        }
-
-        $dokters = Dokter::all();
-
-        return view('pasien.buat-janji', compact('dokters'));
-    }
-
-    /**
-     * Menyimpan data Janji Temu yang di-submit dari front-end
-     */
-    public function storeAppointment(Request $request)
-    {
-        $pasien = Auth::user()->pasien;
-
-        if (
-            empty($pasien->nik) ||
-            empty($pasien->birth_date) ||
-            empty($pasien->gender) ||
-            empty($pasien->phone_number) ||
-            empty($pasien->address)
-        ) {
-            return redirect()
-                ->route('pasien.profile')
-                ->with(
-                    'warning',
-                    'Lengkapi profil terlebih dahulu.'
-                );
-        }
-        $request->validate([
-            'id_dokter'     => 'required|exists:dokters,id_dokter',
-            'tanggal_janji' => 'required|date|after_or_equal:today',
-            'keluhan_utama' => 'required|string|min:5',
-        ]);
-
-        $user = Auth::user();
-        $pasienId = $user->pasien->id_pasien;
-
-        $adaJanjiPending = Appointment::where('id_pasien', $pasienId)
-            ->where('status_janji', 'pending')
-            ->exists();
-
-        if ($adaJanjiPending) {
-            return redirect()->back()
-                ->withInput()
-                ->with('error', 'You already have a pending appointment request.');
-        }
-
-        try {
-            DB::beginTransaction();
-
-            $nomorAntrianTerakhir = Appointment::where('id_dokter', $request->id_dokter)
-                ->where('tanggal_janji', $request->tanggal_janji)
-                ->lockForUpdate()
-                ->max('nomor_antrian');
-            
-            $nomorAntrianBaru = $nomorAntrianTerakhir ? $nomorAntrianTerakhir + 1 : 1;
-
-            // Simpan data janji temu baru
-            $appointment = new Appointment();
-            $appointment->id_pasien     = $pasienId;
-            $appointment->id_dokter     = $request->id_dokter;
-            $appointment->id_jadwal     = $request->id_jadwal;
-            $appointment->tanggal_janji = $request->tanggal_janji;
-            $appointment->nomor_antrian = $nomorAntrianBaru;
-            $appointment->status_janji  = 'pending';
-            $appointment->keluhan_utama = $request->keluhan_utama;
-            $appointment->save();
-
-            DB::commit();
-
-            return redirect()->route('pasien.dashboard')->with('success', 'Appointment booked successfully!');
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-            
-            // Mengembalikan error jika sistem gagal memproses antrian
-            return redirect()->back()
-                ->withInput()
-                ->with('error', 'Something went wrong while booking. Please try again.');
-        }
-    }
     public function clinicInfo()
     {
         $setting = ClinicSetting::instance();

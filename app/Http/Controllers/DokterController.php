@@ -236,7 +236,7 @@ class DokterController extends Controller
         ]);
 
         Notifikasi::create([
-            'dokter_id' => $appointment->id_dokter,
+            'dokter_id' => $appointment->jadwal->id_dokter,
             'tipe'      => 'pemeriksaan',
             'judul'     => 'Pemeriksaan Dimulai',
             'pesan'     => 'Pemeriksaan pasien telah dimulai.',
@@ -306,6 +306,15 @@ class DokterController extends Controller
 
         $next->update([
             'status_janji' => 'called'
+        ]);
+
+        Notifikasi::create([
+            'pasien_id' => $next->id_pasien,
+            'tipe'      => 'appointment',
+            'judul'     => 'Nomor Antrian Dipanggil',
+            'pesan'     => 'Nomor antrian ' . $next->nomor_antrian . ' sedang dipanggil. Silakan menuju ruang pemeriksaan.',
+            'link'      => route('pasien.on-going'),
+            'is_read'   => false,
         ]);
 
         return back()->with('success', 'Pasien dipanggil.');

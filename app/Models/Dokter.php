@@ -80,12 +80,15 @@ class Dokter extends Model
     */
     public function pasien()
     {
-        return $this->belongsToMany(
-            Pasien::class,
-            'appointments',
-            'id_dokter',
-            'id_pasien'
-        )->distinct();
+        return Pasien::whereIn('id_pasien', function ($q) {
+            $q->select('id_pasien')
+            ->from('appointments')
+            ->whereIn('id_jadwal', function ($sub) {
+                $sub->select('id_jadwal')
+                    ->from('jadwal_dokters')
+                    ->where('id_dokter', $this->id_dokter);
+            });
+        });
     }
 
     /*

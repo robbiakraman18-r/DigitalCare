@@ -170,9 +170,6 @@ Route::prefix('dokter')->middleware(['auth', 'role:dokter'])->group(function () 
     Route::post('/appointment/start/{id}', [DokterController::class, 'startConsultation'])
         ->name('dokter.start');
 
-    Route::post('/appointment/selesai/{id}', [DokterController::class, 'selesaiPasien'])
-        ->name('dokter.selesai');
-
     Route::post('/appointment/cancel/{id}', [DokterController::class, 'cancelPasien'])
         ->name('dokter.cancel');
 
