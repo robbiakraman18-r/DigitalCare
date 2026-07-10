@@ -38,4 +38,9 @@ public function pasien()
 
         $this->attributes['status'] = $value;
     }
+
+    public function admin()
+    {
+        return $this->hasOne(Admin::class, 'user_id');
+    }
 }
