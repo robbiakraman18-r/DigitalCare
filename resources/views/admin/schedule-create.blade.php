@@ -61,8 +61,23 @@
                     class="w-full pl-11 pr-10 py-3 rounded-2xl border border-slate-200 bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
                         <option value="">Select Doctor</option>
                         @foreach($dokters as $dokter)
-                            <option value="{{ $dokter->id_dokter }}" {{ old('id_dokter') == $dokter->id_dokter ? 'selected' : '' }}>
-                                {{ $dokter->user->nama }}
+                            @php
+                                $isUnavailable = $dokter->status_ketersediaan !== 'Available';
+                                $isInactive    = optional($dokter->user)->status !== 'active';
+                                $isBlocked     = $isUnavailable || $isInactive;
+
+                                $label = $dokter->user->nama;
+                                if ($isInactive) {
+                                    $label .= ' (Inactive Account)';
+                                } elseif ($isUnavailable) {
+                                    $label .= ' (Unavailable)';
+                                }
+                            @endphp
+                            <option
+                            value="{{ $dokter->id_dokter }}"
+                            {{ old('id_dokter') == $dokter->id_dokter ? 'selected' : '' }}
+                            {{ $isBlocked ? 'disabled' : '' }}>
+                                {{ $label }}
                             </option>
                         @endforeach
                     </select>

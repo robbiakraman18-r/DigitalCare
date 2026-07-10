@@ -396,6 +396,20 @@ class AdminController extends Controller
             'kuota_harian' => 'required|integer|min:1',
         ]);
 
+        $dokter = Dokter::with('user')->findOrFail($validated['id_dokter']);
+
+        if ($dokter->status_ketersediaan !== 'Available') {
+            return back()
+                ->withInput()
+                ->with('error', 'Dokter ini sedang berstatus Unavailable dan tidak bisa dijadwalkan.');
+        }
+
+        if (optional($dokter->user)->status !== 'active') {
+            return back()
+                ->withInput()
+                ->with('error', 'Akun dokter ini sedang dinonaktifkan dan tidak bisa dijadwalkan.');
+        }
+
         Jadwal::create([
             'id_dokter'     => $validated['id_dokter'],
             'tanggal'       => $validated['tanggal'],
@@ -440,6 +454,23 @@ class AdminController extends Controller
             'ruang'        => 'required|string|max:255',
             'kuota_harian' => 'required|integer|min:' . max(1, $jadwal->terisi),
         ]);
+
+        // Hanya cek availability kalau dokternya diganti ke dokter lain
+        if ($validated['id_dokter'] != $jadwal->id_dokter) {
+        $dokterBaru = Dokter::with('user')->findOrFail($validated['id_dokter']);
+
+        if ($dokterBaru->status_ketersediaan !== 'Available') {
+            return back()
+                ->withInput()
+                ->with('error', 'Dokter yang dipilih sedang Unavailable dan tidak bisa dijadwalkan.');
+        }
+
+        if (optional($dokterBaru->user)->status !== 'active') {
+            return back()
+                ->withInput()
+                ->with('error', 'Akun dokter yang dipilih sedang dinonaktifkan dan tidak bisa dijadwalkan.');
+        }
+    }
 
         $jadwal->update([
             'id_dokter'    => $validated['id_dokter'],
