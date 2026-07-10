@@ -49,7 +49,6 @@ class AppointmentController extends Controller
             return redirect()->route('pasien.on-going')
                 ->with('info', 'Kamu masih memiliki janji temu yang aktif.');
         }
-
         $dokters = Dokter::with([
             'user',
             'jadwalDokter' => function ($query) {
@@ -60,8 +59,10 @@ class AppointmentController extends Controller
                     ->where(function ($q) use ($today, $nowTime) {
                         $q->where('tanggal', '>', $today)
                             ->orWhere(function ($sub) use ($today, $nowTime) {
-                                $sub->where('tanggal', $today)
-                                    ->where('jam_mulai', '>', $nowTime);
+                                $sub->whereRaw(
+                                    "TIME(?) < SUBTIME(jam_selesai, '00:30:00')",
+                                    [$nowTime]
+                                    );
                             });
                     })
                     ->orderBy('tanggal')
@@ -69,6 +70,7 @@ class AppointmentController extends Controller
             }
         ])
         ->whereHas('jadwalDokter', function ($query) {
+
             $today   = Carbon::today()->toDateString();
             $nowTime = Carbon::now()->format('H:i:s');
 
@@ -77,7 +79,7 @@ class AppointmentController extends Controller
                     $q->where('tanggal', '>', $today)
                         ->orWhere(function ($sub) use ($today, $nowTime) {
                             $sub->where('tanggal', $today)
-                                ->where('jam_mulai', '>', $nowTime);
+                                ->where('jam_selesai', '>', $nowTime);
                         });
                 });
         })
