@@ -268,8 +268,11 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     
     
     // CRUD DOCTOR
+    Route::get('/doctor/create', [AdminController::class, 'createDokter'])
+        ->name('admin.doctor.create');
+
     Route::post('/doctor', [AdminController::class, 'storeDokter'])
-    ->name('admin.doctor.store');
+        ->name('admin.doctor.store');
 
     // BUAT EDIT USER
     Route::put('/user/{id}', [AdminController::class, 'updateUser'])

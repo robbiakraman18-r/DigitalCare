@@ -20,15 +20,12 @@
         </div>
 
         <div class="flex items-center gap-3">
-
-            <button
-            onclick="openModal()"
+            <a href="{{ route('admin.doctor.create') }}"
             class="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold transition">
 
                 + Add Doctor
 
-            </button>
-
+            </a>
         </div>
 
     </div>
@@ -475,164 +472,6 @@ $r = $roleUI[$user->role] ?? [
 
 </div>
 
-<!-- ADD DOCTOR MODAL -->
-<div
-id="addDoctorModal"
-class="fixed inset-0 bg-black/40 hidden z-50 overflow-y-auto py-10 scrollbar-hide">
-
-   <div class="bg-white w-full max-w-2xl rounded-[30px] p-8 shadow-xl mx-auto">
-
-        <div class="flex items-center justify-between mb-6">
-
-            <h2 class="text-2xl font-bold text-slate-800">
-                Add Doctor
-            </h2>
-
-            <button
-            onclick="closeModal()"
-            class="text-slate-500 text-2xl">
-
-                ×
-
-            </button>
-
-        </div>
-
-        <form action="{{ route('admin.doctor.store') }}"
-        method="POST"
-        enctype="multipart/form-data">
-        @csrf
-
-        <div class="p-8 overflow-y-auto scrollbar-hide flex-1">
-
-            <div class="grid grid-cols-2 gap-5">
-
-                <div class="col-span-2">
-
-                    <label class="font-medium text-slate-700">
-                        Doctor Name
-                    </label>
-
-                    <input
-                    type="text"
-                    name="nama"
-                    required
-                    class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
-
-                </div>
-
-                <div>
-
-                    <label class="font-medium text-slate-700">
-                        Email
-                    </label>
-
-                    <input
-                    type="email"
-                    name="email"
-                    required
-                    class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
-
-                </div>
-
-                <div>
-
-                    <label class="font-medium text-slate-700">
-                        Password
-                    </label>
-
-                    <input
-                    type="password"
-                    name="password"
-                    required
-                    class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
-
-                </div>
-
-                <div>
-
-                    <label class="font-medium text-slate-700">
-                        No SIP
-                    </label>
-
-                    <input
-                    type="text"
-                    name="no_sip"
-                    class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
-
-                </div>
-
-                <div>
-                    <label class="font-medium text-slate-700">
-                        Gender
-                    </label>
-
-                    <select
-                        name="gender"
-                        class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
-
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-
-                    </select>
-                </div>
-
-                <div>
-                    <label class="font-medium text-slate-700">
-                        Status
-                    </label>
-
-                    <select
-                        name="status_ketersediaan"
-                        class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
-
-                        <option value="Available">Available</option>
-                        <option value="Unavailable">Unavailable</option>
-
-                    </select>
-                </div>
-
-                <div class="col-span-2">
-                    <label class="font-medium text-slate-700">
-                        Foto Profil
-                    </label>
-
-                    <input
-                        type="file"
-                        name="foto_profil"
-                        class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
-                </div>
-
-            </div>
-
-           <div class="flex justify-end gap-3 mt-8">
-
-    <button
-    type="button"
-    onclick="closeModal()"
-    class="px-5 py-3 rounded-2xl border border-slate-200">
-
-        Cancel
-
-    </button>
-
-    <button
-    type="submit"
-    class="px-5 py-3 rounded-2xl bg-blue-600 text-white">
-
-        Save Doctor
-
-    </button>
-
-</div>
-</div>
-
-        </form>
-
-    </div>
-
-</div>
-
 {{-- VIEW + EDIT MODAL --}}
 @foreach($users as $user)
 
@@ -943,18 +782,6 @@ document.querySelectorAll('form').forEach(form => {
         }
     });
 });
-
-const modal = document.getElementById('addDoctorModal');
-
-
-function openModal() {
-    modal.classList.remove('hidden');
-}
-
-function closeModal() {
-    modal.classList.add('hidden');
-}
-
 function openStatusModal(btn) {
     const userId = btn.getAttribute('data-id');
 

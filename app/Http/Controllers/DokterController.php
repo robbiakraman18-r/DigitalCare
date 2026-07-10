@@ -71,7 +71,9 @@ class DokterController extends Controller
         }
 
         $latestAppointments = Appointment::with('pasien.user')
-            ->where('id_dokter', $dokter->id_dokter)
+            ->whereHas('jadwal', function ($q) use ($dokter) {
+                $q->where('id_dokter', $dokter->id_dokter);
+            })
             ->latest()
             ->take(5)
             ->get();
@@ -141,7 +143,9 @@ class DokterController extends Controller
         $tanggal = $request->filled('tanggal') ? $request->tanggal : today()->format('Y-m-d');
 
         $query = Appointment::with(['pasien.user', 'jadwal'])
-            ->where('id_dokter', $dokter->id_dokter)
+            ->whereHas('jadwal', function ($q) use ($dokter) {
+                $q->where('id_dokter', $dokter->id_dokter);
+            })
             ->whereDate('tanggal_janji', $tanggal);
 
         if ($request->filled('search')) {
@@ -196,7 +200,7 @@ class DokterController extends Controller
         ]);
 
         Notifikasi::create([
-            'dokter_id' => $appointment->id_dokter,
+            'dokter_id' => $appointment->jadwal->id_dokter,
             'tipe'      => 'pasien',
             'judul'     => 'Pasien Dipanggil',
             'pesan'     => 'Antrian nomor ' . $appointment->nomor_antrian . ' telah dipanggil.',
@@ -281,7 +285,9 @@ class DokterController extends Controller
         $dokter = Dokter::where('user_id', auth()->id())->firstOrFail();
 
         $next = Appointment::with('jadwal')
-            ->where('id_dokter', $dokter->id_dokter)
+            ->whereHas('jadwal', function ($q) use ($dokter) {
+                $q->where('id_dokter', $dokter->id_dokter);
+            })
             ->where('status_janji', 'pending')
             ->whereDate('tanggal_janji', today())
             ->orderBy('nomor_antrian')
@@ -354,7 +360,7 @@ class DokterController extends Controller
         // Simpan Rekam Medis
         $rekamMedis = RekamMedis::create([
             'id_janji'          => $appointment->id_janji,
-            'id_dokter'         => $appointment->id_dokter,
+            'id_dokter'         => $appointment->jadwal->id_dokter,
             'keluhan'           => $request->keluhan,
             'diagnosa'          => $request->diagnosa,
             'catatan_dokter'    => $request->catatan_dokter,
@@ -389,7 +395,7 @@ class DokterController extends Controller
         ]);
 
         Notifikasi::create([
-            'dokter_id' => $appointment->id_dokter,
+            'dokter_id' => $appointment->jadwal->id_dokter,
             'tipe'      => 'pemeriksaan',
             'judul'     => 'Pemeriksaan Selesai',
             'pesan'     => 'Diagnosis dan rekam medis berhasil disimpan.',
@@ -411,25 +417,18 @@ class DokterController extends Controller
     public function rekamMedis(Request $request)
     {
         $dokter = Dokter::where('user_id', auth()->id())->firstOrFail();
+
         $query = RekamMedis::with([
             'appointment.pasien.user',
             'dokter.user',
             'detailResep'
-        ]);
-
-        $query->whereHas('appointment', function ($q) use ($dokter) {
-        $q->whereHas('pasien.appointments', function ($sub) use ($dokter) {
-            $sub->where('id_dokter', $dokter->id_dokter);
-            });
-        });
+        ])->where('id_dokter', $dokter->id_dokter);
 
         $filterPasien = null;
 
-        // Filter berdasarkan pasien
         if ($request->filled('id_pasien')) {
-
             $filterPasien = Pasien::with('user')
-                ->whereHas('appointments', function ($q) use ($dokter) {
+                ->whereHas('appointments.jadwal', function ($q) use ($dokter) {
                     $q->where('id_dokter', $dokter->id_dokter);
                 })
                 ->findOrFail($request->id_pasien);
@@ -439,12 +438,10 @@ class DokterController extends Controller
             });
         }
 
-        // Cari diagnosis
         if ($request->filled('search')) {
             $query->where('diagnosa', 'like', '%' . $request->search . '%');
         }
 
-        // Filter tanggal
         if ($request->filled('tanggal')) {
             $query->whereDate('waktu_pemeriksaan', $request->tanggal);
         }
@@ -459,7 +456,6 @@ class DokterController extends Controller
             'filterPasien'
         ));
     }
-
     /*
     |----------------------------------
     | MEDICAL HISTORY
@@ -569,23 +565,23 @@ class DokterController extends Controller
     public function pasien(Request $request)
     {
         $dokter = Dokter::where('user_id', auth()->id())->firstOrFail();
-        
+
         $query = Pasien::with([
             'user',
             'appointments.rekammedis'
         ])
-            ->whereHas('appointments', function ($q) use ($dokter) {
+            ->whereHas('appointments.jadwal', function ($q) use ($dokter) {
                 $q->where('id_dokter', $dokter->id_dokter);
             });
 
-            if ($request->filled('search')) {
-                $query->whereHas('user', function ($q) use ($request) {
-                    $q->where('nama', 'like', '%' . $request->search . '%')
+        if ($request->filled('search')) {
+            $query->whereHas('user', function ($q) use ($request) {
+                $q->where('nama', 'like', '%' . $request->search . '%')
                     ->orWhere('email', 'like', '%' . $request->search . '%');
             });
         }
         $pasiens = $query->paginate(10);
-    
+
         return view('dokter.pasien', compact('pasiens'));
     }
 
@@ -593,7 +589,7 @@ class DokterController extends Controller
     {
         $request->validate([
             'current_password' => 'required',
-            'password' => 'required|min:6|confirmed',
+            'password' => 'required|min:8|confirmed',
         ]);
 
         $user = \App\Models\User::find(auth()->id());

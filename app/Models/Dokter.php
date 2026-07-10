@@ -52,13 +52,16 @@ class Dokter extends Model
     |--------------------------------------------------------------------------
     */
     public function appointments()
-{
-    return $this->hasMany(
-        Appointment::class,
-        'id_dokter',
-        'id_dokter'
-    );
-}
+    {
+        return $this->hasManyThrough(
+            Appointment::class,
+            JadwalDokter::class,
+            'id_dokter', // FK di jadwal_dokters, nunjuk ke dokters
+            'id_jadwal', // FK di appointments, nunjuk ke jadwal_dokters
+            'id_dokter', // local key di dokters
+            'id_jadwal'  // local key di jadwal_dokters
+        );
+    }
 
     /*
     |--------------------------------------------------------------------------

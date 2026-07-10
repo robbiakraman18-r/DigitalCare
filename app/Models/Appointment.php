@@ -16,7 +16,6 @@ class Appointment extends Model
         'id_janji',
         'id_pasien',
         'id_jadwal',
-        'id_dokter',
         'tanggal_janji',
         'nomor_antrian',
         'status_janji',
@@ -27,6 +26,8 @@ class Appointment extends Model
     protected $casts = [
         'tanggal_janji'  => 'date',
     ];
+
+    
 
     public function rekamMedis()
     {
@@ -40,7 +41,14 @@ class Appointment extends Model
 
     public function dokter()
     {
-        return $this->belongsTo(Dokter::class, 'id_dokter', 'id_dokter');
+        return $this->hasOneThrough(
+            Dokter::class,
+            JadwalDokter::class,
+            'id_jadwal', // FK di jadwal_dokters, cocok appointments.id_jadwal
+            'id_dokter', // FK di dokters, cocok jadwal_dokters.id_dokter
+            'id_jadwal', // local key di appointments
+            'id_dokter'  // local key di jadwal_dokters
+        );
     }
 
     public function jadwal()

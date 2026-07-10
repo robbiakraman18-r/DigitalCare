@@ -8,6 +8,7 @@ use App\Models\Complaint;
 use App\Models\User;
 use App\Models\Dokter;
 use App\Models\Pasien;
+use Illuminate\Auth\Events\Registered;
 use App\Models\Notifikasi;
 use App\Models\Appointment;
 use Carbon\Carbon;
@@ -21,13 +22,17 @@ class AdminController extends Controller
     // =========================================
     // STORE DOKTER
     // =========================================
+    public function createDokter()
+    {
+        return view('admin.create');
+    }
+
     public function storeDokter(Request $request)
     {
-        
         $request->validate([
             'nama' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6',
+            'password' => 'required|string|min:8',
             'no_sip' => 'required|string|max:255',
             'gender' => 'required',
             'status_ketersediaan' => 'required',
@@ -40,6 +45,8 @@ class AdminController extends Controller
             'password' => Hash::make($request->password),
             'role' => 'dokter',
         ]);
+
+        event(new Registered($user));
 
         $foto = null;
 
@@ -54,18 +61,18 @@ class AdminController extends Controller
             'status_ketersediaan' => $request->status_ketersediaan,
             'foto_profil' => $foto,
         ]);
-        
+
         Notifikasi::create([
             'dokter_id' => null,
             'tipe'      => 'dokter',
             'judul'     => 'Dokter Baru Ditambahkan',
             'pesan'     => 'Dr. ' . $user->nama . ' berhasil ditambahkan ke sistem.',
-            'link'      => route('admin.dashboard'), // ganti kalau ada halaman detail dokter
+            'link'      => route('admin.dashboard'),
             'is_read'   => false,
         ]);
 
-        return redirect()->back()
-            ->with('success', 'Doctor berhasil ditambahkan');
+        return redirect()->route('admin.user-management')
+            ->with('success', 'Doctor berhasil ditambahkan. Email verifikasi telah dikirim ke dokter.');
     }
 
     // =========================================
@@ -364,23 +371,22 @@ class AdminController extends Controller
     public function storeAppointment(Request $request)
     {
         $request->validate([
-            'id_pasien'=>'required',
-            'id_jadwal'=>'required',
-            'keluhan_utama'=>'required',
+            'id_pasien'     => 'required',
+            'id_jadwal'     => 'required',
+            'keluhan_utama' => 'required',
         ]);
 
-        $nomorAntrian = Appointment::where('id_dokter', $request->id_dokter)
-    ->whereDate('tanggal_janji', $request->tanggal_janji)
-    ->max('nomor_antrian');
+        $nomorAntrian = Appointment::where('id_jadwal', $request->id_jadwal)
+            ->max('nomor_antrian');
 
-$nomorAntrian = ($nomorAntrian ?? 0) + 1;
+        $nomorAntrian = ($nomorAntrian ?? 0) + 1;
 
         Appointment::create([
-            'id_pasien' => $request->id_pasien,
-            'id_dokter' => $request->id_dokter,
+            'id_pasien'     => $request->id_pasien,
+            'id_jadwal'     => $request->id_jadwal,
             'tanggal_janji' => $request->tanggal_janji,
             'nomor_antrian' => $nomorAntrian,
-            'status_janji' => 'pending',
+            'status_janji'  => 'pending',
             'keluhan_utama' => $request->keluhan_utama,
         ]);
 
