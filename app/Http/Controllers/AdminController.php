@@ -9,6 +9,7 @@ use App\Models\Complaint;
 use App\Models\User;
 use App\Models\Dokter;
 use App\Models\Pasien;
+use App\Models\JadwalDokter as Jadwal;
 use Illuminate\Auth\Events\Registered;
 use App\Models\Notifikasi;
 use App\Models\Appointment;
@@ -337,19 +338,138 @@ class AdminController extends Controller
     }
 
     // =========================================
-    // UPDATE JADWAL DOKTER
+    // SCHEDULE MANAGEMENT (JADWAL PRAKTIK DOKTER)
     // =========================================
+
+    /**
+     * Halaman index Schedule Management (index.blade.php).
+     */
+    public function schedule(Request $request)
+    {
+        $query = Jadwal::with('dokter.user');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('ruang', 'like', "%{$search}%")
+                  ->orWhereHas('dokter.user', function ($sub) use ($search) {
+                      $sub->where('nama', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status_jadwal', $request->status);
+        }
+
+        if ($request->filled('tanggal')) {
+            $query->whereDate('tanggal', $request->tanggal);
+        }
+
+        $jadwal  = $query->orderBy('tanggal', 'desc')->get();
+        $dokters = Dokter::with('user')->get();
+
+        return view('admin.schedule.index', compact('jadwal', 'dokters'));
+    }
+
+    /**
+     * Halaman Add Schedule (create.blade.php).
+     */
+    public function createSchedule()
+    {
+        $dokters = Dokter::with('user')->get();
+
+        return view('admin.schedule.create', compact('dokters'));
+    }
+
+    /**
+     * Simpan schedule baru.
+     */
+    public function storeSchedule(Request $request)
+    {
+        $validated = $request->validate([
+            'id_dokter'    => 'required|exists:dokters,id_dokter',
+            'tanggal'      => 'required|date',
+            'jam_mulai'    => 'required',
+            'jam_selesai'  => 'required|after:jam_mulai',
+            'ruang'        => 'required|string|max:255',
+            'kuota_harian' => 'required|integer|min:1',
+        ]);
+
+        Jadwal::create([
+            'id_dokter'     => $validated['id_dokter'],
+            'tanggal'       => $validated['tanggal'],
+            'hari'          => Carbon::parse($validated['tanggal'])->translatedFormat('l'),
+            'jam_mulai'     => $validated['jam_mulai'],
+            'jam_selesai'   => $validated['jam_selesai'],
+            'ruang'         => $validated['ruang'],
+            'kuota_harian'  => $validated['kuota_harian'],
+            'terisi'        => 0,
+            'status_jadwal' => 'Available',
+        ]);
+
+        return redirect()
+            ->route('admin.schedule.index')
+            ->with('success', 'Schedule berhasil ditambahkan.');
+    }
+
+    /**
+     * Halaman Edit Schedule (edit.blade.php).
+     */
+    public function editSchedule($id)
+    {
+        $jadwal  = Jadwal::findOrFail($id);
+        $dokters = Dokter::with('user')->get();
+
+        return view('admin.edit', compact('jadwal', 'dokters'));
+    }
+
+    /**
+     * Update schedule yang sudah ada.
+     * (Menggantikan versi lama yang keliru meng-update tabel dokters)
+     */
     public function updateJadwalDokter(Request $request, int $id)
     {
-        $dokter = Dokter::where('user_id', $id)->firstOrFail();
+        $jadwal = Jadwal::findOrFail($id);
 
-        $dokter->update($request->only(
-            'hari_praktik',
-            'jam_mulai',
-            'jam_selesai'
-        ));
+        $validated = $request->validate([
+            'id_dokter'    => 'required|exists:dokters,id_dokter',
+            'tanggal'      => 'required|date',
+            'jam_mulai'    => 'required',
+            'jam_selesai'  => 'required|after:jam_mulai',
+            'ruang'        => 'required|string|max:255',
+            'kuota_harian' => 'required|integer|min:' . max(1, $jadwal->terisi),
+        ]);
 
-        return back()->with('success', 'Jadwal praktik dokter berhasil diperbarui');
+        $jadwal->update([
+            'id_dokter'    => $validated['id_dokter'],
+            'tanggal'      => $validated['tanggal'],
+            'hari'         => Carbon::parse($validated['tanggal'])->translatedFormat('l'),
+            'jam_mulai'    => $validated['jam_mulai'],
+            'jam_selesai'  => $validated['jam_selesai'],
+            'ruang'        => $validated['ruang'],
+            'kuota_harian' => $validated['kuota_harian'],
+        ]);
+
+        return redirect()
+            ->route('admin.schedule.index')
+            ->with('success', 'Jadwal praktik dokter berhasil diperbarui');
+    }
+
+    /**
+     * Hapus schedule.
+     */
+    public function deleteSchedule($id)
+    {
+        $jadwal = Jadwal::findOrFail($id);
+
+        if ($jadwal->terisi > 0) {
+            return back()->with('error', 'Jadwal tidak bisa dihapus karena sudah ada pasien yang booking.');
+        }
+
+        $jadwal->delete();
+
+        return back()->with('success', 'Schedule berhasil dihapus');
     }
 
     // =========================================

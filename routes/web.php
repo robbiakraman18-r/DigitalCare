@@ -296,7 +296,13 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     // UPDATE JADWAL PRAKTIK DOKTER
 
     Route::put('/doctor-schedule/{id}', [AdminController::class, 'updateJadwalDokter'])
-->name('admin.doctor.schedule.update');
+    ->name('admin.doctor.schedule.update');
+    
+    Route::get('/doctor-schedule/{id}/edit', [AdminController::class, 'editSchedule'])
+    ->name('admin.doctor.schedule.edit');
+
+    // DELETE JADWAL
+    Route::delete('/doctor-schedule/{id}', [AdminController::class, 'deleteSchedule'])->name('admin.doctor.schedule.delete');
 
     // COMPLAINT
     Route::get('/complaint', [App\Http\Controllers\AdminController::class, 'complaint']);

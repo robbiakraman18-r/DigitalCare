@@ -482,20 +482,11 @@ class="fixed top-8 right-8 z-[9999]">
                             </span>
                         @else
                             <!-- EDIT -->
-                            <button
-                                type="button"
-                                onclick="openEditModal(this)"
-                                data-id="{{ $item->id_jadwal }}"
-                                data-dokter="{{ $item->id_dokter }}"
-                                data-tanggal="{{ $item->tanggal }}"
-                                data-hari="{{ $item->hari }}"
-                                data-mulai="{{ $item->jam_mulai }}"
-                                data-selesai="{{ $item->jam_selesai }}"
-                                data-ruang="{{ $item->ruang }}"
-                                data-kuota="{{ $item->kuota_harian }}"
+                            <a
+                                href="{{ route('admin.doctor.schedule.edit', $item->id_jadwal) }}"
                                 class="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center hover:bg-slate-100 transition">
                                 <i data-lucide="square-pen" class="w-4 h-4"></i>
-                            </button>
+                            </a>
 
                             <!-- DELETE -->
                             <button
@@ -522,181 +513,8 @@ class="fixed top-8 right-8 z-[9999]">
 </div>
 
 {{-- =========================
-EDIT MODAL
+DELETE MODAL
 ========================= --}}
-
-<div
-id="editModal"
-class="fixed inset-0 bg-black/40 backdrop-blur-sm hidden items-center justify-center z-[999] p-5">
-
-<div class="bg-white rounded-[32px] w-full max-w-3xl shadow-2xl overflow-hidden">
-
-<div class="px-8 py-6 border-b flex justify-between">
-
-<div>
-
-<h2 class="text-2xl font-bold">
-
-Edit Schedule
-
-</h2>
-
-<p class="text-slate-400">
-
-Update doctor schedule
-
-</p>
-
-</div>
-
-<button
-type="button"
-onclick="closeEditModal()">
-
-✕
-
-</button>
-
-</div>
-
-
-<form
-id="editForm"
-method="POST">
-
-@csrf
-@method('PUT')
-
-<div class="grid lg:grid-cols-2 gap-5 p-8">
-
-<div>
-
-<label>Doctor</label>
-
-<select
-name="id_dokter"
-id="edit_dokter"
-class="w-full border rounded-2xl px-4 py-3">
-
-@foreach($dokters as $dokter)
-
-<option value="{{ $dokter->id_dokter }}">
-
-{{ $dokter->user->nama }}
-
-</option>
-
-@endforeach
-
-</select>
-
-</div>
-
-
-<div>
-
-<label>Date</label>
-
-<input
-type="date"
-id="edit_tanggal"
-name="tanggal"
-class="w-full border rounded-2xl px-4 py-3">
-
-</div>
-
-
-<div>
-
-<label>Day</label>
-
-<input
-type="text"
-id="edit_hari"
-name="hari"
-class="w-full border rounded-2xl px-4 py-3">
-
-</div>
-
-
-<div>
-
-<label>Start</label>
-
-<input
-type="time"
-id="edit_mulai"
-name="jam_mulai"
-class="w-full border rounded-2xl px-4 py-3">
-
-</div>
-
-
-<div>
-
-<label>End</label>
-
-<input
-type="time"
-id="edit_selesai"
-name="jam_selesai"
-class="w-full border rounded-2xl px-4 py-3">
-
-</div>
-
-
-<div>
-
-<label>Room</label>
-
-<input
-type="text"
-id="edit_ruang"
-name="ruang"
-class="w-full border rounded-2xl px-4 py-3">
-
-</div>
-
-
-<div>
-
-<label>Quota</label>
-
-<input
-type="number"
-id="edit_kuota"
-name="kuota_harian"
-class="w-full border rounded-2xl px-4 py-3">
-
-</div>
-
-</div>
-
-<div class="border-t p-6 flex justify-end gap-3">
-
-<button
-type="button"
-onclick="closeEditModal()"
-class="px-5 py-3 rounded-2xl border">
-
-Cancel
-
-</button>
-
-<button
-class="px-5 py-3 rounded-2xl bg-cyan-600 text-white">
-
-Update Schedule
-
-</button>
-
-</div>
-
-</form>
-
-</div>
-
-</div>
 <div
 id="deleteModal"
 class="fixed inset-0 hidden items-center justify-center bg-black/40 backdrop-blur-sm z-[999]">
@@ -762,6 +580,7 @@ Delete
 </div>
 <script>
 
+const deleteUrlTemplate = "{{ route('admin.doctor.schedule.delete', ['id' => '__ID__']) }}";
 
 function closeDeleteModal(){
 
@@ -781,8 +600,7 @@ function openDeleteModal(button){
 
     const id = button.dataset.id;
 
-    document.getElementById('deleteForm').action =
-        "/admin/schedule-management/delete/" + id;
+    document.getElementById('deleteForm').action = deleteUrlTemplate.replace('__ID__', id);
 
     document.getElementById('deleteModal').classList.remove('hidden');
     document.getElementById('deleteModal').classList.add('flex');
@@ -824,37 +642,6 @@ error.remove();
 }
 
 },3000);
-
-
-function openEditModal(button){
-
-    const id = button.dataset.id;
-
-    document.getElementById('edit_dokter').value = button.dataset.dokter;
-    document.getElementById('edit_tanggal').value = button.dataset.tanggal;
-    document.getElementById('edit_hari').value = button.dataset.hari;
-    document.getElementById('edit_mulai').value = button.dataset.mulai;
-    document.getElementById('edit_selesai').value = button.dataset.selesai;
-    document.getElementById('edit_ruang').value = button.dataset.ruang;
-    document.getElementById('edit_kuota').value = button.dataset.kuota;
-
-    document.getElementById('editForm').action =
-        "/admin/schedule-management/update/" + id;
-
-    const modal = document.getElementById('editModal');
-
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
-}
-
-function closeEditModal(){
-
-    const modal = document.getElementById('editModal');
-
-    modal.classList.remove('flex');
-    modal.classList.add('hidden');
-
-}
 
 </script>
 @endsection
