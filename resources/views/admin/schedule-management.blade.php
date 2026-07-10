@@ -93,13 +93,10 @@ class="fixed top-8 right-8 z-[9999]">
         </div>
         
 
-        <button
-        onclick="openAddModal()"
-        class="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold transition">
-
-            + Add Schedule
-
-        </button>
+        <a href="{{ route('admin.schedule.create') }}"
+            class="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold transition">
+                + Add Schedule
+            </a>
 
     </div>
 
@@ -468,36 +465,47 @@ class="fixed top-8 right-8 z-[9999]">
                 {{-- ACTIONS --}}
                 <td class="px-6 py-5">
 
+                    @php
+                        $sudahMulai = \Carbon\Carbon::parse(
+                            $item->tanggal . ' ' . $item->jam_mulai,
+                            'Asia/Jakarta'
+                        )->lessThanOrEqualTo(now('Asia/Jakarta'));
+                    @endphp
+
                     <div class="flex items-center justify-center gap-3">
 
-                        <!-- EDIT -->
-                        <button
-                            type="button"
-                            onclick="openEditModal(this)"
-                            data-id="{{ $item->id_jadwal }}"
-                            data-dokter="{{ $item->id_dokter }}"
-                            data-tanggal="{{ $item->tanggal }}"
-                            data-hari="{{ $item->hari }}"
-                            data-mulai="{{ $item->jam_mulai }}"
-                            data-selesai="{{ $item->jam_selesai }}"
-                            data-ruang="{{ $item->ruang }}"
-                            data-kuota="{{ $item->kuota_harian }}"
-                            class="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center hover:bg-slate-100 transition">
+                        @if($sudahMulai)
+                            <span
+                            class="w-9 h-9 rounded-xl border border-slate-100 flex items-center justify-center text-slate-300"
+                            title="Jadwal sudah dimulai, tidak bisa diubah">
+                                <i data-lucide="lock" class="w-4 h-4"></i>
+                            </span>
+                        @else
+                            <!-- EDIT -->
+                            <button
+                                type="button"
+                                onclick="openEditModal(this)"
+                                data-id="{{ $item->id_jadwal }}"
+                                data-dokter="{{ $item->id_dokter }}"
+                                data-tanggal="{{ $item->tanggal }}"
+                                data-hari="{{ $item->hari }}"
+                                data-mulai="{{ $item->jam_mulai }}"
+                                data-selesai="{{ $item->jam_selesai }}"
+                                data-ruang="{{ $item->ruang }}"
+                                data-kuota="{{ $item->kuota_harian }}"
+                                class="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center hover:bg-slate-100 transition">
+                                <i data-lucide="square-pen" class="w-4 h-4"></i>
+                            </button>
 
-                            <i data-lucide="square-pen" class="w-4 h-4"></i>
-
-                        </button>
-
-                        <!-- DELETE -->
-                        <button
-                            type="button"
-                            onclick="openDeleteModal(this)"
-                            data-id="{{ $item->id_jadwal }}"
-                            class="w-9 h-9 rounded-xl border border-red-200 flex items-center justify-center hover:bg-red-50 transition">
-
-                            <i data-lucide="trash-2" class="w-4 h-4 text-red-500"></i>
-
-                        </button>
+                            <!-- DELETE -->
+                            <button
+                                type="button"
+                                onclick="openDeleteModal(this)"
+                                data-id="{{ $item->id_jadwal }}"
+                                class="w-9 h-9 rounded-xl border border-red-200 flex items-center justify-center hover:bg-red-50 transition">
+                                <i data-lucide="trash-2" class="w-4 h-4 text-red-500"></i>
+                            </button>
+                        @endif
 
                     </div>
 
@@ -513,163 +521,6 @@ class="fixed top-8 right-8 z-[9999]">
 
 </div>
 
-<!-- ADD SCHEDULE MODAL -->
-<div
-id="addScheduleModal"
-class="fixed inset-0 bg-black/40 hidden z-50 overflow-y-auto py-10 scrollbar-hide">
-
-    <div class="bg-white w-full max-w-2xl rounded-[30px] p-8 shadow-xl mx-auto">
-
-        {{-- HEADER --}}
-        <div class="flex items-center justify-between mb-6">
-
-            <h2 class="text-2xl font-bold text-slate-800">
-                Add Doctor Schedule
-            </h2>
-
-            <button
-                type="button"
-                onclick="closeAddModal()"
-                class="text-slate-500 text-2xl">
-
-                ×
-
-            </button>
-
-        </div>
-
-        {{-- FORM --}}
-        <form action="{{ route('admin.schedule.store') }}" method="POST">
-            @csrf
-
-            <div class="grid grid-cols-2 gap-5">
-
-                {{-- DOCTOR --}}
-                <div class="col-span-2">
-
-                    <label class="font-medium text-slate-700">
-                        Doctor
-                    </label>
-
-                    <select
-                        name="id_dokter"
-                        required
-                        class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
-
-                        <option value="">Select Doctor</option>
-
-                        @foreach($dokters as $dokter)
-                            <option value="{{ $dokter->id_dokter }}">
-                                {{ $dokter->user->nama }}
-                            </option>
-                        @endforeach
-
-                    </select>
-
-                </div>
-
-                {{-- DATE --}}
-                <div>
-
-                    <label class="font-medium text-slate-700">
-                        Date
-                    </label>
-
-                    <input
-                        type="date"
-                        name="tanggal"
-                        required
-                        class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
-
-                </div>
-
-                {{-- START TIME --}}
-                <div>
-
-                    <label class="font-medium text-slate-700">
-                        Start Time
-                    </label>
-
-                    <input
-                        type="time"
-                        name="jam_mulai"
-                        required
-                        class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
-
-                </div>
-
-                {{-- END TIME --}}
-                <div>
-
-                    <label class="font-medium text-slate-700">
-                        End Time
-                    </label>
-
-                    <input
-                        type="time"
-                        name="jam_selesai"
-                        required
-                        class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
-
-                </div>
-
-                {{-- ROOM --}}
-                <div>
-
-                    <label class="font-medium text-slate-700">
-                        Room
-                    </label>
-
-                    <input
-                        type="text"
-                        name="ruang"
-                        required
-                        class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
-
-                </div>
-
-                {{-- QUOTA --}}
-                <div>
-
-                    <label class="font-medium text-slate-700">
-                        Daily Quota
-                    </label>
-
-                    <input
-                        type="number"
-                        name="kuota_harian"
-                        required
-                        class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
-
-                </div>
-
-                
-                {{-- FOOTER --}}
-                <div class="flex justify-end gap-3 mt-8">
-
-                <button
-                    type="button"
-                    onclick="closeAddModal()"
-                    class="px-5 py-3 rounded-2xl border border-slate-200">
-                    Cancel
-
-                </button>
-
-                <button
-                type="submit"
-                class="px-5 py-3 rounded-2xl bg-blue-600 text-white">
-                
-                Save Schedule
-                
-            </button>
-            
-        </div>
-        </div>
-
-        </form>
-
-    </div>
-</div>
 {{-- =========================
 EDIT MODAL
 ========================= --}}
@@ -813,7 +664,7 @@ class="w-full border rounded-2xl px-4 py-3">
 
 <input
 type="number"
-id="edit_quota"
+id="edit_kuota"
 name="kuota_harian"
 class="w-full border rounded-2xl px-4 py-3">
 
@@ -911,17 +762,6 @@ Delete
 </div>
 <script>
 
-function openAddModal() {
-    const modal = document.getElementById('addScheduleModal');
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
-}
-
-function closeAddModal() {
-    const modal = document.getElementById('addScheduleModal');
-    modal.classList.remove('flex');
-    modal.classList.add('hidden');
-}
 
 function closeDeleteModal(){
 

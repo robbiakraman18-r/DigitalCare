@@ -324,6 +324,9 @@ Route::put('/schedule-management/update/{id}', [AdminJadwalController::class, 'u
 Route::delete('/schedule-management/delete/{id}', [AdminJadwalController::class, 'destroy'])
     ->name('admin.schedule.destroy');
 
+Route::get('/schedule-management/create', [AdminJadwalController::class, 'create'])
+    ->name('admin.schedule.create');
+
 
    Route::get('/medical-records', [AdminRekamMedisController::class, 'index'])
     ->name('admin.medical-records.index');

@@ -377,12 +377,7 @@ $r = $roleUI[$user->role] ?? [
             Inactive
         </span>
     @endif
-
 </td>
-
-
-
-
                         <td class="px-6 py-5 text-slate-600">
                             {{ $user->created_at->format('d M Y') }}
                         </td>
