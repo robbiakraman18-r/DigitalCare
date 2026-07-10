@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Complaint;
 use App\Models\User;
 use App\Models\Dokter;
@@ -154,33 +155,80 @@ class AdminController extends Controller
     }
 
     // =========================================
-    // UPDATE USER
+    // VIEW USER PROFILE
+    // =========================================
+    public function show($id)
+    {
+        $user = User::findOrFail($id);
+
+        return view('admin.user-view', compact('user'));
+    }
+
+    // =========================================
+    // EDIT USER PROFILE (DOKTER ONLY)
+    // =========================================
+    public function edit($id)
+    {
+        $user = User::findOrFail($id);
+
+        if ($user->role !== 'dokter') {
+            return redirect()
+                ->route('admin.user-management')
+                ->with('error', 'Hanya profil dokter yang bisa diedit.');
+        }
+
+        return view('admin.user-edit', compact('user'));
+    }
+
+    // =========================================
+    // UPDATE USER (DOKTER ONLY)
     // =========================================
     public function updateUser(Request $request, int $id)
     {
         $user = User::findOrFail($id);
 
-        $request->validate([
-            'nama' => 'required',
-            'email' => 'required|email',
-            'role' => 'required',
-        ]);
-
-        $user->update($request->only('nama', 'email', 'role'));
-
-        if ($user->role == 'dokter') {
-            $dokter = Dokter::where('user_id', $user->id)->first();
-
-            $dokter->update([
-                'hari_praktik' => $request->hari_praktik,
-                'jam_mulai' => $request->jam_mulai,
-                'jam_selesai' => $request->jam_selesai,
-                'no_sip' => $request->no_sip,
-                'status_ketersediaan' => $request->status_ketersediaan,
-            ]);
+        if ($user->role !== 'dokter') {
+            return redirect()
+                ->route('admin.user-management')
+                ->with('error', 'Hanya profil dokter yang bisa diedit.');
         }
 
-        return back()->with('success', 'User updated successfully');
+        $validated = $request->validate([
+            'nama'                 => 'required|string|max:60',
+            'email'                => 'required|email|max:255|unique:users,email,' . $user->id,
+            'no_sip'               => 'required|string|max:255',
+            'gender'               => 'required|in:Male,Female',
+            'status_ketersediaan'  => 'required|in:Available,Unavailable',
+            'foto_profil'          => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        // update tabel users (role sengaja tidak disentuh sama sekali)
+        $user->nama  = $validated['nama'];
+        $user->email = $validated['email'];
+        $user->save();
+
+        // update tabel dokters
+        $dokter = Dokter::where('user_id', $user->id)->first();
+
+        if ($dokter) {
+            $dokter->no_sip              = $validated['no_sip'];
+            $dokter->gender              = $validated['gender'];
+            $dokter->status_ketersediaan = $validated['status_ketersediaan'];
+
+            if ($request->hasFile('foto_profil')) {
+                // hapus foto lama biar storage tidak menumpuk
+                if ($dokter->foto_profil && Storage::disk('public')->exists($dokter->foto_profil)) {
+                    Storage::disk('public')->delete($dokter->foto_profil);
+                }
+                $dokter->foto_profil = $request->file('foto_profil')->store('dokter', 'public');
+            }
+
+            $dokter->save();
+        }
+
+        return redirect()
+            ->route('admin.user-management')
+            ->with('success', 'Doctor profile updated successfully');
     }
 
     // =========================================

@@ -130,8 +130,8 @@
                 <div>
 
                     <p class="text-slate-400 text-sm">
-    Registered Users
-</p>
+                        Registered Users
+                    </p>
 
                     <h2 class="text-3xl font-bold text-slate-800 mt-2">
                         {{ $users->count() }}
@@ -154,11 +154,13 @@
         </div>
 
     </div>
+
 @if(session('success'))
     <div class="mb-4 p-3 rounded-xl bg-green-500 text-white">
         {{ session('success') }}
     </div>
 @endif
+
     <!-- TABLE -->
     <div class="bg-white rounded-[30px] border border-slate-100 shadow-sm overflow-hidden">
 
@@ -187,39 +189,37 @@
 
                 <div class="relative w-full lg:w-64">
 
-    <i data-lucide="filter"
-       class="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
+                    <i data-lucide="filter"
+                    class="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
 
-    <select
-        name="role"
-        class="w-full pl-12 pr-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none">
+                    <select
+                        name="role"
+                        class="w-full pl-12 pr-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none">
 
-        <option value="">
-            All Roles
-        </option>
+                        <option value="">
+                            All Roles
+                        </option>
 
-        <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>
-            🛡️ Admin
-        </option>
+                        <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>
+                            🛡️ Admin
+                        </option>
 
-        <option value="dokter" {{ request('role') == 'dokter' ? 'selected' : '' }}>
-            🩺 Doctor
-        </option>
+                        <option value="dokter" {{ request('role') == 'dokter' ? 'selected' : '' }}>
+                            🩺 Doctor
+                        </option>
 
-        <option value="pasien" {{ request('role') == 'pasien' ? 'selected' : '' }}>
-            👤 Patient
-        </option>
+                        <option value="pasien" {{ request('role') == 'pasien' ? 'selected' : '' }}>
+                            👤 Patient
+                        </option>
 
-    </select>
+                    </select>
 
-    <!-- dropdown arrow custom -->
-    <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-        <i data-lucide="chevron-down" class="w-5 h-5 text-slate-400"></i>
-    </div>
+                    <!-- dropdown arrow custom -->
+                    <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                        <i data-lucide="chevron-down" class="w-5 h-5 text-slate-400"></i>
+                    </div>
 
-</div>
-
-        
+                </div>
 
                 <!-- BUTTON -->
                 <button
@@ -283,42 +283,52 @@
 
                                 @if($user->role == 'dokter' && optional($user->dokter)->foto_profil)
 
-<img
-    src="{{ asset('storage/' . $user->dokter->foto_profil) }}"
-    class="w-11 h-11 rounded-2xl object-cover">
+                                    <img
+                                    src="{{ asset('storage/' . $user->dokter->foto_profil) }}"
+                                    class="w-11 h-11 rounded-2xl object-cover">
 
-@else
+                                @else
 
-@php
-    $inisial = collect(explode(' ', $user->nama))
-        ->filter()
-        ->take(2)
-        ->map(fn($item) => strtoupper(substr($item, 0, 1)))
-        ->join('');
+                                    @php
+                                        $inisial = collect(explode(' ', $user->nama))
+                                            ->filter()
+                                            ->take(2)
+                                            ->map(fn($item) => strtoupper(substr($item, 0, 1)))
+                                            ->join('');
 
-    if($user->role == 'admin'){
-        $bg = 'bg-red-500';
-    }elseif($user->role == 'dokter'){
-        $bg = 'bg-blue-500';
-    }else{
-        $bg = 'bg-green-500';
-    }
-@endphp
+                                        if($user->role == 'admin'){
+                                            $bg = 'bg-red-500';
+                                        }elseif($user->role == 'dokter'){
+                                            $bg = 'bg-blue-500';
+                                        }else{
+                                            $bg = 'bg-green-500';
+                                        }
+                                    @endphp
 
-<div class="w-11 h-11 rounded-2xl {{ $bg }} flex items-center justify-center text-white font-bold text-sm">
-    {{ $inisial }}
-</div>
+                                    <div class="w-11 h-11 rounded-2xl {{ $bg }} flex items-center justify-center text-white font-bold text-sm">
+                                        {{ $inisial }}
+                                    </div>
 
-@endif
+                                @endif
 
                                 <div>
-
+                                    @php
+                                        if ($user->role == 'admin') {
+                                            $userCode = 'ADM-' . str_pad(optional($user->admin)->id_admin, 4, '0', STR_PAD_LEFT);
+                                        } elseif ($user->role == 'dokter') {
+                                            $userCode = 'DOC-' . str_pad(optional($user->dokter)->id_dokter, 4, '0', STR_PAD_LEFT);
+                                        } elseif ($user->role == 'pasien') {
+                                            $userCode = 'PAS-' . str_pad(optional($user->pasien)->id_pasien, 4, '0', STR_PAD_LEFT);
+                                        } else {
+                                            $userCode = 'USR-' . str_pad($user->id, 4, '0', STR_PAD_LEFT);
+                                        }
+                                    @endphp
                                     <h3 class="font-semibold text-slate-800">
                                         {{ $user->nama }}
                                     </h3>
 
                                     <p class="text-sm text-slate-400">
-                                        USER-{{ $user->id }}
+                                        {{ $userCode }}
                                     </p>
 
                                 </div>
@@ -330,35 +340,35 @@
                         <td class="px-6 py-5">
 
                             @php
-$roleUI = [
-    'admin' => [
-        'label' => 'Admin',
-        'class' => 'bg-gradient-to-r from-red-500 to-pink-500 text-white',
-        'icon'  => 'shield-check'
-    ],
-    'dokter' => [
-        'label' => 'Doctor',
-        'class' => 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white',
-        'icon'  => 'stethoscope'
-    ],
-    'pasien' => [
-        'label' => 'Patient',
-        'class' => 'bg-gradient-to-r from-green-500 to-emerald-500 text-white',
-        'icon'  => 'user'
-    ],
-];
+                                $roleUI = [
+                                    'admin' => [
+                                        'label' => 'Admin',
+                                        'class' => 'bg-gradient-to-r from-red-500 to-pink-500 text-white',
+                                        'icon'  => 'shield-check'
+                                    ],
+                                    'dokter' => [
+                                        'label' => 'Doctor',
+                                        'class' => 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white',
+                                        'icon'  => 'stethoscope'
+                                    ],
+                                    'pasien' => [
+                                        'label' => 'Patient',
+                                        'class' => 'bg-gradient-to-r from-green-500 to-emerald-500 text-white',
+                                        'icon'  => 'user'
+                                    ],
+                                ];
 
-$r = $roleUI[$user->role] ?? [
-    'label' => ucfirst($user->role),
-    'class' => 'bg-slate-200 text-slate-700',
-    'icon'  => 'user'
-];
-@endphp
+                                $r = $roleUI[$user->role] ?? [
+                                    'label' => ucfirst($user->role),
+                                    'class' => 'bg-slate-200 text-slate-700',
+                                    'icon'  => 'user'
+                                ];
+                            @endphp
 
-<span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold shadow-sm {{ $r['class'] }}">
-    <i data-lucide="{{ $r['icon'] }}" class="w-3.5 h-3.5"></i>
-    {{ $r['label'] }}
-</span>
+                            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold shadow-sm {{ $r['class'] }}">
+                                <i data-lucide="{{ $r['icon'] }}" class="w-3.5 h-3.5"></i>
+                                {{ $r['label'] }}
+                            </span>
 
                         </td>
 
@@ -368,16 +378,18 @@ $r = $roleUI[$user->role] ?? [
 
                         <td class="px-6 py-5">
 
-    @if($user->status == 'active')
-        <span class="px-3 py-1 rounded-xl bg-green-100 text-green-600 text-xs font-semibold">
-            Active
-        </span>
-    @else
-        <span class="px-3 py-1 rounded-xl bg-red-100 text-red-600 text-xs font-semibold">
-            Inactive
-        </span>
-    @endif
-</td>
+                            @if($user->status == 'active')
+                                <span class="px-3 py-1 rounded-xl bg-green-100 text-green-600 text-xs font-semibold">
+                                    Active
+                                </span>
+                            @else
+                                <span class="px-3 py-1 rounded-xl bg-red-100 text-red-600 text-xs font-semibold">
+                                    Inactive
+                                </span>
+                            @endif
+
+                        </td>
+
                         <td class="px-6 py-5 text-slate-600">
                             {{ $user->created_at->format('d M Y') }}
                         </td>
@@ -387,48 +399,50 @@ $r = $roleUI[$user->role] ?? [
                             <div class="flex items-center justify-center gap-3">
 
                                 <!-- VIEW -->
-                                <button
-                                onclick="document.getElementById('viewUserModal{{ $user->id }}').classList.remove('hidden')"
+                                <a
+                                href="{{ route('admin.user.view', $user->id) }}"
                                 class="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center hover:bg-slate-100 transition">
 
                                     <i data-lucide="eye" class="w-4 h-4"></i>
 
-                                </button>
+                                </a>
 
-                                <!-- EDIT -->
-                                <button
-                                onclick="document.getElementById('editUserModal{{ $user->id }}').classList.remove('hidden')"
+                                <!-- EDIT (dokter only) -->
+                                @if($user->role === 'dokter')
+                                <a
+                                href="{{ route('admin.user.edit', $user->id) }}"
                                 class="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center hover:bg-slate-100 transition">
 
                                     <i data-lucide="square-pen" class="w-4 h-4"></i>
 
-                                </button>
+                                </a>
+                                @endif
 
                                 <!-- TOGGLE STATUS -->
                                 @if($user->role === 'admin')
-    <span class="px-3 py-1 rounded-xl bg-slate-200 text-slate-500 text-xs font-semibold">
-        Protected
-    </span>
-@else
-    <button
-        type="button"
-        data-id="{{ $user->id }}"
-        data-status="{{ $user->status }}"
-        onclick="openStatusModal(this)"
-        class="relative inline-flex items-center w-12 h-6 rounded-full transition
-        {{ $user->status === 'active' ? 'bg-green-500' : 'bg-gray-300' }}">
-        
-        <span class="sr-only">toggle</span>
+                                    <span class="px-3 py-1 rounded-xl bg-slate-200 text-slate-500 text-xs font-semibold">
+                                        Protected
+                                    </span>
+                                @else
+                                    <button
+                                        type="button"
+                                        data-id="{{ $user->id }}"
+                                        data-status="{{ $user->status }}"
+                                        onclick="openStatusModal(this)"
+                                        class="relative inline-flex items-center w-12 h-6 rounded-full transition
+                                        {{ $user->status === 'active' ? 'bg-green-500' : 'bg-gray-300' }}">
 
-        <span class="
-            absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow-md
-            transition-transform duration-200
-            {{ $user->status === 'active' ? 'translate-x-6' : 'translate-x-0' }}">
-        </span>
+                                        <span class="sr-only">toggle</span>
 
-    </button>
-@endif
-            
+                                        <span class="
+                                            absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow-md
+                                            transition-transform duration-200
+                                            {{ $user->status === 'active' ? 'translate-x-6' : 'translate-x-0' }}">
+                                        </span>
+
+                                    </button>
+                                @endif
+
                                 <!-- DELETE -->
                                 <form
                                 action="{{ route('admin.user.delete', $user->id) }}"
@@ -467,340 +481,20 @@ $r = $roleUI[$user->role] ?? [
 
 </div>
 
-{{-- VIEW + EDIT MODAL --}}
-@foreach($users as $user)
-
-<!-- VIEW MODAL -->
-<div
-id="viewUserModal{{ $user->id }}"
-class="fixed inset-0 bg-black/40 hidden z-50 flex items-center justify-center">
-
-    <div class="bg-white w-full max-w-lg rounded-[30px] p-8 shadow-xl">
-
-        <div class="flex items-center justify-between mb-6">
-
-            <h2 class="text-2xl font-bold text-slate-800">
-                @if($user->role == 'dokter')
-                    Doctor Profile
-                @elseif($user->role == 'admin')
-                    Admin Profile
-                @else
-                    Patient Profile
-                @endif
-            </h2>
-
-            <button
-            onclick="document.getElementById('viewUserModal{{ $user->id }}').classList.add('hidden')"
-            class="text-slate-500 text-2xl">
-
-                ×
-
-            </button>
-
-        </div>
-
-        <div class="space-y-4">
-
-            @if($user->role == 'dokter')
-
-            @php
-            $dokter = \App\Models\Dokter::where('user_id',$user->id)->first();
-            @endphp
-
-            <div class="space-y-4">
-
-                @php
-$dokter = \App\Models\Dokter::where('user_id', $user->id)->first();
-@endphp
-
-<div>
-    <p class="text-sm text-slate-400">Name</p>
-    <h3 class="font-semibold text-slate-800">
-        {{ $user->nama }}
-    </h3>
-</div>
-
-<div>
-    <p class="text-sm text-slate-400">Email</p>
-    <h3 class="font-semibold text-slate-800">
-        {{ $user->email }}
-    </h3>
-</div>
-
-@if($user->role == 'dokter')
-
-<div>
-    <p class="text-sm text-slate-400">No SIP</p>
-    <h3 class="font-semibold text-slate-800">
-        {{ optional($dokter)->no_sip ?? '-' }}
-    </h3>
-</div>
-
-<div>
-    <p class="text-sm text-slate-400">Gender</p>
-    <h3 class="font-semibold text-slate-800">
-        {{ optional($dokter)->gender ?? '-' }}
-    </h3>
-</div>
-
-<div>
-    <p class="text-sm text-slate-400">Status Ketersediaan</p>
-    <h3 class="font-semibold text-slate-800">
-        {{ optional($dokter)->status_ketersediaan ?? '-' }}
-    </h3>
-</div>
-
-@endif
-
-<div>
-    <p class="text-sm text-slate-400">Role</p>
-    <h3 class="font-semibold text-slate-800">
-        {{ ucfirst($user->role) }}
-    </h3>
-</div>
-
-<div>
-    <p class="text-sm text-slate-400">Created</p>
-    <h3 class="font-semibold text-slate-800">
-        {{ $user->created_at->format('d M Y H:i') }}
-    </h3>
-</div>
-            </div>
-
-            @else
-
-            <div class="space-y-4">
-
-                <div>
-                    <p class="text-sm text-slate-400">Name</p>
-                    <h3 class="font-semibold">{{ $user->nama }}</h3>
-                </div>
-
-                <div>
-                    <p class="text-sm text-slate-400">Email</p>
-                    <h3 class="font-semibold">{{ $user->email }}</h3>
-                </div>
-
-                <div>
-                    <p class="text-sm text-slate-400">Role</p>
-                    <h3 class="font-semibold">{{ ucfirst($user->role) }}</h3>
-                </div>
-
-            </div>
-
-            @endif
-
-        </div>
-
-    </div>
-
-</div>
-
-<!-- EDIT MODAL -->
-<div
-id="editUserModal{{ $user->id }}"
-class="fixed inset-0 bg-black/40 hidden z-50 overflow-y-auto py-10 scrollbar-hide">
-
-    <div class="bg-white w-full max-w-xl rounded-[30px] p-8 shadow-xl mx-auto">
-
-        <div class="flex items-center justify-between mb-6">
-
-            <h2 class="text-2xl font-bold text-slate-800">
-                @if($user->role == 'dokter')
-                    Edit Doctor
-                @elseif($user->role == 'admin')
-                    Edit Admin
-                @else
-                    Edit Patient
-                @endif
-            </h2>
-
-            <button
-            onclick="document.getElementById('editUserModal{{ $user->id }}').classList.add('hidden')"
-            class="text-slate-500 text-2xl">
-
-                ×
-
-            </button>
-
-        </div>
-
-        <form
-        action="{{ route('admin.user.update', $user->id) }}"
-        method="POST">
-
-            @csrf
-            @method('PUT')
-
-            <div class="space-y-5">
-
-                <div>
-
-                    <label class="font-medium text-slate-700">
-                        Name
-                    </label>
-
-                    <input
-                    type="text"
-                    name="nama"
-                    value="{{ $user->nama }}"
-                    class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
-
-                </div>
-
-                <div>
-
-                    <label class="font-medium text-slate-700">
-                        Email
-                    </label>
-
-                    <input
-                    type="email"
-                    name="email"
-                    value="{{ $user->email }}"
-                    class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
-
-                </div>
-
-                @if($user->role == 'dokter')
-
-<div>
-    <label class="font-medium text-slate-700">
-        No SIP
-    </label>
-
-    <input
-    type="text"
-    name="no_sip"
-    value="{{ optional($dokter)->no_sip }}"
-    class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
-</div>
-
-<div>
-    <label class="font-medium text-slate-700">
-        Gender
-    </label>
-
-    <select
-    name="gender"
-    class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
-
-        <option value="Male" {{ optional($dokter)->gender=='Male'?'selected':'' }}>
-            Male
-        </option>
-
-        <option value="Female" {{ optional($dokter)->gender=='Female'?'selected':'' }}>
-            Female
-        </option>
-
-    </select>
-</div>
-
-<div>
-    <label class="font-medium text-slate-700">
-        Status Ketersediaan
-    </label>
-
-    <select
-    name="status_ketersediaan"
-    class="w-full mt-2 px-4 py-3 rounded-2xl border border-slate-200">
-
-        <option value="Available" {{ optional($dokter)->status_ketersediaan=='Available'?'selected':'' }}>
-            Available
-        </option>
-
-        <option value="Unavailable" {{ optional($dokter)->status_ketersediaan=='Unavailable'?'selected':'' }}>
-            Unavailable
-        </option>
-
-    </select>
-</div>
-
-@endif
-
-                <div>
-
-    <label class="font-medium text-slate-700">
-        Role
-    </label>
-
-    <input
-    type="text"
-    value="{{ ucfirst($user->role) }}"
-    readonly
-    class="w-full mt-2 px-4 py-3 rounded-2xl bg-slate-100 border border-slate-200 cursor-not-allowed">
-
-    <input
-    type="hidden"
-    name="role"
-    value="{{ $user->role }}">
-
-</div>
-
-            </div>
-
-            <div class="flex justify-end gap-3 p-8 bg-white border-t border-slate-100">
-
-                <button
-                type="button"
-                onclick="document.getElementById('editUserModal{{ $user->id }}').classList.add('hidden')"
-                class="px-5 py-3 rounded-2xl border border-slate-200">
-
-                    Cancel
-
-                </button>
-
-                <button
-                type="submit"
-                class="px-5 py-3 rounded-2xl bg-blue-600 text-white">
-
-                    Update User
-
-                </button>
-
-            </div>
-
-        </form>
-
-    </div>
-
-</div>
-
-@endforeach
-<script>
-document.querySelectorAll('form').forEach(form => {
-    form.addEventListener('submit', function () {
-        const btn = this.querySelector('button[type="submit"]');
-        if (btn) {
-            btn.disabled = true;
-            btn.innerText = "Processing...";
-        }
-    });
-});
-function openStatusModal(btn) {
-    const userId = btn.getAttribute('data-id');
-
-    const form = document.getElementById('statusForm');
-    form.action = `/admin/user/${userId}/toggle-status`;
-
-    document.getElementById('statusModal').classList.remove('hidden');
-}
-
-function closeStatusModal() {
-    document.getElementById('statusModal').classList.add('hidden');
-}
-
-</script>
 <!-- STATUS MODAL -->
-<div id="statusModal" class="fixed inset-0 bg-black/40 hidden z-50 flex items-center justify-center">
+<div id="statusModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
 
-    <div class="bg-white w-full max-w-md rounded-[28px] p-6 shadow-xl">
+    <div class="bg-white w-full max-w-md rounded-[28px] p-6 shadow-2xl">
+
+        <div class="w-12 h-12 rounded-2xl bg-amber-100 flex items-center justify-center mb-4">
+            <i data-lucide="alert-triangle" class="w-6 h-6 text-amber-500"></i>
+        </div>
 
         <h2 class="text-xl font-bold text-slate-800">
             Change User Status
         </h2>
 
-        <p class="text-slate-500 mt-2">
+        <p class="text-slate-500 mt-2 text-sm">
             Are you sure you want to change this user's status?
         </p>
 
@@ -827,4 +521,28 @@ function closeStatusModal() {
 
     </div>
 </div>
+
+<script>
+document.querySelectorAll('form').forEach(form => {
+    form.addEventListener('submit', function () {
+        const btn = this.querySelector('button[type="submit"]');
+        if (btn) {
+            btn.disabled = true;
+            btn.innerText = "Processing...";
+        }
+    });
+});
+
+function openStatusModal(btn) {
+    const userId = btn.getAttribute('data-id');
+    const form = document.getElementById('statusForm');
+    form.action = `/admin/user/${userId}/toggle-status`;
+    document.getElementById('statusModal').classList.remove('hidden');
+}
+
+function closeStatusModal() {
+    document.getElementById('statusModal').classList.add('hidden');
+}
+</script>
+
 @endsection

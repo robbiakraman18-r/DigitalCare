@@ -274,6 +274,9 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/doctor', [AdminController::class, 'storeDokter'])
         ->name('admin.doctor.store');
 
+        Route::get('/user/{id}', [AdminController::class, 'show'])->name('admin.user.view');
+        Route::get('/user/{id}/edit', [AdminController::class, 'edit'])->name('admin.user.edit');
+
     // BUAT EDIT USER
     Route::put('/user/{id}', [AdminController::class, 'updateUser'])
     ->name('admin.user.update');
