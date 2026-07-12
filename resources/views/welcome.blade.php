@@ -256,43 +256,36 @@
 
                 <!-- IMAGE -->
                 <img
-                    src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=800&auto=format&fit=crop"
-                    alt="Dokter DigitalCare"
+                    src="{{ asset('images/polibatam.jpg') }}"
+                    alt="{{ $clinic->clinic_name ?? 'DigitalCare' }}"
                     class="relative z-10 w-full max-w-[360px] aspect-square object-cover rounded-[45%_55%_60%_40%/50%_40%_60%_50%] hover:scale-105 transition duration-500 shadow-2xl border-4 border-white/70"
                 >
 
-                <!-- RATING CARD -->
+                <!-- CARD -> kesan klinik kampus -->
                 <div class="absolute top-1/2 -translate-y-1/2 -right-2 lg:right-0 bg-white/90 backdrop-blur-lg rounded-2xl shadow-xl p-3 border border-white/60 z-20 hover:scale-105 transition">
 
                     <div class="flex items-center gap-2">
-                        <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
-                        <span class="text-sm font-bold text-slate-800">4.9</span>
+                        <i data-lucide="graduation-cap" class="w-4 h-4 text-teal-500"></i>
+                        <span class="text-sm font-bold text-slate-800">Klinik Kampus</span>
                     </div>
 
                     <p class="text-[10px] text-slate-500 mt-0.5">
-                        Rating Pasien
+                        Politeknik Negeri Batam
                     </p>
 
                 </div>
 
-                <!-- BOTTOM CARD -->
+                <!-- BOTTOM CARD -> ganti jadi jumlah dokter (data asli, bukan klaim) -->
                 <div class="absolute bottom-2 right-0 lg:right-4 bg-white/90 backdrop-blur-lg rounded-2xl shadow-xl p-4 border border-white/60 z-20 hover:scale-105 transition">
-
                     <div class="flex items-center gap-3">
-
                         <div class="w-10 h-10 rounded-xl bg-teal-100 flex items-center justify-center">
-                            <i data-lucide="activity" class="w-5 h-5 text-teal-500"></i>
+                            <i data-lucide="stethoscope" class="w-5 h-5 text-teal-500"></i>
                         </div>
-
                         <div>
-                            <h4 class="text-sm font-semibold text-slate-800">100+ Pasien</h4>
-                            <p class="text-xs text-slate-500">
-                                Menggunakan {{ $clinic->clinic_name ?? 'DigitalCare' }}
-                            </p>
+                            <h4 class="text-sm font-semibold text-slate-800">{{ $dokters->count() }}+ Dokter</h4>
+                            <p class="text-xs text-slate-500">Siap melayani Anda</p>
                         </div>
-
                     </div>
-
                 </div>
 
             </div>
