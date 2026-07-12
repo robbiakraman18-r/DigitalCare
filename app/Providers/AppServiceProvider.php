@@ -8,6 +8,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\View;
 use App\Models\Dokter;
 use App\Models\Notifikasi;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,5 +28,8 @@ class AppServiceProvider extends ServiceProvider
                 ->action('Verifikasi Email Saya', $url)
                 ->line('Jika Anda tidak merasa membuat akun ini, abaikan saja email ini.');
         });
+        if (env('APP_ENV') === 'production') {
+            URL::forceScheme('https');
+        }
     }
 }
