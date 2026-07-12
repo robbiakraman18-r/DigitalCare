@@ -14,7 +14,6 @@ class WelcomeController extends Controller
             ->latest()
             ->take(4)
             ->get();
-
         $clinic = ClinicSetting::first();
 
         return view('welcome', compact('dokters', 'clinic'));
