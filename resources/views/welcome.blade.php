@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $clinic->clinic_name ?? 'DigitalCare' }}</title>
+    <title>DigitalCare</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -37,11 +37,11 @@
                 <div>
 
                     <h1 class="text-xl font-bold text-slate-800">
-                        {{ $clinic->clinic_name ?? 'DigitalCare' }}
+                        DigitalCare
                     </h1>
 
                     <p class="text-xs text-slate-500">
-                        {{ $clinic->clinic_tagline ?? 'Better Healthcare, Digitally' }}
+                        Layanan Kesehatan yang Lebih Baik secara Digital
                     </p>
 
                 </div>
@@ -137,7 +137,7 @@
                 <!-- DESCRIPTION -->
                 <p class="text-slate-600 text-base leading-relaxed mt-6 max-w-lg">
 
-                    {{ $clinic->clinic_description ?? ($clinic->clinic_name ?? 'DigitalCare') . ' hadir untuk memberikan kemudahan konsultasi dokter, booking online, rekam medis, dan layanan kesehatan modern dalam satu platform.' }}
+                    Layanan kesehatan yang Lebih Baik secara Digital
 
                 </p>
 
@@ -257,7 +257,7 @@
                 <!-- IMAGE -->
                 <img
                     src="{{ asset('images/polibatam.jpg') }}"
-                    alt="{{ $clinic->clinic_name ?? 'DigitalCare' }}"
+                    alt="DigitalCare"
                     class="relative z-10 w-full max-w-[360px] aspect-square object-cover rounded-[45%_55%_60%_40%/50%_40%_60%_50%] hover:scale-105 transition duration-500 shadow-2xl border-4 border-white/70"
                 >
 
@@ -467,7 +467,7 @@
 
                 <p class="text-teal-50 text-sm mt-3 max-w-lg mx-auto relative z-10">
                     Daftar sekarang dan nikmati kemudahan layanan kesehatan
-                    digital bersama tim dokter profesional {{ $clinic->clinic_name ?? 'DigitalCare' }}.
+                    digital bersama tim dokter profesional DigitalCare.
                 </p>
 
                 <div class="flex flex-wrap items-center justify-center gap-4 mt-8 relative z-10">
@@ -507,7 +507,7 @@
                         </div>
 
                         <h3 class="text-lg font-bold text-slate-800">
-                            {{ $clinic->clinic_name ?? 'DigitalCare' }}
+                            DigitalCare
                         </h3>
 
                     </div>
@@ -581,7 +581,7 @@
             <div class="border-t border-slate-100 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
 
                 <p class="text-xs text-slate-400">
-                    &copy; {{ date('Y') }} {{ $clinic->clinic_name ?? 'DigitalCare' }}. Seluruh hak cipta dilindungi.
+                    &copy; {{ date('Y') }} DigitalCare. Seluruh hak cipta dilindungi.
                 </p>
 
                 <div class="flex items-center gap-3">

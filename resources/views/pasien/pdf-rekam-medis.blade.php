@@ -2,229 +2,213 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Rekam Medis - {{ $rekamMedis->id_rekam_medis }}</title>
     <style>
-        @page { margin: 30px 40px; }
         body {
-            font-family: 'DejaVu Sans', sans-serif;
-            font-size: 11px;
-            color: #334155;
-        }
-        .header {
-            background: #0d9488;
-            color: #ffffff;
-            padding: 18px 22px;
-            border-radius: 10px;
-            margin-bottom: 18px;
-        }
-        .header h1 {
-            margin: 0;
-            font-size: 20px;
-            letter-spacing: 0.5px;
-        }
-        .header p {
-            margin: 4px 0 0;
-            font-size: 11px;
-            color: #ccfbf1;
-        }
-        .meta-table {
-            width: 100%;
-            margin-top: 10px;
-        }
-        .meta-table td {
-            font-size: 10px;
-            color: #f0fdfa;
-            padding-top: 4px;
-        }
-        .section {
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 14px 16px;
-            margin-bottom: 14px;
-        }
-        .section-title {
-            font-size: 13px;
-            font-weight: bold;
+            font-family: sans-serif;
+            font-size: 12px;
             color: #1e293b;
-            margin-bottom: 10px;
-            border-bottom: 1px solid #e2e8f0;
-            padding-bottom: 6px;
         }
-        table.info-grid {
+
+        .header {
+            border-bottom: 2px solid #0d9488;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 18px;
+            margin: 0 0 4px 0;
+            color: #0f172a;
+        }
+
+        .header p {
+            font-size: 11px;
+            color: #64748b;
+            margin: 0;
+        }
+
+        table {
             width: 100%;
             border-collapse: collapse;
         }
-        table.info-grid td {
-            width: 50%;
-            padding: 6px 8px;
-            vertical-align: top;
-        }
-        .label {
-            font-size: 9px;
+
+        th {
+            background-color: #f1f5f9;
+            text-align: left;
+            padding: 8px;
+            font-size: 10px;
             text-transform: uppercase;
-            color: #94a3b8;
-            letter-spacing: 0.5px;
+            color: #64748b;
+            border-bottom: 1px solid #e2e8f0;
         }
-        .value {
-            font-size: 11.5px;
+
+        td {
+            padding: 8px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 11px;
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 9px;
+            color: #94a3b8;
+            text-align: right;
+        }
+
+        .info-box {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 10px 14px;
+            margin-bottom: 12px;
+        }
+
+        .info-box .label {
+            font-size: 9px;
+            color: #64748b;
+            text-transform: uppercase;
+        }
+
+        .info-box .value {
+            font-size: 12px;
             font-weight: bold;
-            color: #334155;
+            color: #0f172a;
             margin-top: 2px;
         }
-        .diagnosis-box {
-            background: #f0fdfa;
-            border: 1px solid #99f6e4;
-            border-radius: 8px;
-            padding: 12px 14px;
-            margin-top: 6px;
-        }
-        .diagnosis-box .label { color: #0d9488; }
-        .diagnosis-box .value { color: #0f766e; font-size: 13px; }
 
-        table.resep-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 6px;
+        .warning-box {
+            margin-top: 14px;
+            padding: 10px 14px;
+            background-color: #fffbeb;
+            border: 1px solid #fde68a;
         }
-        table.resep-table th {
-            background: #ecfdf5;
-            color: #047857;
-            font-size: 9.5px;
+
+        .warning-box .warning-title {
+            font-size: 10px;
+            font-weight: bold;
+            color: #b45309;
+            margin: 0 0 4px 0;
             text-transform: uppercase;
-            text-align: left;
-            padding: 6px 8px;
-            border-bottom: 1px solid #d1fae5;
         }
-        table.resep-table td {
-            font-size: 10.5px;
-            padding: 6px 8px;
-            border-bottom: 1px solid #f1f5f9;
-        }
-        .notes {
-            font-size: 11px;
-            line-height: 1.6;
-            color: #475569;
-        }
-        .footer {
-            margin-top: 24px;
-            font-size: 9px;
-            color: #94a3b8;
-            text-align: center;
-            border-top: 1px solid #e2e8f0;
-            padding-top: 10px;
+
+        .warning-box .warning-text {
+            font-size: 10px;
+            color: #92400e;
+            margin: 0;
+            line-height: 1.5;
         }
     </style>
 </head>
 <body>
 
+    {{-- LETTERHEAD KLINIK --}}
     <div class="header">
-        <h1>REKAM MEDIS</h1>
-        <p>Hasil Konsultasi Pasien</p>
-        <table class="meta-table">
-            <tr>
-                <td><strong>No. Rekam Medis:</strong> DCM26-{{ $rekamMedis->appointment->id_janji ?? $rekamMedis->id_rekam_medis }}</td>
-                <td><strong>Tanggal Cetak:</strong> {{ \Carbon\Carbon::now()->translatedFormat('d F Y, H:i') }} WIB</td>
-            </tr>
-        </table>
+        <h1>{{ $setting->clinic_name ?? 'DigitalCare Clinic' }}</h1>
+        <p>
+            @if($setting->address ?? false)
+                {{ $setting->address }}
+                @if($setting->city) , {{ $setting->city }} @endif
+                &middot;
+            @endif
+            Dicetak pada {{ \Carbon\Carbon::now()->translatedFormat('d F Y, H:i') }} WIB
+        </p>
     </div>
 
-    {{-- PATIENT & VISIT INFO --}}
-    <div class="section">
-        <div class="section-title">Informasi Kunjungan</div>
-        <table class="info-grid">
-            <tr>
-                <td>
-                    <div class="label">Nama Pasien</div>
-                    <div class="value">{{ $rekamMedis->appointment->pasien->user->nama ?? '-' }}</div>
-                </td>
-                <td>
-                    <div class="label">Dokter</div>
-                    <div class="value">{{ $rekamMedis->dokter->user->nama ?? '-' }}</div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="label">Tanggal Pemeriksaan</div>
-                    <div class="value">{{ \Carbon\Carbon::parse($rekamMedis->waktu_pemeriksaan)->translatedFormat('l, d F Y') }}</div>
-                </td>
-                <td>
-                    <div class="label">Jam Pemeriksaan</div>
-                    <div class="value">{{ \Carbon\Carbon::parse($rekamMedis->waktu_pemeriksaan)->format('H:i') }} WIB</div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="label">Ruangan</div>
-                    <div class="value">{{ $rekamMedis->appointment->jadwaldokter->ruang ?? '-' }}</div>
-                </td>
-                <td>
-                    <div class="label">No. SIP Dokter</div>
-                    <div class="value">{{ $rekamMedis->dokter->no_sip ?? '-' }}</div>
-                </td>
-            </tr>
-        </table>
+    <p style="font-size: 14px; font-weight: bold; margin: 0 0 12px 0;">
+        Rekam Medis Pasien
+    </p>
+
+    {{-- INFO PASIEN & KUNJUNGAN --}}
+    <table style="margin-bottom: 14px;">
+        <tr>
+            <td style="width: 25%; border: none; padding: 3px 8px 3px 0; color: #64748b;">Nama Pasien</td>
+            <td style="width: 25%; border: none; padding: 3px 0; font-weight: bold;">{{ $pasien->user->nama ?? '-' }}</td>
+            <td style="width: 25%; border: none; padding: 3px 8px 3px 0; color: #64748b;">No. RM</td>
+            <td style="width: 25%; border: none; padding: 3px 0; font-weight: bold;">
+                RM{{ str_pad($pasien->id_pasien ?? 0, 4, '0', STR_PAD_LEFT) }}
+            </td>
+        </tr>
+        <tr>
+            <td style="border: none; padding: 3px 8px 3px 0; color: #64748b;">Dokter</td>
+            <td style="border: none; padding: 3px 0; font-weight: bold;">{{ $rekamMedis->dokter->user->nama ?? '-' }}</td>
+            <td style="border: none; padding: 3px 8px 3px 0; color: #64748b;">Ruangan</td>
+            <td style="border: none; padding: 3px 0; font-weight: bold;">
+                {{ $rekamMedis->appointment->jadwal->ruang ?? '-' }}
+            </td>
+        </tr>
+        <tr>
+            <td style="border: none; padding: 3px 8px 3px 0; color: #64748b;">Tanggal Kunjungan</td>
+            <td style="border: none; padding: 3px 0; font-weight: bold;">
+                {{ \Carbon\Carbon::parse($rekamMedis->waktu_pemeriksaan)->translatedFormat('d F Y') }}
+            </td>
+            <td style="border: none; padding: 3px 8px 3px 0; color: #64748b;">Jam Pemeriksaan</td>
+            <td style="border: none; padding: 3px 0; font-weight: bold;">
+                {{ \Carbon\Carbon::parse($rekamMedis->waktu_pemeriksaan)->format('H:i') }} WIB
+            </td>
+        </tr>
+    </table>
+
+    {{-- KELUHAN --}}
+    <div class="info-box">
+        <div class="label">Keluhan</div>
+        <div class="value" style="font-weight: normal;">{{ $rekamMedis->keluhan ?? '-' }}</div>
     </div>
 
-    {{-- CLINICAL INFO --}}
-    {{-- FIX: dulu ada 2 field ("Keluhan Utama" dari appointment->keluhan_utama dan
-         "Keluhan Saat Pemeriksaan" dari rekamMedis->keluhan) yang isinya sering
-         double karena textarea Anamnesis di form dokter di-prefill dari keluhan_utama.
-         Sekarang cuma tampilkan rekamMedis->keluhan, data final yang benar-benar
-         diinput/dikonfirmasi dokter, biar konsisten dengan halaman pasien. --}}
-    <div class="section">
-        <div class="section-title">Informasi Klinis</div>
-        <table class="info-grid">
+    {{-- DIAGNOSIS --}}
+    <div class="info-box" style="background-color: #f0fdfa; border-color: #99f6e4;">
+        <div class="label" style="color: #0d9488;">Diagnosis</div>
+        <div class="value" style="color: #0f766e;">{{ $rekamMedis->diagnosa ?? '-' }}</div>
+    </div>
+
+    {{-- CATATAN DOKTER --}}
+    @if($rekamMedis->catatan_dokter)
+    <div class="info-box">
+        <div class="label">Catatan Dokter</div>
+        <div class="value" style="font-weight: normal;">{{ $rekamMedis->catatan_dokter }}</div>
+    </div>
+    @endif
+
+    {{-- RESEP OBAT --}}
+    <p style="font-size: 12px; font-weight: bold; color: #0f172a; margin: 18px 0 6px 0;">Resep Obat</p>
+
+    @if($rekamMedis->detailResep && $rekamMedis->detailResep->count() > 0)
+
+    <table>
+        <thead>
             <tr>
-                <td colspan="2">
-                    <div class="label">Keluhan</div>
-                    <div class="value">{{ $rekamMedis->keluhan ?? '-' }}</div>
-                </td>
+                <th>Nama Obat</th>
+                <th>Dosis</th>
+                <th>Aturan Pakai</th>
+                <th>Jumlah</th>
             </tr>
-        </table>
+        </thead>
+        <tbody>
+            @foreach($rekamMedis->detailResep as $resep)
+            <tr>
+                <td>{{ $resep->nama_obat }}</td>
+                <td>{{ $resep->dosis ?? '-' }}</td>
+                <td>{{ $resep->aturan_pakai ?? '-' }}</td>
+                <td>{{ $resep->jumlah }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
 
-        <div class="diagnosis-box">
-            <div class="label">Diagnosis</div>
-            <div class="value">{{ $rekamMedis->diagnosa ?? '-' }}</div>
-        </div>
+    {{-- PERINGATAN KEPATUHAN OBAT --}}
+    <div class="warning-box">
+        <p class="warning-title">Penting Diperhatikan</p>
+        <p class="warning-text">
+            Konsumsi obat sesuai dosis dan aturan pakai yang tertera di atas. Jangan menghentikan atau mengubah
+            dosis obat secara sepihak tanpa berkonsultasi dengan dokter. Jika muncul reaksi tidak biasa (alergi,
+            efek samping, atau kondisi memburuk), segera hubungi dokter atau fasilitas kesehatan terdekat.
+        </p>
     </div>
 
-    {{-- PRESCRIPTION --}}
-    <div class="section">
-        <div class="section-title">Resep Obat</div>
-        @if($rekamMedis->detailResep && $rekamMedis->detailResep->count() > 0)
-        <table class="resep-table">
-            <thead>
-                <tr>
-                    <th>Nama Obat</th>
-                    <th>Dosis</th>
-                    <th>Jumlah</th>
-                    <th>Aturan Pakai</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($rekamMedis->detailResep as $resep)
-                <tr>
-                    <td>{{ $resep->nama_obat }}</td>
-                    <td>{{ $resep->dosis ?? '-' }}</td>
-                    <td>{{ $resep->jumlah }} pcs</td>
-                    <td>{{ $resep->aturan_pakai ?? '-' }}</td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-        @else
-        <p class="notes">Tidak ada resep obat.</p>
-        @endif
-    </div>
-
-    {{-- NOTES --}}
-    <div class="section">
-        <div class="section-title">Catatan Dokter</div>
-        <p class="notes">{{ $rekamMedis->catatan_dokter ?? 'Tidak ada catatan dari dokter.' }}</p>
-    </div>
+    @else
+    <p style="font-size: 11px; color: #94a3b8;">Tidak ada resep obat pada kunjungan ini.</p>
+    @endif
 
     <div class="footer">
-        Dokumen ini dicetak otomatis dari sistem dan sah tanpa tanda tangan basah.
+        {{ $setting->clinic_name ?? 'DigitalCare Clinic' }} &middot; Dokumen Rahasia
     </div>
 
 </body>

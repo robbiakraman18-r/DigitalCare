@@ -9,11 +9,11 @@
         <div>
 
             <h1 class="text-3xl font-bold text-slate-800">
-                Reports
+                Laporan Klinik
             </h1>
 
             <p class="text-slate-500 mt-1">
-                Monitor clinic analytics, appointments, patients and performance
+                Pantau analisis klinik, janji temu, pasien, dan kinerja.
             </p>
 
         </div>
@@ -30,7 +30,7 @@
                 <div>
 
                     <p class="text-sm text-slate-400">
-                        Total Appointments
+                        Total Janji Temu
                     </p>
 
                     <h2 class="text-3xl font-bold text-slate-800 mt-2">
@@ -38,7 +38,7 @@
                     </h2>
 
                     <p class="text-blue-500 text-sm mt-2">
-                        {{ $completionRate }}% completed
+                        {{ $completionRate }}% Selesai
                     </p>
 
                 </div>
@@ -61,7 +61,7 @@
                 <div>
 
                     <p class="text-sm text-slate-400">
-                        Completed Appointments
+                        Janji Temu Selesai
                     </p>
 
                     <h2 class="text-3xl font-bold text-slate-800 mt-2">
@@ -69,7 +69,7 @@
                     </h2>
 
                     <p class="text-green-500 text-sm mt-2">
-                        {{ $cancellationRate }}% cancelled
+                        {{ $cancellationRate }}% Dibatalkan
                     </p>
 
                 </div>
@@ -92,7 +92,7 @@
                 <div>
 
                     <p class="text-sm text-slate-400">
-                        New Patients
+                        Pasien Baru
                     </p>
 
                     <h2 class="text-3xl font-bold text-slate-800 mt-2">
@@ -100,7 +100,7 @@
                     </h2>
 
                     <p class="text-cyan-500 text-sm mt-2">
-                        this month &middot; {{ number_format($totalPatients) }} total
+                        bulan ini &middot; {{ number_format($totalPatients) }} pasien
                     </p>
 
                 </div>
@@ -123,7 +123,7 @@
                 <div>
 
                     <p class="text-sm text-slate-400">
-                        Doctors Active
+                        Dokter Aktif
                     </p>
 
                     <h2 class="text-3xl font-bold text-slate-800 mt-2">
@@ -131,7 +131,7 @@
                     </h2>
 
                     <p class="text-yellow-500 text-sm mt-2">
-                        of {{ $totalDoctors }} total
+                        Dari total {{ $totalDoctors }} dokter
                     </p>
 
                 </div>
@@ -159,17 +159,17 @@
                 <div>
 
                     <h2 class="text-xl font-bold text-slate-800">
-                        Appointments Overview
+                        Ringkasan Janji Temu
                     </h2>
 
                     <p class="text-sm text-slate-400 mt-1">
-                        Volume of appointments in the last 6 months
+                        Jumlah janji temu selama 6 bulan terakhir
                     </p>
 
                 </div>
 
                 <span class="px-4 py-2 rounded-xl border border-slate-200 text-sm text-slate-500">
-                    Monthly
+                    Bulanan
                 </span>
 
             </div>
@@ -210,11 +210,11 @@
             <div>
 
                 <h2 class="text-xl font-bold text-slate-800">
-                    Performance
+                    Kinerja Klinik
                 </h2>
 
                 <p class="text-sm text-slate-400 mt-1">
-                    Overall clinic statistics
+                    Statistik keseluruhan klinik
                 </p>
 
             </div>
@@ -227,7 +227,7 @@
                     <div class="flex items-center justify-between mb-2">
 
                         <span class="text-sm text-slate-600">
-                            Appointment Completion
+                            Penyelesaian Janji Temu
                         </span>
 
                         <span class="text-sm font-semibold text-slate-800">
@@ -250,7 +250,7 @@
                     <div class="flex items-center justify-between mb-2">
 
                         <span class="text-sm text-slate-600">
-                            Doctor Availability
+                            Ketersediaan Dokter
                         </span>
 
                         <span class="text-sm font-semibold text-slate-800">
@@ -273,7 +273,7 @@
                     <div class="flex items-center justify-between mb-2">
 
                         <span class="text-sm text-slate-600">
-                            Cancellation Rate
+                            Tingkat Pembatalan
                         </span>
 
                         <span class="text-sm font-semibold text-slate-800">
@@ -305,11 +305,11 @@
             <div>
 
                 <h2 class="text-xl font-bold text-slate-800">
-                    Available Reports
+                    Laporan Tersedia
                 </h2>
 
                 <p class="text-sm text-slate-400 mt-1">
-                    Generate and download clinic reports
+                    Buat dan unduh laporan klinik 
                 </p>
 
             </div>
@@ -319,7 +319,7 @@
                 class="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold transition inline-flex items-center gap-2">
 
                 <i data-lucide="file-down" class="w-4 h-4"></i>
-                Generate Summary Report
+                Unduh Laporan Ringkasan
 
             </a>
 
@@ -335,19 +335,19 @@
                     <tr>
 
                         <th class="px-6 py-4 text-left text-sm text-slate-400 font-semibold">
-                            Report Name
+                            Nama Laporan
                         </th>
 
                         <th class="px-6 py-4 text-left text-sm text-slate-400 font-semibold">
-                            Category
+                            Kategori
                         </th>
 
                         <th class="px-6 py-4 text-left text-sm text-slate-400 font-semibold">
-                            Records
+                            Jumlah Data
                         </th>
 
                         <th class="px-6 py-4 text-center text-sm text-slate-400 font-semibold">
-                            Export
+                            Ekspor
                         </th>
 
                     </tr>
@@ -377,7 +377,7 @@
                                     </h3>
 
                                     <p class="text-sm text-slate-400">
-                                        Clinic Report
+                                        Laporan Klinik
                                     </p>
 
                                 </div>

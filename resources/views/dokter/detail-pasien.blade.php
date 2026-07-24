@@ -5,6 +5,18 @@
 @php
     $latestAppointment = $pasien->appointments->sortByDesc('tanggal_janji')->first();
 @endphp
+@php
+    $latestAppointment = $pasien->appointments->sortByDesc('tanggal_janji')->first();
+
+    $nama    = $pasien->user->nama ?? 'Pasien';
+    $inisial = collect(explode(' ', $nama))
+                    ->take(2)
+                    ->map(fn($w) => strtoupper($w[0]))
+                    ->join('');
+
+    $colors  = ['teal','cyan','indigo','purple','orange','pink'];
+    $color   = $colors[$pasien->id_pasien % count($colors)];
+@endphp
 
 <div class="space-y-6">
 
@@ -13,17 +25,17 @@
 
         <div>
             <h1 class="text-3xl font-bold text-slate-800">
-                Patient Details
+                Detail Pasien
             </h1>
 
             <p class="text-slate-400 mt-1">
-                Complete consultation patient information.
+                Informasi lengkap pasien dan riwayat konsultasi
             </p>
         </div>
 
         <a href="{{ route('dokter.pasien') }}"
            class="px-5 py-3 rounded-2xl bg-slate-100 hover:bg-slate-200 font-semibold transition">
-            Back
+            Kembali
         </a>
     </div>
 
@@ -33,9 +45,14 @@
         <div class="flex flex-col lg:flex-row lg:items-center gap-6">
 
             {{-- FIX: tabel pasiens tidak punya kolom foto, jadi pakai avatar generik --}}
-            <img
-                src="https://i.pravatar.cc/150?img=12"
-                class="w-28 h-28 rounded-3xl object-cover">
+            <div
+    class="w-28 h-28 rounded-3xl bg-{{ $color }}-100
+    text-{{ $color }}-600 flex items-center justify-center
+    text-3xl font-bold shrink-0">
+
+    {{ $inisial }}
+
+</div>
 
             <div class="flex-1">
 
@@ -51,12 +68,12 @@
                 <div class="flex flex-wrap gap-3 mt-5">
 
                     <span class="px-4 py-2 rounded-xl bg-teal-100 text-teal-600 text-sm font-semibold">
-                        Active Patient
+                        Pasien Aktif
                     </span>
 
                     @if($latestAppointment)
                     <span class="px-4 py-2 rounded-xl bg-cyan-100 text-cyan-600 text-sm font-semibold">
-                        Last Visit: {{ \Carbon\Carbon::parse($latestAppointment->tanggal_janji)->format('d M Y') }}
+                        Kunjungan Terakhir: {{ \Carbon\Carbon::parse($latestAppointment->tanggal_janji)->format('d M Y') }}
                     </span>
                     @endif
 
@@ -75,13 +92,13 @@
         <div class="bg-white rounded-[32px] border border-slate-100 shadow-sm p-7">
 
             <h2 class="text-xl font-bold text-slate-800 mb-6">
-                Patient Biodata
+                Biodata Pasien
             </h2>
 
             <div class="space-y-5">
 
                 <div class="flex justify-between">
-                    <span class="text-slate-400">Full Name</span>
+                    <span class="text-slate-400">Nama Lengkap</span>
                     {{-- FIX: kolom di tabel users bernama `nama`, bukan `name` --}}
                     <span class="font-semibold text-slate-700">
                         {{ $pasien->user->nama ?? '-' }}
@@ -89,7 +106,7 @@
                 </div>
 
                 <div class="flex justify-between">
-                    <span class="text-slate-400">Age</span>
+                    <span class="text-slate-400">Umur</span>
                     <span class="font-semibold text-slate-700">
                         {{ $pasien->birth_date ? \Carbon\Carbon::parse($pasien->birth_date)->age . ' Years Old' : '-' }}
                     </span>
@@ -98,21 +115,21 @@
                 {{-- FIX: nilai enum gender di DB adalah 'Male'/'Female', bukan 'L'/'P',
                      jadi tinggal ditampilkan langsung tanpa ternary yang salah bandingin --}}
                 <div class="flex justify-between">
-                    <span class="text-slate-400">Gender</span>
+                    <span class="text-slate-400">Jenis Kelamin</span>
                     <span class="font-semibold text-slate-700">
                         {{ $pasien->gender ?? '-' }}
                     </span>
                 </div>
 
                 <div class="flex justify-between">
-                    <span class="text-slate-400">Phone Number</span>
+                    <span class="text-slate-400">Nomor Telepon</span>
                     <span class="font-semibold text-slate-700">
                         {{ $pasien->phone_number ?? '-' }}
                     </span>
                 </div>
 
                 <div class="flex justify-between">
-                    <span class="text-slate-400">Address</span>
+                    <span class="text-slate-400">Alamat</span>
                     <span class="font-semibold text-slate-700 text-right">
                         {{ $pasien->address ?? '-' }}
                     </span>
@@ -126,7 +143,7 @@
         <div class="bg-white rounded-[32px] border border-slate-100 shadow-sm p-7">
 
             <h2 class="text-xl font-bold text-slate-800 mb-6">
-                Latest Consultation
+                Kunjungan Terakhir
             </h2>
 
             @if($latestAppointment)
@@ -134,18 +151,19 @@
             <div class="space-y-5">
 
                 <div class="flex justify-between">
-                    <span class="text-slate-400">Date</span>
+                    <span class="text-slate-400">Tanggal</span>
                     <span class="font-semibold text-slate-700">
                         {{ \Carbon\Carbon::parse($latestAppointment->tanggal_janji)->format('d M Y') }}
                     </span>
                 </div>
 
                 <div class="flex justify-between">
-                    <span class="text-slate-400">Complaint</span>
-                    <span class="font-semibold text-slate-700">
-                        {{ $latestAppointment->keluhan_utama ?? '-' }}
-                    </span>
-                </div>
+    <span class="text-slate-400">Keluhan</span>
+
+    <span class="font-semibold text-slate-700 text-right max-w-md">
+        {{ $latestAppointment->keluhan_utama ?? '-' }}
+    </span>
+</div>
 
                 <div class="flex justify-between">
                     <span class="text-slate-400">Status</span>
@@ -164,7 +182,7 @@
                 <div class="pt-4 border-t">
 
                     <p class="text-slate-400 text-sm mb-2">
-                        Doctor Notes
+                        Catatan Dokter
                     </p>
 
                     <p class="text-slate-700 leading-relaxed">
@@ -178,7 +196,7 @@
             </div>
 
             @else
-                <p class="text-slate-400">No consultation found</p>
+                <p class="text-slate-400">Tidak ada kunjungan terakhir</p>
             @endif
 
         </div>
@@ -189,7 +207,7 @@
     <div class="bg-white rounded-[32px] border border-slate-100 shadow-sm p-7">
 
         <h2 class="text-xl font-bold text-slate-800 mb-6">
-            Medical History
+            Riwayat Rekam Medis
         </h2>
 
         <div class="space-y-4">
@@ -226,7 +244,7 @@
                 @endif
 
             @empty
-                <p class="text-slate-400">No medical history</p>
+                <p class="text-slate-400">Tidak ada riwayat medis</p>
             @endforelse
 
         </div>

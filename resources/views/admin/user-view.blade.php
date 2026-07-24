@@ -25,9 +25,17 @@
 
     $roleMeta = [
         'admin'  => ['label' => 'Administrator', 'icon' => 'shield-check', 'chip' => 'from-red-500 to-pink-500',    'soft' => 'bg-red-50 text-red-600'],
-        'dokter' => ['label' => 'Doctor',         'icon' => 'stethoscope',  'chip' => 'from-blue-500 to-cyan-500',   'soft' => 'bg-blue-50 text-blue-600'],
-        'pasien' => ['label' => 'Patient',        'icon' => 'user',         'chip' => 'from-green-500 to-emerald-500', 'soft' => 'bg-green-50 text-green-600'],
+        'dokter' => ['label' => 'Dokter',         'icon' => 'stethoscope',  'chip' => 'from-blue-500 to-cyan-500',   'soft' => 'bg-blue-50 text-blue-600'],
+        'pasien' => ['label' => 'Pasien',         'icon' => 'user',         'chip' => 'from-green-500 to-emerald-500', 'soft' => 'bg-green-50 text-green-600'],
     ][$user->role] ?? ['label' => ucfirst($user->role), 'icon' => 'user', 'chip' => 'from-slate-400 to-slate-500', 'soft' => 'bg-slate-100 text-slate-600'];
+
+    $genderLabel = function($gender) {
+        return match($gender) {
+            'Male'   => 'Laki-laki',
+            'Female' => 'Perempuan',
+            default  => $gender ?? '-',
+        };
+    };
 @endphp
 
 <div class="space-y-6 w-full">
@@ -36,28 +44,28 @@
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 
         <div>
-            <a
-            href="{{ route('admin.user-management') }}"
+            
+            <a href="{{ route('admin.user-management') }}"
             class="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-slate-600 transition mb-2">
                 <i data-lucide="chevron-left" class="w-4 h-4"></i>
-                Back to User Management
+                Kembali ke Manajemen Pengguna
             </a>
 
             <h1 class="text-3xl font-bold text-slate-800">
-                {{ $roleMeta['label'] }} Profile
+                Profil {{ $roleMeta['label'] }}
             </h1>
 
             <p class="text-slate-400 mt-1">
-                Viewing account details for {{ $user->nama }}.
+                Melihat detail akun untuk {{ $user->nama }}.
             </p>
         </div>
 
         @if($user->role === 'dokter')
-        <a
-        href="{{ route('admin.user.edit', $user->id) }}"
+        
+        <a href="{{ route('admin.user.edit', $user->id) }}"
         class="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold transition inline-flex items-center gap-2 w-fit">
             <i data-lucide="square-pen" class="w-4 h-4"></i>
-            Edit Profile
+            Edit Profil
         </a>
         @endif
 
@@ -106,7 +114,7 @@
                             {{ $roleMeta['label'] }}
                         </span>
                         <span class="px-3 py-1 rounded-full text-xs font-semibold {{ $user->status == 'active' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-500' }}">
-                            {{ $user->status == 'active' ? 'Active' : 'Inactive' }}
+                            {{ $user->status == 'active' ? 'Aktif' : 'Tidak Aktif' }}
                         </span>
                     </div>
                 </div>
@@ -118,7 +126,7 @@
 
             <!-- ACCOUNT -->
             <div>
-                <p class="text-xs font-bold uppercase tracking-wide text-slate-400 mb-4">Account</p>
+                <p class="text-xs font-bold uppercase tracking-wide text-slate-400 mb-4">Akun</p>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
                     <div class="flex items-start gap-3 p-4 rounded-2xl bg-slate-50">
@@ -136,7 +144,7 @@
                             <i data-lucide="calendar" class="w-4 h-4"></i>
                         </div>
                         <div class="min-w-0">
-                            <p class="text-xs text-slate-400">Joined</p>
+                            <p class="text-xs text-slate-400">Bergabung</p>
                             <p class="font-semibold text-slate-800 text-sm">{{ $user->created_at->format('d M Y, H:i') }}</p>
                         </div>
                     </div>
@@ -147,7 +155,7 @@
             @if($user->role == 'dokter')
             <!-- PROFESSIONAL DETAILS -->
             <div>
-                <p class="text-xs font-bold uppercase tracking-wide text-slate-400 mb-4">Professional Details</p>
+                <p class="text-xs font-bold uppercase tracking-wide text-slate-400 mb-4">Detail Profesional</p>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
 
                     <div class="flex items-start gap-3 p-4 rounded-2xl bg-slate-50">
@@ -165,8 +173,8 @@
                             <i data-lucide="{{ optional($dokter)->gender == 'Female' ? 'venus' : 'mars' }}" class="w-4 h-4"></i>
                         </div>
                         <div class="min-w-0">
-                            <p class="text-xs text-slate-400">Gender</p>
-                            <p class="font-semibold text-slate-800 text-sm">{{ optional($dokter)->gender ?? '-' }}</p>
+                            <p class="text-xs text-slate-400">Jenis Kelamin</p>
+                            <p class="font-semibold text-slate-800 text-sm">{{ $genderLabel(optional($dokter)->gender) }}</p>
                         </div>
                     </div>
 
@@ -175,7 +183,7 @@
                             <i data-lucide="activity" class="w-4 h-4"></i>
                         </div>
                         <div class="min-w-0">
-                            <p class="text-xs text-slate-400">Availability</p>
+                            <p class="text-xs text-slate-400">Ketersediaan</p>
                             <p class="font-semibold text-slate-800 text-sm">{{ optional($dokter)->status_ketersediaan ?? '-' }}</p>
                         </div>
                     </div>
@@ -187,7 +195,7 @@
             @if($user->role == 'pasien')
             <!-- PERSONAL INFORMATION -->
             <div>
-                <p class="text-xs font-bold uppercase tracking-wide text-slate-400 mb-4">Personal Information</p>
+                <p class="text-xs font-bold uppercase tracking-wide text-slate-400 mb-4">Informasi Pribadi</p>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
                     <div class="flex items-start gap-3 p-4 rounded-2xl bg-slate-50">
@@ -215,7 +223,7 @@
                             <i data-lucide="cake" class="w-4 h-4"></i>
                         </div>
                         <div class="min-w-0">
-                            <p class="text-xs text-slate-400">Birth Date</p>
+                            <p class="text-xs text-slate-400">Tanggal Lahir</p>
                             <p class="font-semibold text-slate-800 text-sm">{{ optional($pasien)->birth_date ? \Carbon\Carbon::parse($pasien->birth_date)->format('d M Y') : '-' }}</p>
                         </div>
                     </div>
@@ -225,7 +233,7 @@
                             <i data-lucide="phone" class="w-4 h-4"></i>
                         </div>
                         <div class="min-w-0">
-                            <p class="text-xs text-slate-400">Phone Number</p>
+                            <p class="text-xs text-slate-400">Nomor Telepon</p>
                             <p class="font-semibold text-slate-800 text-sm">{{ optional($pasien)->phone_number ?? '-' }}</p>
                         </div>
                     </div>
@@ -235,8 +243,8 @@
                             <i data-lucide="{{ optional($pasien)->gender == 'Female' ? 'venus' : 'mars' }}" class="w-4 h-4"></i>
                         </div>
                         <div class="min-w-0">
-                            <p class="text-xs text-slate-400">Gender</p>
-                            <p class="font-semibold text-slate-800 text-sm">{{ optional($pasien)->gender ?? '-' }}</p>
+                            <p class="text-xs text-slate-400">Jenis Kelamin</p>
+                            <p class="font-semibold text-slate-800 text-sm">{{ $genderLabel(optional($pasien)->gender) }}</p>
                         </div>
                     </div>
 
@@ -245,7 +253,7 @@
                             <i data-lucide="map-pin" class="w-4 h-4"></i>
                         </div>
                         <div class="min-w-0">
-                            <p class="text-xs text-slate-400">Address</p>
+                            <p class="text-xs text-slate-400">Alamat</p>
                             <p class="font-semibold text-slate-800 text-sm">{{ optional($pasien)->address ?? '-' }}</p>
                         </div>
                     </div>
@@ -257,18 +265,18 @@
             @if($user->role == 'admin')
             <!-- ADMINISTRATOR INFO -->
             <div>
-                <p class="text-xs font-bold uppercase tracking-wide text-slate-400 mb-4">Administrator Info</p>
+                <p class="text-xs font-bold uppercase tracking-wide text-slate-400 mb-4">Info Administrator</p>
                 <div class="flex items-start gap-3 p-4 rounded-2xl bg-slate-50 max-w-sm">
                     <div class="w-10 h-10 rounded-xl {{ $roleMeta['soft'] }} flex items-center justify-center shrink-0">
                         <i data-lucide="shield" class="w-4 h-4"></i>
                     </div>
                     <div class="min-w-0">
-                        <p class="text-xs text-slate-400">Admin ID</p>
+                        <p class="text-xs text-slate-400">ID Admin</p>
                         <p class="font-semibold text-slate-800 text-sm">{{ $displayId }}</p>
                     </div>
                 </div>
                 <p class="text-xs text-slate-400 mt-3 italic">
-                    Administrator accounts have full system access and their role cannot be changed from here.
+                    Akun administrator memiliki akses penuh ke sistem dan perannya tidak dapat diubah dari sini.
                 </p>
             </div>
             @endif

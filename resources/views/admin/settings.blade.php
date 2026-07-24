@@ -10,10 +10,10 @@
     {{-- HEADER --}}
     <div>
         <h1 class="text-3xl font-bold text-slate-800">
-            Clinic Settings
+            Pengaturan Klinik
         </h1>
         <p class="text-slate-500 mt-1">
-            Manage your clinic profile, operational hours, and legal information
+            Kelola profil klinik, jam operasional, dan informasi legal.
         </p>
     </div>
 
@@ -33,8 +33,8 @@
                 <i data-lucide="building-2" class="w-4 h-4 text-teal-600"></i>
             </div>
             <div>
-                <h2 class="font-semibold text-slate-800">General Information</h2>
-                <p class="text-xs text-slate-400">Clinic name, type, and contact details</p>
+                <h2 class="font-semibold text-slate-800">Informasi Umum</h2>
+                <p class="text-xs text-slate-400">Nama klinik, jenis klinik, dan informasi kontak.</p>
             </div>
         </div>
 
@@ -63,14 +63,14 @@
 
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1">
-                        Clinic Photo
+                        Logo Klinik
                     </label>
                     <input
                         type="file"
                         name="clinic_logo"
                         accept="image/png,image/jpeg"
                         class="text-sm text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-teal-50 file:text-teal-600 file:font-medium hover:file:bg-teal-100">
-                    <p class="text-xs text-slate-400 mt-1">PNG atau JPG, maks 2MB</p>
+                    <p class="text-xs text-slate-400 mt-1">Format PNG atau JPG, maksimal 2 MB.</p>
                 </div>
 
             </div>
@@ -79,7 +79,7 @@
 
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1">
-                        Clinic Name <span class="text-red-400">*</span>
+                        Nama Klinik <span class="text-red-400">*</span>
                     </label>
                     <input
                         type="text"
@@ -97,18 +97,18 @@
                         type="text"
                         name="clinic_tagline"
                         value="{{ old('clinic_tagline', $setting->clinic_tagline) }}"
-                        placeholder="e.g. Kesehatan Anda, Prioritas Kami"
+                        placeholder="Contoh: Kesehatan Anda, Prioritas Kami"
                         class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-300">
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1">
-                        Clinic Type
+                        Jenis Klinik
                     </label>
                     <select
                         name="clinic_type"
                         class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-300">
-                        @foreach(['General Clinic', 'Specialist Clinic', 'Dental Clinic', 'Maternity Clinic', 'Eye Clinic', 'Hospital'] as $type)
+                        @foreach(['Klinik Umum', 'Klinik Spesialis', 'Klinik Gigi', 'Klinik Kehamilan', 'Klinik Mata', 'Rumah Sakit'] as $type)
                         <option value="{{ $type }}" {{ old('clinic_type', $setting->clinic_type) == $type ? 'selected' : '' }}>
                             {{ $type }}
                         </option>
@@ -129,7 +129,7 @@
 
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1">
-                        Phone
+                        Nomor Telepon
                     </label>
                     <input
                         type="text"
@@ -168,7 +168,7 @@
                 <button
                     type="submit"
                     class="px-6 py-3 rounded-2xl bg-teal-500 hover:bg-teal-600 text-white font-semibold text-sm transition">
-                    Save General Info
+                    Simpan Informasi Umum
                 </button>
             </div>
 
@@ -184,8 +184,8 @@
                 <i data-lucide="map-pin" class="w-4 h-4 text-blue-600"></i>
             </div>
             <div>
-                <h2 class="font-semibold text-slate-800">Address</h2>
-                <p class="text-xs text-slate-400">Clinic location and Google Maps link</p>
+                <h2 class="font-semibold text-slate-800">Alamat Klinik</h2>
+                <p class="text-xs text-slate-400">Lokasi lengkap dan tautan Google Maps</p>
             </div>
         </div>
 
@@ -199,7 +199,7 @@
 
             <div>
                 <label class="block text-sm font-medium text-slate-700 mb-1">
-                    Street Address
+                    Alamat Lengkap
                 </label>
                 <textarea
                     name="address"
@@ -210,7 +210,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
                 <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">City</label>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Kota</label>
                     <input
                         type="text"
                         name="city"
@@ -219,7 +219,7 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Province</label>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Provinsi</label>
                     <input
                         type="text"
                         name="province"
@@ -228,7 +228,7 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Postal Code</label>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Kode Pos</label>
                     <input
                         type="text"
                         name="postal_code"
@@ -240,7 +240,7 @@
 
             <div>
                 <label class="block text-sm font-medium text-slate-700 mb-1">
-                    Google Maps URL
+                    Tautan Google Maps
                 </label>
                 <input
                     type="url"
@@ -254,7 +254,7 @@
                 <button
                     type="submit"
                     class="px-6 py-3 rounded-2xl bg-teal-500 hover:bg-teal-600 text-white font-semibold text-sm transition">
-                    Save Address
+                    Simpan Alamat
                 </button>
             </div>
 
@@ -270,8 +270,8 @@
                 <i data-lucide="clock" class="w-4 h-4 text-orange-500"></i>
             </div>
             <div>
-                <h2 class="font-semibold text-slate-800">Operational Hours</h2>
-                <p class="text-xs text-slate-400">Opening hours and availability</p>
+                <h2 class="font-semibold text-slate-800">Jam Operasional</h2>
+                <p class="text-xs text-slate-400">Atur hari dan jam operasional klinik.</p>
             </div>
         </div>
 
@@ -287,19 +287,19 @@
 
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1">
-                        Open Days
+                        Hari Operasional
                     </label>
                     <input
                         type="text"
                         name="open_days"
                         value="{{ old('open_days', $setting->open_days) }}"
-                        placeholder="e.g. Senin - Sabtu"
+                        placeholder="Contoh: Senin - Sabtu"
                         class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-300">
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1">
-                        Open Time
+                        Jam Buka
                     </label>
                     <input
                         type="time"
@@ -310,7 +310,7 @@
 
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1">
-                        Close Time
+                        Jam Tutup
                     </label>
                     <input
                         type="time"
@@ -330,7 +330,7 @@
                         value="1"
                         {{ old('is_open_sunday', $setting->is_open_sunday) ? 'checked' : '' }}
                         class="w-4 h-4 rounded accent-teal-500">
-                    <span class="text-sm text-slate-700">Open on Sunday</span>
+                    <span class="text-sm text-slate-700">Buka hari Minggu</span>
                 </label>
 
                 <label class="flex items-center gap-3 cursor-pointer">
@@ -340,20 +340,20 @@
                         value="1"
                         {{ old('is_open_24h', $setting->is_open_24h) ? 'checked' : '' }}
                         class="w-4 h-4 rounded accent-teal-500">
-                    <span class="text-sm text-slate-700">Open 24 Hours</span>
+                    <span class="text-sm text-slate-700">Buka 24 Jam</span>
                 </label>
 
             </div>
 
             <div>
                 <label class="block text-sm font-medium text-slate-700 mb-1">
-                    Sunday Hours <span class="text-slate-400 font-normal">(if open)</span>
+                    Jam operasional hari Minggu <span class="text-slate-400 font-normal">(jika buka)</span>
                 </label>
                 <input
                     type="text"
                     name="sunday_hours"
                     value="{{ old('sunday_hours', $setting->sunday_hours) }}"
-                    placeholder="e.g. 08:00 - 12:00"
+                    placeholder="Contoh: 08:00 - 12:00"
                     class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-300">
             </div>
 
@@ -361,7 +361,7 @@
                 <button
                     type="submit"
                     class="px-6 py-3 rounded-2xl bg-teal-500 hover:bg-teal-600 text-white font-semibold text-sm transition">
-                    Save Hours
+                    Simpan Jam Operasional
                 </button>
             </div>
 
@@ -378,7 +378,7 @@
             </div>
             <div>
                 <h2 class="font-semibold text-slate-800">Social Media</h2>
-                <p class="text-xs text-slate-400">Clinic social media links</p>
+                <p class="text-xs text-slate-400">Tautan media sosial klinik</p>
             </div>
         </div>
 
@@ -466,7 +466,7 @@
                 <button
                     type="submit"
                     class="px-6 py-3 rounded-2xl bg-teal-500 hover:bg-teal-600 text-white font-semibold text-sm transition">
-                    Save Social Media
+                    Simpan Tautan Media Sosial
                 </button>
             </div>
 
@@ -482,8 +482,8 @@
                 <i data-lucide="shield-check" class="w-4 h-4 text-slate-600"></i>
             </div>
             <div>
-                <h2 class="font-semibold text-slate-800">Legal Information</h2>
-                <p class="text-xs text-slate-400">Clinic license and tax information</p>
+                <h2 class="font-semibold text-slate-800">Informasi Legal</h2>
+                <p class="text-xs text-slate-400">Informasi izin operasional dan perpajakan klinik.</p>
             </div>
         </div>
 
@@ -499,7 +499,7 @@
 
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1">
-                        License Number <span class="text-slate-400 font-normal">(No. Izin Klinik)</span>
+                        Nomor Izin Klinik <span class="text-slate-400 font-normal">(No. Izin Klinik)</span>
                     </label>
                     <input
                         type="text"
@@ -510,7 +510,7 @@
 
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1">
-                        Tax Number <span class="text-slate-400 font-normal">(NPWP)</span>
+                        Nomor Pajak <span class="text-slate-400 font-normal">(NPWP)</span>
                     </label>
                     <input
                         type="text"
@@ -521,7 +521,7 @@
 
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1">
-                        License Expiry Date
+                        Tanggal Kedaluwarsa Izin Klinik
                     </label>
                     <input
                         type="date"
@@ -539,11 +539,11 @@
             <div class="flex items-center gap-2 text-sm {{ $daysLeft < 30 ? 'text-red-500' : 'text-slate-500' }}">
                 <i data-lucide="{{ $daysLeft < 30 ? 'alert-triangle' : 'info' }}" class="w-4 h-4"></i>
                 @if($daysLeft < 0)
-                    License has expired {{ abs($daysLeft) }} days ago.
+                    Masa berlaku izin telah berakhir {{ abs($daysLeft) }} hari yang lalu.
                 @elseif($daysLeft < 30)
-                    License expires in {{ $daysLeft }} days. Please renew soon.
+                    Izin akan berakhir dalam {{ $daysLeft }} hari. Segera lakukan perpanjangan.
                 @else
-                    License is valid for {{ $daysLeft }} more days.
+                    Izin masih berlaku selama {{ $daysLeft }} hari lagi.
                 @endif
             </div>
             @endif
@@ -552,7 +552,7 @@
                 <button
                     type="submit"
                     class="px-6 py-3 rounded-2xl bg-teal-500 hover:bg-teal-600 text-white font-semibold text-sm transition">
-                    Save Legal Info
+                    Simpan Informasi Legal
                 </button>
             </div>
 

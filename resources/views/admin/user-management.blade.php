@@ -10,11 +10,11 @@
         <div>
 
             <h1 class="text-3xl font-bold text-slate-800">
-                User Management
+                Manajemen Pengguna
             </h1>
 
             <p class="text-slate-400 mt-1">
-                Manage system users, roles and permissions.
+                Kelola pengguna sistem, peran, dan hak akses.
             </p>
 
         </div>
@@ -23,7 +23,7 @@
             <a href="{{ route('admin.doctor.create') }}"
             class="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold transition">
 
-                + Add Doctor
+                + Tambah Dokter
 
             </a>
         </div>
@@ -40,7 +40,7 @@
                 <div>
 
                     <p class="text-slate-400 text-sm">
-                        Total Users
+                        Total Pengguna
                     </p>
 
                     <h2 class="text-3xl font-bold text-slate-800 mt-2">
@@ -48,7 +48,7 @@
                     </h2>
 
                     <p class="text-green-500 text-sm mt-2">
-                        System Users
+                        Pengguna Sistem
                     </p>
 
                 </div>
@@ -70,7 +70,7 @@
                 <div>
 
                     <p class="text-slate-400 text-sm">
-                        Doctors
+                        Dokter
                     </p>
 
                     <h2 class="text-3xl font-bold text-slate-800 mt-2">
@@ -78,7 +78,7 @@
                     </h2>
 
                     <p class="text-green-500 text-sm mt-2">
-                        Active Doctors
+                        Dokter Aktif
                     </p>
 
                 </div>
@@ -100,7 +100,7 @@
                 <div>
 
                     <p class="text-slate-400 text-sm">
-                        Patients
+                        Pasien
                     </p>
 
                     <h2 class="text-3xl font-bold text-slate-800 mt-2">
@@ -108,7 +108,7 @@
                     </h2>
 
                     <p class="text-green-500 text-sm mt-2">
-                        Registered Patients
+                        Pasien Terdaftar
                     </p>
 
                 </div>
@@ -130,7 +130,7 @@
                 <div>
 
                     <p class="text-slate-400 text-sm">
-                        Registered Users
+                        Pengguna Terdaftar
                     </p>
 
                     <h2 class="text-3xl font-bold text-slate-800 mt-2">
@@ -138,7 +138,7 @@
                     </h2>
 
                     <p class="text-green-500 text-sm mt-2">
-                        Current Active Accounts
+                        Akun Aktif Saat Ini
                     </p>
 
                 </div>
@@ -182,7 +182,7 @@
                     type="text"
                     name="search"
                     value="{{ request('search') }}"
-                    placeholder="Search user, role, email..."
+                    placeholder="Cari pengguna, peran, email..."
                     class="w-full pl-12 pr-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
 
                 </div>
@@ -197,7 +197,7 @@
                         class="w-full pl-12 pr-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none">
 
                         <option value="">
-                            All Roles
+                            Semua Peran
                         </option>
 
                         <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>
@@ -205,11 +205,11 @@
                         </option>
 
                         <option value="dokter" {{ request('role') == 'dokter' ? 'selected' : '' }}>
-                            🩺 Doctor
+                            🩺 Dokter
                         </option>
 
                         <option value="pasien" {{ request('role') == 'pasien' ? 'selected' : '' }}>
-                            👤 Patient
+                            👤 Pasien
                         </option>
 
                     </select>
@@ -244,11 +244,11 @@
                     <tr>
 
                         <th class="px-6 py-4 text-left text-sm text-slate-400">
-                            User
+                            Pengguna
                         </th>
 
                         <th class="px-6 py-4 text-left text-sm text-slate-400">
-                            Role
+                            Peran
                         </th>
 
                         <th class="px-6 py-4 text-left text-sm text-slate-400">
@@ -260,11 +260,11 @@
                         </th>
 
                         <th class="px-6 py-4 text-left text-sm text-slate-400">
-                            Created
+                            Dibuat
                         </th>
 
                         <th class="px-6 py-4 text-center text-sm text-slate-400">
-                            Actions
+                            Aksi
                         </th>
 
                     </tr>
@@ -347,12 +347,12 @@
                                         'icon'  => 'shield-check'
                                     ],
                                     'dokter' => [
-                                        'label' => 'Doctor',
+                                        'label' => 'Dokter',
                                         'class' => 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white',
                                         'icon'  => 'stethoscope'
                                     ],
                                     'pasien' => [
-                                        'label' => 'Patient',
+                                        'label' => 'Pasien',
                                         'class' => 'bg-gradient-to-r from-green-500 to-emerald-500 text-white',
                                         'icon'  => 'user'
                                     ],
@@ -380,12 +380,12 @@
 
                             @if($user->status == 'active')
                                 <span class="px-3 py-1 rounded-xl bg-green-100 text-green-600 text-xs font-semibold">
-                                    Active
+                                    Aktif
                                 </span>
                             @else
-                                <span class="px-3 py-1 rounded-xl bg-red-100 text-red-600 text-xs font-semibold">
-                                    Inactive
-                                </span>
+                            <span class="px-3 py-1 rounded-xl bg-red-100 text-red-600 text-xs font-semibold whitespace-nowrap">
+                                Tidak Aktif
+                            </span>
                             @endif
 
                         </td>
@@ -421,7 +421,7 @@
                                 <!-- TOGGLE STATUS -->
                                 @if($user->role === 'admin')
                                     <span class="px-3 py-1 rounded-xl bg-slate-200 text-slate-500 text-xs font-semibold">
-                                        Protected
+                                        Terlindungi
                                     </span>
                                 @else
                                     <button
@@ -454,7 +454,7 @@
 
                                     <button
                                     type="submit"
-                                    onclick="return confirm('Delete this user?')"
+                                    onclick="return confirm('Hapus pengguna ini?')"
                                     class="w-9 h-9 rounded-xl border border-red-200 flex items-center justify-center hover:bg-red-50 transition">
 
                                         <i data-lucide="trash-2" class="w-4 h-4 text-red-500"></i>
@@ -491,11 +491,11 @@
         </div>
 
         <h2 class="text-xl font-bold text-slate-800">
-            Change User Status
+            Ubah Status Pengguna
         </h2>
 
         <p class="text-slate-500 mt-2 text-sm">
-            Are you sure you want to change this user's status?
+            Apakah Anda yakin ingin mengubah status pengguna ini?
         </p>
 
         <div class="flex justify-end gap-3 mt-6">
@@ -503,7 +503,7 @@
             <button
                 onclick="closeStatusModal()"
                 class="px-4 py-2 rounded-xl border border-slate-200 text-slate-600">
-                Cancel
+                Batal
             </button>
 
             <form id="statusForm" method="POST">
@@ -513,7 +513,7 @@
                 <button
                     type="submit"
                     class="px-4 py-2 rounded-xl bg-red-500 text-white">
-                    Yes, Continue
+                    Ya, Lanjutkan
                 </button>
             </form>
 
@@ -528,7 +528,7 @@ document.querySelectorAll('form').forEach(form => {
         const btn = this.querySelector('button[type="submit"]');
         if (btn) {
             btn.disabled = true;
-            btn.innerText = "Processing...";
+            btn.innerText = "Memproses...";
         }
     });
 });

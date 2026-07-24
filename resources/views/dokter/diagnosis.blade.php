@@ -16,10 +16,10 @@
                 <div class="bg-white/20 px-6 py-4 rounded-3xl text-sm space-y-2">
                     {{-- FIX: kolom no_rekam_medis tidak ada di tabel appointments,
                          jadi langsung pakai format DCM26-{id_janji} tanpa akses kolom yang tidak ada --}}
-                    <div><span class="font-semibold">Medical Record :</span> DCM26-{{ $appointment->id_janji }}</div>
-                    <div><span class="font-semibold">Date :</span> {{ \Carbon\Carbon::parse($appointment->tanggal_janji)->format('d M Y') }}</div>
+                    <div><span class="font-semibold">No. Rekam Medis :</span> DCM26-{{ $appointment->id_janji }}</div>
+                    <div><span class="font-semibold">Tanggal :</span> {{ \Carbon\Carbon::parse($appointment->tanggal_janji)->format('d M Y') }}</div>
                     {{-- FIX: kolom di tabel appointments bernama jam_konsultasi, bukan jam_janji --}}
-                    <div><span class="font-semibold">Time :</span> {{ \Carbon\Carbon::parse($appointment->jam_konsultasi)->format('H:i') }} WIB</div>
+                    <div><span class="font-semibold">Waktu :</span> {{ \Carbon\Carbon::parse($appointment->jam_konsultasi)->format('H:i') }} WIB</div>
                 </div>
             </div>
         </div>
@@ -34,7 +34,7 @@
                 <div class="bg-sky-50 border border-sky-100 rounded-[30px] p-6">
                     <div class="flex items-center gap-3 mb-6">
                         <div class="w-12 h-12 rounded-2xl bg-blue-500 text-white flex items-center justify-center text-xl">👤</div>
-                        <h2 class="text-2xl font-bold text-slate-800">Patient Information</h2>
+                        <h2 class="text-2xl font-bold text-slate-800">Informasi Pasien</h2>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -42,21 +42,21 @@
                         <!-- LEFT — hanya tampilan, tidak di-submit -->
                         <div class="space-y-4">
                             <div>
-                                <label class="text-sm font-semibold">Patient Name</label>
+                                <label class="text-sm font-semibold">Nama Pasien</label>
                                 <input type="text"
                                     value="{{ $appointment->pasien->user->nama ?? '-' }}"
                                     readonly
                                     class="mt-2 w-full rounded-2xl border px-5 py-4 bg-slate-100 text-slate-500 cursor-not-allowed">
                             </div>
                             <div>
-                                <label class="text-sm font-semibold">Date of Birth</label>
+                                <label class="text-sm font-semibold">Tanggal Lahir</label>
                                 <input type="text"
                                     value="{{ $appointment->pasien->birth_date ? \Carbon\Carbon::parse($appointment->pasien->birth_date)->format('d M Y') : '-' }}"
                                     readonly
                                     class="mt-2 w-full rounded-2xl border px-5 py-4 bg-slate-100 text-slate-500 cursor-not-allowed">
                             </div>
                             <div>
-                                <label class="text-sm font-semibold">Gender</label>
+                                <label class="text-sm font-semibold">Jenis Kelamin</label>
                                 <input type="text"
                                     value="{{ $appointment->pasien->gender ?? '-' }}"
                                     readonly
@@ -67,7 +67,7 @@
                         <!-- RIGHT — semua readonly -->
                         <div class="space-y-4">
                             <div>
-                                <label class="text-sm font-semibold">Doctor Name</label>
+                                <label class="text-sm font-semibold">Nama Dokter</label>
                                 <input type="text"
                                     value="{{ $appointment->dokter->user->nama ?? '-' }}"
                                     readonly
@@ -135,18 +135,18 @@
 
                         <!-- PRESCRIPTION -->
                         <div class="bg-emerald-50 border border-emerald-100 rounded-[30px] p-6">
-                            <h3 class="text-xl font-bold text-emerald-700 mb-5">Prescription</h3>
+                            <h3 class="text-xl font-bold text-emerald-700 mb-5">Resep Obat</h3>
 
                             <div id="resep-container" class="space-y-3">
                                 {{-- Baris pertama tidak bisa dihapus --}}
                                 <div class="resep-row grid grid-cols-4 gap-3">
-                                    <input type="text" name="nama_obat[]" placeholder="Medicine Name" required
+                                    <input type="text" name="nama_obat[]" placeholder="Nama Obat" required
                                         class="rounded-2xl border px-4 py-3 bg-white">
-                                    <input type="text" name="dosis[]" placeholder="Dosage"
+                                    <input type="text" name="dosis[]" placeholder="Dosis"
                                         class="rounded-2xl border px-4 py-3 bg-white">
-                                    <input type="number" name="jumlah[]" placeholder="Qty" min="1"
+                                    <input type="number" name="jumlah[]" placeholder="Jumlah" min="1"
                                         class="rounded-2xl border px-4 py-3 bg-white">
-                                    <input type="text" name="aturan_pakai[]" placeholder="Usage"
+                                    <input type="text" name="aturan_pakai[]" placeholder="Aturan Pakai"
                                         class="rounded-2xl border px-4 py-3 bg-white">
                                 </div>
                             </div>
@@ -154,14 +154,14 @@
                             <div class="mt-4">
                                 <button type="button" onclick="tambahObat()"
                                     class="px-4 py-2 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition">
-                                    + Add Medicine
+                                    + Tambah Obat
                                 </button>
                             </div>
                         </div>
 
                         <!-- NOTES -->
                         <div class="bg-white border rounded-[30px] p-6 shadow-sm">
-                            <h3 class="text-xl font-bold mb-5">Additional Notes</h3>
+                            <h3 class="text-xl font-bold mb-5">Catatan Tambahan</h3>
                             <textarea name="catatan_dokter" rows="4"
                                 class="w-full rounded-2xl border px-5 py-4 bg-slate-50"></textarea>
                         </div>
@@ -174,7 +174,7 @@
                 <div class="pt-4">
                     <button type="submit"
                         class="w-full py-5 rounded-3xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold text-lg hover:opacity-90 transition">
-                        Save Diagnosis Report
+                        Simpan Diagnosis
                     </button>
                 </div>
 
@@ -188,14 +188,14 @@
 function tambahObat() {
     const html = `
         <div class="resep-row grid grid-cols-4 gap-3 relative">
-            <input type="text" name="nama_obat[]" placeholder="Medicine Name"
+            <input type="text" name="nama_obat[]" placeholder="Nama Obat" 
                 class="rounded-2xl border px-4 py-3 bg-white">
-            <input type="text" name="dosis[]" placeholder="Dosage"
+            <input type="text" name="dosis[]" placeholder="Dosis"
                 class="rounded-2xl border px-4 py-3 bg-white">
-            <input type="number" name="jumlah[]" placeholder="Qty" min="1"
+            <input type="number" name="jumlah[]" placeholder="Jumlah" min="1"
                 class="rounded-2xl border px-4 py-3 bg-white">
             <div class="relative">
-                <input type="text" name="aturan_pakai[]" placeholder="Usage"
+                <input type="text" name="aturan_pakai[]" placeholder="Aturan Pakai"
                     class="w-full rounded-2xl border px-4 py-3 bg-white">
                 <button type="button" onclick="hapusObat(this)"
                     class="absolute -top-2 -right-2 w-6 h-6 bg-red-400 hover:bg-red-600 text-white rounded-full text-xs font-bold leading-none">

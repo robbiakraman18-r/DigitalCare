@@ -21,7 +21,7 @@ class="fixed top-8 right-8 z-[9999]">
 
             <h2 class="font-bold text-slate-800">
 
-                Success
+                Berhasil
 
             </h2>
 
@@ -58,7 +58,7 @@ class="fixed top-8 right-8 z-[9999]">
 
             <h2 class="font-bold text-slate-800">
 
-                Failed
+                Gagal
 
             </h2>
 
@@ -83,11 +83,11 @@ class="fixed top-8 right-8 z-[9999]">
         <div>
 
             <h1 class="text-3xl font-bold text-slate-800">
-                Schedule Management
+                Manajemen Jadwal
             </h1>
 
             <p class="text-slate-500 mt-1">
-                Schedule Management - {{ \Carbon\Carbon::now()->format('F Y') }}
+                Manajemen Jadwal - {{ \Carbon\Carbon::now()->format('F Y') }}
             </p>
 
         </div>
@@ -95,7 +95,7 @@ class="fixed top-8 right-8 z-[9999]">
 
         <a href="{{ route('admin.schedule.create') }}"
             class="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold transition">
-                + Add Schedule
+                + Tambah Jadwal
             </a>
 
     </div>
@@ -115,7 +115,7 @@ class="fixed top-8 right-8 z-[9999]">
             <div>
 
                 <p class="text-slate-400 text-sm">
-                    Total Schedule
+                    Total Jadwal
                 </p>
 
                 <h2 class="text-3xl font-bold text-slate-800 mt-2">
@@ -123,7 +123,7 @@ class="fixed top-8 right-8 z-[9999]">
                 </h2>
 
                 <p class="text-blue-500 text-sm mt-2">
-                    All schedules
+                    Semua jadwal 
                 </p>
 
             </div>
@@ -146,7 +146,7 @@ class="fixed top-8 right-8 z-[9999]">
             <div>
 
                 <p class="text-slate-400 text-sm">
-                    Available
+                    Tersedia
                 </p>
 
                 <h2 class="text-3xl font-bold text-slate-800 mt-2">
@@ -154,7 +154,7 @@ class="fixed top-8 right-8 z-[9999]">
                 </h2>
 
                 <p class="text-green-500 text-sm mt-2">
-                    Ready for booking
+                    Tersedia untuk pasien
                 </p>
 
             </div>
@@ -177,7 +177,7 @@ class="fixed top-8 right-8 z-[9999]">
             <div>
 
                 <p class="text-slate-400 text-sm">
-                    Full
+                    Penuh
                 </p>
 
                 <h2 class="text-3xl font-bold text-slate-800 mt-2">
@@ -185,7 +185,7 @@ class="fixed top-8 right-8 z-[9999]">
                 </h2>
 
                 <p class="text-red-500 text-sm mt-2">
-                    Fully booked
+                    Kuota Penuh
                 </p>
 
             </div>
@@ -208,7 +208,7 @@ class="fixed top-8 right-8 z-[9999]">
             <div>
 
                 <p class="text-slate-400 text-sm">
-                    Closed
+                    Ditutup
                 </p>
 
                 <h2 class="text-3xl font-bold text-slate-800 mt-2">
@@ -216,7 +216,7 @@ class="fixed top-8 right-8 z-[9999]">
                 </h2>
 
                 <p class="text-slate-500 text-sm mt-2">
-                    Not active
+                    Tidak aktif
                 </p>
 
             </div>
@@ -259,7 +259,7 @@ class="fixed top-8 right-8 z-[9999]">
                     type="text"
                     name="search"
                     value="{{ request('search') }}"
-                    placeholder="Search doctor, room..."
+                    placeholder="Cari dokter atau ruangan..."
                     class="w-full pl-12 pr-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-cyan-500">
 
             </div>
@@ -274,10 +274,10 @@ class="fixed top-8 right-8 z-[9999]">
                     name="status"
                     class="w-full pl-12 pr-4 py-3 rounded-2xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-cyan-500 appearance-none">
 
-                    <option value="">All Status</option>
-                    <option value="Available" {{ request('status') == 'Available' ? 'selected' : '' }}>Available</option>
-                    <option value="Full" {{ request('status') == 'Full' ? 'selected' : '' }}>Full</option>
-                    <option value="Closed" {{ request('status') == 'Closed' ? 'selected' : '' }}>Closed</option>
+                    <option value="">Semua Status</option>
+                    <option value="Available" {{ request('status') == 'Available' ? 'selected' : '' }}>Tersedia</option>
+                    <option value="Full" {{ request('status') == 'Full' ? 'selected' : '' }}>Penuh</option>
+                    <option value="Closed" {{ request('status') == 'Closed' ? 'selected' : '' }}>Ditutup</option>
 
                 </select>
 
@@ -329,23 +329,23 @@ class="fixed top-8 right-8 z-[9999]">
             <tr>
 
                 <th class="px-6 py-4 text-left text-sm text-slate-400">
-                    Doctor
+                    Dokter
                 </th>
 
                 <th class="px-6 py-4 text-left text-sm text-slate-400">
-                    Date
+                    Tanggal
                 </th>
 
                 <th class="px-6 py-4 text-left text-sm text-slate-400">
-                    Time
+                    Jam
                 </th>
 
                 <th class="px-6 py-4 text-left text-sm text-slate-400">
-                    Room
+                    Ruangan
                 </th>
 
                 <th class="px-6 py-4 text-left text-sm text-slate-400">
-                    Quota
+                    Kuota
                 </th>
 
                 <th class="px-6 py-4 text-left text-sm text-slate-400">
@@ -353,7 +353,7 @@ class="fixed top-8 right-8 z-[9999]">
                 </th>
 
                 <th class="px-6 py-4 text-center text-sm text-slate-400">
-                    Actions
+                    Aksi
                 </th>
 
             </tr>
@@ -404,7 +404,7 @@ class="fixed top-8 right-8 z-[9999]">
                             </h3>
 
                             <p class="text-sm text-slate-400">
-                                {{ $item->dokter->spesialis ?? 'Doctor' }}
+                                {{ $item->dokter->spesialis ?? 'Dokter' }}
                             </p>
 
                         </div>
@@ -446,17 +446,17 @@ class="fixed top-8 right-8 z-[9999]">
 
                     @if($item->status_jadwal == 'Available')
                         <span class="px-3 py-1 rounded-xl bg-green-100 text-green-600 text-xs font-semibold">
-                            Available
+                            Tersedia
                         </span>
 
                     @elseif($item->status_jadwal == 'Full')
                         <span class="px-3 py-1 rounded-xl bg-red-100 text-red-600 text-xs font-semibold">
-                            Full
+                            Penuh
                         </span>
 
                     @else
                         <span class="px-3 py-1 rounded-xl bg-slate-100 text-slate-600 text-xs font-semibold">
-                            Closed
+                            Ditutup
                         </span>
                     @endif
 
@@ -477,7 +477,7 @@ class="fixed top-8 right-8 z-[9999]">
                         @if($sudahMulai)
                             <span
                             class="w-9 h-9 rounded-xl border border-slate-100 flex items-center justify-center text-slate-300"
-                            title="Jadwal sudah dimulai, tidak bisa diubah">
+                            title="Jadwal telah dimulai sehingga tidak dapat diubah.">
                                 <i data-lucide="lock" class="w-4 h-4"></i>
                             </span>
                         @else
@@ -533,13 +533,13 @@ class="w-10 h-10 text-red-500"></i>
 
 <h2 class="text-2xl font-bold mt-5">
 
-Delete Schedule?
+Hapus Jadwal?
 
 </h2>
 
 <p class="text-slate-400 mt-2">
 
-This action cannot be undone.
+Jadwal yang dihapus tidak dapat dipulihkan kembali.
 
 </p>
 
@@ -560,14 +560,14 @@ type="button"
 onclick="closeDeleteModal()"
 class="flex-1 py-3 rounded-2xl border">
 
-Cancel
+Batal
 
 </button>
 
 <button
 class="flex-1 py-3 rounded-2xl bg-red-500 text-white">
 
-Delete
+Hapus
 
 </button>
 

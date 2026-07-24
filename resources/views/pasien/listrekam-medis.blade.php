@@ -10,8 +10,8 @@
     {{-- HEADER --}}
     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5 mb-6">
         <div>
-            <h2 class="text-2xl font-bold text-slate-800">Medical History List</h2>
-            <p class="text-slate-400 text-sm mt-1">View your past consultations and medical records</p>
+            <h2 class="text-2xl font-bold text-slate-800">Daftar Rekam Medis</h2>
+            <p class="text-slate-400 text-sm mt-1">Lihat riwayat konsultasi dan rekam medis kamu</p>
         </div>
     </div>
 
@@ -32,9 +32,9 @@
         <table class="w-full text-sm">
             <thead class="bg-slate-50 text-slate-500">
                 <tr>
-                    <th class="px-6 py-4 text-left font-semibold">Visit Date</th>
-                    <th class="px-6 py-4 text-left font-semibold">Doctor</th>
-                    <th class="px-6 py-4 text-left font-semibold">Main Complaint</th>
+                    <th class="px-6 py-4 text-left font-semibold">Tanggal Kunjungan</th>
+                    <th class="px-6 py-4 text-left font-semibold">Dokter</th>
+                    <th class="px-6 py-4 text-left font-semibold">Keluhan Utama</th>
                     <th class="px-6 py-4 text-left font-semibold">Diagnosis</th>
                     <th class="px-6 py-4 text-left font-semibold">Status</th>
                     <th class="px-6 py-4 text-center font-semibold">Detail</th>

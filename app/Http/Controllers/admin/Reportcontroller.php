@@ -195,7 +195,7 @@ class ReportController extends Controller
 
         Notifikasi::create([
             'dokter_id' => null,
-            'tipe'      => 'laporan',
+            'tipe'      => 'rekam_medis',
             'judul'     => 'Laporan Klinik',
             'pesan'     => 'Laporan ringkasan klinik berhasil dibuat.',
             'link'      => route('admin.reports.index'),

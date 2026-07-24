@@ -27,8 +27,8 @@
                 <h1 class="text-xl font-bold text-slate-800">
                     Digital<span class="text-teal-500">Care</span>
                 </h1>
-                <p class="text-xs text-slate-400">
-                    Better Healthcare, Digitally
+                <p class="text-xs text-slate-400 whitespace-nowrap">
+                    Layanan Kesehatan Digital
                 </p>
             </div>
         </div>
@@ -112,7 +112,7 @@
             <i data-lucide="log-out" class="w-5 h-5 shrink-0"></i>
 
             <span class="font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300">
-                Logout
+                Keluar
             </span>
         </button>
     </div>

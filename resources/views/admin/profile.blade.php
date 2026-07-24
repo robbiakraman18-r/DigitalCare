@@ -161,26 +161,6 @@
                     @endforeach
                 </div>
             </div>
-
-            <div class="bg-white rounded-[28px] border border-slate-100 shadow-sm p-6">
-                <div class="flex items-center gap-3 mb-5">
-                    <div class="w-10 h-10 rounded-2xl bg-slate-100 flex items-center justify-center">
-                        <i data-lucide="monitor-smartphone" class="w-5 h-5 text-slate-500"></i>
-                    </div>
-                    <div>
-                        <h2 class="font-bold text-slate-800">Info Sistem</h2>
-                        <p class="text-xs text-slate-400">Perangkat & sesi aktif</p>
-                    </div>
-                </div>
-                <div class="space-y-3">
-                    @foreach([['Browser','Google Chrome'],['Perangkat','Windows Desktop'],['IP Address','192.168.1.1']] as [$label, $val])
-                    <div class="bg-slate-50 rounded-xl p-4">
-                        <p class="text-xs text-slate-400">{{ $label }}</p>
-                        <p class="font-semibold text-slate-800 mt-1 text-sm">{{ $val }}</p>
-                    </div>
-                    @endforeach
-                </div>
-            </div>
         </div>
     </div>
 </div>

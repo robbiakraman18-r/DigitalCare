@@ -10,17 +10,17 @@
 
         <div>
             <h1 class="text-3xl font-bold text-slate-800">
-                Medical Records
+                Rekam Medis
             </h1>
 
             <p class="text-slate-500 mt-1">
-                {{ $totalRecords }} medical records stored
+                {{ $totalRecords }} rekam medis tersimpan
             </p>
         </div>
 
         <button
             class="px-5 py-3 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 font-medium text-slate-600">
-            Export
+            Ekspor
         </button>
 
     </div>
@@ -30,7 +30,7 @@
 
         <div class="bg-white rounded-3xl border border-slate-100 p-5">
             <p class="text-sm text-slate-500">
-                Total Records
+                Total Rekam Medis
             </p>
 
             <h2 class="text-3xl font-bold text-slate-800 mt-2">
@@ -40,7 +40,7 @@
 
         <div class="bg-white rounded-3xl border border-slate-100 p-5">
             <p class="text-sm text-slate-500">
-                Active Doctors
+                Dokter Aktif
             </p>
 
             <h2 class="text-3xl font-bold text-blue-600 mt-2">
@@ -50,7 +50,7 @@
 
         <div class="bg-white rounded-3xl border border-slate-100 p-5">
             <p class="text-sm text-slate-500">
-                Prescriptions
+                Resep Obat
             </p>
 
             <h2 class="text-3xl font-bold text-purple-600 mt-2">
@@ -72,7 +72,7 @@
                 type="text"
                 name="search"
                 value="{{ request('search') }}"
-                placeholder="Search patient or diagnosis..."
+                placeholder="Cari pasien atau diagnosis..."
                 class="border border-slate-200 rounded-2xl px-4 py-3">
 
             <input
@@ -106,11 +106,11 @@
                     <tr>
 
                         <th class="px-6 py-4 text-left text-slate-500 font-medium">
-                            Date
+                            Tanggal 
                         </th>
 
                         <th class="px-6 py-4 text-left text-slate-500 font-medium">
-                            Patient
+                            Pasien
                         </th>
 
                         <th class="px-6 py-4 text-left text-slate-500 font-medium">
@@ -118,7 +118,7 @@
                         </th>
 
                         <th class="px-6 py-4 text-left text-slate-500 font-medium">
-                            Doctor
+                            Dokter
                         </th>
 
                         <th class="px-6 py-4 text-left text-slate-500 font-medium">
@@ -126,7 +126,7 @@
                         </th>
 
                         <th class="px-6 py-4 text-right text-slate-500 font-medium">
-                            Action
+                            Aksi
                         </th>
 
                     </tr>
@@ -143,7 +143,7 @@
 
                         $namaPasien =
                             $pasien->user->nama
-                            ?? 'Unknown Patient';
+                            ?? 'Pasien Tidak Ditemukan';
 
                         $namaDokter =
                             $rekam->dokter->user->nama
@@ -191,7 +191,7 @@
                             </p>
 
                             <p class="text-xs text-slate-400">
-                                {{ $pasien->no_rm ?? '-' }}
+                                {{ $pasien ? 'RM' . str_pad($pasien->id_pasien, 4, '0', STR_PAD_LEFT) : '-' }}
                             </p>
 
                         </td>
@@ -234,7 +234,7 @@
                                 href="{{ route('admin.medical-records.show', $rekam->id_rekam_medis) }}"
                                 class="px-4 py-2 rounded-xl bg-blue-50 text-blue-600 hover:bg-blue-100 font-medium text-xs inline-block">
 
-                                View Detail
+                                Lihat Detail
 
                             </a>
 
@@ -261,7 +261,7 @@
             </i>
 
             <p class="text-slate-500">
-                No medical records found
+                Tidak ada rekam medis yang ditemukan
             </p>
 
         </div>

@@ -14,8 +14,8 @@
                     Digital<span class="text-teal-500">Care</span>
                 </h1>
 
-                <p class="text-xs text-slate-400">
-                    Better Healthcare, Digitally
+                <p class="text-xs text-slate-400 whitespace-nowrap">
+                    Layanan Kesehatan Digital
                 </p>
             </div>
 
@@ -56,7 +56,7 @@
                 <i data-lucide="user-cog" class="w-5 h-5 shrink-0"></i>
 
                 <span class="font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300">
-                    User Management
+                    Manajemen Pengguna
                 </span>
 
             </a>
@@ -71,7 +71,7 @@
                 <i data-lucide="calendar-clock" class="w-5 h-5 shrink-0"></i>
 
                 <span class="font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300">
-                    Schedule Management
+                    Manajemen Jadwal
                 </span>
 
             </a>
@@ -86,7 +86,7 @@
                 <i data-lucide="clipboard-list" class="w-5 h-5 shrink-0"></i>
 
                 <span class="font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300">
-                    Appointment
+                    Janji Temu
                 </span>
 
             </a>
@@ -101,7 +101,7 @@
                 <i data-lucide="file-heart" class="w-5 h-5 shrink-0"></i>
 
                 <span class="font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300">
-                    Medical Records
+                    Rekam Medis
                 </span>
             </a>
 
@@ -115,7 +115,7 @@
                 <i data-lucide="chart-column-big" class="w-5 h-5 shrink-0"></i>
 
                 <span class="font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300">
-                    Reports
+                    Laporan
                 </span>
             </a>
 
@@ -133,7 +133,7 @@
                 <i data-lucide="message-square-warning" class="w-5 h-5 shrink-0"></i>
 
                 <span class="font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300">
-                    Complaint
+                    Keluhan
                 </span>
             </a>
 
@@ -154,7 +154,7 @@
                 <i data-lucide="settings-2" class="w-5 h-5 shrink-0"></i>
 
                 <span class="font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300">
-                    Settings
+                    Pengaturan
                 </span>
             </a>
 
@@ -172,7 +172,7 @@
             <i data-lucide="log-out" class="w-5 h-5 shrink-0"></i>
 
             <span class="font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300">
-                Logout
+                Keluar
             </span>
 
         </button>

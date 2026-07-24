@@ -100,7 +100,7 @@
         <a href="{{ route('dokter.appointment') }}"
             class="inline-block mt-8 px-6 py-3 rounded-xl bg-teal-500 text-white font-medium hover:bg-teal-600 transition">
 
-            Buka Appointment
+            Buka Janji Temu
 
         </a>
 

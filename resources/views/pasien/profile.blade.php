@@ -14,6 +14,13 @@
         ->map(fn($w) => strtoupper(substr($w, 0, 1)))
         ->join('');
 @endphp
+@php
+    $genderLabel = match($pasien?->gender) {
+        'Male'   => 'Laki-laki',
+        'Female' => 'Perempuan',
+        default  => $pasien?->gender ?? '-',
+    };
+@endphp
 
 @if(session('success'))
 <div class="mb-4 px-5 py-3.5 bg-green-50 border border-green-200 rounded-2xl text-green-700 text-sm font-medium flex items-center gap-2">
@@ -93,7 +100,7 @@
                             <span class="px-3 py-1 rounded-xl bg-teal-100 text-teal-700 text-xs font-semibold">Pasien</span>
                             <span class="px-3 py-1 rounded-xl bg-green-100 text-green-700 text-xs font-semibold">● Aktif</span>
                             @if($pasien?->gender)
-                                <span class="px-3 py-1 rounded-xl bg-slate-100 text-slate-600 text-xs font-semibold">{{ $pasien->gender }}</span>
+                                <span class="px-3 py-1 rounded-xl bg-slate-100 text-slate-600 text-xs font-semibold">{{ $genderLabel }}</span>
                             @endif
                         </div>
                     </div>
@@ -140,7 +147,7 @@
                     </div>
                     <div class="bg-slate-50 rounded-2xl p-4">
                         <p class="text-xs text-slate-400 mb-1">Jenis Kelamin</p>
-                        <p class="font-semibold text-slate-800">{{ $pasien?->gender ?? '-' }}</p>
+                        <p class="font-semibold text-slate-800">{{ $genderLabel }}</p>
                     </div>
                     <div class="bg-slate-50 rounded-2xl p-4">
                         <p class="text-xs text-slate-400 mb-1">Nomor Telepon</p>
@@ -286,7 +293,7 @@
                         <span class="font-semibold text-sm text-slate-700 group-hover:text-teal-700 transition">Buat Janji Baru</span>
                         <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 ml-auto group-hover:text-teal-400 transition"></i>
                     </a>
-                    <a href="{{ route('pasien.janji-temu') }}"
+                    <a href="{{ route('pasien.listrekam-medis') }}"
                        class="flex items-center gap-3 p-4 rounded-2xl bg-slate-50 hover:bg-blue-50 border border-transparent hover:border-blue-100 transition group">
                         <div class="w-8 h-8 rounded-xl bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition">
                             <i data-lucide="history" class="w-4 h-4 text-blue-600"></i>

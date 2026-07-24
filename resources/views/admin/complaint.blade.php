@@ -8,8 +8,8 @@
 <div class="p-6 md:p-10 space-y-6">
 
     <div>
-        <h1 class="text-2xl font-bold text-slate-800">Manajemen Complaint</h1>
-        <p class="text-slate-400 text-sm">Kelola komplain yang masuk dari pasien &amp; dokter</p>
+        <h1 class="text-2xl font-bold text-slate-800">Manajemen komplain</h1>
+        <p class="text-slate-400 text-sm">Kelola komplain yang dikirim oleh pasien dan dokter.</p>
     </div>
 
     @if(session('success'))
@@ -34,22 +34,22 @@
         <a href="{{ url()->current() }}?status=pending"
            class="px-4 py-2 rounded-2xl text-sm font-medium transition
            {{ request('status') == 'pending' ? 'bg-amber-500 text-white shadow-lg shadow-amber-200' : 'bg-white text-slate-500 border border-slate-200' }}">
-            Pending <span class="opacity-70">({{ $countPending }})</span>
+            Menunggu<span class="opacity-70">({{ $countPending }})</span>
         </a>
         <a href="{{ url()->current() }}?status=in_progress"
            class="px-4 py-2 rounded-2xl text-sm font-medium transition
            {{ request('status') == 'in_progress' ? 'bg-blue-500 text-white shadow-lg shadow-blue-200' : 'bg-white text-slate-500 border border-slate-200' }}">
-            In Progress <span class="opacity-70">({{ $countInProgress }})</span>
+            Diproses <span class="opacity-70">({{ $countInProgress }})</span>
         </a>
         <a href="{{ url()->current() }}?status=resolved"
            class="px-4 py-2 rounded-2xl text-sm font-medium transition
            {{ request('status') == 'resolved' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-200' : 'bg-white text-slate-500 border border-slate-200' }}">
-            Resolved <span class="opacity-70">({{ $countResolved }})</span>
+            Selesai<span class="opacity-70">({{ $countResolved }})</span>
         </a>
         <a href="{{ url()->current() }}?status=closed"
            class="px-4 py-2 rounded-2xl text-sm font-medium transition
            {{ request('status') == 'closed' ? 'bg-slate-500 text-white shadow-lg shadow-slate-200' : 'bg-white text-slate-500 border border-slate-200' }}">
-            Closed <span class="opacity-70">({{ $countClosed }})</span>
+            Ditutup <span class="opacity-70">({{ $countClosed }})</span>
         </a>
     </div>
 
@@ -62,7 +62,7 @@
                     <div>
                         <div class="flex items-center gap-2 mb-1">
                             <span class="font-semibold text-slate-800">
-                                {{ $complaint->user->nama ?? 'User telah dihapus' }}
+                                {{ $complaint->user->nama ?? 'Pengguna telah dihapus' }}
                             </span>
                             @if($complaint->user)
                                 <span class="text-[11px] uppercase tracking-wide text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">
@@ -90,7 +90,7 @@
                 @if(!in_array($complaint->status, ['closed']))
                     <div class="mt-4">
                         <button @click="open = !open" class="text-sm font-medium text-teal-600 hover:underline">
-                            <span x-show="!open">Tangani complaint ini</span>
+                            <span x-show="!open">Tangani komplain ini</span>
                             <span x-show="open">Tutup form</span>
                         </button>
 
@@ -105,9 +105,9 @@
                             <div class="flex flex-wrap gap-3 items-center">
                                 <select name="status" class="rounded-xl border border-slate-200 px-3 py-2 text-sm">
                                     <option value="in_progress" {{ $complaint->status == 'in_progress' ? 'selected' : '' }}>
-                                        In Progress (sedang ditangani)
+                                        Sedang Diproses
                                     </option>
-                                    <option value="resolved">Resolved (sudah dikasih solusi)</option>
+                                    <option value="resolved">Selesai (solusi telah diberikan)</option>
                                 </select>
 
                                 <button type="submit"
@@ -119,7 +119,7 @@
                     </div>
                 @else
                     <p class="mt-3 text-xs text-slate-400 italic">
-                        Complaint ini sudah dikonfirmasi selesai oleh pengirim
+                        Komplain ini sudah dikonfirmasi selesai oleh pengirim
                         @if($complaint->confirmed_at)
                             pada {{ $complaint->confirmed_at->format('d M Y, H:i') }}
                         @endif
@@ -129,7 +129,7 @@
             </div>
         @empty
             <div class="bg-white rounded-2xl shadow-md border border-slate-100 p-10 text-center text-slate-400">
-                Belum ada complaint yang masuk.
+                Belum ada komplain yang masuk.
             </div>
         @endforelse
     </div>

@@ -23,8 +23,8 @@
             <i data-lucide="calendar" class="w-6 h-6 text-slate-700"></i>
         </div>
         <div>
-            <h1 class="text-xl sm:text-2xl font-bold text-slate-800 tracking-tight">Make Appointment</h1>
-            <p class="text-xs sm:text-sm text-slate-400 mt-0.5">Fill in the details below to book your appointment</p>
+            <h1 class="text-xl sm:text-2xl font-bold text-slate-800 tracking-tight">Buat Janji Temu</h1>
+            <p class="text-xs sm:text-sm text-slate-400 mt-0.5">Lengkapi data di bawah ini untuk membuat janji temu Anda</p>
         </div>
     </div>
 
@@ -39,12 +39,12 @@
                     <div class="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-sm shrink-0">
                         1
                     </div>
-                    <h2 class="text-base sm:text-lg font-bold text-slate-800">Personal Information</h2>
+                    <h2 class="text-base sm:text-lg font-bold text-slate-800">Data Diri</h2>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 sm:gap-5">
                     <div class="sm:col-span-3">
-                        <label class="text-xs sm:text-sm font-semibold text-slate-700 block mb-1.5">Name</label>
+                        <label class="text-xs sm:text-sm font-semibold text-slate-700 block mb-1.5">Nama</label>
                         <input type="text" 
                                value="{{ Auth::user()->nama }}" 
                                class="w-full px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl bg-slate-50 text-slate-400 cursor-not-allowed focus:outline-none text-sm" 
@@ -60,7 +60,7 @@
                     </div>
 
                     <div class="sm:col-span-3">
-                        <label class="text-xs sm:text-sm font-semibold text-slate-700 block mb-1.5">Date of Birth</label>
+                        <label class="text-xs sm:text-sm font-semibold text-slate-700 block mb-1.5">Tanggal Lahir</label>
                         <input type="text" 
                                value="{{ Auth::user()->pasien->birth_date ?? '-' }}"
                                class="w-full px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl bg-slate-50 text-slate-400 cursor-not-allowed focus:outline-none text-sm" 
@@ -68,7 +68,7 @@
                     </div>
 
                     <div class="sm:col-span-1">
-                        <label class="text-xs sm:text-sm font-semibold text-slate-700 block mb-1.5">Gender</label>
+                        <label class="text-xs sm:text-sm font-semibold text-slate-700 block mb-1.5">Jenis Kelamin</label>
                         <input type="text" 
                                value="{{ Auth::user()->pasien->gender ?? '-' }}" 
                                class="w-full px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl bg-slate-50 text-slate-400 cursor-not-allowed focus:outline-none text-sm" 
@@ -87,7 +87,7 @@
 
                     <div class="sm:col-span-2">
                         <label class="text-xs sm:text-sm font-semibold text-slate-700 block mb-1.5">
-                            Phone Number
+                            Nomor Telepon
                         </label>
                         <input type="text"
                             value="{{ Auth::user()->pasien->phone_number ?? '-' }}"
@@ -97,7 +97,7 @@
 
                     <div class="sm:col-span-4">
                         <label class="text-xs sm:text-sm font-semibold text-slate-700 block mb-1.5">
-                            Address
+                            Alamat
                         </label>
                         <textarea
                             rows="3"
@@ -122,12 +122,12 @@
                         <div class="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-sm shrink-0">
                             2
                         </div>
-                        <h2 class="text-base sm:text-lg font-bold text-slate-800">Appointment Details</h2>
+                        <h2 class="text-base sm:text-lg font-bold text-slate-800">Detail Janji Temu</h2>
                     </div>
 
                     <div class="space-y-4">
                         <div>
-                            <label for="tanggal_janji" class="text-xs sm:text-sm font-semibold text-slate-700 block mb-1.5">Select Date</label>
+                            <label for="tanggal_janji" class="text-xs sm:text-sm font-semibold text-slate-700 block mb-1.5">Pilih Tanggal</label>
                             <input type="date" 
                                    name="tanggal_janji" 
                                    id="tanggal_janji"
@@ -145,14 +145,14 @@
 
                             <label
                                 class="text-xs sm:text-sm font-semibold text-slate-700 block mb-1.5">
-                                Select Doctor
+                                Pilih Dokter
                             </label>
                             <select
                                 name="id_dokter"
                                 id="id_dokter"
                                 class="w-full px-4 py-3 border border-slate-200 rounded-xl">
                                 <option value="">
-                                    Select Doctor
+                                    Pilih Dokter
                                 </option>
                                 @foreach($dokters as $dokter)
                                     <option
@@ -166,7 +166,7 @@
                         <div class="mt-4">
                             <label
                                 class="text-xs sm:text-sm font-semibold text-slate-700 block mb-1.5">
-                                Select Time
+                                Pilih Waktu
                             </label>
                             <select
                                 name="id_jadwal"
@@ -174,7 +174,7 @@
                                 class="w-full px-4 py-3 border border-slate-200 rounded-xl"
                                 required>
                                 <option value="">
-                                    Select Time
+                                    Pilih Waktu
                                 </option>
                                 @foreach($dokters as $dokter)
                                     @foreach($dokter->jadwalDokter as $jadwal)
@@ -201,15 +201,15 @@
                             <div class="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-sm shrink-0">
                                 3
                             </div>
-                            <h2 class="text-base sm:text-lg font-bold text-slate-800">Visit Details</h2>
+                            <h2 class="text-base sm:text-lg font-bold text-slate-800">Detail Kunjungan</h2>
                         </div>
 
                         <div class="flex-1 flex flex-col">
-                            <label for="keluhan_utama" class="text-xs sm:text-sm font-semibold text-slate-700 block mb-1.5">Reason for Visit</label>
+                            <label for="keluhan_utama" class="text-xs sm:text-sm font-semibold text-slate-700 block mb-1.5">Keluhan / Alasan Kunjungan</label>
                             <textarea name="keluhan_utama" 
                                     id="keluhan_utama" 
                                     class="w-full flex-1 min-h-[150px] lg:min-h-[120px] px-4 py-2.5 sm:py-3 border @error('keluhan_utama') border-red-500 @else border-slate-200 @enderror rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-400 text-slate-700 text-sm resize-none" 
-                                    placeholder="Write your symptoms or reason here..." 
+                                    placeholder="Tuliskan keluhan atau alasan kunjungan Anda di sini..." 
                                     required>{{ old('keluhan_utama') }}</textarea>
                             @error('keluhan_utama')
                                 <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span>
@@ -229,7 +229,7 @@
                         <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
                             <i data-lucide="calendar" class="w-5 h-5"></i>
                         </div>
-                        <span>Book Appointment</span>
+                        <span>Buat Janji Temu</span>
                     </button>
                 </div>
             </div>
@@ -250,7 +250,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function filterJam() {
 
         jadwal.innerHTML =
-            '<option value="">Select Time</option>';
+            '<option value="">Pilih Waktu</option>';
 
         semuaOption.forEach(function(option){
 

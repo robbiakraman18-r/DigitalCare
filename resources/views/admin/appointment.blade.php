@@ -9,7 +9,7 @@
             <i data-lucide="check-circle-2" class="w-6 h-6 text-green-600"></i>
         </div>
         <div>
-            <h2 class="font-bold text-slate-800">Success</h2>
+            <h2 class="font-bold text-slate-800">Berhasil</h2>
             <p class="text-sm text-slate-500">{{ session('success') }}</p>
         </div>
     </div>
@@ -23,7 +23,7 @@
             <i data-lucide="circle-x" class="w-6 h-6 text-red-500"></i>
         </div>
         <div>
-            <h2 class="font-bold text-slate-800">Failed</h2>
+            <h2 class="font-bold text-slate-800">Gagal</h2>
             <p class="text-sm text-slate-500">{{ session('error') }}</p>
         </div>
     </div>
@@ -35,7 +35,7 @@
     <!-- HEADER -->
     <div class="relative overflow-hidden rounded-[30px] bg-gradient-to-r from-teal-500 to-cyan-500 p-6 text-white shadow-lg">
         <div class="relative z-10">
-            <h1 class="text-2xl lg:text-3xl font-bold leading-tight">Appointment Management</h1>
+            <h1 class="text-2xl lg:text-3xl font-bold leading-tight">Manajemen Janji Temu</h1>
             <p class="mt-1 text-teal-100 text-sm">
                 {{ \Carbon\Carbon::parse($tanggal)->translatedFormat('l, d F Y') }}
             </p>
@@ -52,27 +52,27 @@
         </div>
 
         <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
-            <p class="text-xs text-slate-400">Pending</p>
+            <p class="text-xs text-slate-400">Menunggu</p>
             <h2 class="text-2xl font-bold mt-1 text-yellow-600">{{ $pending }}</h2>
         </div>
 
         <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
-            <p class="text-xs text-slate-400">Called</p>
+            <p class="text-xs text-slate-400">Dipanggil</p>
             <h2 class="text-2xl font-bold mt-1 text-blue-600">{{ $called }}</h2>
         </div>
 
         <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
-            <p class="text-xs text-slate-400">Consultation</p>
+            <p class="text-xs text-slate-400">Pemeriksaan</p>
             <h2 class="text-2xl font-bold mt-1 text-purple-600">{{ $consultation }}</h2>
         </div>
 
         <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
-            <p class="text-xs text-slate-400">Completed</p>
+            <p class="text-xs text-slate-400">Selesai</p>
             <h2 class="text-2xl font-bold mt-1 text-green-600">{{ $completed }}</h2>
         </div>
 
         <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
-            <p class="text-xs text-slate-400">Cancelled</p>
+            <p class="text-xs text-slate-400">Dibatalkan</p>
             <h2 class="text-2xl font-bold mt-1 text-slate-500">{{ $cancelled }}</h2>
         </div>
 
@@ -86,7 +86,7 @@
             <form method="GET" class="flex flex-col lg:flex-row gap-3 items-end">
 
                 <div class="relative w-full lg:w-72">
-                    <label class="block text-xs text-slate-400 mb-1">Search</label>
+                    <label class="block text-xs text-slate-400 mb-1">Pencaharian</label>
                     <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-4 top-[42px] -translate-y-1/2"></i>
                     <input
                         type="text"
@@ -101,12 +101,12 @@
                     <select
                         name="status"
                         class="w-full pl-4 pr-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-cyan-500 text-sm appearance-none">
-                        <option value="">All Status</option>
-                        <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
-                        <option value="called" {{ request('status') == 'called' ? 'selected' : '' }}>Called</option>
-                        <option value="in_consultation" {{ request('status') == 'in_consultation' ? 'selected' : '' }}>Consultation</option>
-                        <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>Completed</option>
-                        <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                        <option value="">Semua Status</option>
+                        <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Menunggu</option>
+                        <option value="called" {{ request('status') == 'called' ? 'selected' : '' }}>Dipanggil</option>
+                        <option value="in_consultation" {{ request('status') == 'in_consultation' ? 'selected' : '' }}>Pemeriksaan</option>
+                        <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>Selesai</option>
+                        <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Dibatalkan</option>
                     </select>
                 </div>
 
@@ -128,7 +128,7 @@
 
                 <a href="{{ route('admin.appointment') }}"
                    class="px-4 py-3 rounded-2xl border border-slate-200 text-sm text-slate-500 hover:bg-slate-50 transition whitespace-nowrap">
-                    Today
+                    Hari Ini
                 </a>
 
             </form>
@@ -139,13 +139,13 @@
             <table class="w-full text-sm">
                 <thead class="bg-slate-50">
                     <tr>
-                        <th class="px-6 py-4 text-left text-xs text-slate-400 font-medium">Queue</th>
-                        <th class="px-6 py-4 text-left text-xs text-slate-400 font-medium">Patient</th>
-                        <th class="px-6 py-4 text-left text-xs text-slate-400 font-medium">Doctor</th>
-                        <th class="px-6 py-4 text-left text-xs text-slate-400 font-medium">Schedule</th>
-                        <th class="px-6 py-4 text-left text-xs text-slate-400 font-medium">Complaint</th>
+                        <th class="px-6 py-4 text-left text-xs text-slate-400 font-medium">Antrian</th>
+                        <th class="px-6 py-4 text-left text-xs text-slate-400 font-medium">Pasien</th>
+                        <th class="px-6 py-4 text-left text-xs text-slate-400 font-medium">Dokter</th>
+                        <th class="px-6 py-4 text-left text-xs text-slate-400 font-medium">Jadwal</th>
+                        <th class="px-6 py-4 text-left text-xs text-slate-400 font-medium">Keluhan</th>
                         <th class="px-6 py-4 text-center text-xs text-slate-400 font-medium">Status</th>
-                        <th class="px-6 py-4 text-center text-xs text-slate-400 font-medium">Action</th>
+                        <th class="px-6 py-4 text-center text-xs text-slate-400 font-medium">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
@@ -160,11 +160,11 @@
                                 default => 'bg-slate-100 text-slate-600',
                             };
                             $labelStatus = match($appointment->status_janji) {
-                                'pending' => 'Pending',
-                                'called' => 'Called',
-                                'in_consultation' => 'Consultation',
-                                'completed' => 'Completed',
-                                'cancelled' => 'Cancelled',
+                                'pending' => 'Menunggu',
+                                'called' => 'Dipanggil',
+                                'in_consultation' => 'Pemeriksaan',
+                                'completed' => 'Selesai',
+                                'cancelled' => 'Dibatalkan',
                                 default => ucfirst($appointment->status_janji),
                             };
                         @endphp
@@ -227,14 +227,14 @@
                                         <form
                                             action="{{ route('admin.appointment.status', $appointment->id_janji) }}"
                                             method="POST"
-                                            onsubmit="return confirm('Batalkan appointment ini?')">
+                                            onsubmit="return confirm('Batalkan janji temu ini?')">
                                             @csrf
                                             @method('PUT')
                                             <input type="hidden" name="status_janji" value="cancelled">
 
                                             <button class="px-3 py-2 rounded-xl border border-red-200 text-red-500 hover:bg-red-50 transition text-xs font-semibold inline-flex items-center gap-1">
                                                 <i data-lucide="x-circle" class="w-4 h-4"></i>
-                                                Cancel
+                                                Batalkan
                                             </button>
                                         </form>
 
@@ -255,7 +255,7 @@
                                     <form
                                         action="{{ route('admin.appointment.delete', $appointment->id_janji) }}"
                                         method="POST"
-                                        onsubmit="return confirm('Delete appointment?')">
+                                        onsubmit="return confirm('Hapus janji temu ini?')">
                                         @csrf
                                         @method('DELETE')
 

@@ -1,7 +1,7 @@
 @extends('layouts.dokter')
 
-@section('title', 'Appointments')
-@section('subtitle', 'Patient Appointment Management')
+@section('title', 'Janji Temu')
+@section('subtitle', 'Manajemen Janji Temu Pasien')
 
 @section('content')
 
@@ -48,7 +48,7 @@ setTimeout(()=>{
     <div class="relative overflow-hidden rounded-[30px] bg-gradient-to-r from-teal-500 to-cyan-500 p-6 text-white shadow-lg">
         <div class="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div>
-                <h1 class="text-2xl lg:text-3xl font-bold leading-tight">Appointments</h1>
+                <h1 class="text-2xl lg:text-3xl font-bold leading-tight">Janji Temu</h1>
                 <p class="mt-1 text-teal-100 text-sm">
                     {{ \Carbon\Carbon::parse($tanggal)->translatedFormat('l, d F Y') }}
                 </p>
@@ -83,27 +83,27 @@ setTimeout(()=>{
         </div>
 
         <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
-            <p class="text-xs text-slate-400">Pending</p>
+            <p class="text-xs text-slate-400">Menunggu</p>
             <h2 class="text-2xl font-bold mt-1 text-yellow-600">{{ $pending }}</h2>
         </div>
 
         <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
-            <p class="text-xs text-slate-400">Called</p>
+            <p class="text-xs text-slate-400">Dipanggil</p>
             <h2 class="text-2xl font-bold mt-1 text-blue-600">{{ $called }}</h2>
         </div>
 
         <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
-            <p class="text-xs text-slate-400">In Consultation</p>
+            <p class="text-xs text-slate-400">Sedang diperiksa</p>
             <h2 class="text-2xl font-bold mt-1 text-purple-600">{{ $consultation }}</h2>
         </div>
 
         <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
-            <p class="text-xs text-slate-400">Completed</p>
+            <p class="text-xs text-slate-400">Selesai</p>
             <h2 class="text-2xl font-bold mt-1 text-green-600">{{ $completed }}</h2>
         </div>
 
         <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
-            <p class="text-xs text-slate-400">Cancelled</p>
+            <p class="text-xs text-slate-400">Dibatalkan</p>
             <h2 class="text-2xl font-bold mt-1 text-slate-500">{{ $cancelled }}</h2>
         </div>
 
@@ -117,7 +117,7 @@ setTimeout(()=>{
             <form method="GET" class="flex flex-col lg:flex-row gap-3 items-end">
 
                 <div class="relative w-full lg:w-64">
-                    <label class="block text-xs text-slate-400 mb-1">Search Patient</label>
+                    <label class="block text-xs text-slate-400 mb-1">Cari Pasien</label>
                     <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-4 top-[42px] -translate-y-1/2"></i>
                     <input
                         type="text"
@@ -133,11 +133,11 @@ setTimeout(()=>{
                         name="status"
                         class="w-full pl-4 pr-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-teal-400 text-sm appearance-none">
                         <option value="">Semua Status</option>
-                        <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
-                        <option value="called" {{ request('status') == 'called' ? 'selected' : '' }}>Called</option>
-                        <option value="in_consultation" {{ request('status') == 'in_consultation' ? 'selected' : '' }}>In Consultation</option>
-                        <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>Completed</option>
-                        <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                        <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Menunggu</option>
+                        <option value="called" {{ request('status') == 'called' ? 'selected' : '' }}>Dipanggil</option>
+                        <option value="in_consultation" {{ request('status') == 'in_consultation' ? 'selected' : '' }}>Sedang diperiksa</option>
+                        <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>Selesai</option>
+                        <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Dibatalkan</option>
                     </select>
                 </div>
 
@@ -159,7 +159,7 @@ setTimeout(()=>{
 
                 <a href="{{ route('dokter.appointment') }}"
                    class="px-4 py-3 rounded-2xl border border-slate-200 text-sm text-slate-500 hover:bg-slate-50 transition whitespace-nowrap">
-                    Today
+                    Hari Ini
                 </a>
 
             </form>
@@ -190,11 +190,11 @@ setTimeout(()=>{
                                 default => 'bg-slate-100 text-slate-600',
                             };
                             $labelStatus = match($item->status_janji) {
-                                'pending' => 'Pending',
-                                'called' => 'Called',
-                                'in_consultation' => 'In Consultation',
-                                'completed' => 'Completed',
-                                'cancelled' => 'Cancelled',
+                                'pending' => 'Menunggu',
+                                'called' => 'Dipanggil',
+                                'in_consultation' => 'Sedang diperiksa',
+                                'completed' => 'Selesai',
+                                'cancelled' => 'Dibatalkan',
                                 default => ucfirst($item->status_janji),
                             };
                             $isLocked = in_array($item->status_janji, ['completed', 'cancelled']);
@@ -294,7 +294,7 @@ setTimeout(()=>{
                             <td colspan="6" class="px-6 py-12 text-center">
                                 <div class="flex flex-col items-center gap-2">
                                     <i data-lucide="calendar-x" class="w-10 h-10 text-slate-200"></i>
-                                    <p class="text-slate-400 text-sm">Tidak ada appointment pada tanggal ini</p>
+                                    <p class="text-slate-400 text-sm">Tidak ada janji temu pada tanggal ini</p>
                                     <p class="text-xs text-slate-300">
                                         {{ \Carbon\Carbon::parse($tanggal)->format('d M Y') }}
                                     </p>
@@ -339,17 +339,17 @@ setTimeout(()=>{
                     </div>
 
                     <div class="p-3 bg-slate-50 rounded-xl">
-                        <p class="text-slate-400">Gender</p>
+                        <p class="text-slate-400">Jenis Kelamin</p>
                         <p class="font-semibold" x-text="selected?.pasien?.gender"></p>
                     </div>
 
                     <div class="p-3 bg-slate-50 rounded-xl">
-                        <p class="text-slate-400">Birth Date</p>
+                        <p class="text-slate-400">Tanggal Lahir</p>
                         <p class="font-semibold" x-text="selected?.pasien?.birth_date"></p>
                     </div>
 
                     <div class="p-3 bg-slate-50 rounded-xl">
-                        <p class="text-slate-400">Phone</p>
+                        <p class="text-slate-400">Nomor Telepon</p>
                         <p class="font-semibold" x-text="selected?.pasien?.phone_number"></p>
                     </div>
 
@@ -372,7 +372,7 @@ setTimeout(()=>{
 
                 <button @click="detailModal=false"
                         class="w-full mt-2 py-3 bg-slate-900 text-white rounded-xl">
-                    Close
+                    Tutup
                 </button>
 
             </div>

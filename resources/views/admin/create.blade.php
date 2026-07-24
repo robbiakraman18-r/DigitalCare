@@ -12,15 +12,15 @@
             href="{{ route('admin.user-management') }}"
             class="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-slate-600 transition mb-2">
                 <i data-lucide="chevron-left" class="w-4 h-4"></i>
-                Back to User Management
+                Kembali ke Manajemen Pengguna
             </a>
 
             <h1 class="text-3xl font-bold text-slate-800">
-                Add Doctor
+                Tambah Dokter
             </h1>
 
             <p class="text-slate-400 mt-1">
-                Register a new doctor account and their practice details.
+                Daftarkan akun dokter baru beserta informasi praktiknya.
             </p>
         </div>
 
@@ -55,80 +55,92 @@
         Foto Profil
     </p>
 
-    <div class="flex items-start gap-4">
+    <div class="flex flex-col items-center">
 
+        <!-- Upload -->
         <div
-        @click="$refs.fotoInput.click()"
-        @dragover.prevent="dragging = true"
-        @dragleave.prevent="dragging = false"
-        @drop.prevent="onDrop($event)"
-        :class="dragging ? 'border-blue-500 bg-blue-50' : 'border-slate-200 hover:border-blue-300 hover:bg-slate-50'"
-        class="relative w-40 h-40 shrink-0 rounded-3xl border-2 border-dashed flex flex-col items-center justify-center overflow-hidden cursor-pointer transition group">
+            @click="$refs.fotoInput.click()"
+            @dragover.prevent="dragging = true"
+            @dragleave.prevent="dragging = false"
+            @drop.prevent="onDrop($event)"
+            :class="dragging ? 'border-blue-500 bg-blue-50' : 'border-slate-200 hover:border-blue-300 hover:bg-slate-50'"
+            class="relative w-40 h-40 rounded-3xl border-2 border-dashed flex flex-col items-center justify-center overflow-hidden cursor-pointer transition group">
 
             <template x-if="!preview">
                 <div class="flex flex-col items-center gap-2 px-4 text-center">
                     <div class="w-12 h-12 rounded-2xl bg-blue-100 flex items-center justify-center group-hover:scale-105 transition">
                         <i data-lucide="upload" class="w-5 h-5 text-blue-600"></i>
                     </div>
+
                     <p class="text-sm font-semibold text-slate-600">
                         Klik untuk upload
                     </p>
+
                     <p class="text-xs text-slate-400">
-                        atau drag & drop<br>JPG/PNG
+                        atau drag & drop <br>
+                        JPG / JPEG / PNG
                     </p>
                 </div>
             </template>
 
             <img
-            x-show="preview"
-            :src="preview"
-            class="w-full h-full object-cover">
+                x-show="preview"
+                :src="preview"
+                class="w-full h-full object-cover">
 
             <div
-            x-show="preview"
-            class="absolute inset-0 bg-black/0 group-hover:bg-black/40 flex items-center justify-center transition">
+                x-show="preview"
+                class="absolute inset-0 bg-black/0 group-hover:bg-black/40 flex items-center justify-center transition">
+
                 <span class="opacity-0 group-hover:opacity-100 text-white text-sm font-semibold transition">
-                    Ganti foto
+                    Ganti Foto
                 </span>
             </div>
 
             <input
-            x-ref="fotoInput"
-            type="file"
-            name="foto_profil"
-            accept="image/png, image/jpeg, image/jpg"
-            class="hidden"
-            @click.stop
-            @change="onFileChange($event)">
-
+                x-ref="fotoInput"
+                type="file"
+                name="foto_profil"
+                accept="image/png, image/jpeg, image/jpg"
+                class="hidden"
+                @click.stop
+                @change="onFileChange($event)">
         </div>
 
-        <!-- TIPS: KANAN -->
-        <div class="flex-1 p-4 rounded-2xl bg-blue-50/60 border border-blue-100">
-            <div class="flex items-center gap-2 mb-2">
-                <i data-lucide="info" class="w-4 h-4 text-blue-500"></i>
-                <p class="text-sm font-semibold text-slate-700">Tips Foto</p>
+        <!-- Tips Foto -->
+        <div class="mt-5 w-full rounded-2xl bg-blue-50 border border-blue-100 p-4">
+
+            <div class="flex items-center gap-2 mb-3">
+                <i data-lucide="info" class="w-4 h-4 text-blue-600"></i>
+                <p class="text-sm font-semibold text-slate-700">
+                    Tips Foto
+                </p>
             </div>
-            <ul class="text-xs text-slate-500 space-y-1.5 list-disc list-inside">
-                <li>Gunakan foto tampak depan yang jelas</li>
-                <li>Latar belakang polos lebih baik</li>
-                <li>Foto rasio persegi hasilnya paling rapi</li>
+
+            <ul class="space-y-2 text-xs text-slate-600">
+                <li>✓ Gunakan foto dengan wajah terlihat jelas.</li>
+                <li>✓ Gunakan latar belakang polos.</li>
+                <li>✓ Pastikan foto tidak buram.</li>
+                <li>✓ Format yang didukung: JPG, JPEG, dan PNG.</li>
+                <li>✓ Kosongkan jika tidak ingin mengganti foto.</li>
             </ul>
+
         </div>
+
+        <!-- Tombol Hapus -->
+        <button
+            type="button"
+            x-show="preview"
+            @click="clearPhoto()"
+            class="mt-4 text-sm font-medium text-red-500 hover:text-red-600 transition flex items-center gap-1.5">
+
+            <i data-lucide="trash-2" class="w-4 h-4"></i>
+            Hapus Foto
+        </button>
 
     </div>
 
-    <button
-    type="button"
-    x-show="preview"
-    @click="clearPhoto()"
-    class="mt-3 text-sm font-medium text-red-500 hover:text-red-600 transition flex items-center gap-1.5">
-        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-        Hapus foto
-    </button>
-
 </div>
-
             <!-- RIGHT: FORM -->
             <div class="xl:col-span-9 space-y-8">
 
@@ -140,7 +152,7 @@
                             <i data-lucide="id-card" class="w-4 h-4 text-blue-600"></i>
                         </div>
                         <p class="font-semibold text-slate-800">
-                            Account Information
+                            Informasi Akun
                         </p>
                     </div>
 
@@ -148,7 +160,7 @@
 
                         <div class="sm:col-span-2">
                             <label class="text-sm font-medium text-slate-600">
-                                Doctor Name
+                                Nama Dokter
                             </label>
 
                             <div class="relative mt-2">
@@ -158,7 +170,7 @@
                                 name="nama"
                                 value="{{ old('nama') }}"
                                 required
-                                placeholder="e.g. Dr. Maria Jessica"
+                                placeholder="Contoh: Dr. Maria Jessica"
                                 class="w-full pl-11 pr-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
                             </div>
                         </div>
@@ -175,7 +187,7 @@
                                 name="email"
                                 value="{{ old('email') }}"
                                 required
-                                placeholder="doctor@digitalcare.com"
+                                placeholder="dokter@gmail.com"
                                 class="w-full pl-11 pr-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
                             </div>
                         </div>
@@ -192,7 +204,7 @@
                                 name="password"
                                 required
                                 minlength="8"
-                                placeholder="Minimum 8 characters"
+                                placeholder="Minimal 8 karakter"
                                 class="w-full pl-11 pr-11 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
 
                                 <button
@@ -219,7 +231,7 @@
                             <i data-lucide="stethoscope" class="w-4 h-4 text-cyan-600"></i>
                         </div>
                         <p class="font-semibold text-slate-800">
-                            Professional Details
+                            Informasi Profesional
                         </p>
                     </div>
 
@@ -237,14 +249,14 @@
                                 name="no_sip"
                                 value="{{ old('no_sip') }}"
                                 required
-                                placeholder="e.g. 1234567890"
+                                placeholder="Contoh: 1234567890"
                                 class="w-full pl-11 pr-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
                             </div>
                         </div>
 
                         <div>
                             <label class="text-sm font-medium text-slate-600">
-                                Gender
+                                Jenis Kelamin
                             </label>
 
                             <div class="grid grid-cols-2 gap-2 mt-2">
@@ -252,14 +264,14 @@
                                 <label class="cursor-pointer">
                                     <input type="radio" name="gender" value="Male" class="peer sr-only" checked>
                                     <div class="px-4 py-3 rounded-2xl border border-slate-200 text-center text-sm font-medium text-slate-500 peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition">
-                                        Male
+                                        Laki-laki
                                     </div>
                                 </label>
 
                                 <label class="cursor-pointer">
                                     <input type="radio" name="gender" value="Female" class="peer sr-only">
                                     <div class="px-4 py-3 rounded-2xl border border-slate-200 text-center text-sm font-medium text-slate-500 peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition">
-                                        Female
+                                        Perempuan
                                     </div>
                                 </label>
 
@@ -268,7 +280,7 @@
 
                         <div>
                             <label class="text-sm font-medium text-slate-600">
-                                Availability
+                                Status Ketersediaan
                             </label>
 
                             <div class="relative mt-2">
@@ -276,8 +288,8 @@
                                 name="status_ketersediaan"
                                 class="w-full pl-4 pr-10 py-3 rounded-2xl border border-slate-200 bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
 
-                                    <option value="Available">Available</option>
-                                    <option value="Unavailable">Unavailable</option>
+                                    <option value="Available">Tersedia</option>
+                                    <option value="Unavailable">Tidak Tersedia</option>
 
                                 </select>
 
@@ -301,7 +313,7 @@
         <a
         href="{{ route('admin.user-management') }}"
         class="px-5 py-3 rounded-2xl border border-slate-200 text-slate-600 font-semibold hover:bg-slate-50 transition">
-            Cancel
+            Batal
         </a>
 
         <button
@@ -310,7 +322,7 @@
         class="px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold transition inline-flex items-center gap-2">
 
             <i data-lucide="save" class="w-4 h-4" x-show="!submitting"></i>
-            <span x-text="submitting ? 'Saving...' : 'Save Doctor'"></span>
+            <span x-text="submitting ? 'Saving...' : 'Simpan Dokter'"></span>
 
         </button>
 

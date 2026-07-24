@@ -1,6 +1,6 @@
 @extends('admin.reports.pdf._layout')
 
-@section('report_title', 'Patient Report')
+@section('report_title', 'Laporan Pasien')
 
 @section('report_body')
 
@@ -8,11 +8,11 @@
     <thead>
         <tr>
             <th>No. RM</th>
-            <th>Name</th>
+            <th>Nama</th>
             <th>Email</th>
-            <th>Gender</th>
-            <th>Phone</th>
-            <th>Address</th>
+            <th>Jenis Kelamin</th>
+            <th>Telepon</th>
+            <th>Alamat</th>
         </tr>
     </thead>
     <tbody>
@@ -21,7 +21,7 @@
             <td>{{ $pasien->no_rm }}</td>
             <td>{{ $pasien->user->nama ?? '-' }}</td>
             <td>{{ $pasien->user->email ?? '-' }}</td>
-            <td>{{ $pasien->gender }}</td>
+            <td>{{ $pasien->gender === 'Male' ? 'Laki-laki' : 'Perempuan' }}</td>
             <td>{{ $pasien->phone_number }}</td>
             <td>{{ $pasien->address }}</td>
         </tr>

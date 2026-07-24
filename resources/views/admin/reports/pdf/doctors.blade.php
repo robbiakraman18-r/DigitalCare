@@ -1,6 +1,6 @@
 @extends('admin.reports.pdf._layout')
 
-@section('report_title', 'Doctor Performance Report')
+@section('report_title', 'Laporan Kinerja Dokter')
 
 @section('report_body')
 
@@ -8,10 +8,10 @@
     <thead>
         <tr>
             <th>No. SIP</th>
-            <th>Name</th>
+            <th>Nama</th>
             <th>Email</th>
-            <th>Gender</th>
-            <th>Availability</th>
+            <th>Jenis Kelamin</th>
+            <th>Ketersediaan</th>
         </tr>
     </thead>
     <tbody>
@@ -20,8 +20,8 @@
             <td>{{ $dokter->no_sip }}</td>
             <td>{{ $dokter->user->nama ?? '-' }}</td>
             <td>{{ $dokter->user->email ?? '-' }}</td>
-            <td>{{ $dokter->gender }}</td>
-            <td>{{ $dokter->status_ketersediaan }}</td>
+            <td>{{ $dokter->gender === 'Male' ? 'Laki-laki' : 'Perempuan' }}</td>
+            <td>{{ $dokter->status_ketersediaan === 'Available' ? 'Tersedia' : 'Tidak Tersedia' }}</td>
         </tr>
         @endforeach
     </tbody>

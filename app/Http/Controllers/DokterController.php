@@ -432,16 +432,12 @@ class DokterController extends Controller
             'appointment.pasien.user',
             'dokter.user',
             'detailResep'
-        ])->where('id_dokter', $dokter->id_dokter);
+        ]);
 
         $filterPasien = null;
 
         if ($request->filled('id_pasien')) {
-            $filterPasien = Pasien::with('user')
-                ->whereHas('appointments.jadwal', function ($q) use ($dokter) {
-                    $q->where('id_dokter', $dokter->id_dokter);
-                })
-                ->findOrFail($request->id_pasien);
+            $filterPasien = Pasien::with('user')->findOrFail($request->id_pasien);
 
             $query->whereHas('appointment', function ($q) use ($request) {
                 $q->where('id_pasien', $request->id_pasien);
@@ -463,7 +459,8 @@ class DokterController extends Controller
 
         return view('dokter.rekam-medis', compact(
             'rekamMedis',
-            'filterPasien'
+            'filterPasien',
+            'dokter'
         ));
     }
     /*

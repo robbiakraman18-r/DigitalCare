@@ -86,13 +86,13 @@
 
     <div class="header">
         <h1>@yield('report_title')</h1>
-        <p>Generated on {{ \Carbon\Carbon::now()->translatedFormat('d F Y, H:i') }}</p>
+        <p>Dibuat pada {{ \Carbon\Carbon::now()->translatedFormat('d F Y, H:i') }}</p>
     </div>
 
     @yield('report_body')
 
     <div class="footer">
-        DigitalCare Clinic &middot; Confidential Document
+        DigitalCare Clinic &middot; Dokumen Rahasia
     </div>
 
 </body>

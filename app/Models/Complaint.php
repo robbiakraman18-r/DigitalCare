@@ -30,9 +30,15 @@ class Complaint extends Model
     }
 
     /** Label rapi untuk ditampilkan di badge, mis. "in_progress" -> "In Progress" */
-    public function getStatusLabelAttribute(): string
+   public function getStatusLabelAttribute(): string
     {
-        return ucwords(str_replace('_', ' ', $this->status));
+        return match ($this->status) {
+            'pending'     => 'Menunggu',
+            'in_progress' => 'Sedang Diproses',
+            'resolved'    => 'Selesai',
+            'closed'      => 'Ditutup',
+            default       => ucfirst(str_replace('_', ' ', $this->status)),
+        };
     }
 
     /** Warna badge tailwind per status, dipakai bareng di view admin/dokter/pasien */

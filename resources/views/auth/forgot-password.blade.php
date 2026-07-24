@@ -26,7 +26,7 @@
             </h2>
 
             <p class="text-sm text-slate-500 mt-1">
-                Better Healthcare, Digitally
+                Layanan Kesehatan yang Lebih Baik secara Digital
             </p>
 
         </div>

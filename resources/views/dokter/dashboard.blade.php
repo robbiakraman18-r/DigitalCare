@@ -1,7 +1,7 @@
 @extends('layouts.dokter')
 
-@section('title', 'Doctor Dashboard')
-@section('subtitle', 'Today Practicum Activity Monitoring')
+@section('title', 'Dashboard Dokter')
+@section('subtitle', 'Pemantauan Aktivitas Praktik Hari Ini')
 
 @section('content')
 <div class="space-y-5">
@@ -10,19 +10,19 @@
     <div class="relative overflow-hidden rounded-[30px] bg-gradient-to-r from-teal-500 to-cyan-500 p-6 text-white shadow-lg">
         <div class="relative z-10">
             <h1 class="text-2xl lg:text-3xl font-bold leading-tight">
-                Welcome, {{ $dokter->user->nama }} 👋
+                Selamat Datang, {{ $dokter->user->nama }} 👋
             </h1>
             <p class="mt-2 text-teal-100 text-sm">
-                You have {{ $todaySchedule }} consultation schedules for today.
+                Anda memiliki {{ $todaySchedule }} jadwal konsultasi untuk hari ini.
             </p>
             <div class="mt-5 flex gap-3">
                 <a href="{{ route('dokter.jadwal') }}"
                    class="px-4 py-2 rounded-2xl bg-white text-teal-600 text-sm font-semibold hover:scale-105 transition">
-                    View Schedule
+                    Lihat Jadwal
                 </a>
                 <a href="{{ route('dokter.pasien') }}"
                    class="px-4 py-2 rounded-2xl border border-white/30 hover:bg-white/10 text-sm transition">
-                    Patient Data
+                    Data Pasien
                 </a>
             </div>
         </div>
@@ -35,7 +35,7 @@
         <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-xs text-slate-400">Total Patients <span class="text-slate-300">(30 hari)</span></p>
+                    <p class="text-xs text-slate-400">Total Pasien <span class="text-slate-300">(30 hari)</span></p>
                     <h2 class="text-2xl font-bold mt-1 text-slate-800">{{ $totalPasien }}</h2>
                 </div>
                 <div class="w-11 h-11 rounded-xl bg-teal-100 flex items-center justify-center">
@@ -47,7 +47,7 @@
         <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-xs text-slate-400">Appointments <span class="text-slate-300">(30 hari)</span></p>
+                    <p class="text-xs text-slate-400">Janji Temu <span class="text-slate-300">(30 hari)</span></p>
                     <h2 class="text-2xl font-bold mt-1 text-slate-800">{{ $totalAppointment }}</h2>
                 </div>
                 <div class="w-11 h-11 rounded-xl bg-cyan-100 flex items-center justify-center">
@@ -59,7 +59,7 @@
         <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-xs text-slate-400">Pending <span class="text-slate-300">(30 hari)</span></p>
+                    <p class="text-xs text-slate-400">Menunggu <span class="text-slate-300">(30 hari)</span></p>
                     <h2 class="text-2xl font-bold mt-1 text-slate-800">{{ $totalPending }}</h2>
                 </div>
                 <div class="w-11 h-11 rounded-xl bg-orange-100 flex items-center justify-center">
@@ -71,7 +71,7 @@
         <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-xs text-slate-400">Completed <span class="text-slate-300">(30 hari)</span></p>
+                    <p class="text-xs text-slate-400">Selesai <span class="text-slate-300">(30 hari)</span></p>
                     <h2 class="text-2xl font-bold mt-1 text-slate-800">{{ $totalCompleted }}</h2>
                 </div>
                 <div class="w-11 h-11 rounded-xl bg-green-100 flex items-center justify-center">
@@ -83,7 +83,7 @@
         <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-xs text-slate-400">Medical Records <span class="text-slate-300">(30 hari)</span></p>
+                    <p class="text-xs text-slate-400">Rekam Medis <span class="text-slate-300">(30 hari)</span></p>
                     <h2 class="text-2xl font-bold mt-1 text-slate-800">{{ $totalRekamMedis }}</h2>
                 </div>
                 <div class="w-11 h-11 rounded-xl bg-red-100 flex items-center justify-center">
@@ -95,7 +95,7 @@
         <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-xs text-slate-400">Today's Schedule</p>
+                    <p class="text-xs text-slate-400">Jadwal Hari Ini</p>
                     <h2 class="text-2xl font-bold mt-1 text-slate-800">{{ $todaySchedule }}</h2>
                 </div>
                 <div class="w-11 h-11 rounded-xl bg-yellow-100 flex items-center justify-center">
@@ -116,12 +116,12 @@
             <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
                 <div class="flex justify-between items-center mb-4">
                     <div>
-                        <h2 class="text-lg font-bold text-slate-800">Practice Schedule</h2>
-                        <p class="text-xs text-slate-400 mt-1">Today's consultation schedule</p>
+                        <h2 class="text-lg font-bold text-slate-800">Jadwal Praktik</h2>
+                        <p class="text-xs text-slate-400 mt-1">Jadwal konsultasi hari ini</p>
                     </div>
                     <a href="{{ route('dokter.jadwal') }}"
                        class="px-3 py-2 rounded-xl bg-teal-50 text-teal-500 text-sm font-medium hover:bg-teal-100 transition">
-                        View All
+                        Lihat Semua
                     </a>
                 </div>
 
@@ -162,12 +162,12 @@
             <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
                 <div class="flex justify-between items-center mb-4">
                     <div>
-                        <h2 class="text-lg font-bold text-slate-800">Today's Appointments</h2>
+                        <h2 class="text-lg font-bold text-slate-800">Janji Temu Hari Ini</h2>
                         <p class="text-xs text-slate-400 mt-1">Appointment pasien hari ini</p>
                     </div>
                     <a href="{{ route('dokter.appointment') }}"
                        class="px-3 py-2 rounded-xl bg-teal-50 text-teal-500 text-sm font-medium hover:bg-teal-100 transition">
-                        View All
+                        Lihat Semua
                     </a>
                 </div>
 
@@ -175,8 +175,8 @@
                     <table class="w-full">
                         <thead>
                             <tr class="border-b">
-                                <th class="text-left py-3 text-xs text-slate-400">Name</th>
-                                <th class="text-left py-3 text-xs text-slate-400">Queue</th>
+                                <th class="text-left py-3 text-xs text-slate-400">Nama</th>
+                                <th class="text-left py-3 text-xs text-slate-400">Antrian</th>
                                 <th class="text-left py-3 text-xs text-slate-400">Status</th>
                             </tr>
                         </thead>
@@ -221,7 +221,7 @@
         <!-- RIGHT: Donut -->
         <div>
             <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 h-full">
-                <h2 class="text-lg font-bold text-slate-800 mb-1">Status Breakdown</h2>
+                <h2 class="text-lg font-bold text-slate-800 mb-1">Ringkasan Status</h2>
                 <p class="text-xs text-slate-400 mb-4">30 hari terakhir</p>
 
                 @php
@@ -282,8 +282,8 @@
 
     <!-- BAR CHART full width -->
     <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
-        <h2 class="text-lg font-bold text-slate-800 mb-1">Appointment Trend</h2>
-        <p class="text-xs text-slate-400 mb-4">Jumlah appointment 30 hari terakhir</p>
+        <h2 class="text-lg font-bold text-slate-800 mb-1">Grafik Janji Temu</h2>
+        <p class="text-xs text-slate-400 mb-4">Jumlah Janji Temu selama 30 hari terakhir</p>
 
         @php $maxVal = max(array_merge($appointmentTrendData, [1])); @endphp
 

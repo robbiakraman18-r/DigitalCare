@@ -1,7 +1,7 @@
 @extends('layouts.dokter')
 
-@section('title', 'Practice Schedule')
-@section('subtitle', 'Your Practice Schedule')
+@section('title', 'Jadwal Praktik')
+@section('subtitle', 'Jadwal Praktik Anda')
 
 @section('content')
 <div class="space-y-6">
@@ -9,7 +9,7 @@
     <!-- HEADER -->
     <div class="relative overflow-hidden rounded-[30px] bg-gradient-to-r from-teal-500 to-cyan-500 p-6 text-white shadow-lg">
         <div class="relative z-10">
-            <h1 class="text-2xl lg:text-3xl font-bold leading-tight">Practice Schedule</h1>
+            <h1 class="text-2xl lg:text-3xl font-bold leading-tight">Jadwal Praktik</h1>
             <p class="mt-1 text-teal-100 text-sm">
                 {{ \Carbon\Carbon::parse($tanggal)->translatedFormat('l, d F Y') }}
             </p>
@@ -30,7 +30,7 @@
         <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-xs text-slate-400">Total Schedule</p>
+                    <p class="text-xs text-slate-400">Total Jadwal</p>
                     <h2 class="text-2xl font-bold mt-1 text-slate-800">{{ $totalJadwal }}</h2>
                 </div>
                 <div class="w-11 h-11 rounded-xl bg-blue-100 flex items-center justify-center">
@@ -42,7 +42,7 @@
         <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-xs text-slate-400">Available</p>
+                    <p class="text-xs text-slate-400">Tersedia</p>
                     <h2 class="text-2xl font-bold mt-1 text-slate-800">{{ $available }}</h2>
                 </div>
                 <div class="w-11 h-11 rounded-xl bg-green-100 flex items-center justify-center">
@@ -54,7 +54,7 @@
         <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-xs text-slate-400">Full</p>
+                    <p class="text-xs text-slate-400">Penuh</p>
                     <h2 class="text-2xl font-bold mt-1 text-slate-800">{{ $full }}</h2>
                 </div>
                 <div class="w-11 h-11 rounded-xl bg-red-100 flex items-center justify-center">
@@ -66,7 +66,7 @@
         <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-xs text-slate-400">Closed</p>
+                    <p class="text-xs text-slate-400">Ditutup</p>
                     <h2 class="text-2xl font-bold mt-1 text-slate-800">{{ $closed }}</h2>
                 </div>
                 <div class="w-11 h-11 rounded-xl bg-slate-100 flex items-center justify-center">
@@ -96,7 +96,7 @@
 
                 <a href="{{ route('dokter.jadwal') }}"
                    class="px-4 py-3 rounded-2xl border border-slate-200 text-sm text-slate-500 hover:bg-slate-50 transition whitespace-nowrap">
-                    Today
+                    Hari Ini
                 </a>
 
             </form>
@@ -107,11 +107,11 @@
             <table class="w-full text-sm">
                 <thead class="bg-slate-50">
                     <tr>
-                        <th class="text-left px-6 py-4 text-xs text-slate-400 font-medium">Day / Date</th>
-                        <th class="text-left px-6 py-4 text-xs text-slate-400 font-medium">Practice Hours</th>
-                        <th class="text-left px-6 py-4 text-xs text-slate-400 font-medium">Room</th>
-                        <th class="text-left px-6 py-4 text-xs text-slate-400 font-medium">Quota</th>
-                        <th class="text-left px-6 py-4 text-xs text-slate-400 font-medium">Queue Progress</th>
+                        <th class="text-left px-6 py-4 text-xs text-slate-400 font-medium">Hari / Tanggal</th>
+                        <th class="text-left px-6 py-4 text-xs text-slate-400 font-medium">Waktu Praktik</th>
+                        <th class="text-left px-6 py-4 text-xs text-slate-400 font-medium">Ruang</th>
+                        <th class="text-left px-6 py-4 text-xs text-slate-400 font-medium">Kuota</th>
+                        <th class="text-left px-6 py-4 text-xs text-slate-400 font-medium">Progress Antrian</th>
                         <th class="text-left px-6 py-4 text-xs text-slate-400 font-medium">Status</th>
                     </tr>
                 </thead>
@@ -164,7 +164,7 @@
                             <td class="px-6 py-4">
                                 <span class="font-semibold text-slate-800">{{ $item->terisi }}</span>
                                 <span class="text-slate-400">/{{ $item->kuota_harian }}</span>
-                                <span class="text-xs text-slate-400 ml-1">patients</span>
+                                <span class="text-xs text-slate-400 ml-1">pasien</span>
                             </td>
 
                             <!-- PROGRESS BAR -->
@@ -211,7 +211,7 @@
                     <i data-lucide="info" class="w-4 h-4"></i>
                 </div>
                 <p class="text-sm text-slate-600">
-                    Schedule may change according to clinic needs. Contact admin for any changes.
+                    Jadwal dapat berubah sesuai kebutuhan klinik. Silakan hubungi admin jika terdapat perubahan.
                 </p>
             </div>
         </div>

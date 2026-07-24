@@ -16,7 +16,7 @@
                 </h1>
 
                 <p class="text-xs text-slate-400">
-                    Better Healthcare, Digitally
+                    Layanan Kesehatan Digital
                 </p>
 
             </div>
@@ -72,7 +72,7 @@
                 <i data-lucide="clipboard-list" class="w-5 h-5 shrink-0"></i>
 
                 <span class="font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300">
-                    Appointment
+                    Janji Temu
                 </span>
 
             </a>
@@ -146,7 +146,7 @@
             <i data-lucide="log-out" class="w-5 h-5 shrink-0"></i>
 
             <span class="font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300">
-                Logout
+                Keluar
             </span>
 
         </button>

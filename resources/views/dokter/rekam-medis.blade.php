@@ -121,7 +121,7 @@
             </p>
 
             <p class="text-xs text-slate-400 mt-2">
-                DigitalCare Patient Profile • Active Record
+                Profil Pasien DigitalCare • Data Aktif
             </p>
         </div>
 
@@ -254,38 +254,44 @@
                     </div>
                     @endif
 
-                    {{-- RESEP OBAT (pakai relasi detailResep dari model RekamMedis) --}}
-                    @if($rekam->detailResep && $rekam->detailResep->count())
-                    <div>
-                        <div class="flex items-center gap-2 mb-3">
-                            <i data-lucide="pill" class="w-3.5 h-3.5 text-purple-500"></i>
-                            <p class="text-[11px] font-semibold text-slate-600 uppercase tracking-wide">Resep Obat</p>
+                    {{-- RESEP OBAT — cuma kelihatan kalau rekam medis ini dibuat oleh dokter yang sedang login --}}
+                    @if($rekam->id_dokter === $dokter->id_dokter)
+
+                        @if($rekam->detailResep && $rekam->detailResep->count())
+                        <div>
+                            <div class="flex items-center gap-2 mb-3">
+                                <i data-lucide="pill" class="w-3.5 h-3.5 text-purple-500"></i>
+                                <p class="text-[11px] font-semibold text-slate-600 uppercase tracking-wide">Resep Obat</p>
+                            </div>
+                            <div class="overflow-x-auto rounded-2xl border border-slate-100">
+                                <table class="w-full text-sm">
+                                    <thead class="bg-slate-50">
+                                        <tr>
+                                            <th class="text-left text-xs text-slate-400 font-semibold px-4 py-2.5">Nama Obat</th>
+                                            <th class="text-left text-xs text-slate-400 font-semibold px-4 py-2.5">Dosis</th>
+                                            <th class="text-left text-xs text-slate-400 font-semibold px-4 py-2.5">Aturan Pakai</th>
+                                            <th class="text-left text-xs text-slate-400 font-semibold px-4 py-2.5">Jumlah</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-slate-50">
+                                        @foreach($rekam->detailResep as $resep)
+                                        <tr class="hover:bg-slate-50/50">
+                                            <td class="px-4 py-3 font-medium text-slate-800">{{ $resep->nama_obat }}</td>
+                                            <td class="px-4 py-3 text-slate-600">{{ $resep->dosis }}</td>
+                                            <td class="px-4 py-3 text-slate-600">{{ $resep->aturan_pakai }}</td>
+                                            <td class="px-4 py-3 text-slate-600">{{ $resep->jumlah }}</td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                        <div class="overflow-x-auto rounded-2xl border border-slate-100">
-                            <table class="w-full text-sm">
-                                <thead class="bg-slate-50">
-                                    <tr>
-                                        <th class="text-left text-xs text-slate-400 font-semibold px-4 py-2.5">Nama Obat</th>
-                                        <th class="text-left text-xs text-slate-400 font-semibold px-4 py-2.5">Dosis</th>
-                                        <th class="text-left text-xs text-slate-400 font-semibold px-4 py-2.5">Aturan Pakai</th>
-                                        <th class="text-left text-xs text-slate-400 font-semibold px-4 py-2.5">Jumlah</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-slate-50">
-                                    @foreach($rekam->detailResep as $resep)
-                                    <tr class="hover:bg-slate-50/50">
-                                        <td class="px-4 py-3 font-medium text-slate-800">{{ $resep->nama_obat }}</td>
-                                        <td class="px-4 py-3 text-slate-600">{{ $resep->dosis }}</td>
-                                        <td class="px-4 py-3 text-slate-600">{{ $resep->aturan_pakai }}</td>
-                                        <td class="px-4 py-3 text-slate-600">{{ $resep->jumlah }}</td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                        @else
+                        <p class="text-xs text-slate-400 italic">Tidak ada resep obat pada kunjungan ini</p>
+                        @endif
+
                     @else
-                    <p class="text-xs text-slate-400 italic">Tidak ada resep obat pada kunjungan ini</p>
+                        <p class="text-xs text-slate-400 italic">Resep obat hanya bisa dilihat oleh dokter yang membuat rekam medis ini.</p>
                     @endif
 
                 </div>

@@ -24,8 +24,8 @@
 
                 <div class="flex items-center justify-between mb-6">
                     <div>
-                        <h2 class="text-2xl font-bold text-slate-800">Consultation Detail</h2>
-                        <p class="text-slate-400 text-sm mt-1">Medical examination information</p>
+                        <h2 class="text-2xl font-bold text-slate-800">Detail Konsultasi</h2>
+                        <p class="text-slate-400 text-sm mt-1">Informasi pemeriksaan medis</p>
                     </div>
                     <span class="px-4 py-2 rounded-full bg-green-100 text-green-500 text-sm font-semibold">
                         Selesai
@@ -35,7 +35,7 @@
                 <div class="grid md:grid-cols-2 gap-4">
 
                     <div class="bg-slate-50 rounded-2xl p-4">
-                        <p class="text-slate-400 text-xs uppercase tracking-wide">Visit Date</p>
+                        <p class="text-slate-400 text-xs uppercase tracking-wide">Tanggal Kunjungan</p>
                         <h3 class="font-semibold text-slate-700 mt-1">
                             {{ \Carbon\Carbon::parse($rekamMedis->waktu_pemeriksaan)->translatedFormat('l, d F Y') }}
                         </h3>
@@ -49,7 +49,7 @@
                     </div>
 
                     <div class="bg-slate-50 rounded-2xl p-4">
-                        <p class="text-slate-400 text-xs uppercase tracking-wide">Doctor</p>
+                        <p class="text-slate-400 text-xs uppercase tracking-wide">Dokter</p>
                         <h3 class="font-semibold text-slate-700 mt-1">
                             {{ $rekamMedis->dokter->user->nama ?? '-' }}
                         </h3>
@@ -62,11 +62,6 @@
                         </h3>
                     </div>
 
-                    {{-- FIX: dulu ada 2 field ("Keluhan Utama" dari appointment->keluhan_utama
-                         dan "Keluhan Saat Pemeriksaan" dari rekamMedis->keluhan) yang isinya
-                         sering sama persis, karena textarea Anamnesis di form dokter di-prefill
-                         dari keluhan_utama. Sekarang cuma tampilkan rekamMedis->keluhan, yaitu
-                         data final yang benar-benar diinput/dikonfirmasi dokter. --}}
                     <div class="bg-slate-50 rounded-2xl p-4 md:col-span-2">
                         <p class="text-slate-400 text-xs uppercase tracking-wide">Keluhan</p>
                         <h3 class="font-semibold text-slate-700 mt-1">
@@ -92,7 +87,7 @@
                     <div class="w-8 h-8 rounded-xl bg-teal-100 flex items-center justify-center">
                         <i data-lucide="notebook-pen" class="w-4 h-4 text-teal-600"></i>
                     </div>
-                    <h2 class="text-xl font-bold text-slate-800">Doctor Notes</h2>
+                    <h2 class="text-xl font-bold text-slate-800">Catatan Dokter</h2>
                 </div>
 
                 <p class="text-slate-600 leading-relaxed">
@@ -113,7 +108,7 @@
                     <div class="w-8 h-8 rounded-xl bg-teal-100 flex items-center justify-center">
                         <i data-lucide="pill" class="w-4 h-4 text-teal-600"></i>
                     </div>
-                    <h2 class="text-xl font-bold text-slate-800">Prescription</h2>
+                    <h2 class="text-xl font-bold text-slate-800">Resep Obat</h2>
                 </div>
 
                 @if($rekamMedis->detailResep && $rekamMedis->detailResep->count() > 0)
@@ -137,6 +132,21 @@
 
                     </div>
                     @endforeach
+                </div>
+
+                {{-- PERINGATAN KEPATUHAN OBAT --}}
+                <div class="mt-4 p-4 rounded-2xl bg-amber-50 border border-amber-200">
+                    <div class="flex items-start gap-2.5">
+                        <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-500 shrink-0 mt-0.5"></i>
+                        <div>
+                            <p class="text-xs font-semibold text-amber-700">
+                                Penting Diperhatikan
+                            </p>
+                            <p class="text-xs text-amber-700/90 leading-relaxed mt-1">
+                                Konsumsi obat sesuai <strong>dosis</strong> dan <strong>aturan pakai</strong> yang tertera di atas. Jangan menghentikan atau mengubah dosis obat secara sepihak tanpa berkonsultasi dengan dokter. Jika muncul reaksi tidak biasa (alergi, efek samping, atau kondisi memburuk), segera hubungi dokter atau fasilitas kesehatan terdekat.
+                            </p>
+                        </div>
+                    </div>
                 </div>
 
                 @else

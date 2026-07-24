@@ -8,7 +8,7 @@
 <div class="p-6 md:p-10 space-y-6">
 
     <div>
-        <h1 class="text-2xl font-bold text-slate-800">Complaint</h1>
+        <h1 class="text-2xl font-bold text-slate-800">Bantuan</h1>
         <p class="text-slate-400 text-sm">Sampaikan kendala atau keluhan Anda ke admin</p>
     </div>
 

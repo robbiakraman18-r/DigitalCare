@@ -10,15 +10,15 @@
         <a href="{{ route('admin.schedule.index') }}"
         class="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-slate-600 transition mb-2">
             <i data-lucide="chevron-left" class="w-4 h-4"></i>
-            Back to Schedule Management
+            Kembali ke Manajemen Jadwal
         </a>
 
         <h1 class="text-3xl font-bold text-slate-800">
-            Add Schedule
+            Tambah Jadwal
         </h1>
 
         <p class="text-slate-400 mt-1">
-            Create a new practice schedule for a doctor.
+            Buat jadwal praktik baru untuk dokter.
         </p>
     </div>
 
@@ -51,7 +51,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
 
             <div class="sm:col-span-2">
-                <label class="text-sm font-medium text-slate-600">Doctor</label>
+                <label class="text-sm font-medium text-slate-600">Dokter</label>
 
                 <div class="relative mt-2">
                     <i data-lucide="stethoscope" class="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
@@ -59,7 +59,7 @@
                     name="id_dokter"
                     required
                     class="w-full pl-11 pr-10 py-3 rounded-2xl border border-slate-200 bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
-                        <option value="">Select Doctor</option>
+                        <option value="">Pilih Dokter</option>
                         @foreach($dokters as $dokter)
                             @php
                                 $isUnavailable = $dokter->status_ketersediaan !== 'Available';
@@ -68,9 +68,9 @@
 
                                 $label = $dokter->user->nama;
                                 if ($isInactive) {
-                                    $label .= ' (Inactive Account)';
+                                    $label .= ' (Akun Tidak Aktif)';
                                 } elseif ($isUnavailable) {
-                                    $label .= ' (Unavailable)';
+                                    $label .= ' (Tidak Tersedia)';
                                 }
                             @endphp
                             <option
@@ -86,7 +86,7 @@
             </div>
 
             <div>
-                <label class="text-sm font-medium text-slate-600">Date</label>
+                <label class="text-sm font-medium text-slate-600">Tanggal</label>
                 <div class="relative mt-2">
                     <i data-lucide="calendar" class="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
                     <input
@@ -99,7 +99,7 @@
             </div>
 
             <div>
-                <label class="text-sm font-medium text-slate-600">Room</label>
+                <label class="text-sm font-medium text-slate-600">Ruangan</label>
                 <div class="relative mt-2">
                     <i data-lucide="door-open" class="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
                     <input
@@ -107,13 +107,13 @@
                     name="ruang"
                     value="{{ old('ruang') }}"
                     required
-                    placeholder="e.g. Room 201"
+                    placeholder="Contoh: Room 201"
                     class="w-full pl-11 pr-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
                 </div>
             </div>
 
             <div>
-                <label class="text-sm font-medium text-slate-600">Start Time</label>
+                <label class="text-sm font-medium text-slate-600">Jam Mulai</label>
                 <div class="relative mt-2">
                     <i data-lucide="clock" class="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
                     <input
@@ -126,7 +126,7 @@
             </div>
 
             <div>
-                <label class="text-sm font-medium text-slate-600">End Time</label>
+                <label class="text-sm font-medium text-slate-600">Jam Selesai</label>
                 <div class="relative mt-2">
                     <i data-lucide="clock" class="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
                     <input
@@ -139,7 +139,7 @@
             </div>
 
             <div>
-                <label class="text-sm font-medium text-slate-600">Daily Quota</label>
+                <label class="text-sm font-medium text-slate-600">Kuota Harian</label>
                 <div class="relative mt-2">
                     <i data-lucide="users" class="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
                     <input
@@ -148,7 +148,7 @@
                     value="{{ old('kuota_harian') }}"
                     required
                     min="1"
-                    placeholder="e.g. 20"
+                    placeholder="Contoh: 20"
                     class="w-full pl-11 pr-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
                 </div>
             </div>
@@ -162,14 +162,14 @@
         
         <a href="{{ route('admin.schedule.index') }}"
         class="px-5 py-3 rounded-2xl border border-slate-200 text-slate-600 font-semibold hover:bg-slate-50 transition">
-            Cancel
+            Batal
         </a>
 
         <button
         type="submit"
         class="px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold transition inline-flex items-center gap-2">
             <i data-lucide="save" class="w-4 h-4"></i>
-            Save Schedule
+            Simpan Jadwal
         </button>
     </div>
 
